@@ -145,8 +145,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>163</width>
-             <height>137</height>
+             <width>152</width>
+             <height>83</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -321,12 +321,12 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>communications</string>
+                  <string>socializing</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>screen time</string>
+                  <string>physical activity</string>
                  </property>
                 </item>
                </widget>
@@ -469,8 +469,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>490</width>
-               <height>467</height>
+               <width>506</width>
+               <height>443</height>
               </rect>
              </property>
             </widget>
@@ -600,7 +600,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>333</width>
+             <width>312</width>
              <height>200</height>
             </rect>
            </property>

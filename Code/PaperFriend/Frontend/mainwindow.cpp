@@ -334,7 +334,7 @@ void MainWindow::on_filterButton_clicked() {
   // QString value_filter_value =
   // findChild<QDoubleSpinBox *>("value_filter")->text();
   double value = findChild<QDoubleSpinBox *>("value_filter")->value();
-  int n = 20;
+  size_t n = 20;
 
   // construct a filter_param object
   struct Filter_param filt;
@@ -346,7 +346,7 @@ void MainWindow::on_filterButton_clicked() {
 
   // handling duplicated filters
   bool is_insert = true;
-  for (int i = 0; i < filter_params.size(); i++) {
+  for (size_t i = 0; i < filter_params.size(); i++) {
     if (filter_params[i].keyword == filt.keyword &&
         filter_params[i].opt == filt.opt &&
         filter_params[i].value == filt.value) {
@@ -377,7 +377,7 @@ void MainWindow::on_filterButton_clicked() {
     filter_params.push_back(filt);
   }
 
-  for (int i = 0; i < filter_params.size(); i++) {
+  for (size_t i = 0; i < filter_params.size(); i++) {
     if (filter_params[i].keyword == "last_n_entries") {
       n = filter_params[i].value;
       break;
@@ -386,7 +386,7 @@ void MainWindow::on_filterButton_clicked() {
 
   // filter the entries
   std::vector<EntryPerso *> filtered_entries = vector_entries;
-  for (int i = 0; i < filter_params.size(); i++) {
+  for (size_t i = 0; i < filter_params.size(); i++) {
     if (filter_params[i].keyword == "last_n_entries") {
       continue;
     }
@@ -407,7 +407,7 @@ void MainWindow::on_filterButton_clicked() {
 
   // update and display the filters
   std::string f = "Filters:   ";
-  for (int i = 0; i < filter_params.size(); i++) {
+  for (size_t i = 0; i < filter_params.size(); i++) {
     // value keeps 2 digits after the decimal point
     std::stringstream stream;
 
@@ -424,7 +424,7 @@ void MainWindow::on_filterButton_clicked() {
 
   // select the n last entries
   std::vector<EntryPerso *> entries_to_display;
-  for (int i = filtered_entries.size() - n; i < filtered_entries.size(); i++) {
+  for (size_t i = filtered_entries.size() - n; i < filtered_entries.size(); i++) {
     entries_to_display.push_back(filtered_entries[i]);
   }
 
