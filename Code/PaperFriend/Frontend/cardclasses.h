@@ -110,7 +110,6 @@ private:
   QPushButton *modify; // button to switch to modify mode
   QPushButton *analize; // button to analize text
   QPushButton *back_to_display; // button to switch to readOnly mode
-  QLayout *display_layout;   // parent layout of the card
   QWidget *mood_slider_w;    // widget for displaying mood slider, part of the top menu
   QLabel *mood_slider_instr; // label for the mood slider
   QSlider *mood_slider;

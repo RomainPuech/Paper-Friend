@@ -787,7 +787,7 @@ DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &entries,
   return res;
 }
 
-EntryRecap DataAnalysis::recap(int type) {
+EntryRecap* DataAnalysis::recap(int type) {
   /**
    * @param  an integer representing the period to be considered. 0 = week, 1 =
    * month, 2 = year.
@@ -829,10 +829,10 @@ EntryRecap DataAnalysis::recap(int type) {
   text += "Here is a summary of your " + periods[type] + " across all areas\n";
   text += detailed_analysis;
 
-  return EntryRecap(best_day, worst_day, text, avg_mood, type);
+  return new EntryRecap(best_day, worst_day, text, avg_mood, type);
 }
 
-EntryRecap DataAnalysis::weekly_recap() {
+EntryRecap* DataAnalysis::weekly_recap() {
   /**
    * @param
    *
@@ -840,7 +840,7 @@ EntryRecap DataAnalysis::weekly_recap() {
    */
   return recap(0);
 }
-EntryRecap DataAnalysis::monthly_recap() {
+EntryRecap* DataAnalysis::monthly_recap() {
   /**
    * @param
    *
@@ -848,7 +848,7 @@ EntryRecap DataAnalysis::monthly_recap() {
    */
   return recap(1);
 }
-EntryRecap DataAnalysis::yearly_recap() {
+EntryRecap* DataAnalysis::yearly_recap() {
   /**
    * @param
    *

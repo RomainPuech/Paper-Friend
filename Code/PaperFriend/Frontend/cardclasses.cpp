@@ -146,9 +146,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
       this->readOnly = readOnly;
       can_be_modified = false;
   }
-    display_layout =
-      new QVBoxLayout(); // to be changed when the card is displayed- layout containing the card
-  entry_perso = nullptr;
+     entry_perso = nullptr;
   entry_recap = nullptr;
   text_analysis = new text_analysis_window("", 0, this);
   // entry_perso display
@@ -1298,7 +1296,6 @@ void EntryCard::set_entryRecap_style() {
 
 void EntryCard::display(QLayout *layout) {
   layout->addWidget(this);
-  display_layout = layout;
 }
 
 bool EntryCard::isReadOnly() { return readOnly; }
