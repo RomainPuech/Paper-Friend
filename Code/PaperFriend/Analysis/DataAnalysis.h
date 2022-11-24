@@ -9,6 +9,7 @@ class DataAnalysis{
 
 public:
     double calculateSD(vector<double> data);  // calculates standart deviation
+    double calculate_mean(vector<double> data);
 private:
 
 };
