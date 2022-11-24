@@ -1,3 +1,8 @@
 
 Code/build-PaperFriend-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/*
 build-PaperFriend-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/*
+
+# Artem's apple specific:
+.DS_Store
+Code/.DS_Store
+Code/build-PaperFriend-Qt_6_2_4_for_macOS-Debug/

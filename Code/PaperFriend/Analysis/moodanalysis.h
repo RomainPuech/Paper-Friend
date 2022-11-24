@@ -1,15 +1,32 @@
 #ifndef MOODANALYSIS_H
 #define MOODANALYSIS_H
 
+#include "DataAnalysis.h";
+
+#include <vector>
+#include <string>
+#include <math.h>
 #include <vector>
 
-#include "DataAnalysis.h";
+
+using namespace std;
+
+class DayLog{
+public:
+
+private:
+    string day;
+    double mood;
+};
+
+
 class MoodAnalysis : public DataAnalysis{
+public:
+    bool alert_depression(int n, int m);
+    vector<string> anomalies_dtection(vector<DayLog> log);
 private:
     double get_lastn_average(int n); // This will compute the average mood over the last n days.
                                      // Not implemented yet.
-public:
-    bool alert_depression(int n, int m);
 };
 
 template <typename T> double average_vector(std::vector<T> vector){
