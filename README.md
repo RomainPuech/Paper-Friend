@@ -15,4 +15,8 @@ As an extension, if we have the time, Paper Friend can even help you with other 
 We could also sync the app with the google account to display the user's calendar or his google tasks: PaerFriend is a hub to organize your life.
 
 Based on the same model we can also adapt the personnal journal to a project-oriented journal. The user would not track their mood anymore but rather their performance or the advancment of their project.  
-
+  
+    
+    
+Here is an example of the application's UI:
+![exampleUI](https://user-images.githubusercontent.com/91381114/203642351-10ddf1b8-be66-4267-aefb-1da34732f860.jpg)
