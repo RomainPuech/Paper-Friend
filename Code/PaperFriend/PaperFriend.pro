@@ -16,6 +16,7 @@ SOURCES += \
     cipher/cipher.cpp \
     dynamicgraph.cpp \
     Analysis/moodanalysis.cpp \
+    entryclasses.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -29,6 +30,7 @@ HEADERS += \
     cipher/cipher.h \
     dynamicgraph.h \
     Analysis/moodanalysis.h \
+    entryclasses.h \
     mainwindow.h
 
 FORMS += \
