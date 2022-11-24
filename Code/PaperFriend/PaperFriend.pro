@@ -10,6 +10,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    activityclasses.cpp \
     cardclasses.cpp \
     Analysis/DataAnalysis.cpp \
     cipher/Qt-AES-1.2/qaesencryption.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    activityclasses.h \
     cardclasses.h \
     Analysis/DataAnalysis.h \
     cipher/Qt-AES-1.2/aesni/aesni-enc-cbc.h \

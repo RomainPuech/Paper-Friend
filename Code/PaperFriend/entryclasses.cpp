@@ -58,6 +58,11 @@ EntryPerso::EntryPerso(std::string text, std::string title, std::string* activit
     this->mood = mood;
 }
 
+EntryPerso::~EntryPerso() {
+    delete activities;
+    delete friends;
+}
+
 std::string* EntryPerso::get_activities() {
     return activities;
 }
