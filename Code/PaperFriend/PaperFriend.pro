@@ -17,7 +17,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp
 
-HEADERS +=
+HEADERS += \
     cardclasses.h \
     Analysis/DataAnalysis.h \
     dynamicgraph.h \
