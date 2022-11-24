@@ -35,3 +35,7 @@ void Card::set_width(int width){
 void Card::set_border_radius(int border_radius){
     this->border_radius = border_radius;
 }
+
+void Card::display(QPainter *painter, double x, double y){
+    painter->drawRoundedRect(x, y, width, length, border_radius, border_radius);
+}

@@ -3,6 +3,7 @@
 
 #include <QGraphicsItem>
 #include <QWidget>
+#include <QPainter>
 
 class Card : public QGraphicsItem{
 public:
@@ -18,7 +19,11 @@ public:
     void set_width(int width);
     void set_border_radius(int border_radius);
 
-    virtual void display(){};
+    virtual void display(QPainter *painter, double x, double y)
+    /*
+    * A funtion for displaying the Card object on the screen
+    * at position (x, y), using a provided QPainter object
+    */;
 
 private:
     int length, width; // default values: 100 and 100
