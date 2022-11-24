@@ -3,6 +3,11 @@
 
 #include <vector>
 
+#include "DataAnalysis.h";
+class MoodAnalysis : public DataAnalysis{
+private:
+public:
+};
 
 template <typename T> double average_vector(std::vector<T> vector){
     T sum = 0;
