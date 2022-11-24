@@ -15,8 +15,16 @@
 #include <QtCharts/QLineSeries>
 // Used to change names on axis
 #include <QtCharts/QCategoryAxis>
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 
-DynamicGraph::DynamicGraph()
+DynamicGraph::DynamicGraph(Ui::MainWindow *ui)
+    :ui(ui)
+{
+
+
+}
+void DynamicGraph::display() const
 {
     QLineSeries* series = new QLineSeries();
     series->append(0,6);
@@ -29,5 +37,5 @@ DynamicGraph::DynamicGraph()
     mood_chart->setTitle("Mood");
     QChartView *mood_view = new QChartView(mood_chart);
     mood_view->setRenderHint(QPainter::Antialiasing);
-    //mood_view->setParent(ui->horizontalFrame);
+    mood_view->setParent(ui->frame);
 }

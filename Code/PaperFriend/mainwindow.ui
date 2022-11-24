@@ -14,13 +14,13 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="moodChartView">
+   <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>20</y>
       <width>731</width>
-      <height>281</height>
+      <height>551</height>
      </rect>
     </property>
     <property name="styleSheet">
