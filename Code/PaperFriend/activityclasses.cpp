@@ -1,6 +1,7 @@
 #include "activityclasses.h"
 
 #include <iostream>
+#include <string>
 
 
 Activity::Activity() {

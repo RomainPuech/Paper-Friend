@@ -1,6 +1,7 @@
 #include "entryclasses.h"
 
 #include <iostream>
+#include <string>
 
 
 std::string current_date() {

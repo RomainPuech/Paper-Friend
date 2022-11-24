@@ -2,6 +2,7 @@
 #define ACTIVITYCLASSES_H
 
 #include <iostream>
+#include <string>
 
 
 class Activity {

@@ -18,6 +18,7 @@ SOURCES += \
     dynamicgraph.cpp \
     Analysis/moodanalysis.cpp \
     entryclasses.cpp \
+    friendclasses.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -33,6 +34,7 @@ HEADERS += \
     dynamicgraph.h \
     Analysis/moodanalysis.h \
     entryclasses.h \
+    friendclasses.h \
     mainwindow.h
 
 FORMS += \
