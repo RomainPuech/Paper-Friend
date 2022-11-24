@@ -1,5 +1,5 @@
-#ifndef CYPHER_H
-#define CYPHER_H
+#ifndef CIPHER_H
+#define CIPHER_H
 
 #include <string>
 #include <iostream>
@@ -12,4 +12,4 @@ string encode_string(string input, string key);
 string decode_string(string input, string key);
 
 
-#endif // CYPHER_H
+#endif // CIPHER_H

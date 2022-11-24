@@ -12,8 +12,9 @@ CONFIG += c++17
 SOURCES += \
     cardclasses.cpp \
     Analysis/DataAnalysis.cpp \
-    crypt/Qt-AES-1.2/qaesencryption.cpp \
-    crypt/cypher.cpp \
+    cipher/Qt-AES-1.2/qaesencryption.cpp \
+    cipher/cipher.cpp \
+    cipher/example.cpp \
     dynamicgraph.cpp \
     Analysis/moodanalysis.cpp \
     main.cpp \
@@ -22,10 +23,11 @@ SOURCES += \
 HEADERS += \
     cardclasses.h \
     Analysis/DataAnalysis.h \
-    crypt/Qt-AES-1.2/aesni/aesni-enc-cbc.h \
-    crypt/Qt-AES-1.2/aesni/aesni-enc-ecb.h \
-    crypt/Qt-AES-1.2/aesni/aesni-key-exp.h \
-    crypt/Qt-AES-1.2/qaesencryption.h \
+    cipher/Qt-AES-1.2/aesni/aesni-enc-cbc.h \
+    cipher/Qt-AES-1.2/aesni/aesni-enc-ecb.h \
+    cipher/Qt-AES-1.2/aesni/aesni-key-exp.h \
+    cipher/Qt-AES-1.2/qaesencryption.h \
+    cipher/cipher.h \
     dynamicgraph.h \
     Analysis/moodanalysis.h \
     mainwindow.h
@@ -42,3 +44,8 @@ CONFIG += embed_translations
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    cipher/Qt-AES-1.2/CONTRIBUTING.md \
+    cipher/Qt-AES-1.2/LICENSE \
+    cipher/Qt-AES-1.2/README.md

@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-#include "cypher.h"
+#include "cipher.h"
 
 int main(){
     string plain = "1234567890/*-+;jkladsfhjklaeuk[];'/,\\=-```/.,,;.";
