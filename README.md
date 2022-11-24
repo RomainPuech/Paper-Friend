@@ -10,3 +10,9 @@ The app can even find correlations between the mood/emotions of the user and the
 
 Thus PaperFriend helps you introspecting to understand what makes you happy, stressed or depressed and keeps an eye on your mood and mental health.
 
+
+As an extension, if we have the time, Paper Friend can even help you with other aspects of your life. For example, we wish to implment a habit tracker in the app. The user could tell the app that they want to go to the gym evry monday and the app would ask them if they did so evry monday. We plan to add a gamified experience to help the user stick to this new habit.  
+We could also sync the app with the google account to display the user's calendar or his google tasks: PaerFriend is a hub to organize your life.
+
+Based on the same model we can also adapt the personnal journal to a project-oriented journal. The user would not track their mood anymore but rather their performance or the advancment of their project.  
+
