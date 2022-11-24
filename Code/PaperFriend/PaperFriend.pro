@@ -14,7 +14,6 @@ SOURCES += \
     Analysis/DataAnalysis.cpp \
     cipher/Qt-AES-1.2/qaesencryption.cpp \
     cipher/cipher.cpp \
-    cipher/example.cpp \
     dynamicgraph.cpp \
     Analysis/moodanalysis.cpp \
     main.cpp \
