@@ -20,3 +20,52 @@ Based on the same model we can also adapt the personal journal to a project-orie
     
 Here is an example of the application's UI:
 ![exampleUI](https://user-images.githubusercontent.com/91381114/203642351-10ddf1b8-be66-4267-aefb-1da34732f860.jpg)
+
+
+### Members (name surname, github username, [role])
+
+    - Romain Puech, Romain-Puech-BX24, project leader
+    - Luigi Massacci, luigi-massacci, git leader, frontend subteam leader
+    - Octave Gaspard, Elyndrium, data analysis subteam leader
+    - Bogdana Kolic, bogdanaKolic
+    - Artem Mamichev, artem-mamichev
+    - Junyuan (Frank) Wang, frank2002
+    - Brook Nigatu, Brook-B-Nigatu
+    - Michaela Gledacheva, mihaelagledacheva
+    - Yubo Cai, yubocai-poly
+    - Safaa Arbai, safaa-40
+    - Ahmed Benchekroun, ahmedbchk
+    - Thomas Turkieh, thomas-Turkieh
+    - Liam Loughman, liamloughman
+
+#### Teams
+See Teams directly in Github. Subject to change from week to week according tou our needs.
+##### Analysis team (team leader Octave):
+  - Octave
+  - Brook
+  - Artem
+
+##### Frontend team (team leader Luigi & Romain):
+Codes the desktop app GUI and user functionalities.
+  ###### General UI team
+  Glues components together and organise the frontend.
+  - Luigi 
+  - Michaela
+  - Safaa
+  - Ahmed
+
+  ###### Components team
+  Creates specific components.
+  - Romain
+  - Bogdana
+  - Liam
+  - Yubo
+  
+##### File processing (team leader Romain):
+Handles the saving, loading and encryption of files.
+- Thomas
+- Frank
+      
+        
+    
+
