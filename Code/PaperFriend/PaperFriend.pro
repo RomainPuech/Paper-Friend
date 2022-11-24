@@ -11,13 +11,15 @@ CONFIG += c++17
 
 SOURCES += \
     cardclasses.cpp \
+    Analysis/DataAnalysis.cpp \
     dynamicgraph.cpp \
     Analysis/moodanalysis.cpp \
     main.cpp \
     mainwindow.cpp
 
-HEADERS += \
+HEADERS +=
     cardclasses.h \
+    Analysis/DataAnalysis.h \
     dynamicgraph.h \
     Analysis/moodanalysis.h \
     mainwindow.h
