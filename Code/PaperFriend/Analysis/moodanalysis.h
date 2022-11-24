@@ -1,0 +1,8 @@
+#ifndef MOODANALYSIS_H
+#define MOODANALYSIS_H
+
+
+
+
+
+#endif // MOODANALYSIS_H
