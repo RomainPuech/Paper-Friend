@@ -11,6 +11,8 @@ CONFIG += c++17
 
 SOURCES += \
     Analysis/DataAnalysis.cpp \
+    crypt/Qt-AES-1.2/qaesencryption.cpp \
+    crypt/cypher.cpp \
     dynamicgraph.cpp \
     Analysis/moodanalysis.cpp \
     main.cpp \
@@ -18,6 +20,10 @@ SOURCES += \
 
 HEADERS += \
     Analysis/DataAnalysis.h \
+    crypt/Qt-AES-1.2/aesni/aesni-enc-cbc.h \
+    crypt/Qt-AES-1.2/aesni/aesni-enc-ecb.h \
+    crypt/Qt-AES-1.2/aesni/aesni-key-exp.h \
+    crypt/Qt-AES-1.2/qaesencryption.h \
     dynamicgraph.h \
     Analysis/moodanalysis.h \
     mainwindow.h
