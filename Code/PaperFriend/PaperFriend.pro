@@ -11,11 +11,13 @@ CONFIG += c++17
 
 SOURCES += \
     dynamicgraph.cpp \
+    Analysis/moodanalysis.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     dynamicgraph.h \
+    Analysis/moodanalysis.h \
     mainwindow.h
 
 FORMS += \
