@@ -7,6 +7,7 @@
 class Card : public QGraphicsItem{
 public:
     Card();
+    Card(int length, int width, int border_radius);
     ~Card(){};
 
     int get_length();
@@ -20,8 +21,17 @@ public:
     virtual void display(){};
 
 private:
-    int length, width;
-    int border_radius; // the radius of the rounded borders
+    int length, width; // default values: 100 and 100
+    int border_radius; // the radius of the rounded borders, default value: 5
+};
+
+class EntryCard : public Card{
+public:
+    EntryCard(){};
+    ~EntryCard(){};
+
+
+
 };
 
 #endif // CARDCLASSES_H

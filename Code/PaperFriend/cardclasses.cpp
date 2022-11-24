@@ -6,6 +6,12 @@ Card::Card(){
     border_radius = 5;
 }
 
+Card::Card(int length, int width, int border_radius){
+    this->length = length;
+    this->width = width;
+    this->border_radius = border_radius;
+}
+
 int Card::get_length(){
     return length;
 }
