@@ -25,8 +25,9 @@ vector<DayLog> MoodAnalysis::anomalies_dtection(vector<DayLog> log){
     return {{"Artem: I'll do it", 112}};
 }
 
-
+/* This will be uncommented once get_lastn_average is implemented
 // MoodAnalisys implementation:
 bool MoodAnalysis::alert_depression(int n, int m){
     return get_lastn_average(n) < get_lastn_average(m);
 }
+*/
