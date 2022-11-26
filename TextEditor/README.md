@@ -1,5 +1,7 @@
 # TextEditor Based on QT document
 
+`Author: Yubo Cai`
+
 ## 1. Introduction
 
 This is a simple TextEditor inner the PaperFriend Appliation which allow our client to process the text file with some basic function. The TextEditor is available for both Windows and MacOS.
@@ -31,6 +33,14 @@ The framework of the TextEditor is shown as below:
   - myresources.qrc
 
 The cpp source file which is most base on `textedit.cpp` and `edit.cpp` which accomplish the basic function of the TextEditor. The `textedit.ui` is the UI file which is used to design the GUI of the TextEditor. The `myresources.qrc` is the resource file which is used to store the icon of the TextEditor. The `edit.h` and `textedit.h` are the header file which is used to declare the class of the TextEditor.
+
+## 4. Frontend and Backend Design
+### 4.1 Frontend Design
+- ① Complete the main software architecture and business logic
+- ② Design the GUI of the TextEditor
+- ③ Complete the function of loading and saving text
+
+We use the **Qt Desinger** to design the GUI of the TextEditor. The GUI of the TextEditor is shown as below:
 
 ---
 
