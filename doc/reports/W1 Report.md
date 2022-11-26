@@ -10,7 +10,7 @@
 | Thomas Turkieh       |File processing    |     centered   |   What I wil do |
 | Junyuan (Frank) Wang |File processing    |     centered   |   What I wil do |
 | Michaela Gledacheva  |Structure          |     centered   |   What I wil do |
-| Octave Gaspard       |Data analysis      |     centered   |   What I wil do |
+| Octave Gaspard       |Data analysis      |- Discussed with the File processing team the best way to represent saved user data.<br>- Found what analysis we could do on the user data with the Data analysis team.<br>- Implemented basic function template average_vector and wrote the [wiki](https://github.com/CSE201-project/PaperFriend-desktop-app/wiki) page for the [DayLog](https://github.com/CSE201-project/PaperFriend-desktop-app/wiki/Day-Log) class.<br>| - Decide with the team who will do which part of the analysis and start working on them.  |
 | Brook Nigatu         |Data analysis      |     centered   |   What I wil do |
 | Artem Mamichev       |Data analysis      |     centered   |   What I wil do |
     
