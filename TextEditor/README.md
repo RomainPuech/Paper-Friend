@@ -41,8 +41,22 @@ The cpp source file which is most base on `textedit.cpp` and `edit.cpp` which ac
 - ③ Complete the function of loading and saving text
 
 We use the **Qt Desinger** to design the GUI of the TextEditor. The GUI of the TextEditor is shown as below:
+<img src="./img/pic1.png"/>
+We have the tool bar and the menu bar which is used to control the function of the TextEditor.
+
+### 4.2 Backend Design
+>Since `Qt` comes with the string storage class `QString` and the stack class `QStack`, we mainly use these classes when implementing the expected functionality and further develop based on them during the development process.
+
+### 4.3 Declaration of the class in program
+> We have two main classes of **TextEditor** and **edit**. Details are shown as below:
+
+**TextEditor**: In this class we define the TextEditor interface framework and implement several of its main functions.
+
+**edit**: Defined in `edit.h`, inherited from `QTextEdit`, the main purpose is to overload the function that controls the right-click menu.
 
 ---
+
+## 5. Function Design
 
 ## Testing Report
 
