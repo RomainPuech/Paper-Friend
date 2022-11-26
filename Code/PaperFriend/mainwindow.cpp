@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dynamicgraph.h"
+#include "cardclasses.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -12,6 +13,9 @@ MainWindow::MainWindow(QWidget *parent)
     //test
     DynamicGraph moodGraph = DynamicGraph(ui);
     moodGraph.display();
+    // test for the Card class
+    Card *c = new Card();
+    c->display(ui->frame);
 }
 
 MainWindow::~MainWindow()

@@ -1,33 +1,34 @@
 #ifndef CARDCLASSES_H
 #define CARDCLASSES_H
-
-#include <QGraphicsItem>
 #include <QWidget>
-#include <QPainter>
+#include <QPainterPath>
+#include <QRegion>
+#include <QString>
 
-class Card : public QGraphicsItem{
+class Card : public QWidget{
 public:
-    Card();
-    Card(int length, int width, int border_radius);
+    Card(int border_radius = 15, int width = 200, int height = 200, QString color = "beige");
     ~Card(){};
 
-    int get_length();
-    int get_width();
     int get_border_radius();
+    int get_width();
+    int get_height();
+    QString get_background_color();
 
-    void set_length(int length);
-    void set_width(int width);
     void set_border_radius(int border_radius);
+    void set_width(int width);
+    void set_height(int height);
+    void set_background_color(QString color);
 
-    virtual void display(QPainter *painter, double x, double y)
+    virtual void display(QWidget *parent)
     /*
     * A funtion for displaying the Card object on the screen
-    * at position (x, y), using a provided QPainter object
+    * provided a parent widget
     */;
 
 private:
-    int length, width; // default values: 100 and 100
-    int border_radius; // the radius of the rounded borders, default value: 5
+    int border_radius; // the radius of the rounded borders, default value: 15
+    QString background_color; // default color: beige
 };
 
 class EntryCard : public Card{
