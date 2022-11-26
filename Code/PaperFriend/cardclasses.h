@@ -1,9 +1,13 @@
 #ifndef CARDCLASSES_H
 #define CARDCLASSES_H
+
+#include "entryclasses.h"
+
 #include <QWidget>
 #include <QPainterPath>
 #include <QRegion>
 #include <QString>
+#include <QLabel>
 
 class Card : public QWidget{
 public:
@@ -33,11 +37,12 @@ private:
 
 class EntryCard : public Card{
 public:
-    EntryCard(){};
-    ~EntryCard(){};
+    EntryCard(Entry *entry = nullptr);
+    ~EntryCard();
 
-
-
+private:
+    Entry *entry;
+    QLabel *date_display;
 };
 
 #endif // CARDCLASSES_H

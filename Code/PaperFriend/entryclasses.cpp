@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 
-
 std::string current_date() {
     const int maxlen = 80;
     char s[maxlen];
@@ -15,13 +14,13 @@ std::string current_date() {
 Entry::Entry() {
     text = "";
     title = "";
-    date = current_date();
+    date = QDate::currentDate();
 }
 
 Entry::Entry(std::string text, std::string title) {
     this->text = text;
     this->title = title;
-    date = current_date();
+    date = QDate::currentDate();
 }
 
 std::string Entry::get_text() {
@@ -40,7 +39,7 @@ void Entry::set_title(std::string title) {
     this->title=title;
 }
 
-std::string Entry::get_date() {
+QDate Entry::get_date() {
     return date;
 }
 
