@@ -14,8 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     DynamicGraph moodGraph = DynamicGraph(ui);
     moodGraph.display();
     // test for the EntryCard class
-    Entry *e = new Entry();
-    EntryCard *c = new EntryCard(e);
+    EntryPerso *e = new EntryPerso();
+    EntryCard *c = new EntryCard(20, 300, 300, "beige", e);
     c->display(ui->frame);
 }
 

@@ -54,10 +54,13 @@ void Card::display(QWidget *parent){
     this->setParent(parent);
 }
 
-EntryCard::EntryCard(Entry *entry){
-    this->entry = entry;
+QString generate_date_string(QDate date){
+    /* Using the date of the entry generates the QString of the form
+     * 'Day - dd days ago
+     * date of the entry '
+     */
     QDate today = QDate::currentDate();
-    int day_int = entry->get_date().dayOfWeek();
+    int day_int = date.dayOfWeek();
     QString day_string;
     switch(day_int){
     case 1:
@@ -75,11 +78,67 @@ EntryCard::EntryCard(Entry *entry){
     case 7:
         day_string = "Sun"; break;
     }
-    int days_ago = entry->get_date().daysTo(today);
-    date_display = new QLabel(this);
-    date_display->setText(day_string + " - " + QString::number(days_ago) + " days ago");
+
+    int days_ago = date.daysTo(today);
+    QString days_ago_string;
+    if(days_ago % 100 == 1){
+        days_ago_string = " day ago \n";
+    }
+    else{
+        days_ago_string = " days ago \n";
+    }
+
+    return day_string + " - " + QString::number(days_ago) + days_ago_string + date.toString("MM-dd-yyyy");
+}
+
+void generate_rgb(QString &red, QString &green, double m){
+    if(m <= 0.5){
+        red = QString::number(255);
+        green = QString::number(255 * m / (1-m));
+    }
+    else{
+        green = QString::number(255);
+        red = QString::number(255 * (1-m) / m);
+    }
+}
+
+EntryCard::EntryCard(int border_radius, int width, int height, QString color, EntryPerso *entry) : Card(border_radius, width, height, color){
+    this->entry = entry;
+
+    // display date
+    date_display = new QLabel();
+    date_display->setFixedWidth(this->get_width() / 2); // to be changed depending on the number of widgets
+    date_display->setFixedHeight(50);
+    date_display->setText(generate_date_string(entry->get_date()));
+    date_display->setAlignment(Qt::AlignCenter);
+    date_display->setStyleSheet("font: 12px; font-family: ariel; font-weight: bold; background-color: aqua;");
+
+    // display activities and friends
+    // te be implemented
+
+    //display mood
+    mood_display = new QLabel();
+    mood_display->setText("Mood: " + QString::number(entry->get_mood() * 100) + "%");
+    mood_display->setFixedWidth(this->get_width() / 2); // to be changed depending on the number of widgets
+    mood_display->setFixedHeight(50);
+    mood_display->setAlignment(Qt::AlignCenter);
+    QString red, green;
+    generate_rgb(red, green, entry->get_mood());
+    mood_display->setStyleSheet("font: 12px; font-family: ariel; font-weight: bold; background-color: rgb(" + red + ", " + green + ", 0);");
+
+
+    //top menu
+    top_menu = new QHBoxLayout(this);
+    top_menu->setAlignment(Qt::AlignTop);
+    top_menu->setSpacing(0);
+    top_menu->addWidget(date_display);
+    top_menu->addWidget(mood_display);
+
 }
 
 EntryCard::~EntryCard(){
     delete entry;
+    delete date_display;
+    delete mood_display;
+    delete top_menu;
 }

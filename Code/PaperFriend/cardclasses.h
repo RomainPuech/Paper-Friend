@@ -8,6 +8,7 @@
 #include <QRegion>
 #include <QString>
 #include <QLabel>
+#include <QHBoxLayout>
 
 class Card : public QWidget{
 public:
@@ -37,12 +38,14 @@ private:
 
 class EntryCard : public Card{
 public:
-    EntryCard(Entry *entry = nullptr);
+    EntryCard(int border_radius = 15, int width = 200, int height = 200, QString color = "beige", EntryPerso *entry = nullptr);
     ~EntryCard();
 
 private:
-    Entry *entry;
+    EntryPerso *entry;
+    QHBoxLayout *top_menu;
     QLabel *date_display;
+    QLabel *mood_display;
 };
 
 #endif // CARDCLASSES_H
