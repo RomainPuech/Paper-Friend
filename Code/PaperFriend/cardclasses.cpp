@@ -111,7 +111,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     date_display->setFixedHeight(50);
     date_display->setText(generate_date_string(entry->get_date()));
     date_display->setAlignment(Qt::AlignCenter);
-    date_display->setStyleSheet("font: 12px; font-family: ariel; font-weight: bold; background-color: aqua;");
+    date_display->setStyleSheet("font: 12px; font-weight: bold; background-color: aqua;");
 
     // display activities and friends
     // te be implemented
@@ -124,7 +124,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     mood_display->setAlignment(Qt::AlignCenter);
     QString red, green;
     generate_rgb(red, green, entry->get_mood());
-    mood_display->setStyleSheet("font: 12px; font-family: ariel; font-weight: bold; background-color: rgb(" + red + ", " + green + ", 0);");
+    mood_display->setStyleSheet("font: 12px; font-weight: bold; background-color: rgb(" + red + ", " + green + ", 0);");
 
 
     //top menu
