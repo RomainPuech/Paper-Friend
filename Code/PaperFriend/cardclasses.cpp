@@ -54,12 +54,18 @@ void Card::display(QWidget *parent){
     this->setParent(parent);
 }
 
-QString generate_date_string(QDate date){
+QString generate_date_string(std::string date_string){
     /* Using the date of the entry generates the QString of the form
      * 'Day - dd days ago
      * date of the entry '
      */
-    QDate today = QDate::currentDate();
+
+    //convert date_string to QDate object date
+    int month = std::stoi(date_string.substr(0, 2));
+    int day = std::stoi(date_string.substr(3, 2));
+    int year = std::stoi(date_string.substr(6, 4));
+    QDate date = QDate(year, month, day);
+
     int day_int = date.dayOfWeek();
     QString day_string;
     switch(day_int){
@@ -77,8 +83,11 @@ QString generate_date_string(QDate date){
         day_string = "Sat"; break;
     case 7:
         day_string = "Sun"; break;
+    default:
+        day_string = QString::number(day_int); break;
     }
 
+    QDate today = QDate::currentDate();
     int days_ago = date.daysTo(today);
     QString days_ago_string;
     if(days_ago % 100 == 1){
@@ -118,7 +127,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
 
     //display mood
     mood_display = new QLabel();
-    mood_display->setText("Mood: " + QString::number(entry->get_mood() * 100) + "%");
+    mood_display->setText("Mood: " + QString::number(std::round(entry->get_mood() * 100)) + "%");
     mood_display->setFixedWidth(this->get_width() / 2); // to be changed depending on the number of widgets
     mood_display->setFixedHeight(50);
     mood_display->setAlignment(Qt::AlignCenter);

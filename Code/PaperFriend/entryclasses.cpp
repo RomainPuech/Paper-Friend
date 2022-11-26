@@ -14,13 +14,13 @@ std::string current_date() {
 Entry::Entry() {
     text = "";
     title = "";
-    date = QDate::currentDate();
+    date = current_date();
 }
 
 Entry::Entry(std::string text, std::string title) {
     this->text = text;
     this->title = title;
-    date = QDate::currentDate();
+    date = current_date();
 }
 
 std::string Entry::get_text() {
@@ -39,7 +39,7 @@ void Entry::set_title(std::string title) {
     this->title=title;
 }
 
-QDate Entry::get_date() {
+std::string Entry::get_date() {
     return date;
 }
 

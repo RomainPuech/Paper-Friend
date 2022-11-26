@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <string>
-#include <QDate>
 
 class Entry {
 public:
@@ -17,12 +16,12 @@ public:
     std::string get_title();
     void set_title(std::string text);
 
-    QDate get_date();
+    std::string get_date();
 
 protected:
     std::string text;
     std::string title;
-    QDate date;
+    std::string date;
 };
 
 
