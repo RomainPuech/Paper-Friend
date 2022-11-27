@@ -1,7 +1,7 @@
 | Name                 |Team               |      What I did             |  What I will do |
 |:----------------------:|:-----------------:|:-------------------------|:------------------|
 | Romain Puech         |Frontend (specific)|- Conceived project structure, teams and detailed tasks.<br>-Wrote project description and roadmap<br>-Drew UI examples<br>-Wrote the [wiki](https://github.com/CSE201-project/PaperFriend-desktop-app/wiki) pages related to graphics, entries and UI to explain project structure<br>-Implemented the class [DynamicGraph](https://github.com/orgs/CSE201-project/projects/4/views/2?filterQuery=assignee%3A%40me) using Qt Charts structure<br>| |
-| Bogdana Kolic        |Frontend (specific)|     centered              |   What I wil do  |
+| Bogdana Kolic        |Frontend (specific)|     -Implemented the [Card](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/17) class and updated its [wiki page](https://github.com/CSE201-project/PaperFriend-desktop-app/wiki/Card-class) <br> -Started working on the [EntryCard](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/9) class and implemented the display of the "entry date" and "mood".<br>   |   -Continue working on the [EntryCard](https://github.com/CSE201-project/PaperFriend-desktop-app/wiki/EntryCard-class)  class.<br>|
 | Liam Loughman        |Frontend (specific)|     centered    | What I wil do |
 | Yubo Cai             |Frontend (specific)|     centered   |   What I wil do |
 | Luigi Massacci       |Frontend (general) |     centered   |   What I wil do |
