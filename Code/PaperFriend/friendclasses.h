@@ -9,15 +9,15 @@ class Friend {
 public:
     Friend();
     Friend(std::string name, int duration);
-    ~Friend() {}
+    ~Friend();
 
-    std::string get_name();
+    std::string get_name() const;
     void set_name(std::string name);
 
-    int get_duration();
+    int get_duration() const;
     void set_duration(int duration);
 
-protected:
+private:
     std::string name;
     int duration;
 };
