@@ -9,7 +9,13 @@ class DataAnalysis{
 
 public:
     double calculateSD(vector<double> data);  // calculates standart deviation
-    double calculate_mean(vector<double> data);
+
+    template <typename T> double calculate_mean(vector<T> data){ // calculates mean
+        double sum = 0;
+        for (typename vector<T>::iterator i=data.begin(); i<data.end(); i++){sum += *i;}
+        return sum/data.size();
+    }
+
 private:
 
 };

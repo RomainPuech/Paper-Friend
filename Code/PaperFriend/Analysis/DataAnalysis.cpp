@@ -5,20 +5,6 @@
 using namespace std;
 
 
-double DataAnalysis:: calculate_mean(vector<double> data){
-    /**
-     * @param vector data.
-     * @return mean.
-     */
-    double sum = 0.0, res = 0.0;
-
-    for(vector<double>::iterator i = data.begin(); i < data.end(); i++){
-        sum += *i;
-    }
-    res = sum / data.size();
-    return res;
-}
-
 double DataAnalysis::calculateSD(vector<double> data){
     /**
      * @param vector data.
