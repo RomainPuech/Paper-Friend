@@ -85,6 +85,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="pushButton">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(30, 154, 70 );</string>
+             </property>
              <property name="text">
               <string>All Habits</string>
              </property>
