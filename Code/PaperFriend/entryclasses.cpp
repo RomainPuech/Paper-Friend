@@ -63,19 +63,33 @@ std::string Entry::get_date() const {
     return date;
 }
 
+void Entry::set_date(std::string date) {
+    this->date=date;
+
 std::string Entry::get_weekday() const{
     return weekday;
 }
 
 int Entry::get_absolute_day() const{
     return absolute_day;
+
 }
 
 
 EntryPerso::EntryPerso() : Entry(), activities(NULL), friends(NULL), mood(0) {}
 
-EntryPerso::EntryPerso(std::string text, std::string title, Activity* activities, Friend* friends, double mood) :
-    Entry(text, title), activities(activities), friends(friends), mood(mood) {}
+EntryPerso::EntryPerso(std::string text, std::string title, Activity* activities, Friend* friends, double mood,
+                                                                                                   double sleep,
+                                                                                                   double eating_healthy,
+                                                                                                   double productivity,
+                                                                                                   double communications,
+                                                                                                   double screen_time) :
+    Entry(text, title), activities(activities), friends(friends), mood(mood),
+                                                                  sleep(sleep),
+                                                                  eating_healthy(eating_healthy),
+                                                                  productivity(productivity),
+                                                                  communications(communications),
+                                                                  screen_time(screen_time) {}
 
 EntryPerso::~EntryPerso() {
     delete activities;

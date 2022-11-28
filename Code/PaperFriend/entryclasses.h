@@ -20,6 +20,7 @@ public:
     void set_title(std::string text);
 
     std::string get_date() const;
+    void set_date(std::string text);
 
     std::string get_weekday() const;
 
@@ -38,7 +39,12 @@ protected:
 class EntryPerso : public Entry {
 public:
     EntryPerso();
-    EntryPerso(std::string text, std::string title, Activity* activities,Friend* friends, double mood);
+    EntryPerso(std::string text, std::string title, Activity* activities, Friend* friends, double mood,
+                                                                                           double sleep,
+                                                                                           double eating_healthy,
+                                                                                           double productivity,
+                                                                                           double communications,
+                                                                                           double screen_time);
     ~EntryPerso();
 
     Activity* get_activities() const;
