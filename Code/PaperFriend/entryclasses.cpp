@@ -6,14 +6,40 @@
 std::string current_date() {
     const int maxlen = 80;
     char s[maxlen];
-    time_t t = time(0);
+    time_t t = time(nullptr);
     strftime(s, maxlen, "%m/%d/%Y", localtime(&t));
     return s;
 }
 
-Entry::Entry(): text(""), title(""), date(current_date()) {}
+std::string find_weekday(){
+    const int maxlen = 80;
+    char s[maxlen];
+    time_t t = time(nullptr);
+    strftime(s, maxlen, "%A", localtime(&t));
+    return s;
+}
 
-Entry::Entry(std::string text, std::string title): text(text), title(title), date(current_date()) {}
+int find_absolute_day(){ // ! we assume time() returns the number of seconds since epoch UTC. further, we assume days are always exactly 24h
+    return (time(NULL)+3600)/(60*60*24);
+}
+
+Entry::Entry() {
+    this->text = "";
+    this->title = "";
+    this->time_log = time(nullptr);
+    this->date = current_date();
+    this->weekday = find_weekday();
+    this->absolute_day = find_absolute_day();
+}
+
+Entry::Entry(std::string text, std::string title){
+    this->text = text;
+    this->title = title;
+    this->time_log = time(nullptr);
+    this->date = current_date();
+    this->weekday = find_weekday();
+    this->absolute_day = find_absolute_day();
+}
 
 Entry::~Entry() {}
 
@@ -37,11 +63,33 @@ std::string Entry::get_date() const {
     return date;
 }
 
+void Entry::set_date(std::string date) {
+    this->date=date;
+
+std::string Entry::get_weekday() const{
+    return weekday;
+}
+
+int Entry::get_absolute_day() const{
+    return absolute_day;
+
+}
+
 
 EntryPerso::EntryPerso() : Entry(), activities(NULL), friends(NULL), mood(0) {}
 
-EntryPerso::EntryPerso(std::string text, std::string title, Activity* activities, Friend* friends, double mood) :
-    Entry(text, title), activities(activities), friends(friends), mood(mood) {}
+EntryPerso::EntryPerso(std::string text, std::string title, Activity* activities, Friend* friends, double mood,
+                                                                                                   double sleep,
+                                                                                                   double eating_healthy,
+                                                                                                   double productivity,
+                                                                                                   double communications,
+                                                                                                   double screen_time) :
+    Entry(text, title), activities(activities), friends(friends), mood(mood),
+                                                                  sleep(sleep),
+                                                                  eating_healthy(eating_healthy),
+                                                                  productivity(productivity),
+                                                                  communications(communications),
+                                                                  screen_time(screen_time) {}
 
 EntryPerso::~EntryPerso() {
     delete activities;

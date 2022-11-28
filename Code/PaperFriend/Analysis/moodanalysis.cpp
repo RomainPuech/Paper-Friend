@@ -1,42 +1,51 @@
 #include "moodanalysis.h"
+#include "entryclasses.h"
 
 #include <string>
 #include <math.h>
 #include <vector>
+#include <algorithm>
 
-// DayLog implementation:
-std::string DayLog::get_day() const{
-    return day;
-}
 
-double DayLog::get_mood() const{
-    return mood;
-}
 
-std::vector<DayLog> MoodAnalysis::anomalies_detection(std::vector<DayLog> log){
+// MoodAnalysis implementation:
+double MoodAnalysis::get_lastn_average(int n){
     /**
-     * @param vector of DayLogs [string day, double mood].
+     * @param int n: number of n last days we take into account
+     * @return double average mood for last n days
+     */
+    std::vector<double> mood_list{};
+
+    for(int i = std::max<int>(0, log.size() - n); i < log.size(); i++){
+        mood_list.push_back((log.begin() + i)->get_mood());
+    }
+    return avg<double>(mood_list);
+}
+
+std::vector<EntryPerso> MoodAnalysis::anomalies_detection(std::vector<EntryPerso> log){
+    /**
+     * @param vector of EntryPersos.
      * @return vector of dates at which anomalie in mood was detected (value is 2 SDs far from its mean).
      */
     std::vector<double> mood_list{};
-    std::vector<DayLog> res{};  // stores output info about anomaly points
+    std::vector<EntryPerso> res{};  // stores output info about anomaly points
 
-    for(std::vector<DayLog>::iterator i = log.begin(); i < log.end(); i++){
+    for(std::vector<EntryPerso>::iterator i = log.begin(); i < log.end(); i++){
             mood_list.push_back(i->get_mood());
     }
     double mean = avg<double>(mood_list);
     for(int i = 0; i < log.size(); i++){
         if (*(mood_list.begin() + i) - mean >= 2 * stddev(mood_list)){
-            DayLog temp = {(log.begin() + i)->get_day(), (log.begin() + i)->get_mood()};
+            EntryPerso temp;
+            temp.set_mood((log.begin() + i)->get_mood());
+            temp.set_date((log.begin() + i)->get_date());
             res.push_back(temp);
         }
     }
     return res;
 }
 
-/* This will be uncommented once get_lastn_average is implemented
-// MoodAnalisys implementation:
 bool MoodAnalysis::alert_depression(int n, int m){
     return get_lastn_average(n) < get_lastn_average(m);
 }
-*/
+
