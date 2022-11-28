@@ -4,8 +4,16 @@
 #include <QLocale>
 #include <QTranslator>
 
+#include "entryclasses.h"
+#include <iostream>
+
 int main(int argc, char *argv[])
 {
+
+    Entry aeo = Entry();
+    qDebug() << aeo.get_absolute_day();
+    return 0;
+
     QApplication a(argc, argv);
 
     QTranslator translator;

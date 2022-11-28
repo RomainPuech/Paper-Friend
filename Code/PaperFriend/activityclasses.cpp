@@ -4,9 +4,9 @@
 #include <string>
 
 
-Activity::Activity() : name(""), duration(0) {}
+Activity::Activity() : name(""), value(0) {}
 
-Activity::Activity(std::string name, int duration) : name(name), duration(duration) {}
+Activity::Activity(std::string name, int value) : name(name), value(value) {}
 
 Activity::~Activity() {}
 
@@ -18,12 +18,12 @@ void Activity::set_name(std::string name) {
     this->name=name;
 }
 
-int Activity::get_duration() const {
-    return duration;
+double Activity::get_value() const {
+    return value;
 }
 
-void Activity::set_duration(int duration) {
-    this->duration=duration;
+void Activity::set_value(double value) {
+    this->value=value;
 }
 
 int Activity::get_type() const{
