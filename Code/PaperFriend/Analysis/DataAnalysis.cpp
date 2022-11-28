@@ -1,33 +1,27 @@
 #include "DataAnalysis.h"
+#include <algorithm>
 #include <cmath> //prefer the c- version rather than the .h
+#include <numeric>
 #include <vector>
+
+// using namespace std; don't be lazy and just use the specifier, it
+// avoids naming conflicts. If you really have to use it, put it in the most
+// restricted scope possible (
 
 /**
  * @param vector data.
  * @return standart deviation.
  */
 
-// using namespace std; don't be lazy and just use the specifier, it
-// avoids naming conflicts. If you really have to use it, put it in the most
-// restricted scope possible (
-
-template <typename T> double avg(std::vector<T> data) { // calculates mean
-
-  return static_cast<double>(std::accumulate(data.begin(), data.end())) /
-         data.size();
-}
-
 double DataAnalysis::stddev(vector<double> data) {
 
-  double sum = 0.0, standardDeviation = 0.0;
-  double mean = avg(data);
+  double residue_sum = 0.0;
+  double mean = avg<double>(data);
 
   // Never manually iterate trough an STL container with iterators. Either use
   // the normal syntax or use range based for loops like the one below
   for (auto el : data)
-    standardDeviation += pow(el - mean, 2);
+    residue_sum = std::pow(mean - el, 2);
 
-  standardDeviation = sqrt(standardDeviation / data.size());
-
-  return standardDeviation;
+  return sqrt(residue_sum / data.size());
 }
