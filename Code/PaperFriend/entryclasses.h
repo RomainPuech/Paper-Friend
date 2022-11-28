@@ -21,10 +21,17 @@ public:
 
     std::string get_date() const;
 
+    std::string get_weekday() const;
+
+    int get_absolute_day() const;
+
 protected:
+    time_t time_log;
     std::string text;
     std::string title;
-    std::string date;
+    std::string date; // "MM/DD/YYYY"
+    std::string weekday; // "Monday", "Tuesday", ...
+    int absolute_day; // Number of days since Epoch, considering a UTC+1 (Paris) time zone, about 5 minute precision on day change.
 };
 
 
