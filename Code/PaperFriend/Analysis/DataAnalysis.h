@@ -4,20 +4,20 @@
 #include <numeric>
 #include <vector>
 
-using namespace std;
 
 class DataAnalysis {
 
 public:
-  double stddev(vector<double> data); // calculates standart deviation
+  double stddev(std::vector<double> data); // calculates standart deviation
 
-  template <typename T> double avg(vector<T> data) {
+ template <typename T> double avg(std::vector<T> data) {
 
     // prefer STL when available
     double sum = std::accumulate(data.begin(), data.end(), 0.0);
 
     return sum / data.size();
   }
+
 
 private:
 };

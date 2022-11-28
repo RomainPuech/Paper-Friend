@@ -25,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent)
     entries.push_back(*e2);
     DynamicGraph moodGraph = DynamicGraph(ui->frame,entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
     moodGraph.display(); //displays the graph
+
+
 }
 
 MainWindow::~MainWindow()

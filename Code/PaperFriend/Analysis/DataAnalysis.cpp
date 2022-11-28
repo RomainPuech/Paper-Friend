@@ -3,6 +3,7 @@
 #include <cmath> //prefer the c- version rather than the .h
 #include <numeric>
 #include <vector>
+#include <numeric>
 
 // using namespace std; don't be lazy and just use the specifier, it
 // avoids naming conflicts. If you really have to use it, put it in the most
@@ -13,9 +14,11 @@
  * @return standart deviation.
  */
 
-double DataAnalysis::stddev(vector<double> data) {
+
+double DataAnalysis::stddev(std::vector<double> data) {
 
   double residue_sum = 0.0;
+
   double mean = avg<double>(data);
 
   // Never manually iterate trough an STL container with iterators. Either use
