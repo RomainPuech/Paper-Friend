@@ -26,11 +26,11 @@ void Activity::set_duration(int duration) {
     this->duration=duration;
 }
 
-Activity::activity_types Activity::get_type() const{
+int Activity::get_type() const{
     return type;
 }
 
-void Activity::set_type(Activity::activity_types type){
+void Activity::set_type(int type){
     this->type = type;
 }
 

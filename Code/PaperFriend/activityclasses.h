@@ -17,13 +17,13 @@ public:
     int get_duration() const;
     void set_duration(int duration);
 
-    activity_types get_type() const;
-    void set_type(activity_types type);
+    int get_type() const;
+    void set_type(int type);
 
 protected:
     std::string name;
     int duration;
-    activity_types type;
+    int type;
     enum activity_types {Sport, Spiritual, Work, Study, Art};
 };
 
