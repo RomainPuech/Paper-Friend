@@ -40,7 +40,7 @@ std::string Entry::get_date() const {
 
 EntryPerso::EntryPerso() : Entry(), activities(NULL), friends(NULL), mood(0) {}
 
-EntryPerso::EntryPerso(std::string text, std::string title, std::string* activities, std::string* friends, double mood) :
+EntryPerso::EntryPerso(std::string text, std::string title, Activity* activities, Friend* friends, double mood) :
     Entry(text, title), activities(activities), friends(friends), mood(mood) {}
 
 EntryPerso::~EntryPerso() {
@@ -48,19 +48,19 @@ EntryPerso::~EntryPerso() {
     delete friends;
 }
 
-std::string* EntryPerso::get_activities() const {
+Activity* EntryPerso::get_activities() const {
     return activities;
 }
 
-void EntryPerso::set_activities(std::string* activities) {
+void EntryPerso::set_activities(Activity* activities) {
     this->activities = activities;
 }
 
-std::string* EntryPerso::get_friends() const {
+Friend* EntryPerso::get_friends() const {
     return friends;
 }
 
-void EntryPerso::set_friends(std::string* friends) {
+void EntryPerso::set_friends(Friend* friends) {
     this->friends = friends;
 }
 

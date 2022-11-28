@@ -4,6 +4,9 @@
 #include <iostream>
 #include <string>
 
+#include "activityclasses.h"
+#include "friendclasses.h"
+
 class Entry {
 public:
     Entry();
@@ -28,14 +31,14 @@ protected:
 class EntryPerso : public Entry {
 public:
     EntryPerso();
-    EntryPerso(std::string text, std::string title, std::string* activities, std::string* friends, double mood);
+    EntryPerso(std::string text, std::string title, Activity* activities,Friend* friends, double mood);
     ~EntryPerso();
 
-    std::string* get_activities() const;
-    void set_activities(std::string* activities);
+    Activity* get_activities() const;
+    void set_activities(Activity* activities);
 
-    std::string* get_friends() const;
-    void set_friends(std::string* friends);
+    Friend* get_friends() const;
+    void set_friends(Friend* friends);
 
     double get_mood() const;
     void set_mood(double mood);
@@ -56,8 +59,8 @@ public:
     void set_screen_time(double screen_time);
 
 private:
-    std::string* activities;
-    std::string* friends;
+    Activity* activities;
+    Friend* friends;
     double mood;
     double sleep;
     double eating_healthy;
