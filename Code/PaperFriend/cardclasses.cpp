@@ -3,28 +3,26 @@
 #include <QDate>
 #include <QCalendar>
 
-Card::Card(int border_radius, int width, int height, QString color){
-    this->border_radius = border_radius;
+Card::Card(int border_radius, int width, int height, QString color) : border_radius(border_radius), background_color(color){
     this->resize(width, height);
     this->rect().setHeight(height);
     this->rect().setWidth(width);
-    this->background_color = color;
     this->setStyleSheet("background-color: " + color + ";");
 }
 
-int Card::get_width(){
+int Card::get_width() const{
     return this->width();
 }
 
-int Card::get_height(){
+int Card::get_height() const{
     return this->height();
 }
 
-int Card::get_border_radius(){
+int Card::get_border_radius() const{
     return border_radius;
 }
 
-QString Card::get_background_color(){
+QString Card::get_background_color() const{
     return background_color;
 }
 
@@ -101,6 +99,9 @@ QString generate_date_string(std::string date_string){
 }
 
 void generate_rgb(QString &red, QString &green, double m){
+    /* Associate a color on a scale from red to green
+     * according to the mood parameter
+     */
     if(m <= 0.5){
         red = QString::number(255);
         green = QString::number(255 * m / (1-m));
@@ -111,16 +112,14 @@ void generate_rgb(QString &red, QString &green, double m){
     }
 }
 
-EntryCard::EntryCard(int border_radius, int width, int height, QString color, EntryPerso *entry) : Card(border_radius, width, height, color){
-    this->entry = entry;
-
+EntryCard::EntryCard(int border_radius, int width, int height, QString color, EntryPerso *entry) : Card(border_radius, width, height, color), entry(entry){
     // display date
     date_display = new QLabel();
     date_display->setFixedWidth(this->get_width() / 2); // to be changed depending on the number of widgets
     date_display->setFixedHeight(50);
     date_display->setText(generate_date_string(entry->get_date()));
     date_display->setAlignment(Qt::AlignCenter);
-    date_display->setStyleSheet("font: 12px; font-weight: bold; background-color: aqua;");
+    date_display->setStyleSheet("font: 12px; font-weight: bold; border-color: black; border-width: 2px;");
 
     // display activities and friends
     // te be implemented
@@ -133,7 +132,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     mood_display->setAlignment(Qt::AlignCenter);
     QString red, green;
     generate_rgb(red, green, entry->get_mood());
-    mood_display->setStyleSheet("font: 12px; font-weight: bold; background-color: rgb(" + red + ", " + green + ", 0);");
+    mood_display->setStyleSheet("font: 12px; font-weight: bold; background-color: rgb(" + red + ", " + green + ", 0); border-color: black; border-width: 2px;");
 
 
     //top menu
