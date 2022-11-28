@@ -26,7 +26,15 @@ void Activity::set_duration(int duration) {
     this->duration=duration;
 }
 
+Activity::activity_types Activity::get_type() const{
+    return type;
+}
 
+void Activity::set_type(Activity::activity_types type){
+    this->type = type;
+}
+
+/*
 ActivitySport::ActivitySport() : Activity() {}
 
 ActivitySport::ActivitySport(std::string name, int duration) : Activity(name, duration) {}
@@ -60,3 +68,4 @@ ActivityArt::ActivityArt() : Activity() {}
 ActivityArt::ActivityArt(std::string name, int duration) : Activity(name, duration) {}
 
 ActivityArt::~ActivityArt() {}
+*/
