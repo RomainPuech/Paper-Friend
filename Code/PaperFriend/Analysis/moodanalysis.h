@@ -9,15 +9,14 @@
 #include <vector>
 
 
-using namespace std;
 
 class DayLog{
 public:
-    DayLog(string day_n, double mood_n): day(day_n), mood(mood_n){}
-    string get_day() const;
+    DayLog(std::string day_n, double mood_n): day(day_n), mood(mood_n){}
+    std::string get_day() const;
     double get_mood() const;
 private:
-    string day;
+    std::string day;
     double mood;
 };
 
@@ -25,7 +24,7 @@ private:
 class MoodAnalysis : public DataAnalysis{
 public:
     bool alert_depression(int n, int m);
-    vector<DayLog> anomalies_detection(vector<DayLog> log);
+    std::vector<DayLog> anomalies_detection(std::vector<DayLog> log);
 private:
     double get_lastn_average(int n); // This will compute the average mood over the last n days.
                                      // Not implemented yet.

@@ -3,14 +3,13 @@
 
 #include <vector>
 
-using namespace std;
 
 class DataAnalysis {
 
 public:
-  double stddev(vector<double> data); // calculates standart deviation
+  double stddev(std::vector<double> data); // calculates standart deviation
 
-  template <typename T> double mean(vector<T> data);
+  template <typename T> double mean(std::vector<T> data);
 
 private:
 };

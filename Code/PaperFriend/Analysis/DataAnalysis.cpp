@@ -1,6 +1,7 @@
 #include "DataAnalysis.h"
 #include <cmath> //prefer the c- version rather than the .h
 #include <vector>
+#include <numeric>
 
 /**
  * @param vector data.
@@ -17,10 +18,10 @@ template <typename T> double avg(std::vector<T> data) { // calculates mean
          data.size();
 }
 
-double DataAnalysis::stddev(vector<double> data) {
+double DataAnalysis::stddev(std::vector<double> data) {
 
   double sum = 0.0, standardDeviation = 0.0;
-  double mean = avg(data);
+  double mean = avg<double>(data);
 
   // Never manually iterate trough an STL container with iterators. Either use
   // the normal syntax or use range based for loops like the one below
