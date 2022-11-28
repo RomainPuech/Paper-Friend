@@ -27,7 +27,7 @@ double DataAnalysis::stddev(vector<double> data) {
   for (auto el : data)
     standardDeviation += pow(el - mean, 2);
 
-  standardDeviation /= data.size();
+  standardDeviation = sqrt(standardDeviation / data.size());
 
   return standardDeviation;
 }
