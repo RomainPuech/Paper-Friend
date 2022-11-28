@@ -32,3 +32,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::on_pushButton_clicked()
+{
+    hide();
+    all_habits = new All_Habits(this);
+    all_habits -> show();
+}
+
