@@ -15,10 +15,10 @@ public:
     Card(int border_radius = 15, int width = 200, int height = 200, QString color = "beige");
     ~Card(){};
 
-    int get_border_radius();
-    int get_width();
-    int get_height();
-    QString get_background_color();
+    int get_border_radius() const;
+    int get_width() const;
+    int get_height() const;
+    QString get_background_color() const;
 
     void set_border_radius(int border_radius);
     void set_width(int width);
