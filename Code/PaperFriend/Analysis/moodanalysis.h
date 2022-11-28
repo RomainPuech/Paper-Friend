@@ -27,7 +27,7 @@ public:
     std::vector<DayLog> anomalies_detection(std::vector<DayLog> log);
 private:
     double get_lastn_average(int n); // This will compute the average mood over the last n days.
-                                     // Not implemented yet.
+    std::vector<DayLog> log;                                  // Not implemented yet.
 };
 
 
