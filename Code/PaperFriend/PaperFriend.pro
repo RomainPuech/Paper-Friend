@@ -11,6 +11,7 @@ CONFIG += c++17
 
 SOURCES += \
     activityclasses.cpp \
+    all_habits.cpp \
     cardclasses.cpp \
     Analysis/DataAnalysis.cpp \
     cipher/Qt-AES-1.2/qaesencryption.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
 
 HEADERS += \
     activityclasses.h \
+    all_habits.h \
     cardclasses.h \
     Analysis/DataAnalysis.h \
     cipher/Qt-AES-1.2/aesni/aesni-enc-cbc.h \
@@ -38,6 +40,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    all_habits.ui \
     mainwindow.ui
 
 TRANSLATIONS += \

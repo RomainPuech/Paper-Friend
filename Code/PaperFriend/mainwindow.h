@@ -18,7 +18,7 @@
 #include <QtCharts/QLineSeries>
 // Used to change names on axis
 #include <QtCharts/QCategoryAxis>
-
+#include "all_habits.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -32,7 +32,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    All_Habits *all_habits;
 };
 #endif // MAINWINDOW_H
