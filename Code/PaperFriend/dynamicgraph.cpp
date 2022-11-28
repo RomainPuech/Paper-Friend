@@ -45,6 +45,7 @@ void DynamicGraph::display() const
     mood_chart->addSeries(series);
     mood_chart->setTitle("Mood");
     QChartView *mood_view = new QChartView(mood_chart);
+    //mood_view->setMaximumSize(parent_frame->width(),100);
     mood_view->setRenderHint(QPainter::Antialiasing);
-    mood_view->setParent(parent_frame);//displays the graph on the sreen in the parent frame
+    mood_view->setParent(parent_frame);//displays the graph on the screen in the parent frame
 }
