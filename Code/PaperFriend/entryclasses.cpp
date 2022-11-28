@@ -65,6 +65,7 @@ std::string Entry::get_date() const {
 
 void Entry::set_date(std::string date) {
     this->date=date;
+}
 
 std::string Entry::get_weekday() const{
     return weekday;
@@ -72,7 +73,6 @@ std::string Entry::get_weekday() const{
 
 int Entry::get_absolute_day() const{
     return absolute_day;
-
 }
 
 
