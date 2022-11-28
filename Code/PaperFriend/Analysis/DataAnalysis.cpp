@@ -17,7 +17,7 @@ double DataAnalysis::calculateSD(vector<double> data){
         standardDeviation += pow(*i - mean, 2);
     }
 
-    standardDeviation /= data.size();
+    standardDeviation = sqrt(standardDeviation / data.size());
 
     return standardDeviation;
 }
