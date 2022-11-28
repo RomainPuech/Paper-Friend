@@ -3,6 +3,7 @@
 #include <string>
 #include <math.h>
 #include <vector>
+#include <algorithm>
 
 // DayLog implementation:
 std::string DayLog::get_day() const{
@@ -11,6 +12,21 @@ std::string DayLog::get_day() const{
 
 double DayLog::get_mood() const{
     return mood;
+}
+
+
+// MoodAnalysis implementation:
+double MoodAnalysis::get_lastn_average(int n){
+    /**
+     * @param int n: number of n last days we take into account
+     * @return double average mood for last n days
+     */
+    std::vector<double> mood_list{};
+
+    for(int i = std::max<int>(0, log.size() - n); i < log.size(); i++){
+        mood_list.push_back((log.begin() + i)->get_mood());
+    }
+    return avg<double>(mood_list);
 }
 
 std::vector<DayLog> MoodAnalysis::anomalies_detection(std::vector<DayLog> log){
@@ -34,9 +50,7 @@ std::vector<DayLog> MoodAnalysis::anomalies_detection(std::vector<DayLog> log){
     return res;
 }
 
-/* This will be uncommented once get_lastn_average is implemented
-// MoodAnalisys implementation:
 bool MoodAnalysis::alert_depression(int n, int m){
     return get_lastn_average(n) < get_lastn_average(m);
 }
-*/
+
