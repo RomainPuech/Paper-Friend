@@ -1,6 +1,7 @@
 #ifndef DATAANALYSIS_H
 #define DATAANALYSIS_H
 
+#include "entryclasses.h"
 #include <numeric>
 #include <vector>
 
@@ -18,8 +19,9 @@ public:
     return sum / data.size();
   }
 
+  std::vector<EntryPerso> get_lastn_days_data(int n) const;  
 
-private:
+  std::vector<EntryPerso> log;
 };
 
 

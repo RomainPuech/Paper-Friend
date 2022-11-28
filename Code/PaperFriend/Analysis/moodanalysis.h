@@ -18,7 +18,7 @@ public:
     std::string suggestion();
 private:
     double get_lastn_average(int n); // This will compute the average mood over the last n days.
-    std::vector<EntryPerso> log;                                  // Not implemented yet.
+                                     // Not implemented yet.
 };
 
 
