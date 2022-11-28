@@ -1,23 +1,33 @@
 #include "DataAnalysis.h"
-#include "math.h"
+#include <cmath> //prefer the c- version rather than the .h
 #include <vector>
 
-using namespace std;
+/**
+ * @param vector data.
+ * @return standart deviation.
+ */
 
+// using namespace std; don't be lazy and just use the specifier, it
+// avoids naming conflicts. If you really have to use it, put it in the most
+// restricted scope possible (
 
-double DataAnalysis::calculateSD(vector<double> data){
-    /**
-     * @param vector data.
-     * @return standart deviation.
-     */
-    double sum = 0.0, standardDeviation = 0.0;
-    double mean =  calculate_mean(data);
+template <typename T> double avg(std::vector<T> data) { // calculates mean
 
-    for(vector<double>::iterator i = data.begin(); i < data.end(); i++) {
-        standardDeviation += pow(*i - mean, 2);
-    }
+  return static_cast<double>(std::accumulate(data.begin(), data.end())) /
+         data.size();
+}
 
-    standardDeviation = sqrt(standardDeviation / data.size());
+double DataAnalysis::stddev(vector<double> data) {
 
-    return standardDeviation;
+  double sum = 0.0, standardDeviation = 0.0;
+  double mean = avg(data);
+
+  // Never manually iterate trough an STL container with iterators. Either use
+  // the normal syntax or use range based for loops like the one below
+  for (auto el : data)
+    standardDeviation += pow(el - mean, 2);
+
+  standardDeviation = sqrt(standardDeviation / data.size());
+
+  return standardDeviation;
 }
