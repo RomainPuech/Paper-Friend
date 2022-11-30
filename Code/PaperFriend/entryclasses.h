@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <QDate>
 
 #include "activityclasses.h"
 #include "friendclasses.h"
@@ -19,20 +20,24 @@ public:
     std::string get_title() const;
     void set_title(std::string text);
 
-    std::string get_date() const;
-    void set_date(std::string text);
+    std::string get_date() const; // "MM/DD/YYYY"
+    void set_date(std::string format_date);
 
-    std::string get_weekday() const;
+    QDate get_qdate() const;
+    void set_qdate(QDate qdate);
 
-    int get_absolute_day() const;
+
+    std::string get_weekday() const; // 1 = Monday, 2 = Tuesday", ...
+
+    int get_absolute_day() const; // Day in Julian calendar
 
 protected:
-    time_t time_log;
     std::string text;
     std::string title;
-    std::string date; // "MM/DD/YYYY"
-    std::string weekday; // "Monday", "Tuesday", ...
-    int absolute_day; // Number of days since Epoch, considering a UTC+1 (Paris) time zone, about 5 minute precision on day change.
+    QDate qdate;
+    std::string date;
+    std::string weekday;
+    int absolute_day;
 };
 
 
