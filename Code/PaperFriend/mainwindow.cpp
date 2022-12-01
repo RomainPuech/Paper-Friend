@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "dynamicgraph.h"
 #include "cardclasses.h"
+#include "all_activities.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -12,20 +13,25 @@ MainWindow::MainWindow(QWidget *parent)
 
     // test for the EntryCard class
     EntryPerso *e = new EntryPerso();
+
     EntryCard *c = new EntryCard(20, 300, 300, "beige", e);
-    //c->display(ui->main_frame); //displays the entry in the main_frame.
+    c->display(ui->main_frame); //displays the entry in the main_frame.
 
     //test for the DynamicGraph class
-    EntryPerso *e1 = new EntryPerso(); //create an entry
-    EntryPerso *e2 = new EntryPerso();
-    e1->set_mood(10.); //put a dummy mood
-    e2->set_mood(12.);
-    std::vector<EntryPerso> entries; //put entries in a vector
-    entries.push_back(*e1);
-    entries.push_back(*e2);
+    //std::vector<EntryPerso> entries = sample_entries(10);
+    EntryPerso e1 =EntryPerso();
+    EntryPerso e2 =EntryPerso();
+    EntryPerso e3 =EntryPerso();
+    e1.set_mood(10.);
+    e2.set_mood(12.);
+    e3.set_mood(11.);
+    std::vector<EntryPerso> entries;
+    entries.push_back(e1);
+    entries.push_back(e2);
+    entries.push_back(e3);
     DynamicGraph moodGraph = DynamicGraph(entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
     moodGraph.display(ui->graph_frame); //displays the graph
-
+    this -> showMaximized();
 
 }
 
@@ -48,7 +54,16 @@ void MainWindow::on_pushButton_clicked()
 {
     hide();
     all_habits = new All_Habits(this);
-    all_habits -> show();
+    all_habits -> showMaximized();
 }
 
+
+
+void MainWindow::on_activitie_button_clicked()
+{
+    all_activities my_activities;
+    my_activities.setModal(true);
+    my_activities.exec();
+
+}
 

@@ -42,6 +42,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    all_activities.ui \
     all_habits.ui \
     mainwindow.ui
 
