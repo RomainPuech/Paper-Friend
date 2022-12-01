@@ -1,4 +1,5 @@
 #include "all_habits.h"
+#include "qevent.h"
 #include "ui_all_habits.h"
 
 All_Habits::All_Habits(QWidget *parent) :
@@ -11,4 +12,9 @@ All_Habits::All_Habits(QWidget *parent) :
 All_Habits::~All_Habits()
 {
     delete ui;
+}
+void All_Habits::closeEvent (QCloseEvent *event){
+    event -> accept();
+    QWidget *parent = this->parentWidget();
+    parent->showMaximized();
 }

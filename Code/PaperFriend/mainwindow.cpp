@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "dynamicgraph.h"
 #include "cardclasses.h"
+#include "all_activities.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -26,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     entries.push_back(*e2);
     DynamicGraph moodGraph = DynamicGraph(entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
     moodGraph.display(ui->graph_frame); //displays the graph
-
+    this -> showMaximized();
 
 }
 
@@ -49,7 +50,16 @@ void MainWindow::on_pushButton_clicked()
 {
     hide();
     all_habits = new All_Habits(this);
-    all_habits -> show();
+    all_habits -> showMaximized();
 }
 
+
+
+void MainWindow::on_activitie_button_clicked()
+{
+    all_activities my_activities;
+    my_activities.setModal(true);
+    my_activities.exec();
+
+}
 
