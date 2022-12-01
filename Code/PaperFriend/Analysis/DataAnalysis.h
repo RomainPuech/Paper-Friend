@@ -14,7 +14,13 @@ enum Variables {    // These are the variables to analyze. This definition allow
 class DataAnalysis {
 
 public:
+
   std::vector<EntryPerso> log; // Data to be analysed
+
+  double stddev(std::vector<double> data);  // calculates standart deviation
+  double cov(std::vector<double> X, std::vector<double> Y);  // calculates covariance
+  double cor(std::vector<double> X, std::vector<double> Y);  // calculates correlation
+
 
 
 

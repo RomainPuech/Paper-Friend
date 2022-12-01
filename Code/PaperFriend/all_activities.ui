@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>all_activities</class>
+ <widget class="QDialog" name="all_activities">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>All Activities</string>
+  </property>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -9,10 +9,8 @@
 // avoids naming conflicts. If you really have to use it, put it in the most
 // restricted scope possible (
 
-/**
- * @param vector data.
- * @return standart deviation.
- */
+// Never manually iterate trough an STL container with iterators. Either use
+// the normal syntax or use range based for loops like the one below
 
 double DataAnalysis::avg(const std::vector<EntryPerso>& entries, Variables var_name) const{
     /**
@@ -21,6 +19,7 @@ double DataAnalysis::avg(const std::vector<EntryPerso>& entries, Variables var_n
      * @return average value of the variable across the entries
      */
 
+<<<<<<< HEAD
     return avg<double>(get_vect(entries, var_name));
 }
 
@@ -28,6 +27,25 @@ double DataAnalysis::stddev(std::vector<double> data) const{
     /**
      * @param vector<double>
      * @return standard deviation of the values of the variable across the entries
+=======
+double DataAnalysis::cov(std::vector<double> X, std::vector<double> Y) {
+    /**
+     * @param vectors double X, Y.
+     * @return Cov(X, Y).
+     */
+    std::vector<double> XY{};
+    for (auto elx : X)
+        for(auto ely : Y)
+            XY.push_back(elx*ely);
+
+    return avg(X)*avg(Y) - avg(XY);
+}
+
+double DataAnalysis::stddev(std::vector<double> data) {
+    /**
+     * @param vector data.
+     * @return standart deviation.
+>>>>>>> aad966f5fda31d91d2b8a34de892bae569f4ad1d
      */
   double residue_sum = 0.0;
 
@@ -41,6 +59,7 @@ double DataAnalysis::stddev(std::vector<double> data) const{
   return sqrt(residue_sum / data.size());
 }
 
+<<<<<<< HEAD
 double DataAnalysis::stddev(const std::vector<EntryPerso>& entries, Variables var_name) const{
     /**
      * @param vector<EntryPerso>
@@ -49,6 +68,15 @@ double DataAnalysis::stddev(const std::vector<EntryPerso>& entries, Variables va
      */
 
    return stddev(get_vect(entries, var_name));
+=======
+double DataAnalysis::cor(std::vector<double> X, std::vector<double> Y) {
+    /**
+     * @param vectors double X, Y.
+     * @return Cor(X, Y).
+     */
+
+    return cov(X,Y)/stddev(X)/stddev(Y);
+>>>>>>> aad966f5fda31d91d2b8a34de892bae569f4ad1d
 }
 
 std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n) const {
