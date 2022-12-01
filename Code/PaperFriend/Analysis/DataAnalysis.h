@@ -9,7 +9,9 @@
 class DataAnalysis {
 
 public:
-  double stddev(std::vector<double> data); // calculates standart deviation
+  double stddev(std::vector<double> data);  // calculates standart deviation
+  double cov(std::vector<double> X, std::vector<double> Y);  // calculates covariance
+  double cor(std::vector<double> X, std::vector<double> Y);  // calculates correlation
 
   template <typename T> double avg(std::vector<T> data) {
 
