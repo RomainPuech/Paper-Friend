@@ -4,6 +4,9 @@
 #include "cardclasses.h"
 #include "all_activities.h"
 
+#include <iostream>
+#include <fstream>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -33,10 +36,11 @@ MainWindow::MainWindow(QWidget *parent)
     moodGraph.display(ui->graph_frame); //displays the graph
     this -> showMaximized();
 
+    auto settings = findChild<QWidget*>("settings_frame");
+    settings->hide(); //hide the settings menu on launch
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 void MainWindow::closeEvent (QCloseEvent *event){
@@ -50,8 +54,7 @@ void MainWindow::closeEvent (QCloseEvent *event){
 }
 
 
-void MainWindow::on_pushButton_clicked()
-{
+void MainWindow::on_pushButton_clicked() {
     hide();
     all_habits = new All_Habits(this);
     all_habits -> showMaximized();
@@ -67,3 +70,50 @@ void MainWindow::on_activitie_button_clicked()
 
 }
 
+
+void MainWindow::on_settingsButton_clicked() {
+    auto settings = findChild<QWidget*>("settings_frame");
+    settings->show();
+    auto standard = findChild<QWidget*>("standard_frame");
+    standard->hide();
+}
+
+void MainWindow::on_save_settings_clicked() {
+    std::ofstream myfile;
+    myfile.open("journal_settings.txt");
+    if (findChild<QCheckBox*>("mood")->isChecked()) {
+        myfile << "mood:true\n";
+    } else {
+        myfile << "mood:false\n";
+    }
+    if (findChild<QCheckBox*>("sleep")->isChecked()) {
+        myfile << "sleep:true\n";
+    } else {
+        myfile << "sleep:false\n";
+    }
+    if (findChild<QCheckBox*>("eating_healthy")->isChecked()) {
+        myfile << "eating_healthy:true\n";
+    } else {
+        myfile << "eating_healthy:false\n";
+    }
+    if (findChild<QCheckBox*>("productivity")->isChecked()) {
+        myfile << "productivity:true\n";
+    } else {
+        myfile << "productivity:false\n";
+    }
+    if (findChild<QCheckBox*>("communications")->isChecked()) {
+        myfile << "communications:true\n";
+    } else {
+        myfile << "communications:false\n";
+    }
+    if (findChild<QCheckBox*>("screen_time")->isChecked()) {
+        myfile << "screen_time:true\n";
+    } else {
+        myfile << "screen_time:false\n";
+    }
+    myfile.close();
+    auto settings = findChild<QWidget*>("settings_frame");
+    settings->hide();
+    auto standard = findChild<QWidget*>("standard_frame");
+    standard->show();
+}
