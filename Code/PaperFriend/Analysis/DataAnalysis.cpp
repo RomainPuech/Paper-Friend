@@ -24,7 +24,7 @@ double DataAnalysis::avg(const std::vector<EntryPerso>& entries, Variables var_n
 }
 
 
-double DataAnalysis::cov(std::vector<double> X, std::vector<double> Y) {
+double DataAnalysis::cov(const std::vector<double>& X, const std::vector<double>& Y) const{
     /**
      * @param vectors double X, Y.
      * @return Cov(X, Y).
@@ -34,10 +34,49 @@ double DataAnalysis::cov(std::vector<double> X, std::vector<double> Y) {
         for(auto ely : Y)
             XY.push_back(elx*ely);
 
-    return avg(X)*avg(Y) - avg(XY);
+    return avg(XY) - avg(X)*avg(Y);
 }
 
-double DataAnalysis::stddev(std::vector<double> data) const{
+LinearRegressionCoeffs DataAnalysis::compute_linear_regression_coeffs(const std::vector<double>& X, const std::vector<double>& Y){
+    /**
+     * @param vectors double X, Y.
+     * @return LinearRegressionCoeffs object corresponding to fitting Y against X.
+     */
+
+    double slope = cov(X, Y) / pow(stddev(X), 2);
+    double intercept = avg(Y) - slope * avg(X);
+    double quality_coeff = pow(cor(X, Y), 2);
+
+    return LinearRegressionCoeffs(slope, intercept, quality_coeff);
+}
+
+LinearRegressionCoeffs DataAnalysis::compute_linear_regression_coeffs(const std::vector<EntryPerso>& entries, Variables var1, Variables var2){
+    /**
+     * @param vectors of entries, and two variables
+     * @return LinearRegressionCoeffs object corresponding to fitting the second variable against the first.
+     *         across the values of each in entries.
+     */
+    return compute_linear_regression_coeffs(get_vect(entries, var1), get_vect(entries, var2));
+}
+
+LinearRegressionCoeffs DataAnalysis::general_trend(int n, Variables var){
+    /**
+     * @param int n : represents number of days to consider.
+     *        Variables var: variable to consider.
+     * @return LinearRegressionCoeffs object corresponding to fitting the variable against the number of days since the first entry within n days of the last entry in the log.
+     *  The function uses doubles to store ints because the functions used to calculate the desired coefficients are defined on vectors of doubles.
+     */
+    std::vector<EntryPerso> entries = get_lastn_days_data(n);
+    std::vector<double> values = get_vect(entries, var);
+    std::vector<double> no_of_days;
+
+    double first_day = entries.front().get_absolute_day();
+    for(auto& entry : entries)
+         no_of_days.push_back(entry.get_absolute_day() - first_day);
+    return compute_linear_regression_coeffs(no_of_days, values);
+}
+
+double DataAnalysis::stddev(const std::vector<double>& data) const{
     /**
      * @param vector data.
      * @return standart deviation.
@@ -64,7 +103,7 @@ double DataAnalysis::stddev(const std::vector<EntryPerso>& entries, Variables va
      */
    return stddev(get_vect(entries, var_name));
 }
-double DataAnalysis::cor(std::vector<double> X, std::vector<double> Y) {
+double DataAnalysis::cor(const std::vector<double>& X, const std::vector<double>& Y) const{
     /**
      * @param vectors double X, Y.
      * @return Cor(X, Y).
@@ -191,22 +230,7 @@ std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<Entr
      * @param vector of EntryPersos.
      * @return vector of entries at which anomalie in the variable was detected (value is 2 SDs far from its mean).
      */
-    /*std::vector<double> mood_list{};
-    std::vector<EntryPerso> res{};  // stores output info about anomaly points
 
-    for(std::vector<EntryPerso>::iterator i = log.begin(); i < log.end(); i++){
-            mood_list.push_back(i->get_mood());
-    }
-    double mean = avg<double>(mood_list);
-    for(int i = 0; i < log.size(); i++){
-        if (*(mood_list.begin() + i) - mean >= 2 * stddev(mood_list)){
-            EntryPerso temp;
-            temp.set_mood((log.begin() + i)->get_mood());
-            temp.set_date((log.begin() + i)->get_date());
-            res.push_back(temp);
-        }
-    }
-    return res;*/
     std::vector<EntryPerso> res;
 
     double mean = avg(entries, var_name);

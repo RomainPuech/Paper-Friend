@@ -7,50 +7,7 @@
 #include <algorithm>
 #include <map>
 
-// MoodAnalysis implementation:
-//double MoodAnalysis::get_lastn_average(int n, std::string item){
-    /**
-     * @param int n: number of n last days we take into account, string item: name of item (e.g. "mood" or "screen_time")
-     * @return double average mood for last n days
-     */
- /*   std::vector<double> mood_list{};
-    std::vector<double> sleep_list{};
-    std::vector<double> eating_healthy_list{};
-    std::vector<double> productivity_list{};
-    std::vector<double> communications_list{};
-    std::vector<double> screen_time_list{};
 
-    for(int i = std::max<int>(0, log.size() - n); i < log.size(); i++){
-        if (item == "eating_healthy") {
-            eating_healthy_list.push_back((log.begin() + i)->get_eating_healthy());
-        } else if (item == "sleep") {
-            sleep_list.push_back((log.begin() + i)->get_sleep());
-        } else if (item == "productivity") {
-            productivity_list.push_back((log.begin() + i)->get_productivity());
-        } else if (item == "communications") {
-            communications_list.push_back((log.begin() + i)->get_communications());
-        } else if (item == "screen_time") {
-            screen_time_list.push_back((log.begin() + i)->get_screen_time());
-        } else {
-            mood_list.push_back((log.begin() + i)->get_mood());
-        }
-    }
-
-    if (item == "eating_healthy") {
-        return avg<double>(eating_healthy_list);
-    } else if (item == "sleep") {
-        return avg<double>(sleep_list);
-    } else if (item == "productivity") {
-        return avg<double>(productivity_list);
-    } else if (item == "communications") {
-        return avg<double>(communications_list);
-    } else if (item == "screen_time") {
-        return avg<double>(screen_time_list);
-    } else {
-        return avg<double>(mood_list);
-    }
-
-}*/
 
 
 
@@ -83,15 +40,15 @@ std::vector<Variables> MoodAnalysis::item_priority(){
 
     std::vector<double> mood_list = get_vect(log, MOOD);
 
-    std::vector<double> sleep_list = get_vect(log, SLEEP);;
+    std::vector<double> sleep_list = get_vect(log, SLEEP);
 
-    std::vector<double> eating_healthy_list = get_vect(log, EATING_HEALTHY);;
+    std::vector<double> eating_healthy_list = get_vect(log, EATING_HEALTHY);
 
-    std::vector<double> productivity_list = get_vect(log, PRODUCTIVITY);;
+    std::vector<double> productivity_list = get_vect(log, PRODUCTIVITY);
 
-    std::vector<double> communications_list = get_vect(log, COMMUNICATIONS);;
+    std::vector<double> communications_list = get_vect(log, COMMUNICATIONS);
 
-    std::vector<double> screen_time_list = get_vect(log, SCREEN_TIME);;
+    std::vector<double> screen_time_list = get_vect(log, SCREEN_TIME);
 
     //correlations with mood
     double cor_sleep_mood = cor(sleep_list, mood_list);
