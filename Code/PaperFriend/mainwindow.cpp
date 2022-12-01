@@ -33,6 +33,15 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+void MainWindow::closeEvent (QCloseEvent *event){
+    QMessageBox::StandardButton answr_btn = QMessageBox::question( this, tr("Paper friend"), tr("Are you sure?\n"),
+                                         QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+    if (answr_btn != QMessageBox::Yes) {
+        event->ignore();
+    } else {
+        event->accept();
+    }
+}
 
 
 void MainWindow::on_pushButton_clicked()
@@ -41,4 +50,5 @@ void MainWindow::on_pushButton_clicked()
     all_habits = new All_Habits(this);
     all_habits -> show();
 }
+
 
