@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 
 
@@ -150,3 +151,21 @@ double EntryPerso::get_screen_time() const {
 void EntryPerso::set_screen_time(double screen_time) {
     this->screen_time = screen_time;
 }
+
+std::vector<EntryPerso> sample_entries(int n){
+    std::vector<EntryPerso> res = std::vector<EntryPerso>();
+    for(int i=0;i<n;i++){
+        Activity *activities = new Activity();
+        Friend *friends = new Friend();
+        double mood = rand()%20;
+        double sleep = 6+rand()%6;
+        double eating_healthy = rand()%2;
+        double productivity = rand()%20;
+        double communications = rand()%10;
+        double screen_time = (rand()%240)/10;
+        EntryPerso *entry = new EntryPerso("sample entry text","The title of the entry",activities,friends,mood,sleep,eating_healthy,productivity,communications,screen_time);
+        res.push_back(*entry);
+    }
+    return res;
+}
+
