@@ -87,4 +87,6 @@ private:
     double screen_time;
 };
 
+std::vector<EntryPerso> sample_entries(int n);//gives n randomly generated sample entries
+
 #endif // ENTRYCLASSES_H
