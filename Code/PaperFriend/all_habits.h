@@ -14,6 +14,7 @@ class All_Habits : public QDialog
 public:
     explicit All_Habits(QWidget *parent = nullptr);
     ~All_Habits();
+    void closeEvent (QCloseEvent *event);
 
 private:
     Ui::All_Habits *ui;
