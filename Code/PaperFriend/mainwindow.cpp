@@ -23,8 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     std::vector<EntryPerso> entries; //put entries in a vector
     entries.push_back(*e1);
     entries.push_back(*e2);
-    DynamicGraph moodGraph = DynamicGraph(ui->graph_frame,entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
-    moodGraph.display(); //displays the graph
+    DynamicGraph moodGraph = DynamicGraph(entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
+    moodGraph.display(ui->graph_frame); //displays the graph
 
 
 }

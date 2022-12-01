@@ -19,8 +19,8 @@
 #include "entryclasses.h"
 #include "ui_mainwindow.h"
 
-DynamicGraph::DynamicGraph(QLayout *frame, std::vector<EntryPerso> entries)
-    :parent_frame(frame),series(new QLineSeries()),entries(entries)
+DynamicGraph::DynamicGraph(std::vector<EntryPerso> entries)
+    :series(new QLineSeries()),entries(entries)
 {
     int i =0;
     for(std::vector<EntryPerso>::iterator e=entries.begin();e!=entries.end();e++){
@@ -34,11 +34,10 @@ DynamicGraph::DynamicGraph(QLayout *frame, std::vector<EntryPerso> entries)
 }
 
 //setters and getters
-void DynamicGraph::set_parent(QLayout *new_parent){parent_frame = new_parent;}
-QLayout* DynamicGraph::get_parent() const{return parent_frame;}
+
 
 //display the graph in its parent frame
-void DynamicGraph::display() const
+void DynamicGraph::display(QLayout *layout) const
 {
     QChart *mood_chart = new QChart();
     mood_chart->legend()->hide();
@@ -55,6 +54,6 @@ void DynamicGraph::display() const
     //QVBoxLayout *layout = new QVBoxLayout;
     //parent_frame->setLayout(layout);
     //parent_frame->setMaximumSize(300,300);
-    parent_frame->addWidget(mood_view);
+    layout->addWidget(mood_view);
     //mood_view->setParent(parent_frame);//displays the graph on the screen in the parent frame
 }
