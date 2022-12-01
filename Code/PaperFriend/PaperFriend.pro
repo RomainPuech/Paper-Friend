@@ -11,6 +11,7 @@ CONFIG += c++17
 
 SOURCES += \
     activityclasses.cpp \
+    all_activities.cpp \
     all_habits.cpp \
     cardclasses.cpp \
     Analysis/DataAnalysis.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
 
 HEADERS += \
     activityclasses.h \
+    all_activities.h \
     all_habits.h \
     cardclasses.h \
     Analysis/DataAnalysis.h \
