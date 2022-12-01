@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     EntryPerso *e = new EntryPerso();
 
     EntryCard *c = new EntryCard(20, 300, 300, "beige", e);
-    //c->display(ui->main_frame); //displays the entry in the main_frame.
+    c->display(ui->main_frame); //displays the entry in the main_frame.
 
     //test for the DynamicGraph class
     EntryPerso *e1 = new EntryPerso(); //create an entry

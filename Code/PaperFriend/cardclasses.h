@@ -26,7 +26,7 @@ public:
     void set_height(int height);
     void set_background_color(QString color);
 
-    virtual void display(QWidget *parent)
+    virtual void display(QLayout *layout)
     /*
     * A funtion for displaying the Card object on the screen
     * provided a parent widget

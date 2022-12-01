@@ -44,12 +44,16 @@ void Card::set_background_color(QString color){
     this->background_color = color;
 }
 
-void Card::display(QWidget *parent){
+void Card::display(QLayout *layout){
     QPainterPath path;
     path.addRoundedRect(this->rect(), border_radius, border_radius);
     QRegion mask = QRegion(path.toFillPolygon().toPolygon());
     this->setMask(mask);
-    this->setParent(parent);
+    //QGraphicsView *gv = new QGraphicsView();
+    //this->setParent(gv);
+    //layout->addWidget(gv);
+    layout->addWidget(this);
+
 }
 
 QString generate_date_string(std::string date_string){
