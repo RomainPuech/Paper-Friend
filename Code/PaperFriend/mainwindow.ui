@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="2,6,2">
+   <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="2,6,4">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_8" stretch="6,4">
       <property name="spacing">
@@ -59,7 +59,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_9" stretch="1,9">
+     <layout class="QVBoxLayout" name="verticalLayout_9" stretch="5,5">
       <property name="spacing">
        <number>2</number>
       </property>
@@ -67,19 +67,39 @@
        <layout class="QHBoxLayout" name="graph_frame" stretch=""/>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="habits_frame">
+       <layout class="QVBoxLayout" name="habits_frame">
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
         <item>
          <widget class="QPushButton" name="pushButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
           <property name="text">
-           <string>PushButton</string>
+           <string>All Habits</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
