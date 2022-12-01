@@ -35,6 +35,8 @@ public:
                                                                          // the variable across the vector
 
 
+  std::map<std::string, double> item_priority(std::vector<EntryPerso> log);
+
   double stddev(std::vector<double> data) const; // calculates standard deviation
 
   double stddev(const std::vector<EntryPerso>& entries, Variables var_name) const; // returns the standard
@@ -60,8 +62,27 @@ public:
                                             // of the specified variable over the last n days
 
   std::vector<EntryPerso> anomalies_detection(const std::vector<EntryPerso>& entries, Variables var_name) const;
-                                                        
-  
+
+  std::string var_to_str(Variables var){
+      switch (var)
+      {
+          case MOOD:
+              return "mood";
+          case SLEEP:
+              return "sleep";
+          case EATING_HEALTHY:
+              return "healthy eating";
+          case PRODUCTIVITY:
+              return "productivity";
+          case SCREEN_TIME:
+              return "screen time";
+          case COMMUNICATIONS:
+              return "communications";
+          default:
+              return "0";
+      }
+  }
+
 };
 
 
