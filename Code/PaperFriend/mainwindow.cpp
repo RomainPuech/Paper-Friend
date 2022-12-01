@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "dynamicgraph.h"
 #include "cardclasses.h"
+#include "all_activities.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -51,4 +52,13 @@ void MainWindow::on_pushButton_clicked()
     all_habits -> showMaximized();
 }
 
+
+
+void MainWindow::on_activitie_button_clicked()
+{
+    all_activities my_activities;
+    my_activities.setModal(true);
+    my_activities.exec();
+
+}
 
