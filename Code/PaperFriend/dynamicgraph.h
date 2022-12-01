@@ -10,15 +10,15 @@
 class DynamicGraph
 {
 public:
-    DynamicGraph(QFrame *parent_frame,std::vector<EntryPerso> entries);
+    DynamicGraph(QLayout *parent_frame,std::vector<EntryPerso> entries);
     void display() const;
-    void set_parent(QFrame *parent_frame);
-    QFrame* get_parent() const;
+    void set_parent(QLayout *parent_frame);
+    QLayout* get_parent() const;
 
 
 
 private:
-    QFrame *parent_frame;
+    QLayout *parent_frame;
     QLineSeries *series;
     std::vector<EntryPerso> entries;
 };
