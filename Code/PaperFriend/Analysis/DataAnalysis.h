@@ -76,9 +76,26 @@ public:
 
   std::vector<EntryPerso> anomalies_detection(const std::vector<EntryPerso>& entries, Variables var_name) const;
 
-// To be implemented
-  std::string var_to_str(Variables a){};                                                      
-  
+  std::string var_to_str(Variables var){
+      switch (var)
+      {
+          case MOOD:
+              return "mood";
+          case SLEEP:
+              return "sleep";
+          case EATING_HEALTHY:
+              return "healthy eating";
+          case PRODUCTIVITY:
+              return "productivity";
+          case SCREEN_TIME:
+              return "screen time";
+          case COMMUNICATIONS:
+              return "communications";
+          default:
+              return "0";
+      }
+  }
+
 };
 
 

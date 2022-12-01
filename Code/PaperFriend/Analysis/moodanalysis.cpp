@@ -9,8 +9,6 @@
 
 
 
-
-
 bool MoodAnalysis::alert_depression(int n, int m){
     /**
     * @param int n: number n and m of days with the assumption (needed only for it to make sense)
@@ -86,21 +84,21 @@ std::vector<Variables> MoodAnalysis::item_priority(){
     return vec;
 }
 
-//std::string MoodAnalysis::suggestion(std::vector<EntryPerso> log){  // some more exciting gameplay can be implementen later
+std::string MoodAnalysis::suggestion(){  // some more exciting gameplay can be implementen later
     /**
     * @param NAN
     *
     * @returns string "general mood review + suggestion"
     */
- /*   std::string str{};
-    if (log.end()->get_mood() >= get_lastn_average(7, "mood")){
+    std::string str{};
+    if (log.end()->get_mood() >= get_lastn_average(7, MOOD)){
         str += "Your mood today is better than averadge! \n";
-        str += "For now " + ((*(item_priority(log).begin())))+ " and " + *(item_priority(log).begin() + 1) + "improve your mood the most, keep it up!";  // suggest top two items which affected the mood the most
+        str += "Your progress in" + var_to_str(*(item_priority().begin())) + " and " + var_to_str(*(item_priority().begin() + 1)) + "improves your mood the most, keep it up!";  // suggest top two items which affected the mood the most
     }
     else{
         str += "Your mood today is less than averadge:( \n";
-        str += "Try to increase " + *(item_priority(log).begin()) + " and " + *(item_priority(log).begin() + 1) + "!";
+        str += "Try to wrok on your " + var_to_str(*(item_priority().begin())) + " and " + var_to_str(*(item_priority().begin() + 1)) + "!";
     }
 
     return str;
-}*/
+}
