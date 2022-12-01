@@ -40,7 +40,7 @@ std::string Entry::get_date() const {
 }
 
 void Entry::set_date(std::string format_date){
-    const char *s = "MM/dd/yyyy";
+    const char *s = "MM.dd.yyyy";
     std::string str(s);
     QString format = QString::fromStdString(s);
     QDate new_date = QDate::fromString(QString::fromStdString(format_date), format);
@@ -53,7 +53,7 @@ QDate Entry::get_qdate() const {
 
 void Entry::set_qdate(QDate qdate) {
     this->qdate=qdate;
-    this->date = qdate.toString("MM/dd/yyyy").toStdString();
+    this->date = qdate.toString("MM.dd.yyyy").toStdString();
     this->weekday = qdate.toString("dddd").toStdString(); // Day name : "Monday", "Tuesday", ...
     this->absolute_day = qdate.toJulianDay();
 }

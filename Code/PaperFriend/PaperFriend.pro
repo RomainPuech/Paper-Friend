@@ -19,6 +19,8 @@ SOURCES += \
     dynamicgraph.cpp \
     Analysis/moodanalysis.cpp \
     entryclasses.cpp \
+    file_processing/file_processing/file_save_and_load.cpp \
+    fileloading/saving.cpp \
     friendclasses.cpp \
     main.cpp \
     mainwindow.cpp
@@ -36,6 +38,7 @@ HEADERS += \
     dynamicgraph.h \
     Analysis/moodanalysis.h \
     entryclasses.h \
+    file_processing/file_processing/file_save_and_load.h \
     friendclasses.h \
     mainwindow.h
 
