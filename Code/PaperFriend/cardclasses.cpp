@@ -44,12 +44,16 @@ void Card::set_background_color(QString color){
     this->background_color = color;
 }
 
-void Card::display(QWidget *parent){
+void Card::display(QLayout *layout){
     QPainterPath path;
     path.addRoundedRect(this->rect(), border_radius, border_radius);
     QRegion mask = QRegion(path.toFillPolygon().toPolygon());
     this->setMask(mask);
-    this->setParent(parent);
+    //QGraphicsView *gv = new QGraphicsView();
+    //this->setParent(gv);
+    //layout->addWidget(gv);
+    layout->addWidget(this);
+
 }
 
 QString generate_date_string(std::string date_string){
@@ -115,38 +119,56 @@ void generate_rgb(QString &red, QString &green, double m){
 EntryCard::EntryCard(int border_radius, int width, int height, QString color, EntryPerso *entry) : Card(border_radius, width, height, color), entry(entry){
     // display date
     date_display = new QLabel();
-    date_display->setFixedWidth(this->get_width() / 2); // to be changed depending on the number of widgets
+    date_display->setFixedWidth(this->get_width() / 3); // to be changed depending on the number of widgets
     date_display->setFixedHeight(50);
     date_display->setText(generate_date_string(entry->get_date()));
     date_display->setAlignment(Qt::AlignCenter);
-    date_display->setStyleSheet("font: 12px; font-weight: bold; border-color: black; border-width: 2px;");
+    date_display->setStyleSheet("font: 8px; font-weight: bold;");
 
     // display activities and friends
-    // te be implemented
+    fr_act_display = new QGraphicsView();
+    fr_act_display->setFixedWidth(this->get_width() / 3); // to be changed depending on the number of widgets
+    fr_act_display->setFixedHeight(50);
+    fr_act_labels = new QLabel[10];
 
     //display mood
     mood_display = new QLabel();
     mood_display->setText("Mood: " + QString::number(std::round(entry->get_mood() * 100)) + "%");
-    mood_display->setFixedWidth(this->get_width() / 2); // to be changed depending on the number of widgets
+    mood_display->setFixedWidth(this->get_width() / 3); // to be changed depending on the number of widgets
     mood_display->setFixedHeight(50);
     mood_display->setAlignment(Qt::AlignCenter);
     QString red, green;
     generate_rgb(red, green, entry->get_mood());
-    mood_display->setStyleSheet("font: 12px; font-weight: bold; background-color: rgb(" + red + ", " + green + ", 0); border-color: black; border-width: 2px;");
+    mood_display->setStyleSheet("font: 12px; font-weight: bold; background-color: rgb(" + red + ", " + green + ", 0);");
 
+
+    //borders
+    v_line = new QFrame();
+    v_line->setFrameShape(QFrame::VLine);
+    v_line->setFrameShadow(QFrame::Plain);
+    v_line->setLineWidth(1);
+    v_line1 = new QFrame();
+    v_line1->setFrameShape(QFrame::VLine);
+    v_line1->setFrameShadow(QFrame::Plain);
+    v_line1->setLineWidth(1);
 
     //top menu
     top_menu = new QHBoxLayout(this);
     top_menu->setAlignment(Qt::AlignTop);
     top_menu->setSpacing(0);
     top_menu->addWidget(date_display);
+    top_menu->addWidget(v_line);
+    top_menu->addWidget(fr_act_display);
+    top_menu->addWidget(v_line1);
     top_menu->addWidget(mood_display);
-
 }
 
 EntryCard::~EntryCard(){
     delete entry;
     delete date_display;
     delete mood_display;
+    delete fr_act_display;
     delete top_menu;
+    delete v_line;
+    delete v_line1;
 }
