@@ -24,6 +24,7 @@ public:
   std::vector<EntryPerso> get_lastn_days_data(int n) const;  
 
   std::vector<EntryPerso> log;
+  std::map<std::string, double> item_priority(std::vector<EntryPerso> log);
 };
 
 
