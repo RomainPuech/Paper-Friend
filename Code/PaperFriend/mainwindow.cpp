@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // test for the EntryCard class
     EntryPerso *e = new EntryPerso();
-    EntryCard *c = new EntryCard(20, 300, 300, "beige", e);
+    EntryCard *c = new EntryCard(20, 250, 250, "beige", e);
     c->display(ui->frame_5); //displays the entry in the frame_5
 
     //test for the DynamicGraph class

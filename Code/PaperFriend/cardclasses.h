@@ -9,6 +9,7 @@
 #include <QString>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <QGraphicsView>
 
 class Card : public QWidget{
 public:
@@ -46,6 +47,9 @@ private:
     QHBoxLayout *top_menu;
     QLabel *date_display;
     QLabel *mood_display;
+    QGraphicsView *fr_act_display;
+    QLabel *fr_act_labels;
+    QFrame *v_line, *v_line1;
 };
 
 #endif // CARDCLASSES_H
