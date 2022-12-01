@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     EntryPerso *e = new EntryPerso();
 
     EntryCard *c = new EntryCard(20, 300, 300, "beige", e);
-    c->display(ui->main_frame); //displays the entry in the main_frame.
+    //c->display(ui->main_frame); //displays the entry in the main_frame.
 
     //test for the DynamicGraph class
     EntryPerso *e1 = new EntryPerso(); //create an entry
@@ -24,8 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
     std::vector<EntryPerso> entries; //put entries in a vector
     entries.push_back(*e1);
     entries.push_back(*e2);
-    DynamicGraph moodGraph = DynamicGraph(ui->graph_frame,entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
-    moodGraph.display(); //displays the graph
+    DynamicGraph moodGraph = DynamicGraph(entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
+    moodGraph.display(ui->graph_frame); //displays the graph
 
 
 }
