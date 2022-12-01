@@ -35,25 +35,10 @@ std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n) const {
      * @return a list of all data within n days of the very last log.
      */
     
-    std::vector<EntryPerso> res{};
-    
-    int N = log.size();
-    int current = log[N - 1].get_absolute_day(); // represents the date of the last log in the data.
-    bool located_cutoff = false;     // No need to check conditions once we locate the first entry
-                                     // within n days.
-    
-    for (int i = std::max<int>(0, N - n); i < N; ++i) {
-        
-        if (located_cutoff) {
-            res.push_back(log[i]);
-            continue;
-        }
+    int current = log.back().get_absolute_day(); // represents the date of the last log in the data.
+    auto comp {[current](auto entry, int n){return entry.get_absolute_day() <= current - n;}};
+    auto cutoff = std::lower_bound(log.begin(), log.end(), n, comp);
 
-        if (current - log[i].get_absolute_day() <= n) {
-            located_cutoff = true;
-            res.push_back(log[i]);
-        }
-
-    }
+    std::vector<EntryPerso> res(cutoff, log.end());
     return res;
 }
