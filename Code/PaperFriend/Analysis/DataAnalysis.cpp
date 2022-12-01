@@ -30,9 +30,9 @@ double DataAnalysis::cov(const std::vector<double>& X, const std::vector<double>
      * @return Cov(X, Y).
      */
     std::vector<double> XY{};
-    for (auto elx : X)
-        for(auto ely : Y)
-            XY.push_back(elx*ely);
+    for (int i = 0; i < std::min(X.size(), Y.size()); ++i){ // Just in case the two have different sizes but shouldn't be the case.
+        XY.push_back(X[i] * Y[i]);
+    }
 
     return avg(XY) - avg(X)*avg(Y);
 }

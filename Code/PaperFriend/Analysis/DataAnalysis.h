@@ -38,7 +38,7 @@ public:
                                                                      // entries
   void set_var(EntryPerso& entry, Variables var_name, double value) const;  // sets the value of the
                                                                      // specified variable
-                                // This method will probably not be used that much but here just in case.
+                                // This method will probably not be used that much but here just in case it is needed to generate randomized entries for testing.
 
 
 
@@ -72,7 +72,7 @@ public:
   LinearRegressionCoeffs general_trend(int n, Variables var);      // Fits the values of var over the last n days against the number of days since the first day being considered.
 
   double get_lastn_average(int n, Variables var_name) const;  // This will compute the average
-                                            // of the specified variable over the last n days
+                                            // of the specified variable over the last n entries.
 
   std::vector<EntryPerso> anomalies_detection(const std::vector<EntryPerso>& entries, Variables var_name) const;
 
