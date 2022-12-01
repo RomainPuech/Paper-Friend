@@ -3,6 +3,9 @@
 #include "dynamicgraph.h"
 #include "cardclasses.h"
 
+#include <iostream>
+#include <fstream>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -51,6 +54,39 @@ void MainWindow::on_settingsButton_clicked() {
 }
 
 void MainWindow::on_save_settings_clicked() {
+    std::ofstream myfile;
+    myfile.open("journal_settings.txt");
+    if (findChild<QCheckBox*>("mood")->isChecked()) {
+        myfile << "mood:true\n";
+    } else {
+        myfile << "mood:false\n";
+    }
+    if (findChild<QCheckBox*>("sleep")->isChecked()) {
+        myfile << "sleep:true\n";
+    } else {
+        myfile << "sleep:false\n";
+    }
+    if (findChild<QCheckBox*>("eating_healthy")->isChecked()) {
+        myfile << "eating_healthy:true\n";
+    } else {
+        myfile << "eating_healthy:false\n";
+    }
+    if (findChild<QCheckBox*>("productivity")->isChecked()) {
+        myfile << "productivity:true\n";
+    } else {
+        myfile << "productivity:false\n";
+    }
+    if (findChild<QCheckBox*>("communications")->isChecked()) {
+        myfile << "communications:true\n";
+    } else {
+        myfile << "communications:false\n";
+    }
+    if (findChild<QCheckBox*>("screen_time")->isChecked()) {
+        myfile << "screen_time:true\n";
+    } else {
+        myfile << "screen_time:false\n";
+    }
+    myfile.close();
     auto settings = findChild<QWidget*>("settings_frame");
     settings->hide();
     auto standard = findChild<QWidget*>("standard_frame");

@@ -147,7 +147,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="screen_type">
+           <widget class="QCheckBox" name="screen_time">
             <property name="text">
              <string>Screen time </string>
             </property>
