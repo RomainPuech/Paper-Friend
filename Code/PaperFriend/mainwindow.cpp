@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     entries.push_back(*e2);
     DynamicGraph moodGraph = DynamicGraph(entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
     moodGraph.display(ui->graph_frame); //displays the graph
-
+    this -> showMaximized();
 
 }
 
@@ -48,7 +48,7 @@ void MainWindow::on_pushButton_clicked()
 {
     hide();
     all_habits = new All_Habits(this);
-    all_habits -> show();
+    all_habits -> showMaximized();
 }
 
 
