@@ -9,14 +9,28 @@
 // avoids naming conflicts. If you really have to use it, put it in the most
 // restricted scope possible (
 
-/**
- * @param vector data.
- * @return standart deviation.
- */
+// Never manually iterate trough an STL container with iterators. Either use
+// the normal syntax or use range based for loops like the one below
 
+
+double DataAnalysis::cov(std::vector<double> X, std::vector<double> Y) {
+    /**
+     * @param vectors double X, Y.
+     * @return Cov(X, Y).
+     */
+    std::vector<double> XY{};
+    for (auto elx : X)
+        for(auto ely : Y)
+            XY.push_back(elx*ely);
+
+    return avg(X)*avg(Y) - avg(XY);
+}
 
 double DataAnalysis::stddev(std::vector<double> data) {
-
+    /**
+     * @param vector data.
+     * @return standart deviation.
+     */
   double residue_sum = 0.0;
 
   double mean = avg<double>(data);
@@ -27,6 +41,15 @@ double DataAnalysis::stddev(std::vector<double> data) {
     residue_sum += std::pow(mean - el, 2);
 
   return sqrt(residue_sum / data.size());
+}
+
+double DataAnalysis::cor(std::vector<double> X, std::vector<double> Y) {
+    /**
+     * @param vectors double X, Y.
+     * @return Cor(X, Y).
+     */
+
+    return cov(X,Y)/stddev(X)/stddev(Y);
 }
 
 std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n) const {
