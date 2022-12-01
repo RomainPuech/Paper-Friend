@@ -19,15 +19,11 @@ double DataAnalysis::avg(const std::vector<EntryPerso>& entries, Variables var_n
      * @return average value of the variable across the entries
      */
 
-<<<<<<< HEAD
+
     return avg<double>(get_vect(entries, var_name));
 }
 
-double DataAnalysis::stddev(std::vector<double> data) const{
-    /**
-     * @param vector<double>
-     * @return standard deviation of the values of the variable across the entries
-=======
+
 double DataAnalysis::cov(std::vector<double> X, std::vector<double> Y) {
     /**
      * @param vectors double X, Y.
@@ -45,7 +41,7 @@ double DataAnalysis::stddev(std::vector<double> data) {
     /**
      * @param vector data.
      * @return standart deviation.
->>>>>>> aad966f5fda31d91d2b8a34de892bae569f4ad1d
+
      */
   double residue_sum = 0.0;
 
@@ -59,16 +55,16 @@ double DataAnalysis::stddev(std::vector<double> data) {
   return sqrt(residue_sum / data.size());
 }
 
-<<<<<<< HEAD
-double DataAnalysis::stddev(const std::vector<EntryPerso>& entries, Variables var_name) const{
+
+//double DataAnalysis::stddev(const std::vector<EntryPerso>& entries, Variables var_name) const{
     /**
      * @param vector<EntryPerso>
      *        var_name : variable to consider
      * @return standard deviation of values of the variable across the entries
      */
-
-   return stddev(get_vect(entries, var_name));
-=======
+   //std::vector<double> vect = get_vect(entries, var_name);
+   //return stddev(vect);
+//}
 double DataAnalysis::cor(std::vector<double> X, std::vector<double> Y) {
     /**
      * @param vectors double X, Y.
@@ -76,7 +72,7 @@ double DataAnalysis::cor(std::vector<double> X, std::vector<double> Y) {
      */
 
     return cov(X,Y)/stddev(X)/stddev(Y);
->>>>>>> aad966f5fda31d91d2b8a34de892bae569f4ad1d
+
 }
 
 std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n) const {
@@ -191,7 +187,7 @@ double DataAnalysis::get_lastn_average(int n, Variables var_name) {
 }
 
 
-std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<EntryPerso>& entries, Variables var_name) const{
+//std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<EntryPerso>& entries, Variables var_name) const{
     /**
      * @param vector of EntryPersos.
      * @return vector of entries at which anomalie in the variable was detected (value is 2 SDs far from its mean).
@@ -212,15 +208,15 @@ std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<Entr
         }
     }
     return res;*/
-    std::vector<EntryPerso> res;
+    //std::vector<EntryPerso> res;
 
-    double mean = avg(entries, var_name);
-    double st_dev = stddev(entries, var_name);
+    //double mean = avg(entries, var_name);
+    //double st_dev = stddev(entries, var_name);
 
-    for (auto& entry : entries){
-        if (get_var(entry, var_name) - mean >= 2 * st_dev){
-            res.push_back(entry);
-        }
-    }
-    return res;
-}
+    //for (auto& entry : entries){
+        //if (get_var(entry, var_name) - mean >= 2 * st_dev){
+            //res.push_back(entry);
+        //}
+    //}
+    //return res;
+//}
