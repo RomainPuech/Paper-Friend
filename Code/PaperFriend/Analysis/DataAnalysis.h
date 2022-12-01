@@ -17,7 +17,6 @@ public:
 
   std::vector<EntryPerso> log; // Data to be analysed
 
-  double stddev(std::vector<double> data);  // calculates standart deviation
   double cov(std::vector<double> X, std::vector<double> Y);  // calculates covariance
   double cor(std::vector<double> X, std::vector<double> Y);  // calculates correlation
 
@@ -57,7 +56,7 @@ public:
 
   std::vector<EntryPerso> get_lastn_days_data(int n) const; // gets the entries within n days of the last entry.
 
-  double get_lastn_average(int n, Variables var_name);  // This will compute the average 
+  double get_lastn_average(int n, Variables var_name) const;  // This will compute the average
                                             // of the specified variable over the last n days
 
   std::vector<EntryPerso> anomalies_detection(const std::vector<EntryPerso>& entries, Variables var_name) const;

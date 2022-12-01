@@ -37,7 +37,7 @@ double DataAnalysis::cov(std::vector<double> X, std::vector<double> Y) {
     return avg(X)*avg(Y) - avg(XY);
 }
 
-double DataAnalysis::stddev(std::vector<double> data) {
+double DataAnalysis::stddev(std::vector<double> data) const{
     /**
      * @param vector data.
      * @return standart deviation.
@@ -56,15 +56,14 @@ double DataAnalysis::stddev(std::vector<double> data) {
 }
 
 
-//double DataAnalysis::stddev(const std::vector<EntryPerso>& entries, Variables var_name) const{
+double DataAnalysis::stddev(const std::vector<EntryPerso>& entries, Variables var_name) const{
     /**
      * @param vector<EntryPerso>
      *        var_name : variable to consider
      * @return standard deviation of values of the variable across the entries
      */
-   //std::vector<double> vect = get_vect(entries, var_name);
-   //return stddev(vect);
-//}
+   return stddev(get_vect(entries, var_name));
+}
 double DataAnalysis::cor(std::vector<double> X, std::vector<double> Y) {
     /**
      * @param vectors double X, Y.
@@ -173,21 +172,21 @@ std::vector<double> DataAnalysis::get_vect(const std::vector<EntryPerso>& entrie
     return res;
 }
 
-double DataAnalysis::get_lastn_average(int n, Variables var_name) {
+double DataAnalysis::get_lastn_average(int n, Variables var_name) const{
     /**
      * @param int n: number of n last entries we take into account
      * @return double average of the values of the variable represented by var_name for last n entries
      */
     std::vector<double> val_list{};
 
-    for (int i = std::max<int>(0, log.size() - n); i < log.size(); i++) {
-        val_list.push_back(get_var(*(log.begin() + i), var_name));
+    for (int i = std::max<int>(0, log.size() - n); i < log.size(); ++i) {
+        val_list.push_back(get_var(log[i], var_name));
     }
     return avg<double>(val_list);
 }
 
 
-//std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<EntryPerso>& entries, Variables var_name) const{
+std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<EntryPerso>& entries, Variables var_name) const{
     /**
      * @param vector of EntryPersos.
      * @return vector of entries at which anomalie in the variable was detected (value is 2 SDs far from its mean).
@@ -208,15 +207,15 @@ double DataAnalysis::get_lastn_average(int n, Variables var_name) {
         }
     }
     return res;*/
-    //std::vector<EntryPerso> res;
+    std::vector<EntryPerso> res;
 
-    //double mean = avg(entries, var_name);
-    //double st_dev = stddev(entries, var_name);
+    double mean = avg(entries, var_name);
+    double st_dev = stddev(entries, var_name);
 
-    //for (auto& entry : entries){
-        //if (get_var(entry, var_name) - mean >= 2 * st_dev){
-            //res.push_back(entry);
-        //}
-    //}
-    //return res;
-//}
+    for (auto& entry : entries){
+        if (get_var(entry, var_name) - mean >= 2 * st_dev){
+            res.push_back(entry);
+        }
+    }
+    return res;
+}
