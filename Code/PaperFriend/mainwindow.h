@@ -36,6 +36,8 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_activitie_button_clicked();
+
 private:
     Ui::MainWindow *ui;
     All_Habits *all_habits;

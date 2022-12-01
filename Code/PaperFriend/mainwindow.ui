@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>738</width>
-    <height>544</height>
+    <width>620</width>
+    <height>524</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,24 +21,68 @@
        <number>2</number>
       </property>
       <item>
-       <layout class="QHBoxLayout" name="mascot_frame">
+       <layout class="QHBoxLayout" name="mascot_frame"/>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="1,2,2,1,1">
         <item>
-         <widget class="QPushButton" name="pushButtondummy">
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="activitie_button">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
-           <string>PushButton</string>
+           <string>Activities</string>
           </property>
          </widget>
         </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="activities_people_frame">
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="people_button">
           <property name="text">
-           <string>PushButton</string>
+           <string>People</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
@@ -64,7 +108,7 @@
        <number>2</number>
       </property>
       <item>
-       <layout class="QHBoxLayout" name="graph_frame" stretch=""/>
+       <layout class="QHBoxLayout" name="graph_frame"/>
       </item>
       <item>
        <layout class="QVBoxLayout" name="habits_frame">
@@ -112,8 +156,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>738</width>
-     <height>21</height>
+     <width>620</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>
