@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>738</width>
-    <height>544</height>
+    <width>1028</width>
+    <height>685</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,12 +15,12 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" rowspan="2">
-     <widget class="QFrame" name="mascot_frame">
+    <item row="0" column="3">
+     <widget class="QFrame" name="graph_frame">
       <property name="styleSheet">
        <string notr="true">background-color: rgb(0, 85, 255);</string>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3"/>
+      <layout class="QHBoxLayout" name="horizontalLayout"/>
      </widget>
     </item>
     <item row="0" column="1" rowspan="3" colspan="2">
@@ -31,12 +31,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_2"/>
      </widget>
     </item>
-    <item row="0" column="3">
-     <widget class="QFrame" name="graph_frame">
+    <item row="2" column="0">
+     <widget class="QFrame" name="activities_people_frame">
       <property name="styleSheet">
        <string notr="true">background-color: rgb(0, 85, 255);</string>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout"/>
+      <layout class="QHBoxLayout" name="horizontalLayout_4"/>
      </widget>
     </item>
     <item row="1" column="3" rowspan="2">
@@ -77,12 +77,137 @@
       </layout>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QFrame" name="activities_people_frame">
+    <item row="0" column="0" rowspan="2">
+     <widget class="QFrame" name="mascot_frame">
       <property name="styleSheet">
        <string notr="true">background-color: rgb(0, 85, 255);</string>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_4"/>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QWidget" name="settings_frame" native="true">
+         <layout class="QVBoxLayout" name="settings">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetDefaultConstraint</enum>
+          </property>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Track:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="mood">
+            <property name="text">
+             <string>Mood</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="sleep">
+            <property name="text">
+             <string>Sleep</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="eating_healthy">
+            <property name="text">
+             <string>Eating healthy </string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="productivity">
+            <property name="text">
+             <string>Productivity </string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="communications">
+            <property name="text">
+             <string>Communications </string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="screen_type">
+            <property name="text">
+             <string>Screen time </string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="save_settings">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Save</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="space">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="standard_frame" native="true">
+         <layout class="QHBoxLayout" name="standard">
+          <item>
+           <widget class="QToolButton" name="settingsButton">
+            <property name="contextMenuPolicy">
+             <enum>Qt::DefaultContextMenu</enum>
+            </property>
+            <property name="autoFillBackground">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="popupMode">
+             <enum>QToolButton::InstantPopup</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>
@@ -92,8 +217,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>738</width>
-     <height>17</height>
+     <width>1028</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>

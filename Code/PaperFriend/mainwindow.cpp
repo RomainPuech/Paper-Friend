@@ -26,19 +26,33 @@ MainWindow::MainWindow(QWidget *parent)
     DynamicGraph moodGraph = DynamicGraph(ui->graph_frame,entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
     moodGraph.display(); //displays the graph
 
+    auto settings = findChild<QWidget*>("settings_frame");
+    settings->hide(); //hide the settings menu on launch
 
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
 
-void MainWindow::on_pushButton_clicked()
-{
+void MainWindow::on_pushButton_clicked() {
     hide();
     all_habits = new All_Habits(this);
     all_habits -> show();
 }
 
+
+void MainWindow::on_settingsButton_clicked() {
+    auto settings = findChild<QWidget*>("settings_frame");
+    settings->show();
+    auto standard = findChild<QWidget*>("standard_frame");
+    standard->hide();
+}
+
+void MainWindow::on_save_settings_clicked() {
+    auto settings = findChild<QWidget*>("settings_frame");
+    settings->hide();
+    auto standard = findChild<QWidget*>("standard_frame");
+    standard->show();
+}
