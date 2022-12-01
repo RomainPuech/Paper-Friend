@@ -12,8 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // test for the EntryCard class
     EntryPerso *e = new EntryPerso();
-    EntryCard *c = new EntryCard(20, 250, 250, "beige", e);
-    c->display(ui->frame_5); //displays the entry in the frame_5
+
+    EntryCard *c = new EntryCard(20, 300, 300, "beige", e);
+    c->display(ui->main_frame); //displays the entry in the main_frame.
 
     //test for the DynamicGraph class
     EntryPerso *e1 = new EntryPerso(); //create an entry
@@ -23,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     std::vector<EntryPerso> entries; //put entries in a vector
     entries.push_back(*e1);
     entries.push_back(*e2);
-    DynamicGraph moodGraph = DynamicGraph(ui->frame,entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
+    DynamicGraph moodGraph = DynamicGraph(ui->graph_frame,entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
     moodGraph.display(); //displays the graph
 
 
@@ -33,4 +34,22 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+void MainWindow::closeEvent (QCloseEvent *event){
+    QMessageBox::StandardButton answr_btn = QMessageBox::question( this, tr("Paper friend"), tr("Are you sure?\n"),
+                                         QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+    if (answr_btn != QMessageBox::Yes) {
+        event->ignore();
+    } else {
+        event->accept();
+    }
+}
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    hide();
+    all_habits = new All_Habits(this);
+    all_habits -> show();
+}
+
 

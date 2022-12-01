@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <QDate>
 
 #include "activityclasses.h"
 #include "friendclasses.h"
@@ -19,19 +20,36 @@ public:
     std::string get_title() const;
     void set_title(std::string text);
 
-    std::string get_date() const;
+    std::string get_date() const; // "MM/DD/YYYY"
+    void set_date(std::string format_date);
+
+    QDate get_qdate() const;
+    void set_qdate(QDate qdate);
+
+
+    std::string get_weekday() const; // 1 = Monday, 2 = Tuesday", ...
+
+    int get_absolute_day() const; // Day in Julian calendar
 
 protected:
     std::string text;
     std::string title;
+    QDate qdate;
     std::string date;
+    std::string weekday;
+    int absolute_day;
 };
 
 
 class EntryPerso : public Entry {
 public:
     EntryPerso();
-    EntryPerso(std::string text, std::string title, Activity* activities,Friend* friends, double mood);
+    EntryPerso(std::string text, std::string title, Activity* activities, Friend* friends, double mood,
+                                                                                           double sleep,
+                                                                                           double eating_healthy,
+                                                                                           double productivity,
+                                                                                           double communications,
+                                                                                           double screen_time);
     ~EntryPerso();
 
     Activity* get_activities() const;

@@ -8,22 +8,26 @@
 class Activity {
 public:
     Activity();
-    Activity(std::string name, int duration);
+    Activity(std::string name, int value);
     ~Activity();
 
     std::string get_name() const;
     void set_name(std::string name);
 
-    int get_duration() const;
-    void set_duration(int duration);
+    double get_value() const;
+    void set_value(double value);
+
+    int get_type() const;
+    void set_type(int type);
 
 protected:
     std::string name;
-    int duration;
+    double value;
+    int type;
     enum activity_types {Sport, Spiritual, Work, Study, Art};
 };
 
-
+/*
 class ActivitySport : public Activity {
 public:
     ActivitySport();
@@ -72,5 +76,5 @@ public:
 private:
     activity_types type_of_activity = Art;
 };
-
+*/
 #endif // ACTIVITYCLASSES_H

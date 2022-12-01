@@ -3,17 +3,19 @@
 #include <iostream>
 #include <string>
 
-std::string current_date() {
-    const int maxlen = 80;
-    char s[maxlen];
-    time_t t = time(0);
-    strftime(s, maxlen, "%m/%d/%Y", localtime(&t));
-    return s;
+
+
+Entry::Entry() {
+    this->text = "";
+    this->title = "";
+    this->set_qdate(QDate::currentDate());
 }
 
-Entry::Entry(): text(""), title(""), date(current_date()) {}
-
-Entry::Entry(std::string text, std::string title): text(text), title(title), date(current_date()) {}
+Entry::Entry(std::string text, std::string title){
+    this->text = text;
+    this->title = title;
+    this->set_qdate(QDate::currentDate());
+}
 
 Entry::~Entry() {}
 
@@ -37,11 +39,48 @@ std::string Entry::get_date() const {
     return date;
 }
 
+void Entry::set_date(std::string format_date){
+    const char *s = "MM/dd/yyyy";
+    std::string str(s);
+    QString format = QString::fromStdString(s);
+    QDate new_date = QDate::fromString(QString::fromStdString(format_date), format);
+    this->set_qdate(new_date);
+}
+
+QDate Entry::get_qdate() const {
+    return qdate;
+}
+
+void Entry::set_qdate(QDate qdate) {
+    this->qdate=qdate;
+    this->date = qdate.toString("MM/dd/yyyy").toStdString();
+    this->weekday = qdate.toString("dddd").toStdString(); // Day name : "Monday", "Tuesday", ...
+    this->absolute_day = qdate.toJulianDay();
+}
+
+std::string Entry::get_weekday() const{
+    return weekday;
+}
+
+int Entry::get_absolute_day() const{
+    return absolute_day;
+}
+
 
 EntryPerso::EntryPerso() : Entry(), activities(NULL), friends(NULL), mood(0) {}
 
-EntryPerso::EntryPerso(std::string text, std::string title, Activity* activities, Friend* friends, double mood) :
-    Entry(text, title), activities(activities), friends(friends), mood(mood) {}
+EntryPerso::EntryPerso(std::string text, std::string title, Activity* activities, Friend* friends, double mood,
+                                                                                                   double sleep,
+                                                                                                   double eating_healthy,
+                                                                                                   double productivity,
+                                                                                                   double communications,
+                                                                                                   double screen_time) :
+    Entry(text, title), activities(activities), friends(friends), mood(mood),
+                                                                  sleep(sleep),
+                                                                  eating_healthy(eating_healthy),
+                                                                  productivity(productivity),
+                                                                  communications(communications),
+                                                                  screen_time(screen_time) {}
 
 EntryPerso::~EntryPerso() {
     delete activities;
