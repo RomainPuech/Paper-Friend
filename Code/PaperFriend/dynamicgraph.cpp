@@ -20,12 +20,19 @@
 #include "ui_mainwindow.h"
 
 DynamicGraph::DynamicGraph(std::vector<EntryPerso> entries)
-    :series(new QLineSeries()),entries(entries)
+    :series1(new QSplineSeries()),series2(new QSplineSeries()),entries(entries)
 {
+
+    QPen pen = series1->pen();
+    pen.setWidth(3);
+    pen.setColor("red");
+    series1->setPen(pen);
     int i =0;
     for(std::vector<EntryPerso>::iterator e=entries.begin();e!=entries.end();e++){
-        *series<<QPointF(i,e->get_mood());
+        *series1<<QPointF(i,e->get_mood());
+        *series2<<QPointF(entries.size()+i,e->get_mood());
         i++;
+
     }
     //series->append(0,6);
     //series->append(1,5);
@@ -41,19 +48,12 @@ void DynamicGraph::display(QLayout *layout) const
 {
     QChart *mood_chart = new QChart();
     mood_chart->legend()->hide();
-    mood_chart->addSeries(series);
+    mood_chart->addSeries(series1);
+    mood_chart->addSeries(series2);
+    mood_chart->createDefaultAxes();
+    mood_chart->axes(Qt::Vertical).first()->setRange(0, 20);
     mood_chart->setTitle("Mood");
     QChartView *mood_view = new QChartView(mood_chart);
-    //mood_view->setMaximumHeight(parent_frame->height());
-    //mood_view->setMaximumWidth(100);
-    //mood_view->setMaximumSize(parent_frame->width(),100);
-    //mood_view->setRenderHint(QPainter::Antialiasing);
-    //QVBoxLayout *layout = new QVBoxLayout();
-    //layout->addWidget(mood_view);
-    //parent_frame->addWidget(mood_view);
-    //QVBoxLayout *layout = new QVBoxLayout;
-    //parent_frame->setLayout(layout);
-    //parent_frame->setMaximumSize(300,300);
-    layout->addWidget(mood_view);
-    //mood_view->setParent(parent_frame);//displays the graph on the screen in the parent frame
+    mood_view->setRenderHint(QPainter::Antialiasing);
+    layout->addWidget(mood_view);//displays the graph on the screen in the indicated layout
 }

@@ -35,6 +35,8 @@ public:
 
 private slots:
     void on_pushButton_clicked();
+    void on_settingsButton_clicked();
+    void on_save_settings_clicked();
 
     void on_activitie_button_clicked();
 
