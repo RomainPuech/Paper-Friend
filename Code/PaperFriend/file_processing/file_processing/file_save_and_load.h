@@ -7,8 +7,11 @@
 #include <fstream>
 #include "entryclasses.h"
 
-void save_entry(Entry entry);
+bool save_entry(Entry entry);
 
-Entry load_entry(Entry entry);
+bool save_entry_encrypt(Entry entry, std::string path, std::string key);
 
+Entry load_entry(std::string filename);
+
+Entry load_entry_decrypt(std::string filename, std::string key);
 #endif

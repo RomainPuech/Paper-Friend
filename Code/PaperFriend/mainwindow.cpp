@@ -3,6 +3,7 @@
 #include "dynamicgraph.h"
 #include "cardclasses.h"
 #include "all_activities.h"
+#include "file_processing/file_processing/file_save_and_load.h"
 
 #include <iostream>
 #include <fstream>
@@ -13,6 +14,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this); // display canvas created in drag-and-drop
 
+
+    Entry en = Entry("text", "title");
+    save_entry_encrypt(en, "./output", "123");
+    std::cout << "saving" << std::endl;
+    Entry en2 = load_entry_decrypt("./output/12.02.2022.json", "123");
+    std::cout << "loading" << std::endl;
+    std::cout << en2.get_text() << std::endl;
+    std::cout << en2.get_title() << std::endl;
 
     // test for the EntryCard class
     EntryPerso *e = new EntryPerso();
