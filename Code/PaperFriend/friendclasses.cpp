@@ -1,7 +1,6 @@
 #include "friendclasses.h"
-#include <QJsonDocument>
-#include "json-develop/single_include/nlohmann/json.hpp"
-#include "entryclasses.h"
+
+
 #include <iostream>
 #include <string>
 

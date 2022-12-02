@@ -21,7 +21,6 @@ SOURCES += \
     Analysis/moodanalysis.cpp \
     entryclasses.cpp \
     file_processing/file_processing/file_save_and_load.cpp \
-    fileloading/saving.cpp \
     friendclasses.cpp \
     main.cpp \
     mainwindow.cpp

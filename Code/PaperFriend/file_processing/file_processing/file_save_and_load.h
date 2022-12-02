@@ -10,3 +10,5 @@
 void save_entry(Entry entry);
 
 Entry load_entry(Entry entry);
+
+#endif
