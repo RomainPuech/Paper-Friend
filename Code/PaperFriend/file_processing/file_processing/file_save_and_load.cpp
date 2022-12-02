@@ -2,7 +2,7 @@
 
 
 
-void save_Entry(Entry entry){ // I create and save the entry file, title format MM-YY-JJ
+void save_Entry(Entry entry){ // I create and save the entry file, title format MM.YY.JJ
     nlohmann::json  j = {
         {"text", entry.get_text()},
         {"title", entry.get_title()},
