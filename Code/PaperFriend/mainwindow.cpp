@@ -4,6 +4,8 @@
 #include "cardclasses.h"
 #include "all_activities.h"
 #include "file_processing/file_processing/file_save_and_load.h"
+#include "texteditor.h"
+#include "ui_texteditor.h"
 
 #include <iostream>
 #include <fstream>
@@ -13,7 +15,13 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this); // display canvas created in drag-and-drop
+    // We use Friend function to embed the TextEditor into the MainWindow
+    textEditor = new TextEditor();
+    textEditor->mainUi = this;
 
+    ui->stackedWidget->addWidget(textEditor);
+    ui->stackedWidget->setWindowTitle("Text Editor");
+    ui->stackedWidget->setCurrentWidget(textEditor);
 
     Entry en = Entry("text", "title");
     save_entry_encrypt(en, "./output", "123");

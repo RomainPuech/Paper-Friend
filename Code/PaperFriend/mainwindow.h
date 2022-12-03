@@ -29,8 +29,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    friend class TextEditor;
+    class TextEditor *textEditor;
     void closeEvent (QCloseEvent *event);
 
 private slots:

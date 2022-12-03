@@ -17,13 +17,15 @@ SOURCES += \
     Analysis/DataAnalysis.cpp \
     cipher/Qt-AES-1.2/qaesencryption.cpp \
     cipher/cipher.cpp \
-    dynamicgraph.cpp \
     Analysis/moodanalysis.cpp \
     entryclasses.cpp \
     file_processing/file_processing/file_save_and_load.cpp \
     friendclasses.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp\
+    dynamicgraph.cpp \
+    texteditor.cpp \
+    edit.cpp
 
 HEADERS += \
     activityclasses.h \
@@ -36,17 +38,20 @@ HEADERS += \
     cipher/Qt-AES-1.2/aesni/aesni-key-exp.h \
     cipher/Qt-AES-1.2/qaesencryption.h \
     cipher/cipher.h \
-    dynamicgraph.h \
     Analysis/moodanalysis.h \
     entryclasses.h \
     file_processing/file_processing/file_save_and_load.h \
     friendclasses.h \
-    mainwindow.h
+    mainwindow.h\
+    dynamicgraph.h \
+    texteditor.h \
+    edit.h
 
 FORMS += \
     all_activities.ui \
     all_habits.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    texteditor.ui \
 
 TRANSLATIONS += \
     PaperFriend_en_US.ts
@@ -65,3 +70,5 @@ DISTFILES += \
 
 RESOURCES += \
     myresources.qrc
+
+RC_FILE += rsc/Editor.rc
