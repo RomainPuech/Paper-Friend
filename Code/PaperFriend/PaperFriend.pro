@@ -62,3 +62,6 @@ DISTFILES += \
     cipher/Qt-AES-1.2/CONTRIBUTING.md \
     cipher/Qt-AES-1.2/LICENSE \
     cipher/Qt-AES-1.2/README.md
+
+RESOURCES += \
+    myresources.qrc
