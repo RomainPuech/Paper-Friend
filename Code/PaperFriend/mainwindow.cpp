@@ -25,8 +25,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     // test for the EntryCard class
     EntryPerso *e = new EntryPerso();
-
-    EntryCard *c = new EntryCard(20, 300, 300, "beige", e);
+    Friend *fr = new Friend("fr1", 1);
+    Activity *activity = new Activity("act1", 1);
+    e->set_friends(fr);
+    e->set_activities(activity);
+    EntryCard *c = new EntryCard(20, 300, 300, "white", e);
+    //Card *c = new Card();
     c->display(ui->main_frame); //displays the entry in the main_frame.
 
     //test for the DynamicGraph class

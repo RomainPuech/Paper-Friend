@@ -8,6 +8,13 @@ Card::Card(int border_radius, int width, int height, QString color) : border_rad
     this->rect().setHeight(height);
     this->rect().setWidth(width);
     this->setStyleSheet("background-color: " + color + ";");
+    vb_layout = new QVBoxLayout(this);
+    vb_layout->setContentsMargins(0, 0, 0, 0);
+    this->setLayout(vb_layout);
+}
+
+Card::~Card(){
+    delete vb_layout;
 }
 
 int Card::get_width() const{
@@ -45,13 +52,14 @@ void Card::set_background_color(QString color){
 }
 
 void Card::display(QLayout *layout){
-    QPainterPath path;
+    /*QPainterPath path;
     path.addRoundedRect(this->rect(), border_radius, border_radius);
     QRegion mask = QRegion(path.toFillPolygon().toPolygon());
     this->setMask(mask);
     //QGraphicsView *gv = new QGraphicsView();
     //this->setParent(gv);
-    //layout->addWidget(gv);
+    //layout->addWidget(gv);*/
+
     layout->addWidget(this);
 
 }
@@ -119,48 +127,49 @@ void generate_rgb(QString &red, QString &green, double m){
 EntryCard::EntryCard(int border_radius, int width, int height, QString color, EntryPerso *entry) : Card(border_radius, width, height, color), entry(entry){
     // display date
     date_display = new QLabel();
-    date_display->setFixedWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-    date_display->setFixedHeight(50);
+    date_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
+    date_display->setMinimumHeight(30);
+    date_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     date_display->setText(generate_date_string(entry->get_date()));
     date_display->setAlignment(Qt::AlignCenter);
-    date_display->setStyleSheet("font: 8px; font-weight: bold;");
+    date_display->setStyleSheet("font-weight: bold; border: 1px solid;");
 
     // display activities and friends
-    fr_act_display = new QGraphicsView();
-    fr_act_display->setFixedWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-    fr_act_display->setFixedHeight(50);
-    fr_act_labels = new QLabel[10];
+    fr_act_display = new QListWidget(this);
+    fr_act_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
+    fr_act_display->setMinimumHeight(30);
+    fr_act_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    fr_act_display->setStyleSheet("font-weight: bold; border: 1px solid;");
+    fr_act_labels = new QLabel[15];
+    fr_act_display->addItem(QString::fromStdString(entry->get_friends()->get_name()));
+    fr_act_display->addItem(QString::fromStdString(entry->get_activities()->get_name()));
 
     //display mood
     mood_display = new QLabel();
     mood_display->setText("Mood: " + QString::number(std::round(entry->get_mood() * 100)) + "%");
-    mood_display->setFixedWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-    mood_display->setFixedHeight(50);
+    mood_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
+    mood_display->setMinimumHeight(30);
+    mood_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     mood_display->setAlignment(Qt::AlignCenter);
     QString red, green;
     generate_rgb(red, green, entry->get_mood());
-    mood_display->setStyleSheet("font: 12px; font-weight: bold; background-color: rgb(" + red + ", " + green + ", 0);");
+    mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border: 1px solid;");
 
-
-    //borders
-    v_line = new QFrame();
-    v_line->setFrameShape(QFrame::VLine);
-    v_line->setFrameShadow(QFrame::Plain);
-    v_line->setLineWidth(1);
-    v_line1 = new QFrame();
-    v_line1->setFrameShape(QFrame::VLine);
-    v_line1->setFrameShadow(QFrame::Plain);
-    v_line1->setLineWidth(1);
 
     //top menu
     top_menu = new QHBoxLayout(this);
     top_menu->setAlignment(Qt::AlignTop);
     top_menu->setSpacing(0);
+    date_display->setParent(this);
     top_menu->addWidget(date_display);
-    top_menu->addWidget(v_line);
+    fr_act_display->setParent(this);
     top_menu->addWidget(fr_act_display);
-    top_menu->addWidget(v_line1);
+    mood_display->setParent(this);
     top_menu->addWidget(mood_display);
+
+    vb_layout->addItem(top_menu);
+    this->setLayout(vb_layout);
+
 }
 
 EntryCard::~EntryCard(){
@@ -168,7 +177,6 @@ EntryCard::~EntryCard(){
     delete date_display;
     delete mood_display;
     delete fr_act_display;
+    delete fr_act_labels;
     delete top_menu;
-    delete v_line;
-    delete v_line1;
 }
