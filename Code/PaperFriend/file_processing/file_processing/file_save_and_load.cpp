@@ -2,6 +2,7 @@
 #include "cipher/cipher.h"
 #include "qdir.h"
 #include <direct.h>
+#include <QFile>
 
 
 
@@ -39,17 +40,14 @@ bool save_entry_encrypt(Entry entry, std::string path, std::string key){
         dir.mkpath(".");
     } // create the directory if it does not exist
 
-    std::ofstream o(path + filename);
-
-    if(!o.is_open()){
-        std::cout << "Error opening file" << std::endl;
-        return false;
-    } // check if the file is open
-
-    o << j << std::endl;
-
-    o.close();
-    return true;
+    QFile file(QString::fromStdString(path + filename));
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QTextStream out(&file);
+        file.write(j.dump().c_str());
+        file.close();
+        return true;
+    }
+    return false;
 };
 
 Entry load_entry(std::string filename){
