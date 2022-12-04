@@ -126,7 +126,7 @@ void generate_rgb(QString &red, QString &green, double m){
 }
 
 EntryCard::EntryCard(int border_radius, int width, int height, QString color, Entry *entry) : Card(border_radius, width, height, color), entry(entry){
-    EntryPerso * entry_p = nullptr;
+    entry_p = nullptr;
     if(static_cast<EntryPerso*>(entry) != nullptr){
         entry_p = static_cast<EntryPerso*>(entry);
     }
@@ -219,4 +219,5 @@ EntryCard::~EntryCard(){
     delete text_field;
     delete text_title_vb;
     delete text_title_w;
+    delete entry_p;
 }

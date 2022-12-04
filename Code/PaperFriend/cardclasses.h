@@ -48,6 +48,7 @@ public:
 
 private:
     Entry *entry;
+    EntryPerso *entry_p;
     QHBoxLayout *top_menu;
     QLabel *date_display;
     QLabel *mood_display;
