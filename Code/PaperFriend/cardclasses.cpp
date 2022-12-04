@@ -125,62 +125,33 @@ void generate_rgb(QString &red, QString &green, double m){
     }
 }
 
-EntryCard::EntryCard(int border_radius, int width, int height, QString color, EntryPerso *entry) : Card(border_radius, width, height, color), entry(entry){
+EntryCard::EntryCard(int border_radius, int width, int height, QString color, Entry *entry) : Card(border_radius, width, height, color), entry(entry){
+    EntryPerso * entry_p = nullptr;
+    if(static_cast<EntryPerso*>(entry) != nullptr){
+        entry_p = static_cast<EntryPerso*>(entry);
+    }
     // display date
     date_display = new QLabel();
     date_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
     date_display->setMaximumHeight(40);
     date_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    date_display->setText(generate_date_string(entry->get_date()));
+    date_display->setText(generate_date_string(entry_p->get_date()));
     date_display->setAlignment(Qt::AlignCenter);
     date_display->setStyleSheet("font-weight: bold; border: 1px solid;");
-
-    // display activities and friends
-    fr_act_display = new QListWidget(this);
-    fr_act_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-    fr_act_display->setMaximumHeight(40);
-    fr_act_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    fr_act_display->setStyleSheet("font-weight: bold; border: 1px solid;");
-    fr_act_labels = new QLabel[15]; // to be adjusted to store all friends and activities
-    fr_act_display->addItem(QString::fromStdString(entry->get_friends()->get_name()));
-    fr_act_display->addItem(QString::fromStdString(entry->get_activities()->get_name()));
-
-    //display mood
-    mood_display = new QLabel();
-    mood_display->setText("Mood: " + QString::number(std::round(entry->get_mood() * 100)) + "%");
-    mood_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-    mood_display->setMaximumHeight(40);
-    mood_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    mood_display->setAlignment(Qt::AlignCenter);
-    QString red, green;
-    generate_rgb(red, green, entry->get_mood());
-    mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border: 1px solid;");
-
-
-    //top menu
-    top_menu = new QHBoxLayout(this);
-    top_menu->setAlignment(Qt::AlignTop);
-    top_menu->setSpacing(0);
-    date_display->setParent(this);
-    top_menu->addWidget(date_display);
-    fr_act_display->setParent(this);
-    top_menu->addWidget(fr_act_display);
-    mood_display->setParent(this);
-    top_menu->addWidget(mood_display);
 
     //entry text and title
     text_title_vb = new QVBoxLayout(this);
     text_title_w = new QWidget(this);
     text_title_w->setStyleSheet("border: 1px solid black;");
 
-    title = new QLabel(QString::fromStdString(entry->get_title()), text_title_w);
+    title = new QLabel(QString::fromStdString(entry_p->get_title()), text_title_w);
     title->setMinimumHeight(40);
     title->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     title->setAlignment(Qt::AlignLeft);
     title->setStyleSheet("font: 18px; font-weight: bold; border-style: none;");
     title->setContentsMargins(5, 10, 5, 0);
 
-    text_field = new QTextEdit(QString::fromStdString(entry->get_text()), text_title_w);
+    text_field = new QTextEdit(QString::fromStdString(entry_p->get_text()), text_title_w);
     text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     text_field->setAlignment(Qt::AlignLeft);
     text_field->setStyleSheet("font: 14px; border-style: none;");
@@ -191,11 +162,50 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     text_title_vb->addWidget(text_field);
     text_title_w->setLayout(text_title_vb);
 
+    //top menu
+    top_menu = new QHBoxLayout(this);
+    top_menu->setAlignment(Qt::AlignTop);
+    top_menu->setSpacing(0);
+    date_display->setParent(this);
+    top_menu->addWidget(date_display);
+
+    //display specific for entryPerso
+    if(entry_p != nullptr){
+
+        // display activities and friends
+        fr_act_display = new QListWidget(this);
+        fr_act_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
+        fr_act_display->setMaximumHeight(40);
+        fr_act_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        fr_act_display->setStyleSheet("font-weight: bold; border: 1px solid;");
+        fr_act_labels = new QLabel[15]; // to be adjusted to store all friends and activities
+        fr_act_display->addItem(QString::fromStdString(entry_p->get_friends()->get_name()));
+        fr_act_display->addItem(QString::fromStdString(entry_p->get_activities()->get_name()));
+
+        //display mood
+        mood_display = new QLabel();
+        mood_display->setText("Mood: " + QString::number(std::round(entry_p->get_mood() * 100)) + "%");
+        mood_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
+        mood_display->setMaximumHeight(40);
+        mood_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        mood_display->setAlignment(Qt::AlignCenter);
+        QString red, green;
+        generate_rgb(red, green, entry_p->get_mood());
+        mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border: 1px solid;");
+
+
+        // top menu
+        fr_act_display->setParent(this);
+        top_menu->addWidget(fr_act_display);
+        mood_display->setParent(this);
+        top_menu->addWidget(mood_display);
+
+    }
+
     //add to the layout
     vb_layout->addItem(top_menu);
     vb_layout->addWidget(text_title_w);
     this->setLayout(vb_layout);
-
 }
 
 EntryCard::~EntryCard(){

@@ -43,11 +43,11 @@ private:
 
 class EntryCard : public Card{
 public:
-    EntryCard(int border_radius = 15, int width = 200, int height = 200, QString color = "white", EntryPerso *entry = nullptr);
+    EntryCard(int border_radius = 15, int width = 200, int height = 200, QString color = "white", Entry *entry = nullptr);
     ~EntryCard();
 
 private:
-    EntryPerso *entry;
+    Entry *entry;
     QHBoxLayout *top_menu;
     QLabel *date_display;
     QLabel *mood_display;
