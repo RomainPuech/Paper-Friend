@@ -25,5 +25,6 @@
         <file>rsc/size.png</file>
         <file>rsc/underline.png</file>
         <file>rsc/undo.png</file>
+        <file>rsc/checklist icon.png</file>
     </qresource>
 </RCC>

@@ -83,6 +83,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto settings = findChild<QWidget*>("settings_frame");
     settings->hide(); //hide the settings menu on launch
+    //setting the icon for the setting button
+    QPixmap pix(":/pictures/rsc/checklist icon.png");
+    int w = ui->settingsButton->width();
+    int h = ui->settingsButton->height();
+    ui->settingsButton->setIcon(QIcon(pix.scaled(w,h,Qt::KeepAspectRatio)));
+    //
 }
 
 MainWindow::~MainWindow() {
