@@ -38,7 +38,7 @@ protected:
 
 private:
     int border_radius; // the radius of the rounded borders, default value: 15
-    QString background_color; // default color: beige
+    QString background_color; // default color: white
 };
 
 class EntryCard : public Card{
@@ -48,7 +48,7 @@ public:
 
 private:
     Entry *entry;
-    EntryPerso *entry_p;
+    EntryPerso *entry_perso;
     QHBoxLayout *top_menu;
     QLabel *date_display;
     QLabel *mood_display;
