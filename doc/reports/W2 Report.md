@@ -3,7 +3,7 @@
 | Romain Puech         |Frontend (specific)|||
 | Bogdana Kolic        |Frontend (specific)|||
 | Liam Loughman        |Frontend (specific)|||
-| Yubo Cai             |Frontend (specific)|||
+| Yubo Cai             |Frontend (specific)| - Merge the `TextEditor` into the main window, embed TextEditor into MainWindow and realize data intercommunication. <br> - Give data analysis teams a data interface to analyze content through text editors. <br> - Add more functions like `Font`, `Undo`, `Search` and fixed some bugs in the function. More details can be found [here]().|- Intercommunication with data teams to engage with proposed data. <br> - Further improvement of some functions in the `TextEditor`.| 
 | Luigi Massacci       |Frontend (general) |||
 | Safaa Arbai          |Frontend (general) |||
 | Ahmed Benchekroun    |Frontend (general) |||
