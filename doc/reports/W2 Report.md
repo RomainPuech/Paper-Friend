@@ -1,7 +1,7 @@
 | Name                 |Team               |      What I did             |  What I will do |
 |:----------------------:|:-----------------:|:-------------------------|:------------------|
 | Romain Puech         |Frontend (specific)|||
-| Bogdana Kolic        |Frontend (specific)|||
+| Bogdana Kolic        |Frontend (specific)|-Reimplemented Card and EntryCard classes to work with layouts <br>-Modified their display so that the cards are resizable (and as a consequence don't have rounded corners) and changed the style a bit <br>-Added a display of "friends and activities" , entry title and text in [EntryCard](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/9))<br>||
 | Liam Loughman        |Frontend (specific)|||
 | Yubo Cai             |Frontend (specific)|||
 | Luigi Massacci       |Frontend (general) |||
