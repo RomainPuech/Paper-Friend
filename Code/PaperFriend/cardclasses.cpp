@@ -10,6 +10,7 @@ Card::Card(int border_radius, int width, int height, QString color) : border_rad
     this->setStyleSheet("background-color: " + color + ";");
     vb_layout = new QVBoxLayout(this);
     vb_layout->setContentsMargins(0, 0, 0, 0);
+    vb_layout->setSpacing(0);
     this->setLayout(vb_layout);
 }
 
@@ -128,7 +129,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     // display date
     date_display = new QLabel();
     date_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-    date_display->setMinimumHeight(30);
+    date_display->setMaximumHeight(40);
     date_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     date_display->setText(generate_date_string(entry->get_date()));
     date_display->setAlignment(Qt::AlignCenter);
@@ -137,10 +138,10 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     // display activities and friends
     fr_act_display = new QListWidget(this);
     fr_act_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-    fr_act_display->setMinimumHeight(30);
+    fr_act_display->setMaximumHeight(40);
     fr_act_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     fr_act_display->setStyleSheet("font-weight: bold; border: 1px solid;");
-    fr_act_labels = new QLabel[15];
+    fr_act_labels = new QLabel[15]; // to be adjusted to store all friends and activities
     fr_act_display->addItem(QString::fromStdString(entry->get_friends()->get_name()));
     fr_act_display->addItem(QString::fromStdString(entry->get_activities()->get_name()));
 
@@ -148,7 +149,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     mood_display = new QLabel();
     mood_display->setText("Mood: " + QString::number(std::round(entry->get_mood() * 100)) + "%");
     mood_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-    mood_display->setMinimumHeight(30);
+    mood_display->setMaximumHeight(40);
     mood_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     mood_display->setAlignment(Qt::AlignCenter);
     QString red, green;
@@ -167,7 +168,32 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     mood_display->setParent(this);
     top_menu->addWidget(mood_display);
 
+    //entry text and title
+    text_title_vb = new QVBoxLayout(this);
+    text_title_w = new QWidget(this);
+    text_title_w->setStyleSheet("border: 1px solid black;");
+
+    title = new QLabel(QString::fromStdString(entry->get_title()), text_title_w);
+    title->setMinimumHeight(40);
+    title->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    title->setAlignment(Qt::AlignLeft);
+    title->setStyleSheet("font: 18px; font-weight: bold; border-style: none;");
+    title->setContentsMargins(5, 10, 5, 0);
+
+    text_field = new QTextEdit(QString::fromStdString(entry->get_text()), text_title_w);
+    text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    text_field->setAlignment(Qt::AlignLeft);
+    text_field->setStyleSheet("font: 14px; border-style: none;");
+    text_field->setReadOnly(true);
+    text_field->setContentsMargins(10, 0, 10, 5);
+
+    text_title_vb->addWidget(title);
+    text_title_vb->addWidget(text_field);
+    text_title_w->setLayout(text_title_vb);
+
+    //add to the layout
     vb_layout->addItem(top_menu);
+    vb_layout->addWidget(text_title_w);
     this->setLayout(vb_layout);
 
 }
@@ -179,4 +205,8 @@ EntryCard::~EntryCard(){
     delete fr_act_display;
     delete fr_act_labels;
     delete top_menu;
+    delete title;
+    delete text_field;
+    delete text_title_vb;
+    delete text_title_w;
 }

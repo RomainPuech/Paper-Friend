@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent)
     Activity *activity = new Activity("act1", 1);
     e->set_friends(fr);
     e->set_activities(activity);
+    e->set_title("THIS IS A TITLE");
+    e->set_text("some text...");
     EntryCard *c = new EntryCard(20, 300, 300, "white", e);
     //Card *c = new Card();
     c->display(ui->main_frame); //displays the entry in the main_frame.

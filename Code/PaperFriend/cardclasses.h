@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QListWidget>
+#include <QTextEdit>
 
 class Card : public QWidget{
 public:
@@ -52,6 +53,10 @@ private:
     QLabel *mood_display;
     QListWidget *fr_act_display;
     QLabel *fr_act_labels;
+    QLabel *title;
+    QTextEdit *text_field;
+    QWidget *text_title_w;
+    QVBoxLayout *text_title_vb;
 };
 
 #endif // CARDCLASSES_H
