@@ -2,7 +2,7 @@
 |:----------------------:|:-----------------:|:-------------------------|:------------------|
 | Romain Puech         |Frontend (specific)|||
 | Bogdana Kolic        |Frontend (specific)|-Reimplemented Card and EntryCard classes to work with layouts <br>-Modified their display so that the cards are resizable (and as a consequence don't have rounded corners) and changed the style a bit <br>-Added a display of "friends and activities" , entry title and text in [EntryCard](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/9))<br>||
-| Liam Loughman        |Frontend (specific)|||
+| Liam Loughman        |Frontend (specific)|Found a way to add a few more entry cards in a vertical layout box and add them to frame_5 in order to get a stacked view of the cards.|Fix the issue with the height to fit all cards in the frame and add a scrollable area|
 | Yubo Cai             |Frontend (specific)| - Merge the `TextEditor` into the main window, embed TextEditor into MainWindow and realize data intercommunication. <br> - Give data analysis teams a data interface to analyze content through text editors. <br> - Add more functions like `Font`, `Undo`, `Search` and fixed some bugs in the function. More details can be found [here]().|- Intercommunication with data teams to engage with proposed data. <br> - Further improvement of some functions in the `TextEditor`.| 
 | Luigi Massacci       |Frontend (general) |||
 | Safaa Arbai          |Frontend (general) |||
