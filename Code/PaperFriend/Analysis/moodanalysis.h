@@ -11,7 +11,7 @@
 
 class MoodAnalysis : public DataAnalysis{
 public:
-    bool alert_depression(int n, int m);
+    bool alert_depression();
     std::string suggestion();  // text that will be suggested to user daily
 private:
     std::vector<Variables> item_priority();

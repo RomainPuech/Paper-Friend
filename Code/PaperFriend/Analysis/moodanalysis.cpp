@@ -9,13 +9,16 @@
 
 
 
-bool MoodAnalysis::alert_depression(int n, int m){
+bool MoodAnalysis::alert_depression(){
     /**
-    * @param int n: number n and m of days with the assumption (needed only for it to make sense)
-    *               that n < m                 
-    * @returns the mood has been lower on average over the last n days than it has been over the last m
+    * @param no params
+    * @returns whether the mood has been declining over the last few days or not
     */
-    return get_lastn_average(n, MOOD) < get_lastn_average(m, MOOD);
+    int num_days_to_consider = 10;  // These values are just dummy values for now.
+    double slope_threshold = -1;
+
+    LinearRegressionCoeffs trend = general_trend(num_days_to_consider, MOOD);
+    return trend.slope < slope_threshold;
 }
 
 std::multimap<double, Variables> invert(std::map<Variables, double> & mymap){
