@@ -12,7 +12,7 @@
 #include <QListWidget>
 #include <QTextEdit>
 
-class Card : public QWidget{
+class Card : public QFrame{
 public:
     Card(int border_radius = 15, int width = 200, int height = 200, QString color = "white");
     ~Card();
@@ -33,6 +33,7 @@ public:
     * provided a parent widget
     */;
 
+
 protected:
     QVBoxLayout *vb_layout;
 
@@ -45,6 +46,8 @@ class EntryCard : public Card{
 public:
     EntryCard(int border_radius = 15, int width = 200, int height = 200, QString color = "white", Entry *entry = nullptr);
     ~EntryCard();
+
+    void display(QLayout *layout);
 
 private:
     Entry *entry;
