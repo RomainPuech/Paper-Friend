@@ -209,8 +209,8 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
         fr_act_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
         fr_act_display->setStyleSheet("font-weight: bold; border-radius: 0px;");
         fr_act_labels = new QLabel[15]; // to be adjusted to store all friends and activities
-        fr_act_display->addItem(QString::fromStdString(entry_perso->get_friends()->get_name()));
-        fr_act_display->addItem(QString::fromStdString(entry_perso->get_activities()->get_name()));
+        fr_act_display->addItem(QString::fromStdString((entry_perso->get_friends()[0])->get_name()));
+        fr_act_display->addItem(QString::fromStdString(entry_perso->get_activities()[0]->get_name()));
 
         //display mood
         mood_display = new QLabel();

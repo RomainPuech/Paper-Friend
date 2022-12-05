@@ -70,7 +70,7 @@ int Entry::get_absolute_day() const{
 
 EntryPerso::EntryPerso() : Entry(), activities(NULL), friends(NULL), mood(0) {}
 
-EntryPerso::EntryPerso(std::string text, std::string title, Activity* activities, Friend* friends, double mood,
+EntryPerso::EntryPerso(std::string text, std::string title, std::vector<Activity*> activities, std::vector<Friend*> friends, double mood,
                                                                                                    double sleep,
                                                                                                    double eating_healthy,
                                                                                                    double productivity,
@@ -84,23 +84,23 @@ EntryPerso::EntryPerso(std::string text, std::string title, Activity* activities
                                                                   screen_time(screen_time) {}
 
 EntryPerso::~EntryPerso() {
-    delete activities;
-    delete friends;
+    activities.~vector();
+    friends.~vector();
 }
 
-Activity* EntryPerso::get_activities() const {
+std::vector<Activity*> EntryPerso::get_activities() const {
     return activities;
 }
 
-void EntryPerso::set_activities(Activity* activities) {
+void EntryPerso::set_activities(std::vector<Activity*> activities) {
     this->activities = activities;
 }
 
-Friend* EntryPerso::get_friends() const {
+std::vector<Friend*> EntryPerso::get_friends() const {
     return friends;
 }
 
-void EntryPerso::set_friends(Friend* friends) {
+void EntryPerso::set_friends(std::vector<Friend*> friends) {
     this->friends = friends;
 }
 
@@ -155,8 +155,10 @@ void EntryPerso::set_screen_time(double screen_time) {
 std::vector<EntryPerso> sample_entries(int n){
     std::vector<EntryPerso> res = std::vector<EntryPerso>();
     for(int i=0;i<n;i++){
-        Activity *activities = new Activity();
-        Friend *friends = new Friend();
+        std::vector<Activity*> activities;
+        activities.push_back(new Activity());
+        std::vector<Friend*> friends;
+        friends.push_back(new Friend());
         double mood = rand()%20;
         double sleep = 6+rand()%6;
         double eating_healthy = rand()%2;

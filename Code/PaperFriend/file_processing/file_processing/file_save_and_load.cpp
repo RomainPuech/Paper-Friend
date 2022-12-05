@@ -5,13 +5,17 @@
 
 
 
+
 bool save_entry(Entry entry){ // I create and save the entry file, title format MM.YY.JJ
+
     nlohmann::json  j = {
         {"text", entry.get_text()},
         {"title", entry.get_title()},
         {"date", entry.get_date()}};
     std::string filename = entry.get_qdate().toString("MM.dd.yyyy").toStdString()+".json";
+
     std::ofstream o("./" + filename);
+
 
     if(!o.is_open()){
         std::cout << "Error opening file" << std::endl;
@@ -49,7 +53,12 @@ bool save_entry_encrypt(Entry entry, std::string path, std::string key){
     return false;
 };
 
-Entry load_entry(std::string filename){
+
+
+
+
+
+Entry load_entry(std::string filename){//retrieve the data of a Json file and return an initialized Entry object with this data
     std::ifstream i(filename);
     nlohmann::json j;
     i >> j;

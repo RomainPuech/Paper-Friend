@@ -20,7 +20,7 @@ public:
     std::string get_title() const;
     void set_title(std::string text);
 
-    std::string get_date() const; // "MM/DD/YYYY"
+    std::string get_date() const; // "MM.DD.YYYY"
     void set_date(std::string format_date);
 
     QDate get_qdate() const;
@@ -44,7 +44,7 @@ protected:
 class EntryPerso : public Entry {
 public:
     EntryPerso();
-    EntryPerso(std::string text, std::string title, Activity* activities, Friend* friends, double mood,
+    EntryPerso(std::string text, std::string title, std::vector<Activity*> activities, std::vector<Friend*> friends, double mood,
                                                                                            double sleep,
                                                                                            double eating_healthy,
                                                                                            double productivity,
@@ -52,11 +52,11 @@ public:
                                                                                            double screen_time);
     ~EntryPerso();
 
-    Activity* get_activities() const;
-    void set_activities(Activity* activities);
+    std::vector<Activity*> get_activities() const;
+    void set_activities(std::vector<Activity*> activities);
 
-    Friend* get_friends() const;
-    void set_friends(Friend* friends);
+    std::vector<Friend*> get_friends() const;
+    void set_friends(std::vector<Friend*> friends);
 
     double get_mood() const;
     void set_mood(double mood);
@@ -77,8 +77,8 @@ public:
     void set_screen_time(double screen_time);
 
 private:
-    Activity* activities;
-    Friend* friends;
+    std::vector<Activity*> activities;
+    std::vector<Friend*> friends;
     double mood;
     double sleep;
     double eating_healthy;
