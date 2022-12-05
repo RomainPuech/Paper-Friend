@@ -12,7 +12,7 @@ std::vector<bool> saved_settings() {
     std::ifstream myfile;
     myfile.open("settings.txt");
     while (getline (myfile, state)) {
-      current_settings.push_back(state == "0");
+      current_settings.push_back(state == "1");
     }
     myfile.close();
     return current_settings;

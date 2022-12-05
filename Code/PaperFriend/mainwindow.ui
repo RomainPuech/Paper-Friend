@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>901</width>
-    <height>658</height>
+    <width>1134</width>
+    <height>506</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -124,11 +124,17 @@
           </layout>
          </widget>
         </item>
-        <item>
+        <item alignment="Qt::AlignLeft|Qt::AlignTop">
          <widget class="QWidget" name="standard_frame" native="true">
           <layout class="QHBoxLayout" name="standard">
            <item>
             <widget class="QToolButton" name="settingsButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="contextMenuPolicy">
               <enum>Qt::DefaultContextMenu</enum>
              </property>
@@ -287,8 +293,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>901</width>
-     <height>22</height>
+     <width>1134</width>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
