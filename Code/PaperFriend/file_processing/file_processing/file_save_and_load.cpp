@@ -1,7 +1,6 @@
 #include "file_save_and_load.h"
 #include "cipher/cipher.h"
 #include "qdir.h"
-//#include <direct.h>
 #include <QFile>
 
 
