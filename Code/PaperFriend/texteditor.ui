@@ -45,6 +45,10 @@
    <addaction name="action_Cut"/>
    <addaction name="action_Paste"/>
    <addaction name="separator"/>
+   <addaction name="action_Bold"/>
+   <addaction name="action_Italic"/>
+   <addaction name="action_Underline"/>
+   <addaction name="separator"/>
    <addaction name="action_Font"/>
   </widget>
   <widget class="Edit" name="textEdit">
@@ -200,8 +204,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>:/myImages/rsc/bold.png</normaloff>:/myImages/rsc/bold.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/bold.png</normaloff>:/pictures/rsc/bold.png</iconset>
    </property>
    <property name="text">
     <string>Blod(&amp;B)</string>
@@ -218,8 +222,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>:/myImages/rsc/i.png</normaloff>:/myImages/rsc/i.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/i.png</normaloff>:/pictures/rsc/i.png</iconset>
    </property>
    <property name="text">
     <string>Italic(&amp;I)</string>
@@ -233,8 +237,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>:/myImages/rsc/underline.png</normaloff>:/myImages/rsc/underline.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/underline.png</normaloff>:/pictures/rsc/underline.png</iconset>
    </property>
    <property name="text">
     <string>Underline(U)</string>
