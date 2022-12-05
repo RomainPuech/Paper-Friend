@@ -48,8 +48,12 @@
    <addaction name="action_Bold"/>
    <addaction name="action_Italic"/>
    <addaction name="action_Underline"/>
-   <addaction name="separator"/>
    <addaction name="action_Font"/>
+   <addaction name="separator"/>
+   <addaction name="action_Left"/>
+   <addaction name="action_Right"/>
+   <addaction name="action_Center"/>
+   <addaction name="action_Just"/>
   </widget>
   <widget class="Edit" name="textEdit">
    <property name="geometry">
@@ -208,7 +212,10 @@
      <normaloff>:/pictures/rsc/bold.png</normaloff>:/pictures/rsc/bold.png</iconset>
    </property>
    <property name="text">
-    <string>Blod(&amp;B)</string>
+    <string>Bold(&amp;B)</string>
+   </property>
+   <property name="toolTip">
+    <string>Bold(B)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+B</string>
@@ -255,8 +262,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>:/myImages/rsc/left.png</normaloff>:/myImages/rsc/left.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/left.png</normaloff>:/pictures/rsc/left.png</iconset>
    </property>
    <property name="text">
     <string>JustifyLeft</string>
@@ -267,8 +274,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>:/myImages/rsc/right.png</normaloff>:/myImages/rsc/right.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/right.png</normaloff>:/pictures/rsc/right.png</iconset>
    </property>
    <property name="text">
     <string>JustifyRight</string>
@@ -279,8 +286,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>:/myImages/rsc/middle.png</normaloff>:/myImages/rsc/middle.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/middle.png</normaloff>:/pictures/rsc/middle.png</iconset>
    </property>
    <property name="text">
     <string>JustifyCenter</string>
@@ -309,8 +316,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>:/myImages/rsc/just.png</normaloff>:/myImages/rsc/just.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/just.png</normaloff>:/pictures/rsc/just.png</iconset>
    </property>
    <property name="text">
     <string>Alignment of both ends</string>

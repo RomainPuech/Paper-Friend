@@ -35,6 +35,9 @@ public:
     void textColor();                                          // Set the text color
     void textCurrentFormatChanged(const QTextCharFormat &fmt); // Change the status of the menu
     void textFont();                                           // Set the font
+    void textBold();                                           // Set the font to bold
+    void textItalic();                                         // Set the font to italic
+    void textUnderline();                                      // Set the font to underline
     QStack<QString> strUndo;
     QStack<QString> strRedo;
     void refreshStack(); // Refresh the stack
@@ -64,6 +67,16 @@ private slots:
     void on_action_Paste_triggered();
 
     void on_action_Cut_triggered();
+
+    void on_action_Bold_triggered();
+
+    void on_action_Italic_triggered();
+
+    void on_action_Underline_triggered();
+
+    void on_action_Left_triggered();
+
+    void on_action_Right_triggered();
 
 private:
     Edit edit;

@@ -19,8 +19,8 @@ TextEditor::TextEditor(QWidget *parent) : QWidget(parent),
                                           ui(new Ui::TextEditor)
 {
     ui->setupUi(this);
-    isUntitled = true;            // initialize the text as the status of unsaved
-    curFile = tr("Untitled.txt"); // initialize the current file name as "untitled.txt"
+    isUntitled = true;                         // initialize the text as the status of unsaved
+    curFile = tr("Untitled.txt");              // initialize the current file name as "untitled.txt"
     strUndo.push(ui->textEdit->toPlainText()); // Here the strUndo is a stack
     connect(ui->textEdit, SIGNAL(textChanged(QString)), this, SLOT(on_textEdit_textChanged));
 }
@@ -193,7 +193,50 @@ void TextEditor::mergeformat(const QTextCharFormat &fmt)
     ui->textEdit->mergeCurrentCharFormat(fmt);
 }
 
-// 以后的有关斜体，加粗，下标的代码 - Code content Part
+// Bold, Italic, Underline, Strikeout
+void TextEditor::textBold()
+{
+    QTextCharFormat fmt;
+    fmt.setFontWeight(ui->action_Bold->isChecked() ? QFont::Bold : QFont::Normal);
+    mergeformat(fmt);
+}
+
+void TextEditor::textItalic()
+{
+    QTextCharFormat fmt;
+    fmt.setFontItalic(ui->action_Italic->isChecked());
+    mergeformat(fmt);
+}
+
+void TextEditor::textUnderline()
+{
+    QTextCharFormat fmt;
+    fmt.setFontUnderline(ui->action_Underline->isChecked());
+    mergeformat(fmt);
+}
+
+// Justify part, left justiy, right justify, center justify
+void TextEditor::on_action_Left_triggered()
+{
+    ui->textEdit->setAlignment( Qt::AlignLeft );
+    if (ui->textEdit->alignment() == Qt::AlignLeft)
+    {
+        ui->action_Left->setChecked(true);
+        ui->action_Right->setChecked(false);
+        ui->action_Center->setChecked(false);
+    }
+}
+
+void TextEditor::on_action_Right_triggered()
+{
+    ui->textEdit->setAlignment( Qt::AlignRight );
+    if (ui->textEdit->alignment() == Qt::AlignRight)
+    {
+        ui->action_Left->setChecked(false);
+        ui->action_Right->setChecked(true);
+        ui->action_Center->setChecked(false);
+    }
+}
 
 void TextEditor::textColor()
 {
@@ -271,6 +314,22 @@ void TextEditor::on_textEdit_textChanged()
 }
 
 // 以后的有关斜体，加粗，下标的代码 - Declearation Part
+void TextEditor::on_action_Bold_triggered()
+{
+    textBold();
+}
+
+void TextEditor::on_action_Italic_triggered()
+{
+    textItalic();
+}
+
+void TextEditor::on_action_Underline_triggered()
+{
+    textUnderline();
+}
+
+
 
 void TextEditor::on_action_selectAll_triggered()
 {
