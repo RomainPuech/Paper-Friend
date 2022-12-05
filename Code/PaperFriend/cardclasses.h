@@ -2,6 +2,7 @@
 #define CARDCLASSES_H
 
 #include "entryclasses.h"
+#include "texteditor.h"
 
 #include <QWidget>
 #include <QPainterPath>
@@ -11,6 +12,8 @@
 #include <QHBoxLayout>
 #include <QListWidget>
 #include <QTextEdit>
+#include <QStackedWidget>
+#include <QPushButton>
 
 class Card : public QFrame{
 public:
@@ -44,12 +47,21 @@ private:
 
 class EntryCard : public Card{
 public:
-    EntryCard(int border_radius = 15, int width = 200, int height = 200, QString color = "white", Entry *entry = nullptr);
+    EntryCard(int border_radius = 15, int width = 200, int height = 200, QString color = "white", Entry *entry = nullptr, bool readOnly = true);
     ~EntryCard();
 
-    void display(QLayout *layout);
+    void change();
+
+    void display(QLayout *layout = nullptr);
+
+    bool isReadOnly();
+    void setReadOnly(bool readOnly);
+
+private slots:
+  void handleModify();
 
 private:
+    bool readOnly;
     Entry *entry;
     EntryPerso *entry_perso;
     QHBoxLayout *top_menu;
@@ -61,6 +73,11 @@ private:
     QTextEdit *text_field;
     QWidget *text_title_w;
     QVBoxLayout *text_title_vb;
+    TextEditor *edit_text;
+    QStackedWidget *edit_text_w;
+    QPushButton *modify;
+    QPushButton *back_to_display;
+    QLayout *display_layout;
 };
 
 #endif // CARDCLASSES_H
