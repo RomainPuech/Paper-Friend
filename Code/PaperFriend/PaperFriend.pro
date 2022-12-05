@@ -24,6 +24,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp\
     dynamicgraph.cpp \
+    settings.cpp \
     texteditor.cpp \
     edit.cpp
 
@@ -44,6 +45,7 @@ HEADERS += \
     friendclasses.h \
     mainwindow.h\
     dynamicgraph.h \
+    settings.h \
     texteditor.h \
     edit.h
 
