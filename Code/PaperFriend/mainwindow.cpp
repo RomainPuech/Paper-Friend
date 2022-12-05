@@ -33,8 +33,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     // test for the EntryCard class
     EntryPerso *e = new EntryPerso();
-    Friend *fr = new Friend("fr1", 1);
-    Activity *activity = new Activity("act1", 1);
+    std::vector<Friend*> fr;
+    fr.push_back(new Friend("fr1", 1));
+    std::vector<Activity*> activity;
+    activity.push_back( new Activity("act1", 1));
     e->set_friends(fr);
     e->set_activities(activity);
     e->set_title("THIS IS A TITLE");
