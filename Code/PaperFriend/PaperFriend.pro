@@ -10,6 +10,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    activity_cell.cpp \
     activityclasses.cpp \
     all_activities.cpp \
     all_habits.cpp \
@@ -28,6 +29,7 @@ SOURCES += \
     edit.cpp
 
 HEADERS += \
+    activity_cell.h \
     activityclasses.h \
     all_activities.h \
     all_habits.h \
@@ -48,6 +50,7 @@ HEADERS += \
     edit.h
 
 FORMS += \
+    activity_cell.ui \
     all_activities.ui \
     all_habits.ui \
     mainwindow.ui \
