@@ -23,7 +23,7 @@ string encode_string(string input, string key){
     string vector = "initial_vector";
     QAESEncryption encryption(QAESEncryption::AES_256, QAESEncryption::CBC);
     QString inputqstr = str2qstr(input);
-    cout << "inputqstr: " << qstr2str(inputqstr) << endl;
+    // cout << "inputqstr: " << qstr2str(inputqstr) << endl;
     QString keyqstr = str2qstr(key);
     QString iv = str2qstr(vector);
 

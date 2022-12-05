@@ -10,6 +10,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    activity_cell.cpp \
     activityclasses.cpp \
     all_activities.cpp \
     all_habits.cpp \
@@ -17,15 +18,18 @@ SOURCES += \
     Analysis/DataAnalysis.cpp \
     cipher/Qt-AES-1.2/qaesencryption.cpp \
     cipher/cipher.cpp \
-    dynamicgraph.cpp \
     Analysis/moodanalysis.cpp \
     entryclasses.cpp \
     file_processing/file_processing/file_save_and_load.cpp \
     friendclasses.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp\
+    dynamicgraph.cpp \
+    texteditor.cpp \
+    edit.cpp
 
 HEADERS += \
+    activity_cell.h \
     activityclasses.h \
     all_activities.h \
     all_habits.h \
@@ -36,17 +40,21 @@ HEADERS += \
     cipher/Qt-AES-1.2/aesni/aesni-key-exp.h \
     cipher/Qt-AES-1.2/qaesencryption.h \
     cipher/cipher.h \
-    dynamicgraph.h \
     Analysis/moodanalysis.h \
     entryclasses.h \
     file_processing/file_processing/file_save_and_load.h \
     friendclasses.h \
-    mainwindow.h
+    mainwindow.h\
+    dynamicgraph.h \
+    texteditor.h \
+    edit.h
 
 FORMS += \
+    activity_cell.ui \
     all_activities.ui \
     all_habits.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    texteditor.ui \
 
 TRANSLATIONS += \
     PaperFriend_en_US.ts
@@ -62,3 +70,8 @@ DISTFILES += \
     cipher/Qt-AES-1.2/CONTRIBUTING.md \
     cipher/Qt-AES-1.2/LICENSE \
     cipher/Qt-AES-1.2/README.md
+
+RESOURCES += \
+    myresources.qrc
+
+RC_FILE += rsc/Editor.rc

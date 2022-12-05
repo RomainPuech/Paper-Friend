@@ -3,6 +3,9 @@
 #include "dynamicgraph.h"
 #include "cardclasses.h"
 #include "all_activities.h"
+#include "file_processing/file_processing/file_save_and_load.h"
+#include "texteditor.h"
+#include "ui_texteditor.h"
 
 #include <iostream>
 #include <fstream>
@@ -12,32 +15,80 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this); // display canvas created in drag-and-drop
+    // We use Friend function to embed the TextEditor into the MainWindow
+    textEditor = new TextEditor();
+    textEditor->mainUi = this;
 
+    ui->stackedWidget->addWidget(textEditor);
+    ui->stackedWidget->setWindowTitle("Text Editor");
+    ui->stackedWidget->setCurrentWidget(textEditor);
+
+    Entry en = Entry("text", "title");
+    save_entry_encrypt(en, "./output", "123");
+    std::cout << "saving" << std::endl;
+    Entry en2 = load_entry_decrypt("./output/12.02.2022.json", "123");
+    std::cout << "loading" << std::endl;
+    std::cout << en2.get_text() << std::endl;
+    std::cout << en2.get_title() << std::endl;
 
     // test for the EntryCard class
     EntryPerso *e = new EntryPerso();
-
-    EntryCard *c = new EntryCard(20, 300, 300, "beige", e);
+    Friend *fr = new Friend("fr1", 1);
+    Activity *activity = new Activity("act1", 1);
+    e->set_friends(fr);
+    e->set_activities(activity);
+    e->set_title("THIS IS A TITLE");
+    e->set_text("some text...");
+    EntryCard *c = new EntryCard(20, 300, 300, "white", e);
+    //Card *c = new Card();
     c->display(ui->main_frame); //displays the entry in the main_frame.
 
     //test for the DynamicGraph class
     //std::vector<EntryPerso> entries = sample_entries(10);
+    //double moods[10]={7,8,6,5,18,13,15,16,17,12};
     EntryPerso e1 =EntryPerso();
     EntryPerso e2 =EntryPerso();
     EntryPerso e3 =EntryPerso();
-    e1.set_mood(10.);
-    e2.set_mood(12.);
-    e3.set_mood(11.);
+    EntryPerso e4 =EntryPerso();
+    EntryPerso e5 =EntryPerso();
+    EntryPerso e6 =EntryPerso();
+    EntryPerso e7 =EntryPerso();
+    EntryPerso e8 =EntryPerso();
+    EntryPerso e9 =EntryPerso();
+    EntryPerso e10 =EntryPerso();
+    e1.set_mood(7);
+    e2.set_mood(8);
+    e3.set_mood(6);
+    e4.set_mood(5);
+    e5.set_mood(18);
+    e6.set_mood(13);
+    e7.set_mood(15);
+    e8.set_mood(16.);
+    e9.set_mood(17.);
+    e10.set_mood(12.);
     std::vector<EntryPerso> entries;
     entries.push_back(e1);
     entries.push_back(e2);
     entries.push_back(e3);
+    entries.push_back(e4);
+    entries.push_back(e5);
+    entries.push_back(e6);
+    entries.push_back(e7);
+    entries.push_back(e8);
+    entries.push_back(e9);
+    entries.push_back(e10);
     DynamicGraph moodGraph = DynamicGraph(entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
     moodGraph.display(ui->graph_frame); //displays the graph
     this -> showMaximized();
 
     auto settings = findChild<QWidget*>("settings_frame");
     settings->hide(); //hide the settings menu on launch
+    //setting the icon for the setting button
+    QPixmap pix(":/pictures/rsc/checklist icon.png");
+    int w = ui->settingsButton->width();
+    int h = ui->settingsButton->height();
+    ui->settingsButton->setIcon(QIcon(pix.scaled(w,h,Qt::KeepAspectRatio)));
+    //
 }
 
 MainWindow::~MainWindow() {

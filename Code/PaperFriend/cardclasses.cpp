@@ -7,7 +7,15 @@ Card::Card(int border_radius, int width, int height, QString color) : border_rad
     this->resize(width, height);
     this->rect().setHeight(height);
     this->rect().setWidth(width);
-    this->setStyleSheet("background-color: " + color + ";");
+    this->setStyleSheet("background-color: " + color + "; border: 1px solid black; border-radius:" + QString::number(border_radius) + "px;");
+    vb_layout = new QVBoxLayout(this);
+    vb_layout->setContentsMargins(0, 0, 0, 0);
+    vb_layout->setSpacing(0);
+    this->setLayout(vb_layout);
+}
+
+Card::~Card(){
+    delete vb_layout;
 }
 
 int Card::get_width() const{
@@ -45,28 +53,16 @@ void Card::set_background_color(QString color){
 }
 
 void Card::display(QLayout *layout){
-    QPainterPath path;
-    path.addRoundedRect(this->rect(), border_radius, border_radius);
-    QRegion mask = QRegion(path.toFillPolygon().toPolygon());
-    this->setMask(mask);
-    //QGraphicsView *gv = new QGraphicsView();
-    //this->setParent(gv);
-    //layout->addWidget(gv);
+    this->setStyleSheet("background-color: " + background_color + "; border: 1px solid black; border-radius:" + QString::number(border_radius) + "px;");
     layout->addWidget(this);
 
 }
 
-QString generate_date_string(std::string date_string){
+QString generate_date_string(QDate date){
     /* Using the date of the entry generates the QString of the form
      * 'Day - dd days ago
      * date of the entry '
      */
-
-    //convert date_string to QDate object date
-    int month = std::stoi(date_string.substr(0, 2));
-    int day = std::stoi(date_string.substr(3, 2));
-    int year = std::stoi(date_string.substr(6, 4));
-    QDate date = QDate(year, month, day);
 
     int day_int = date.dayOfWeek();
     QString day_string;
@@ -116,51 +112,89 @@ void generate_rgb(QString &red, QString &green, double m){
     }
 }
 
-EntryCard::EntryCard(int border_radius, int width, int height, QString color, EntryPerso *entry) : Card(border_radius, width, height, color), entry(entry){
+EntryCard::EntryCard(int border_radius, int width, int height, QString color, Entry *entry) : Card(border_radius, width, height, color), entry(entry){
+    entry_perso = nullptr;
+    if(static_cast<EntryPerso*>(entry) != nullptr){
+        entry_perso = static_cast<EntryPerso*>(entry);
+    }
     // display date
     date_display = new QLabel();
-    date_display->setFixedWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-    date_display->setFixedHeight(50);
-    date_display->setText(generate_date_string(entry->get_date()));
+    date_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
+    date_display->setMaximumHeight(40);
+    date_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    date_display->setText(generate_date_string(entry->get_qdate()));
     date_display->setAlignment(Qt::AlignCenter);
-    date_display->setStyleSheet("font: 8px; font-weight: bold;");
+    date_display->setStyleSheet("font-weight: bold; border-right: 1px solid black; border-radius: 0px; border-top-left-radius:" + QString::number(border_radius) + "px;");
 
-    // display activities and friends
-    fr_act_display = new QGraphicsView();
-    fr_act_display->setFixedWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-    fr_act_display->setFixedHeight(50);
-    fr_act_labels = new QLabel[10];
+    //entry text and title
+    text_title_vb = new QVBoxLayout(this);
+    text_title_w = new QWidget(this);
+    text_title_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius:" + QString::number(border_radius) + "px; border-bottom-right-radius:" + QString::number(border_radius) + "px; border-bottom: 1px solid black;");
 
-    //display mood
-    mood_display = new QLabel();
-    mood_display->setText("Mood: " + QString::number(std::round(entry->get_mood() * 100)) + "%");
-    mood_display->setFixedWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-    mood_display->setFixedHeight(50);
-    mood_display->setAlignment(Qt::AlignCenter);
-    QString red, green;
-    generate_rgb(red, green, entry->get_mood());
-    mood_display->setStyleSheet("font: 12px; font-weight: bold; background-color: rgb(" + red + ", " + green + ", 0);");
+    title = new QLabel(QString::fromStdString(entry->get_title()), text_title_w);
+    title->setMinimumHeight(40);
+    title->setMinimumWidth(this->get_width());
+    title->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    title->setAlignment(Qt::AlignLeft);
+    title->setStyleSheet("font: 18px; font-weight: bold; border-style: none;");
+    title->setContentsMargins(5, 10, 5, 0);
 
+    text_field = new QTextEdit(QString::fromStdString(entry->get_text()), text_title_w);
+    text_field->setMinimumWidth(this->get_width());
+    text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    text_field->setAlignment(Qt::AlignLeft);
+    text_field->setStyleSheet("font: 14px; border-style: none;");
+    text_field->setReadOnly(true);
+    text_field->setContentsMargins(10, 0, 10, 5);
 
-    //borders
-    v_line = new QFrame();
-    v_line->setFrameShape(QFrame::VLine);
-    v_line->setFrameShadow(QFrame::Plain);
-    v_line->setLineWidth(1);
-    v_line1 = new QFrame();
-    v_line1->setFrameShape(QFrame::VLine);
-    v_line1->setFrameShadow(QFrame::Plain);
-    v_line1->setLineWidth(1);
+    text_title_vb->addWidget(title);
+    text_title_vb->addWidget(text_field);
+    text_title_w->setLayout(text_title_vb);
+
 
     //top menu
     top_menu = new QHBoxLayout(this);
     top_menu->setAlignment(Qt::AlignTop);
     top_menu->setSpacing(0);
+    date_display->setParent(this);
     top_menu->addWidget(date_display);
-    top_menu->addWidget(v_line);
-    top_menu->addWidget(fr_act_display);
-    top_menu->addWidget(v_line1);
-    top_menu->addWidget(mood_display);
+
+    //display specific for entryPerso
+    if(entry_perso != nullptr){
+
+        // display activities and friends
+        fr_act_display = new QListWidget(this);
+        fr_act_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
+        fr_act_display->setMaximumHeight(40);
+        fr_act_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        fr_act_display->setStyleSheet("font-weight: bold; border-radius: 0px;");
+        fr_act_labels = new QLabel[15]; // to be adjusted to store all friends and activities
+        fr_act_display->addItem(QString::fromStdString(entry_perso->get_friends()->get_name()));
+        fr_act_display->addItem(QString::fromStdString(entry_perso->get_activities()->get_name()));
+
+        //display mood
+        mood_display = new QLabel();
+        mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood() * 100)) + "%");
+        mood_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
+        mood_display->setMaximumHeight(40);
+        mood_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        mood_display->setAlignment(Qt::AlignCenter);
+        QString red, green;
+        generate_rgb(red, green, entry_perso->get_mood());
+        mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-radius: 0px; border-top-right-radius:" + QString::number(border_radius) + "px;");
+
+
+        // top menu
+        fr_act_display->setParent(this);
+        top_menu->addWidget(fr_act_display);
+        mood_display->setParent(this);
+        top_menu->addWidget(mood_display);
+
+    }
+    //add to the layout
+    vb_layout->addItem(top_menu);
+    vb_layout->addWidget(text_title_w);
+    this->setLayout(vb_layout);
 }
 
 EntryCard::~EntryCard(){
@@ -168,7 +202,22 @@ EntryCard::~EntryCard(){
     delete date_display;
     delete mood_display;
     delete fr_act_display;
+    delete fr_act_labels;
     delete top_menu;
-    delete v_line;
-    delete v_line1;
+    delete title;
+    delete text_field;
+    delete text_title_vb;
+    delete text_title_w;
+    delete entry_perso;
+}
+
+void EntryCard::display(QLayout *layout){
+    date_display->setStyleSheet("font-weight: bold; border-right: 1px solid black; border-radius: 0px; border-top-left-radius:" + QString::number(this->get_border_radius()) + "px;");
+    text_title_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius:" + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius:" + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
+    if(entry_perso != nullptr){
+        QString red, green;
+        generate_rgb(red, green, entry_perso->get_mood());
+        mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-radius: 0px; border-top-right-radius:" + QString::number(this->get_border_radius()) + "px;");
+    }
+    layout->addWidget(this);
 }

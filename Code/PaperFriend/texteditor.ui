@@ -14,22 +14,28 @@
    <string>TextEditor</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="Edit" name="textEdit"/>
-    </item>
-   </layout>
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>258</width>
+     <height>194</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1001</width>
+     <height>44</height>
+    </rect>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
    <addaction name="action_Open"/>
    <addaction name="action_New"/>
    <addaction name="action_Save"/>
@@ -39,75 +45,30 @@
    <addaction name="action_Cut"/>
    <addaction name="action_Paste"/>
    <addaction name="separator"/>
+   <addaction name="action_Bold"/>
+   <addaction name="action_Italic"/>
+   <addaction name="action_Underline"/>
    <addaction name="action_Font"/>
+   <addaction name="separator"/>
+   <addaction name="action_Left"/>
+   <addaction name="action_Right"/>
+   <addaction name="action_Center"/>
+   <addaction name="action_Just"/>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
+  <widget class="Edit" name="textEdit">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>0</y>
-     <width>1000</width>
-     <height>24</height>
+     <y>40</y>
+     <width>1001</width>
+     <height>651</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_F">
-    <property name="title">
-     <string>File(&amp;F)</string>
-    </property>
-    <addaction name="action_New"/>
-    <addaction name="action_Open"/>
-    <addaction name="separator"/>
-    <addaction name="action_Save"/>
-    <addaction name="action_SavaAs"/>
-   </widget>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>Edit(&amp;E)</string>
-    </property>
-    <addaction name="action_Undo"/>
-    <addaction name="action_Y"/>
-    <addaction name="separator"/>
-    <addaction name="action_Cut"/>
-    <addaction name="action_Copy"/>
-    <addaction name="action_Paste"/>
-    <addaction name="action_selectAll"/>
-    <addaction name="separator"/>
-    <addaction name="action_Find"/>
-   </widget>
-   <widget class="QMenu" name="menu_2">
-    <property name="title">
-     <string>Format(&amp;O)</string>
-    </property>
-    <widget class="QMenu" name="menu_F_3">
-     <property name="title">
-      <string>Font(&amp;F)</string>
-     </property>
-     <addaction name="action_Bold"/>
-     <addaction name="action_Italic"/>
-     <addaction name="action_Underline"/>
-     <addaction name="action_Font"/>
-    </widget>
-    <widget class="QMenu" name="menu_P">
-     <property name="title">
-      <string>Paragraphs(&amp;P)</string>
-     </property>
-     <addaction name="action_Left"/>
-     <addaction name="action_Right"/>
-     <addaction name="action_Center"/>
-     <addaction name="action_Just"/>
-    </widget>
-    <addaction name="menu_F_3"/>
-    <addaction name="menu_P"/>
-    <addaction name="action_Color"/>
-   </widget>
-   <addaction name="menu_F"/>
-   <addaction name="menu"/>
-   <addaction name="menu_2"/>
   </widget>
   <action name="action_New">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/new.png</normaloff>:/myImages/rsc/new.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/new.png</normaloff>:/pictures/rsc/new.png</iconset>
    </property>
    <property name="text">
     <string>New</string>
@@ -118,8 +79,8 @@
   </action>
   <action name="action_Open">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/open.png</normaloff>:/myImages/rsc/open.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/open.png</normaloff>:/pictures/rsc/open.png</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -130,7 +91,7 @@
   </action>
   <action name="action_Close">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
+    <iconset>
      <normaloff>:/myImages/rsc/close.png</normaloff>:/myImages/rsc/close.png</iconset>
    </property>
    <property name="text">
@@ -139,8 +100,8 @@
   </action>
   <action name="action_Save">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/save.png</normaloff>:/myImages/rsc/save.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/save.png</normaloff>:/pictures/rsc/save.png</iconset>
    </property>
    <property name="text">
     <string>Save(&amp;S)</string>
@@ -151,8 +112,8 @@
   </action>
   <action name="action_SavaAs">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/saveas.png</normaloff>:/myImages/rsc/saveas.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/saveas.png</normaloff>:/pictures/rsc/saveas.png</iconset>
    </property>
    <property name="text">
     <string>Save As(&amp;A)</string>
@@ -160,7 +121,7 @@
   </action>
   <action name="action_Exit">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
+    <iconset>
      <normaloff>:/myImages/rsc/close.png</normaloff>:/myImages/rsc/close.png</iconset>
    </property>
    <property name="text">
@@ -172,8 +133,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/undo.png</normaloff>:/myImages/rsc/undo.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/undo.png</normaloff>:/pictures/rsc/undo.png</iconset>
    </property>
    <property name="text">
     <string>Undo(&amp;Z)</string>
@@ -184,8 +145,8 @@
   </action>
   <action name="action_Cut">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/cut.png</normaloff>:/myImages/rsc/cut.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/cut.png</normaloff>:/pictures/rsc/cut.png</iconset>
    </property>
    <property name="text">
     <string>Cut(&amp;X)</string>
@@ -196,8 +157,8 @@
   </action>
   <action name="action_Copy">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/copy.png</normaloff>:/myImages/rsc/copy.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/copy.png</normaloff>:/pictures/rsc/copy.png</iconset>
    </property>
    <property name="text">
     <string>Copy(&amp;C)</string>
@@ -208,8 +169,8 @@
   </action>
   <action name="action_Paste">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/paste.png</normaloff>:/myImages/rsc/paste.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/paste.png</normaloff>:/pictures/rsc/paste.png</iconset>
    </property>
    <property name="text">
     <string>Paste(&amp;V)</string>
@@ -220,7 +181,7 @@
   </action>
   <action name="action_Find">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
+    <iconset>
      <normaloff>:/myImages/rsc/find.png</normaloff>:/myImages/rsc/find.png</iconset>
    </property>
    <property name="text">
@@ -232,7 +193,7 @@
   </action>
   <action name="action_Help">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
+    <iconset>
      <normaloff>:/myImages/rsc/help.png</normaloff>:/myImages/rsc/help.png</iconset>
    </property>
    <property name="text">
@@ -247,11 +208,14 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/bold.png</normaloff>:/myImages/rsc/bold.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/bold.png</normaloff>:/pictures/rsc/bold.png</iconset>
    </property>
    <property name="text">
-    <string>Blod(&amp;B)</string>
+    <string>Bold(&amp;B)</string>
+   </property>
+   <property name="toolTip">
+    <string>Bold(B)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+B</string>
@@ -265,8 +229,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/i.png</normaloff>:/myImages/rsc/i.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/i.png</normaloff>:/pictures/rsc/i.png</iconset>
    </property>
    <property name="text">
     <string>Italic(&amp;I)</string>
@@ -280,8 +244,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/underline.png</normaloff>:/myImages/rsc/underline.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/underline.png</normaloff>:/pictures/rsc/underline.png</iconset>
    </property>
    <property name="text">
     <string>Underline(U)</string>
@@ -298,8 +262,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/left.png</normaloff>:/myImages/rsc/left.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/left.png</normaloff>:/pictures/rsc/left.png</iconset>
    </property>
    <property name="text">
     <string>JustifyLeft</string>
@@ -310,8 +274,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/right.png</normaloff>:/myImages/rsc/right.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/right.png</normaloff>:/pictures/rsc/right.png</iconset>
    </property>
    <property name="text">
     <string>JustifyRight</string>
@@ -322,8 +286,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/middle.png</normaloff>:/myImages/rsc/middle.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/middle.png</normaloff>:/pictures/rsc/middle.png</iconset>
    </property>
    <property name="text">
     <string>JustifyCenter</string>
@@ -331,8 +295,8 @@
   </action>
   <action name="action_Color">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/color.png</normaloff>:/myImages/rsc/color.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/color.png</normaloff>:/pictures/rsc/color.png</iconset>
    </property>
    <property name="text">
     <string>Color</string>
@@ -340,8 +304,8 @@
   </action>
   <action name="action_Font">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/size.png</normaloff>:/myImages/rsc/size.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/size.png</normaloff>:/pictures/rsc/size.png</iconset>
    </property>
    <property name="text">
     <string>Font Setting</string>
@@ -352,8 +316,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="myresorces.qrc">
-     <normaloff>:/myImages/rsc/just.png</normaloff>:/myImages/rsc/just.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/just.png</normaloff>:/pictures/rsc/just.png</iconset>
    </property>
    <property name="text">
     <string>Alignment of both ends</string>
@@ -361,7 +325,7 @@
   </action>
   <action name="action_Y">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
+    <iconset>
      <normaloff>:/myImages/rsc/redo.png</normaloff>:/myImages/rsc/redo.png</iconset>
    </property>
    <property name="text">
@@ -376,7 +340,7 @@
   </action>
   <action name="action_selectAll">
    <property name="icon">
-    <iconset resource="myresorces.qrc">
+    <iconset>
      <normaloff>:/myImages/rsc/selectall.png</normaloff>:/myImages/rsc/selectall.png</iconset>
    </property>
    <property name="text">
@@ -400,11 +364,11 @@
   <customwidget>
    <class>Edit</class>
    <extends>QTextEdit</extends>
-   <header>edit.h</header>
+   <header location="global">edit.h</header>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="myresorces.qrc"/>
+  <include location="myresources.qrc"/>
  </resources>
  <connections/>
 </ui>
