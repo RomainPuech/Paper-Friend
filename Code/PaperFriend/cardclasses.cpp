@@ -128,57 +128,69 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     date_display->setStyleSheet("font-weight: bold; border-right: 1px solid black; border-radius: 0px; border-top-left-radius: " + QString::number(border_radius) + "px;");
 
     //entry text and title
-    text_title_vb = new QVBoxLayout(this);
     text_title_w = new QWidget(this);
+    text_title_vb = new QVBoxLayout(text_title_w);
 
     //text-editor
-    edit_text_w = new QStackedWidget(this);
-    edit_text = new TextEditor(edit_text_w);
+
+    edit_and_return = new QGroupBox(this);
+    edit_text_w = new QStackedWidget();
+    edit_text = new TextEditor();
 
     //buttons
     modify = new QPushButton("Modify this entry", text_title_w);
+    back_to_display = new QPushButton("Exit editing mode", edit_and_return);
+
+    //entry text and title
+    text_title_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(border_radius) + "px; border-bottom-right-radius: " + QString::number(border_radius) + "px; border-bottom: 1px solid black;");
+
+    title = new QLabel(QString::fromStdString(entry->get_title()), text_title_w);
+    title->setMinimumHeight(40);
+    title->setMinimumWidth(this->get_width());
+    title->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    title->setAlignment(Qt::AlignLeft);
+    title->setStyleSheet("font: 18px; font-weight: bold; border-style: none;");
+    title->setContentsMargins(5, 10, 5, 0);
+
+    text_field = new QTextEdit(QString::fromStdString(entry->get_text()), text_title_w);
+    text_field->setMinimumWidth(this->get_width());
+    text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    text_field->setAlignment(Qt::AlignLeft);
+    text_field->setStyleSheet("font: 14px; border-style: none;");
+    text_field->setReadOnly(true);
+    text_field->setContentsMargins(10, 0, 10, 5);
+
+    //modify
     modify->setMinimumWidth(40);
     modify->setStyleSheet("QPushButton{color: white; background-color: black; font-weight: bold; font: 15px; border: 2px solid black; border-radius: 5px;} QPushButton:hover{background-color:white; color:black;}");
+    connect(modify, &QPushButton::released, this, &EntryCard::handleChange);
 
-    if(isReadOnly()){
-        //entry text and title
-        text_title_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(border_radius) + "px; border-bottom-right-radius: " + QString::number(border_radius) + "px; border-bottom: 1px solid black;");
+    //handle layout
+    text_title_vb->addWidget(title);
+    text_title_vb->addWidget(text_field);
+    text_title_vb->addWidget(modify);
+    text_title_w->setLayout(text_title_vb);
 
-        title = new QLabel(QString::fromStdString(entry->get_title()), text_title_w);
-        title->setMinimumHeight(40);
-        title->setMinimumWidth(this->get_width());
-        title->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-        title->setAlignment(Qt::AlignLeft);
-        title->setStyleSheet("font: 18px; font-weight: bold; border-style: none;");
-        title->setContentsMargins(5, 10, 5, 0);
+    //text-editor
+    edit_text_w->setMinimumWidth(this->get_width());
+    edit_text_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    edit_text_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
+    edit_text_w->setContentsMargins(10, 0, 10, 5);
 
-        text_field = new QTextEdit(QString::fromStdString(entry->get_text()), text_title_w);
-        text_field->setMinimumWidth(this->get_width());
-        text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        text_field->setAlignment(Qt::AlignLeft);
-        text_field->setStyleSheet("font: 14px; border-style: none;");
-        text_field->setReadOnly(true);
-        text_field->setContentsMargins(10, 0, 10, 5);
 
-        //modify
-        connect(modify, &QPushButton::released, this, &EntryCard::handleModify);
+    //back_to_display
+    back_to_display->setMinimumWidth(40);
+    back_to_display->setStyleSheet("QPushButton{color: white; background-color: black; font-weight: bold; font: 15px; border: 2px solid black; border-radius: 5px;} QPushButton:hover{background-color:white; color:black;}");
+    connect(back_to_display, &QPushButton::released, this, &EntryCard::handleChange);
 
-        text_title_vb->addWidget(title);
-        text_title_vb->addWidget(text_field);
-        text_title_vb->addWidget(modify);
-        text_title_w->setLayout(text_title_vb);
-    }
-    else{
-        //text-editor
-        edit_text->setMinimumWidth(this->get_width());
-        edit_text->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        edit_text_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
-        edit_text->setContentsMargins(10, 0, 10, 5);
-        edit_text_w->addWidget(edit_text);
-        edit_text_w->setCurrentWidget(edit_text);
-        text_title_vb->addWidget(edit_text_w);
-        edit_text_w->setLayout(text_title_vb);
-    }
+    //edit_text layout
+    edit_text_w->addWidget(edit_text);
+    edit_text_w->setCurrentWidget(edit_text);
+    edit_text_w->setParent(edit_and_return);
+    edit_vb = new QVBoxLayout(edit_and_return);
+    edit_vb->addWidget(edit_text_w);
+    edit_vb->addWidget(back_to_display);
+    edit_and_return->setLayout(edit_vb);
 
     //top menu
     top_menu = new QHBoxLayout(this);
@@ -225,7 +237,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
         vb_layout->addWidget(text_title_w); // for readOnly
     }
     else{
-        vb_layout->addWidget(edit_text_w); // for editor
+        vb_layout->addWidget(edit_and_return); // for editor
     }
     this->setLayout(vb_layout);
 }
@@ -244,12 +256,13 @@ EntryCard::~EntryCard(){
     delete entry_perso;
     delete edit_text;
     delete edit_text_w;
+    delete edit_and_return;
     delete modify;
     delete back_to_display;
     delete display_layout;
 }
 
-void EntryCard::handleModify(){
+void EntryCard::handleChange(){
     this->change();
     this->display(display_layout);
 
@@ -258,45 +271,16 @@ void EntryCard::handleModify(){
 void EntryCard::change(){
     readOnly = !readOnly;
     if(isReadOnly()){
-        //entry text and title
-        text_title_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(get_border_radius()) + "px; border-bottom: 1px solid black;");
-
-        title = new QLabel(QString::fromStdString(entry->get_title()), text_title_w);
-        title->setMinimumHeight(40);
-        title->setMinimumWidth(this->get_width());
-        title->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-        title->setAlignment(Qt::AlignLeft);
-        title->setStyleSheet("font: 18px; font-weight: bold; border-style: none;");
-        title->setContentsMargins(5, 10, 5, 0);
-
-        text_field = new QTextEdit(QString::fromStdString(entry->get_text()), text_title_w);
-        text_field->setMinimumWidth(this->get_width());
-        text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        text_field->setAlignment(Qt::AlignLeft);
-        text_field->setStyleSheet("font: 14px; border-style: none;");
-        text_field->setReadOnly(true);
-        text_field->setContentsMargins(10, 0, 10, 5);
-
-        text_title_vb->addWidget(title);
-        text_title_vb->addWidget(text_field);
-        text_title_w->setLayout(text_title_vb);
-
-        vb_layout->removeWidget(edit_text_w);
+        vb_layout->removeWidget(edit_and_return);
+        text_title_w->setVisible(true);
+        edit_and_return->setVisible(false);
         vb_layout->addWidget(text_title_w); // for readOnly
     }
     else{
-        //text-editor
-        edit_text->setMinimumWidth(this->get_width());
-        edit_text->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        edit_text->setStyleSheet("border-style: none;");
-        edit_text->setContentsMargins(10, 0, 10, 5);
-        edit_text_w->addWidget(edit_text);
-        edit_text_w->setCurrentWidget(edit_text);
-        text_title_vb->addWidget(edit_text_w);
-        edit_text_w->setLayout(text_title_vb);
-
         vb_layout->removeWidget(text_title_w);
-        vb_layout->addWidget(edit_text_w); // for editor
+        text_title_w->setVisible(false);
+        edit_and_return->setVisible(true);
+        vb_layout->addWidget(edit_and_return); // for editor
     }
 }
 

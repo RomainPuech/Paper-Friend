@@ -14,6 +14,7 @@
 #include <QTextEdit>
 #include <QStackedWidget>
 #include <QPushButton>
+#include <QGroupBox>
 
 class Card : public QFrame{
 public:
@@ -58,7 +59,7 @@ public:
     void setReadOnly(bool readOnly);
 
 private slots:
-  void handleModify();
+  void handleChange();
 
 private:
     bool readOnly;
@@ -71,10 +72,12 @@ private:
     QLabel *fr_act_labels;
     QLabel *title;
     QTextEdit *text_field;
-    QWidget *text_title_w;
-    QVBoxLayout *text_title_vb;
+    QWidget *text_title_w; // widget for title, text_field and modify
+    QVBoxLayout *text_title_vb; // handles the layout of text_title_w
     TextEditor *edit_text;
-    QStackedWidget *edit_text_w;
+    QStackedWidget *edit_text_w; // contains only the text editor
+    QGroupBox *edit_and_return; // contains text editor and back_to_display
+    QVBoxLayout *edit_vb;
     QPushButton *modify;
     QPushButton *back_to_display;
     QLayout *display_layout;
