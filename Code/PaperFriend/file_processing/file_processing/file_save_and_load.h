@@ -11,4 +11,11 @@ void save_entry(Entry entry);
 
 Entry load_entry(Entry entry);
 
+void save_entryperso(Entry entry);
+
+Entry load_entryperso(Entry entry);
+
+
+
+
 #endif
