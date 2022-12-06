@@ -80,9 +80,22 @@ MainWindow::MainWindow(QWidget *parent)
     entries.push_back(e8);
     entries.push_back(e9);
     entries.push_back(e10);
-    DynamicGraph moodGraph = DynamicGraph(entries); // the parent frame (frame in which the graph is going to be displayed) is ui->frame
+    DynamicGraph moodGraph = DynamicGraph(entries);
     moodGraph.display(ui->graph_frame); //displays the graph
     this -> showMaximized();
+
+    //Chatbox tests
+    //overload with too much messages
+    QVBoxLayout *chat_layout = new QVBoxLayout();
+    //chat_layout->addWidget(btn);
+    ui->scrollArea->widget()->setLayout(chat_layout);
+    for(int i = 0; i<20 ; i++){
+        QLabel *label = new QLabel(this);
+        label->setText(QString::number(i));
+         ui->scrollArea->widget()->layout()->addWidget(label);
+    }
+
+
 
     auto settings = findChild<QWidget*>("settings_frame");
     settings->hide(); //hide the settings menu on launch
