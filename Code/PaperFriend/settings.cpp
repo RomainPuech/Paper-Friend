@@ -16,7 +16,7 @@ std::vector<bool> saved_settings() {
     }
     myfile.close();
     while(current_settings.size()<NUMBER_OF_SETTINGS){
-        current_settings.push_back(false);
+        current_settings.push_back(true);//the default value of every setting is true
     }
     return current_settings;
 }
