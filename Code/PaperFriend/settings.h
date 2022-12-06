@@ -18,4 +18,6 @@ bool saved_communications();
 
 bool saved_screen_time();
 
+const int NUMBER_OF_SETTINGS = 6;
+
 #endif // SETTINGS_H
