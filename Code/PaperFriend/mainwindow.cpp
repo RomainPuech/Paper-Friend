@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "entryfilter.h"
 #include "ui_mainwindow.h"
 #include "dynamicgraph.h"
 #include "cardclasses.h"
@@ -25,27 +24,15 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->setWindowTitle("Text Editor");
     ui->stackedWidget->setCurrentWidget(textEditor);
 
-    // this part of the test code have some problems, so I comment it out
+    Entry en = Entry("text", "title");
+    save_entry_encrypt(en, "./output", "123");
+    std::cout << "saving" << std::endl;
+    Entry en2 = load_entry_decrypt("./output/12.02.2022.json", "123");
+    std::cout << "loading" << std::endl;
+    std::cout << en2.get_text() << std::endl;
+    std::cout << en2.get_title() << std::endl;
 
-    // // manually randomly generate 5 entryperso objects
-    // EntryPerso eee1 = EntryPerso( "text1", "title1", new Activity("activity1", 1), new Friend("friend1", 1), 1, 1, 1, 1, 1, 1);
-    // EntryPerso eee2 = EntryPerso( "text2", "title2", new Activity("activity2", 2), new Friend("friend2", 2), 2, 2, 2, 2, 2, 2);
-    // EntryPerso eee3 = EntryPerso( "text3", "title3", new Activity("activity3", 3), new Friend("friend3", 3), 3, 3, 3, 3, 3, 3);
-    // EntryPerso eee4 = EntryPerso( "text4", "title4", new Activity("activity4", 4), new Friend("friend4", 4), 4, 4, 4, 4, 4, 4);
-    // EntryPerso eee5 = EntryPerso( "text5", "title5", new Activity("activity5", 5), new Friend("friend5", 5), 5, 5, 5, 5, 5, 5);
-    // std::vector<EntryPerso> entri = {eee1, eee2, eee3, eee4, eee5};
-
-
-    // std::cout << "generated" << std::endl;
-    // std::vector<EntryPerso*> filtered = filter(entri, compare_mood);
-    // std::cout << "filtered size: " << filtered.size() << std::endl;
-    // for (int i = 0; i < filtered.size(); i++) {
-    //     std::cout << filtered[i]->get_mood() << std::endl;
-    // }
-    // std::cout << "end" << std::endl;
-
-
-     // test for the EntryCard class
+    // test for the EntryCard class
     EntryPerso *e = new EntryPerso();
     std::vector<Friend*> fr;
     fr.push_back(new Friend("fr1", 1));
