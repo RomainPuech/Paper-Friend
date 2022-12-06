@@ -256,6 +256,7 @@ EntryCard::~EntryCard(){
     delete entry_perso;
     delete edit_text;
     delete edit_text_w;
+    delete edit_vb;
     delete edit_and_return;
     delete modify;
     delete back_to_display;
