@@ -1,7 +1,5 @@
 #ifndef MASCOTCHAT_H
 #define MASCOTCHAT_H
-
-
 #include <QWidget>
 #include <QScrollArea>
 #include <QLabel>
