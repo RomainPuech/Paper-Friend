@@ -1,3 +1,13 @@
+/*
+
+  To implement: if there is a too large gap in the dates, leave an empty space in the graph
+  label x axis
+  x axis in absolute value
+  x axis only integers (or date?)
+
+*/
+
+
 #include "dynamicgraph.h"
 #include <QApplication>
 #include <QtCharts>
@@ -74,6 +84,7 @@ void DynamicGraph::get_dummy_point(double y1,double y2, double x1, double x2, do
 DynamicGraph::DynamicGraph(std::vector<EntryPerso> entries)
     :listofseries(std::vector<QLineSeries*>()),entries(entries)
 {   
+    QDate today = QDate::currentDate();
     QLineSeries *series= new QLineSeries();//series in which we add the points to display on the graph
     moodlevel current_mood_level = associated_mood_level(entries[0].get_mood());
     set_color(series,current_mood_level);//initialize the right color for the first point
@@ -82,7 +93,7 @@ DynamicGraph::DynamicGraph(std::vector<EntryPerso> entries)
     double y1;
     double x1;
     for(std::vector<EntryPerso>::iterator e=entries.begin();e!=entries.end();e++){
-        double x2 = -n+i;
+        double x2 = - (e->get_qdate().daysTo(today));
         double y2 = e->get_mood();//current point
         moodlevel level = associated_mood_level(y2);
         if(level!=current_mood_level){//the mood level changed, we need to change the line's color, so create a new series (a series can only have one single color)
@@ -133,10 +144,31 @@ void DynamicGraph::display(QLayout *layout) const
         mood_chart->addSeries(listofseries[i]);
     }
     mood_chart->legend()->hide();
+
+
+
     mood_chart->createDefaultAxes();
     mood_chart->axes(Qt::Vertical).first()->setRange(0, 20);
+    //mood_chart->axes(Qt::Vertical).first()->setTitleText(QString::fromStdString("Mood"));
+    QFont font = QFont();
+    font.setWeight(QFont::Thin);
+    mood_chart->axes(Qt::Horizontal).first()->setTitleFont(font);
+    mood_chart->axes(Qt::Horizontal).first()->setTitleText(QString::fromStdString("Days ago"));
+    QValueAxis* xaxis = static_cast<QValueAxis*>(mood_chart->axes(Qt::Horizontal).first()); //used to be able to call QValueAxis methods as we know that the axis is of type QValueAxis, which inherits from QAbstractAxis, returned by the function
+    xaxis->setLabelFormat("%0.0f");
+
+    //mood_chart->axes(Qt::Horizontal).first()->setLabelFormat("%.2f");
+    //tests to put absolute value as an x axis.
+    /*
+    //QValueAxis *axisX = new QValueAxis;
+    mood_chart->Xaxis.setLabelFormat("%.2f");
+    */
+
     mood_chart->setAnimationOptions(QChart::GridAxisAnimations);
-    mood_chart->setTitle("Mood evolution");
+    QFont titlefont = QFont();
+    titlefont.setWeight(QFont::Bold);
+    mood_chart->setTitleFont(titlefont);
+    mood_chart->setTitle("My mood");
     QChartView *mood_view = new QChartView(mood_chart);
     mood_view->setRenderHint(QPainter::Antialiasing);
     layout->addWidget(mood_view);//displays the graph on the screen in the indicated layout
