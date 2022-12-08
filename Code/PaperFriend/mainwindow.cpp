@@ -17,6 +17,11 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this); // display canvas created in drag-and-drop
+
+    //create layout for central scrollable area
+    QVBoxLayout *entries_layout = new QVBoxLayout();
+    ui->EntriesScroll->widget()->setLayout(entries_layout);
+
     // We use Friend function to embed the TextEditor into the MainWindow
     textEditor = new TextEditor();
     textEditor->mainUi = this;
@@ -41,7 +46,20 @@ MainWindow::MainWindow(QWidget *parent)
     e->set_text("some text...");
     EntryCard *c = new EntryCard(20, 300, 300, "white", e);
     //Card *c = new Card();
-    c->display(ui->main_frame); //displays the entry in the main_frame.
+    ///////
+    EntryPerso *e_bis = new EntryPerso();
+    std::vector<Friend*> fr2;
+    fr2.push_back(new Friend("fr2", 1));
+    std::vector<Activity*> activity2;
+    activity2.push_back( new Activity("act2", 1));
+    e_bis->set_friends(fr);
+    e_bis->set_activities(activity);
+    e_bis->set_title("THIS IS A TITLE2");
+    e_bis->set_text("some text 2 ...");
+    EntryCard *c2 = new EntryCard(20, 300, 300, "white", e_bis);
+    ///////
+    c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
+    c2->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
 
     //test for the DynamicGraph class
     //std::vector<EntryPerso> entries = sample_entries(10);

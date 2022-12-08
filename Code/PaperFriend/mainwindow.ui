@@ -251,20 +251,33 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="main_frame" stretch="0,0">
+     <layout class="QVBoxLayout" name="main_frame" stretch="0">
       <property name="spacing">
        <number>6</number>
       </property>
       <item>
-       <widget class="QPushButton" name="pushButton_3">
-        <property name="text">
-         <string>PushButton</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QStackedWidget" name="stackedWidget">
-        <widget class="QWidget" name="page"/>
+        <widget class="QWidget" name="page">
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QScrollArea" name="EntriesScroll">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>530</width>
+               <height>423</height>
+              </rect>
+             </property>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
         <widget class="QWidget" name="page_2"/>
        </widget>
       </item>
