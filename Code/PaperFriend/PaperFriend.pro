@@ -20,11 +20,13 @@ SOURCES += \
     cipher/cipher.cpp \
     Analysis/moodanalysis.cpp \
     entryclasses.cpp \
+    entryfilter.cpp \
     file_processing/file_processing/file_save_and_load.cpp \
     friendclasses.cpp \
     main.cpp \
     mainwindow.cpp\
     dynamicgraph.cpp \
+    mascotchat.cpp \
     settings.cpp \
     texteditor.cpp \
     edit.cpp
@@ -43,10 +45,12 @@ HEADERS += \
     cipher/cipher.h \
     Analysis/moodanalysis.h \
     entryclasses.h \
+    entryfilter.h \
     file_processing/file_processing/file_save_and_load.h \
     friendclasses.h \
     mainwindow.h\
     dynamicgraph.h \
+    mascotchat.h \
     settings.h \
     texteditor.h \
     edit.h
