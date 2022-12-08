@@ -41,7 +41,9 @@ private slots:
     void on_save_settings_clicked();
     void on_activitie_button_clicked();
 
+
 private:
+    void toggle_visibility(QWidget *component);
     Ui::MainWindow *ui;
     All_Habits *all_habits;
 };

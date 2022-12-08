@@ -7,6 +7,7 @@
 #include "texteditor.h"
 #include "ui_texteditor.h"
 #include "settings.h"
+#include "mascotchat.h"
 
 #include <iostream>
 #include <fstream>
@@ -19,10 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
     // We use Friend function to embed the TextEditor into the MainWindow
     textEditor = new TextEditor();
     textEditor->mainUi = this;
-
-    ui->stackedWidget->addWidget(textEditor);
-    ui->stackedWidget->setWindowTitle("Text Editor");
-    ui->stackedWidget->setCurrentWidget(textEditor);
 
     Entry en = Entry("text", "title");
     save_entry_encrypt(en, "./output", "123");
@@ -84,16 +81,15 @@ MainWindow::MainWindow(QWidget *parent)
     moodGraph.display(ui->graph_frame); //displays the graph
     this -> showMaximized();
 
-    //Chatbox tests
-    //overload with too much messages
-    QVBoxLayout *chat_layout = new QVBoxLayout();
-    //chat_layout->addWidget(btn);
-    ui->scrollArea->widget()->setLayout(chat_layout);
+    //Chatbox
+    MascotChat chat = MascotChat(ui->scrollArea);
+    //tests
     for(int i = 0; i<20 ; i++){
-        QLabel *label = new QLabel(this);
-        label->setText(QString::number(i));
-         ui->scrollArea->widget()->layout()->addWidget(label);
+        chat<<QString::number(i);
     }
+    QString lastm = chat.get_last_message();
+    chat<<lastm;
+
 
 
 
@@ -116,6 +112,15 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {
     delete ui;
 }
+void MainWindow::toggle_visibility(QWidget *component){
+    if(component->isVisible()){
+        component->hide();
+    }
+    else{
+        component->show();
+    }
+}
+
 void MainWindow::closeEvent (QCloseEvent *event){
     QMessageBox::StandardButton answr_btn = QMessageBox::question( this, tr("Paper friend"), tr("Are you sure?\n"),
                                          QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
@@ -146,9 +151,9 @@ void MainWindow::on_activitie_button_clicked()
 
 void MainWindow::on_settingsButton_clicked() {
     auto settings = findChild<QWidget*>("settings_frame");
-    settings->show();
-    auto standard = findChild<QWidget*>("standard_frame");
-    standard->hide();
+    toggle_visibility(settings);
+    auto chat = findChild<QWidget*>("scrollArea");
+    toggle_visibility(chat);
 }
 
 void MainWindow::on_save_settings_clicked() {
@@ -163,6 +168,7 @@ void MainWindow::on_save_settings_clicked() {
     myfile.close();
     auto settings = findChild<QWidget*>("settings_frame");
     settings->hide();
-    auto standard = findChild<QWidget*>("standard_frame");
-    standard->show();
+    auto chat = findChild<QWidget*>("scrollArea");
+    chat->show();
 }
+
