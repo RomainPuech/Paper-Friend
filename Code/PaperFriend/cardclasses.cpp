@@ -2,6 +2,7 @@
 
 #include <QDate>
 #include <QCalendar>
+#include <QMessageBox>
 
 Card::Card(int border_radius, int width, int height, QString color) : border_radius(border_radius), background_color(color){
     this->resize(width, height);
@@ -88,7 +89,10 @@ QString generate_date_string(QDate date){
     QDate today = QDate::currentDate();
     int days_ago = date.daysTo(today);
     QString days_ago_string;
-    if(days_ago % 100 == 1){
+    if(days_ago == 0){
+        return day_string + " - today \n" + date.toString("MM-dd-yyyy");
+    }
+    else if(days_ago % 100 == 1){
         days_ago_string = " day ago \n";
     }
     else{
@@ -136,6 +140,8 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     edit_and_return = new QGroupBox(this);
     edit_text_w = new QStackedWidget();
     edit_text = new TextEditor();
+    edit_text->set_title(QString::fromStdString(entry->get_title() + "\n"));
+    edit_text->append_text(QString::fromStdString(entry->get_text()));
 
     //buttons
     modify = new QPushButton("Modify this entry", text_title_w);
@@ -163,7 +169,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     //modify
     modify->setMinimumWidth(40);
     modify->setStyleSheet("QPushButton{color: white; background-color: black; font-weight: bold; font: 15px; border: 2px solid black; border-radius: 5px;} QPushButton:hover{background-color:white; color:black;}");
-    connect(modify, &QPushButton::released, this, &EntryCard::handleChange);
+    connect(modify, &QPushButton::released, this, &EntryCard::handleModify);
 
     //handle layout
     text_title_vb->addWidget(title);
@@ -181,7 +187,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     //back_to_display
     back_to_display->setMinimumWidth(40);
     back_to_display->setStyleSheet("QPushButton{color: white; background-color: black; font-weight: bold; font: 15px; border: 2px solid black; border-radius: 5px;} QPushButton:hover{background-color:white; color:black;}");
-    connect(back_to_display, &QPushButton::released, this, &EntryCard::handleChange);
+    connect(back_to_display, &QPushButton::released, this, &EntryCard::handleBack);
 
     //edit_text layout
     edit_text_w->addWidget(edit_text);
@@ -263,9 +269,35 @@ EntryCard::~EntryCard(){
     delete display_layout;
 }
 
-void EntryCard::handleChange(){
+void EntryCard::handleModify(){
     this->change();
     this->display(display_layout);
+
+}
+
+void EntryCard::handleBack(){
+    QMessageBox alert;
+    alert.setText("Do you want to save the changes to your entry?");
+    alert.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    alert.setDefaultButton(QMessageBox::Save);
+    int choice = alert.exec();
+    std::string retrieve_text = (edit_text->get_text()).toStdString();
+    std::string new_title = retrieve_text.substr(0, retrieve_text.find("\n"));
+    std::string new_text = retrieve_text.substr(retrieve_text.find("\n") + 1);
+    switch(choice){
+    case QMessageBox::Save:
+        entry->set_title(new_title);
+        entry->set_text(new_text);
+        this->change();
+        this->display(display_layout);
+        break;
+    case QMessageBox::Discard:
+        this->change();
+        this->display(display_layout);
+        break;
+    alert.close();
+    }
+
 
 }
 
@@ -278,6 +310,8 @@ void EntryCard::change(){
         vb_layout->addWidget(text_title_w); // for readOnly
     }
     else{
+        edit_text->set_title(QString::fromStdString(entry->get_title() + "\n"));
+        edit_text->append_text(QString::fromStdString(entry->get_text()));
         vb_layout->removeWidget(text_title_w);
         text_title_w->setVisible(false);
         edit_and_return->setVisible(true);
@@ -286,6 +320,16 @@ void EntryCard::change(){
 }
 
 void EntryCard::display(QLayout *layout){
+    //update values
+    date_display->setText(generate_date_string(entry->get_qdate()));
+    title->setText(QString::fromStdString(entry->get_title()));
+    text_field->setText(QString::fromStdString(entry->get_text()));
+    if(entry_perso != nullptr){
+        mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood() * 100)) + "%");
+        //friends and activities
+    }
+
+    //update style
     date_display->setStyleSheet("font-weight: bold; border-radius: 0px; border-top-left-radius: " + QString::number(this->get_border_radius()) + "px; border: 1px solid black;");
     text_title_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
     edit_text_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
@@ -294,7 +338,7 @@ void EntryCard::display(QLayout *layout){
         generate_rgb(red, green, entry_perso->get_mood());
         mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-left: 1px solid black; border-radius: 0px; border-top-right-radius:" + QString::number(this->get_border_radius()) + "px;");
     }
-    this->setStyleSheet("border-radius: " + QString::number(get_border_radius()) + "px; background-color: " + get_background_color() + "; border: 1px solid black;");
+    this->setStyleSheet("background-color: " + get_background_color() + "; border: 1px solid black; border-radius:" + QString::number(get_border_radius()) + "px;");
     layout->addWidget(this);
     display_layout = layout;
 }
