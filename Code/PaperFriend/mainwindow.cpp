@@ -7,6 +7,7 @@
 #include "texteditor.h"
 #include "ui_texteditor.h"
 #include "settings.h"
+#include "mascotchat.h"
 
 #include <iostream>
 #include <fstream>
@@ -44,7 +45,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     //test for the DynamicGraph class
     //std::vector<EntryPerso> entries = sample_entries(10);
-    //double moods[10]={7,8,6,5,18,13,15,16,17,12};
     EntryPerso e1 =EntryPerso();
     EntryPerso e2 =EntryPerso();
     EntryPerso e3 =EntryPerso();
@@ -65,6 +65,16 @@ MainWindow::MainWindow(QWidget *parent)
     e8.set_mood(16.);
     e9.set_mood(17.);
     e10.set_mood(12.);
+    e1.set_qdate(QDate(2022,11,25));
+    e2.set_qdate(QDate(2022,11,26));
+    e3.set_qdate(QDate(2022,11,30));
+    e4.set_qdate(QDate(2022,12,1));
+    e5.set_qdate(QDate(2022,12,2));
+    e6.set_qdate(QDate(2022,12,3));
+    e7.set_qdate(QDate(2022,12,4));
+    e8.set_qdate(QDate(2022,12,6));
+    e9.set_qdate(QDate(2022,12,7));
+    e10.set_qdate(QDate(2022,12,8));
     std::vector<EntryPerso> entries;
     entries.push_back(e1);
     entries.push_back(e2);
@@ -80,16 +90,15 @@ MainWindow::MainWindow(QWidget *parent)
     moodGraph.display(ui->graph_frame); //displays the graph
     this -> showMaximized();
 
-    //Chatbox tests
-    //overload with too much messages
-    QVBoxLayout *chat_layout = new QVBoxLayout();
-    //chat_layout->addWidget(btn);
-    ui->scrollArea->widget()->setLayout(chat_layout);
+    //Chatbox
+    MascotChat chat = MascotChat(ui->scrollArea);
+    //tests
     for(int i = 0; i<20 ; i++){
-        QLabel *label = new QLabel(this);
-        label->setText(QString::number(i));
-         ui->scrollArea->widget()->layout()->addWidget(label);
+        chat<<QString::number(i);
     }
+    QString lastm = chat.get_last_message();
+    chat<<lastm;
+
 
 
 
