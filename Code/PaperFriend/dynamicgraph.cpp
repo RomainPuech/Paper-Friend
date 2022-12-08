@@ -1,9 +1,7 @@
 /*
 
   To implement: if there is a too large gap in the dates, leave an empty space in the graph
-  label x axis
   x axis in absolute value
-  x axis only integers (or date?)
 
 */
 

@@ -27,7 +27,6 @@ SOURCES += \
     mainwindow.cpp\
     dynamicgraph.cpp \
     mascotchat.cpp \
-    mascotchat.cpp \
     settings.cpp \
     texteditor.cpp \
     edit.cpp

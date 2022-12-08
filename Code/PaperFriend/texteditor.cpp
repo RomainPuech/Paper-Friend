@@ -30,6 +30,21 @@ TextEditor::~TextEditor()
     delete ui;
 }
 
+QString TextEditor::get_text() const{
+    return ui->textEdit->toPlainText();
+}
+
+void TextEditor::set_title(QString text){
+    ui->textEdit->setFontWeight(QFont::Bold);
+    ui->textEdit->clear();
+    ui->textEdit->insertPlainText(text);
+    ui->textEdit->setFontWeight(1);
+}
+
+void TextEditor::append_text(QString text){
+    ui->textEdit->insertPlainText(text);
+}
+
 // Create a new file - checked
 // If you create a file without saving the previous file, the warning will pop up to remind you to save the previous file
 void TextEditor::newFile()
