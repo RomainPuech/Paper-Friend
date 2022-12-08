@@ -6,7 +6,7 @@
 
 Activity::Activity() : name(""), value(0) {}
 
-Activity::Activity(std::string name, int value) : name(name), value(value) {}
+Activity::Activity(std::string name, double value) : name(name), value(value) {}
 
 Activity::~Activity() {}
 

@@ -59,7 +59,8 @@ public:
     void setReadOnly(bool readOnly);
 
 private slots:
-  void handleChange();
+  void handleModify();
+  void handleBack();
 
 private:
     bool readOnly;

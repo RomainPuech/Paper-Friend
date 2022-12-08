@@ -31,12 +31,12 @@ public:
 
   std::vector<EntryPerso> log; // Data to be analysed
 
-  double get_var(const EntryPerso& entry, Variables var_name) const; // gets the value of the
+  double get_var(const EntryPerso& entry, int var_index) const; // gets the value of the
                                                                      // specified variable
-  std::vector<double> get_vect(const std::vector<EntryPerso>& entries, Variables var_name) const; // returns
+  std::vector<double> get_vect(const std::vector<EntryPerso>& entries, int var_index) const; // returns
                                                                      // the vector of values of the variable across the
                                                                      // entries
-  void set_var(EntryPerso& entry, Variables var_name, double value) const;  // sets the value of the
+  void set_var(EntryPerso& entry, int var_index, double value) const;  // sets the value of the
                                                                      // specified variable
                                 // This method will probably not be used that much but here just in case it is needed to generate randomized entries for testing.
 
@@ -52,14 +52,14 @@ public:
     return sum / data.size();
   }
 
-  double avg(const std::vector<EntryPerso>& entries, Variables var_name) const; // returns the average value of
+  double avg(const std::vector<EntryPerso>& entries, int var_index) const; // returns the average value of
                                                                          // the variable across the vector
 
 
 
   double stddev(const std::vector<double>& data) const; // calculates standard deviation
 
-  double stddev(const std::vector<EntryPerso>& entries, Variables var_name) const; // returns the standard
+  double stddev(const std::vector<EntryPerso>& entries, int var_index) const; // returns the standard
                                                                         // deviation of the variable across
                                                                         // the vector
 
@@ -67,14 +67,14 @@ public:
   double cor(const std::vector<double>& X, const std::vector<double>& Y) const;  // calculates correlation
 
 
-  LinearRegressionCoeffs compute_linear_regression_coeffs(const std::vector<double>& X, const std::vector<double>& Y);  // Fits Y against X
-  LinearRegressionCoeffs compute_linear_regression_coeffs(const std::vector<EntryPerso>& entries, Variables var1, Variables var2);  // Fits var1 against var2 across entries
-  LinearRegressionCoeffs general_trend(int n, Variables var);      // Fits the values of var over the last n days against the number of days since the first day being considered.
+  LinearRegressionCoeffs compute_linear_regression_coeffs(const std::vector<double>& X, const std::vector<double>& Y) const;  // Fits Y against X
+  LinearRegressionCoeffs compute_linear_regression_coeffs(const std::vector<EntryPerso>& entries, int var1_index, int var2_index) const;  // Fits var1 against var2 across entries
+  LinearRegressionCoeffs general_trend(int n, int var_index) const;      // Fits the values of var over the last n days against the number of days since the first day being considered.
 
-  double get_lastn_average(int n, Variables var_name) const;  // This will compute the average
+  double get_lastn_average(int n, int var_index) const;  // This will compute the average
                                             // of the specified variable over the last n entries.
 
-  std::vector<EntryPerso> anomalies_detection(const std::vector<EntryPerso>& entries, Variables var_name) const;
+  std::vector<EntryPerso> anomalies_detection(const std::vector<EntryPerso>& entries, int var_index) const;
 
   std::string var_to_str(Variables var){
       switch (var)

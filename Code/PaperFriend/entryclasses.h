@@ -44,6 +44,7 @@ protected:
 class EntryPerso : public Entry {
 public:
     EntryPerso();
+
     EntryPerso(std::string text, std::string title, std::vector<Activity*> activities, std::vector<Friend*> friends, double mood,
                                                                                            double sleep,
                                                                                            double eating_healthy,
@@ -57,6 +58,9 @@ public:
 
     std::vector<Friend*> get_friends() const;
     void set_friends(std::vector<Friend*> friends);
+
+    double get_var_value(int index) const;
+    std::string get_var_name(int index) const;
 
     double get_mood() const;
     void set_mood(double mood);
@@ -77,6 +81,7 @@ public:
     void set_screen_time(double screen_time);
 
 private:
+    std::vector<Activity> all_activities;
     std::vector<Activity*> activities;
     std::vector<Friend*> friends;
     double mood;

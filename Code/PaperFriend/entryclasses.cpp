@@ -70,22 +70,41 @@ int Entry::get_absolute_day() const{
 
 EntryPerso::EntryPerso() : Entry(), activities(NULL), friends(NULL), mood(0) {}
 
-EntryPerso::EntryPerso(std::string text, std::string title, std::vector<Activity*> activities, std::vector<Friend*> friends, double mood,
+EntryPerso::EntryPerso(std::string text, std::string title, std::vector<Activity*> p_activities, std::vector<Friend*> friends, double mood,
                                                                                                    double sleep,
                                                                                                    double eating_healthy,
                                                                                                    double productivity,
                                                                                                    double communications,
                                                                                                    double screen_time) :
-    Entry(text, title), activities(activities), friends(friends), mood(mood),
+    Entry(text, title), activities(p_activities), friends(friends), mood(mood),
                                                                   sleep(sleep),
                                                                   eating_healthy(eating_healthy),
                                                                   productivity(productivity),
                                                                   communications(communications),
-                                                                  screen_time(screen_time) {}
+                                                                  screen_time(screen_time) {
+
+    all_activities.push_back(Activity("mood", mood));
+    all_activities.push_back(Activity("sleep", sleep));
+    all_activities.push_back(Activity("eating_healthy", eating_healthy));
+    all_activities.push_back(Activity("productivity", productivity));
+    all_activities.push_back(Activity("communications", communications));
+    all_activities.push_back(Activity("screen_time", screen_time));
+
+    for (auto& ptr : activities)
+        all_activities.push_back(*ptr);
+}
 
 EntryPerso::~EntryPerso() {
     activities.~vector();
     friends.~vector();
+}
+
+double EntryPerso::get_var_value(int index) const{
+    return all_activities[index].get_value();
+}
+
+std::string EntryPerso::get_var_name(int index) const{
+    return all_activities[index].get_name();
 }
 
 std::vector<Activity*> EntryPerso::get_activities() const {
@@ -103,6 +122,7 @@ std::vector<Friend*> EntryPerso::get_friends() const {
 void EntryPerso::set_friends(std::vector<Friend*> friends) {
     this->friends = friends;
 }
+
 
 double EntryPerso::get_mood() const {
     return mood;
@@ -151,6 +171,7 @@ double EntryPerso::get_screen_time() const {
 void EntryPerso::set_screen_time(double screen_time) {
     this->screen_time = screen_time;
 }
+
 
 std::vector<EntryPerso> sample_entries(int n){
     std::vector<EntryPerso> res = std::vector<EntryPerso>();

@@ -8,7 +8,7 @@
 class Activity {
 public:
     Activity();
-    Activity(std::string name, int value);
+    Activity(std::string name, double value);
     ~Activity();
 
     std::string get_name() const;
