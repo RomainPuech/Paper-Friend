@@ -7,6 +7,7 @@
 #include "texteditor.h"
 #include "ui_texteditor.h"
 #include "settings.h"
+#include "mascotchat.h"
 
 #include <iostream>
 #include <fstream>
@@ -80,16 +81,15 @@ MainWindow::MainWindow(QWidget *parent)
     moodGraph.display(ui->graph_frame); //displays the graph
     this -> showMaximized();
 
-    //Chatbox tests
-    //overload with too much messages
-    QVBoxLayout *chat_layout = new QVBoxLayout();
-    //chat_layout->addWidget(btn);
-    ui->scrollArea->widget()->setLayout(chat_layout);
+    //Chatbox
+    MascotChat chat = MascotChat(ui->scrollArea);
+    //tests
     for(int i = 0; i<20 ; i++){
-        QLabel *label = new QLabel(this);
-        label->setText(QString::number(i));
-         ui->scrollArea->widget()->layout()->addWidget(label);
+        chat<<QString::number(i);
     }
+    QString lastm = chat.get_last_message();
+    chat<<lastm;
+
 
 
 
