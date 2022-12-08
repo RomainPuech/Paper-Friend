@@ -36,11 +36,6 @@
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
-   <addaction name="action_Open"/>
-   <addaction name="action_New"/>
-   <addaction name="action_Save"/>
-   <addaction name="action_SavaAs"/>
-   <addaction name="separator"/>
    <addaction name="action_Copy"/>
    <addaction name="action_Cut"/>
    <addaction name="action_Paste"/>

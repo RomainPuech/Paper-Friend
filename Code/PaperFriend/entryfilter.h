@@ -17,9 +17,9 @@ std::vector<EntryPerso*> filter(
     std::vector<EntryPerso>& entries,
     bool (*filterFn)(const EntryPerso&));
 
-bool compare_long_text(Entry& e);
+bool compare_long_text(const Entry& e);
 
-bool compare_long_text(EntryPerso& e);
+bool compare_long_text(const EntryPerso& e);
 
 bool compare_mood(const EntryPerso& e);
 
