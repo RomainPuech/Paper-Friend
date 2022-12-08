@@ -80,6 +80,10 @@ public:
     double get_screen_time() const;
     void set_screen_time(double screen_time);
 
+    int get_num_activities(){
+        return all_activities.size();
+    }
+
 private:
     std::vector<Activity> all_activities;
     std::vector<Activity*> activities;

@@ -76,25 +76,16 @@ public:
 
   std::vector<EntryPerso> anomalies_detection(const std::vector<EntryPerso>& entries, int var_index) const;
 
-  std::string var_to_str(Variables var){
-      switch (var)
-      {
-          case MOOD:
-              return "mood";
-          case SLEEP:
-              return "sleep";
-          case EATING_HEALTHY:
-              return "healthy eating";
-          case PRODUCTIVITY:
-              return "productivity";
-          case SCREEN_TIME:
-              return "screen time";
-          case COMMUNICATIONS:
-              return "communications";
-          default:
-              return "0";
-      }
+  std::string var_to_str(int var_index) const{
+      return log[0].get_var_name(var_index);
   }
+
+  int get_num_activities(){
+      return log[0].get_num_activities();
+  }
+
+  std::vector<int> item_priority(int var_index);
+  std::string suggestion(int var_index);  // text that will be suggested to user daily
 
 };
 
