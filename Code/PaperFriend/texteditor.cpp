@@ -30,7 +30,7 @@ TextEditor::~TextEditor()
     delete ui;
 }
 
-QString TextEditor::get_text(){
+QString TextEditor::get_text() const{
     return ui->textEdit->toPlainText();
 }
 

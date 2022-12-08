@@ -47,7 +47,7 @@ public:
     void textPaste();
     QString pasteBoard;
     void createPdf();
-    QString get_text();
+    QString get_text() const;
     void set_title(QString text);
     void append_text(QString text);
 

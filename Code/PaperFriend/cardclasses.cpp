@@ -119,6 +119,7 @@ void generate_rgb(QString &red, QString &green, double m){
 EntryCard::EntryCard(int border_radius, int width, int height, QString color, Entry *entry, bool readOnly) : Card(border_radius, width, height, color), entry(entry), readOnly(readOnly){
     display_layout = new QVBoxLayout();
     entry_perso = nullptr;
+    mood_slider = new QSlider(nullptr);
     if(static_cast<EntryPerso*>(entry) != nullptr){
         entry_perso = static_cast<EntryPerso*>(entry);
     }
@@ -229,6 +230,9 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
         generate_rgb(red, green, entry_perso->get_mood());
         mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-left: 1px solid black; border-radius: 0px; border-top-right-radius: " + QString::number(border_radius) + "px;");
 
+        //get mood
+        mood_slider->setMinimum(0);
+        mood_slider->setMaximum(1);
 
         // top menu
         fr_act_display->setParent(this);
@@ -271,7 +275,7 @@ EntryCard::~EntryCard(){
 
 void EntryCard::handleModify(){
     this->change();
-    this->display(display_layout);
+    this->update();
 
 }
 
@@ -289,11 +293,11 @@ void EntryCard::handleBack(){
         entry->set_title(new_title);
         entry->set_text(new_text);
         this->change();
-        this->display(display_layout);
+        this->update();
         break;
     case QMessageBox::Discard:
         this->change();
-        this->display(display_layout);
+        this->update();
         break;
     alert.close();
     }
@@ -307,7 +311,13 @@ void EntryCard::change(){
         vb_layout->removeWidget(edit_and_return);
         text_title_w->setVisible(true);
         edit_and_return->setVisible(false);
-        vb_layout->addWidget(text_title_w); // for readOnly
+        vb_layout->addWidget(text_title_w); // for readOnly text
+        if(entry_perso != nullptr){
+            top_menu->removeWidget(mood_display);
+            mood_display->setVisible(false);
+            mood_slider->setVisible(true);
+            top_menu->addWidget(mood_slider);
+        }
     }
     else{
         edit_text->set_title(QString::fromStdString(entry->get_title() + "\n"));
@@ -316,10 +326,16 @@ void EntryCard::change(){
         text_title_w->setVisible(false);
         edit_and_return->setVisible(true);
         vb_layout->addWidget(edit_and_return); // for editor
+        if(entry_perso != nullptr){
+            top_menu->removeWidget(mood_slider);
+            mood_slider->setVisible(false);
+            mood_display->setVisible(true);
+            top_menu->addWidget(mood_display);
+        }
     }
 }
 
-void EntryCard::display(QLayout *layout){
+void EntryCard::update(){
     //update values
     date_display->setText(generate_date_string(entry->get_qdate()));
     title->setText(QString::fromStdString(entry->get_title()));
@@ -339,6 +355,9 @@ void EntryCard::display(QLayout *layout){
         mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-left: 1px solid black; border-radius: 0px; border-top-right-radius:" + QString::number(this->get_border_radius()) + "px;");
     }
     this->setStyleSheet("background-color: " + get_background_color() + "; border: 1px solid black; border-radius:" + QString::number(get_border_radius()) + "px;");
+}
+
+void EntryCard::display(QLayout *layout){
     layout->addWidget(this);
     display_layout = layout;
 }

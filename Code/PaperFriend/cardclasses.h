@@ -15,6 +15,7 @@
 #include <QStackedWidget>
 #include <QPushButton>
 #include <QGroupBox>
+#include <QSlider>
 
 class Card : public QFrame{
 public:
@@ -57,6 +58,7 @@ public:
 
     bool isReadOnly();
     void setReadOnly(bool readOnly);
+    void update();
 
 private slots:
   void handleModify();
@@ -82,6 +84,7 @@ private:
     QPushButton *modify;
     QPushButton *back_to_display;
     QLayout *display_layout;
+    QSlider *mood_slider;
 };
 
 #endif // CARDCLASSES_H
