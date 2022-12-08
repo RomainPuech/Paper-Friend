@@ -1,6 +1,7 @@
 #ifndef MASCOTCHAT_H
 #define MASCOTCHAT_H
 
+
 #include <QWidget>
 #include <QScrollArea>
 #include <QLabel>
@@ -22,5 +23,6 @@ private:
     void add_message(std::string txt);
     QScrollArea *scrollArea;
 };
+
 
 #endif // MASCOTCHAT_H

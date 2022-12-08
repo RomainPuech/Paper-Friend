@@ -12,7 +12,7 @@
 // Never manually iterate trough an STL container with iterators. Either use
 // the normal syntax or use range based for loops like the one below
 
-double DataAnalysis::avg(const std::vector<EntryPerso>& entries, Variables var_name) const{
+double DataAnalysis::avg(const std::vector<EntryPerso>& entries, int var_index) const{
     /**
      * @param vector<EntryPerso>
      *        var_name : variable to average
@@ -20,7 +20,7 @@ double DataAnalysis::avg(const std::vector<EntryPerso>& entries, Variables var_n
      */
 
 
-    return avg<double>(get_vect(entries, var_name));
+    return avg<double>(get_vect(entries, var_index));
 }
 
 
@@ -37,7 +37,7 @@ double DataAnalysis::cov(const std::vector<double>& X, const std::vector<double>
     return avg(XY) - avg(X)*avg(Y);
 }
 
-LinearRegressionCoeffs DataAnalysis::compute_linear_regression_coeffs(const std::vector<double>& X, const std::vector<double>& Y){
+LinearRegressionCoeffs DataAnalysis::compute_linear_regression_coeffs(const std::vector<double>& X, const std::vector<double>& Y) const{
     /**
      * @param vectors double X, Y.
      * @return LinearRegressionCoeffs object corresponding to fitting Y against X.
@@ -50,16 +50,16 @@ LinearRegressionCoeffs DataAnalysis::compute_linear_regression_coeffs(const std:
     return LinearRegressionCoeffs(slope, intercept, quality_coeff);
 }
 
-LinearRegressionCoeffs DataAnalysis::compute_linear_regression_coeffs(const std::vector<EntryPerso>& entries, Variables var1, Variables var2){
+LinearRegressionCoeffs DataAnalysis::compute_linear_regression_coeffs(const std::vector<EntryPerso>& entries, int var1_index, int var2_index) const{
     /**
      * @param vectors of entries, and two variables
      * @return LinearRegressionCoeffs object corresponding to fitting the second variable against the first.
      *         across the values of each in entries.
      */
-    return compute_linear_regression_coeffs(get_vect(entries, var1), get_vect(entries, var2));
+    return compute_linear_regression_coeffs(get_vect(entries, var1_index), get_vect(entries, var2_index));
 }
 
-LinearRegressionCoeffs DataAnalysis::general_trend(int n, Variables var){
+LinearRegressionCoeffs DataAnalysis::general_trend(int n, int var_index) const{
     /**
      * @param int n : represents number of days to consider.
      *        Variables var: variable to consider.
@@ -67,7 +67,7 @@ LinearRegressionCoeffs DataAnalysis::general_trend(int n, Variables var){
      *  The function uses doubles to store ints because the functions used to calculate the desired coefficients are defined on vectors of doubles.
      */
     std::vector<EntryPerso> entries = get_lastn_days_data(n);
-    std::vector<double> values = get_vect(entries, var);
+    std::vector<double> values = get_vect(entries, var_index);
     std::vector<double> no_of_days;
 
     double first_day = entries.front().get_absolute_day();
@@ -95,13 +95,13 @@ double DataAnalysis::stddev(const std::vector<double>& data) const{
 }
 
 
-double DataAnalysis::stddev(const std::vector<EntryPerso>& entries, Variables var_name) const{
+double DataAnalysis::stddev(const std::vector<EntryPerso>& entries, int var_index) const{
     /**
      * @param vector<EntryPerso>
      *        var_name : variable to consider
      * @return standard deviation of values of the variable across the entries
      */
-   return stddev(get_vect(entries, var_name));
+   return stddev(get_vect(entries, var_index));
 }
 double DataAnalysis::cor(const std::vector<double>& X, const std::vector<double>& Y) const{
     /**
@@ -128,13 +128,13 @@ std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n) const {
 }
 
 
-double DataAnalysis::get_var(const EntryPerso& entry, Variables var_name) const {
+//double DataAnalysis::get_var(const EntryPerso& entry, int var_index) const {
     /**
      * @param EntryPerso entry : entry of interest.
      *        Variables var_name : represents the variable to get.
      * @return the value of the variable in the entry.
      */
-
+    /*
     switch (var_name) {
         
         case MOOD:
@@ -161,9 +161,10 @@ double DataAnalysis::get_var(const EntryPerso& entry, Variables var_name) const 
             return entry.get_screen_time();
     }
 
-}
 
-void DataAnalysis::set_var(EntryPerso& entry, Variables var_name, double value) const {
+} */
+
+//void DataAnalysis::set_var(EntryPerso& entry, Variables var_name, double value) const {
     // This method will probably not be used that much but here just in case.
     /**
      * @param EntryPerso entry : entry of interest.
@@ -171,6 +172,7 @@ void DataAnalysis::set_var(EntryPerso& entry, Variables var_name, double value) 
      *        double value : new value of the variable.
      * @return the value of the variable in the entry.
      */
+/*
     switch (var_name) {
 
         case MOOD:
@@ -197,8 +199,8 @@ void DataAnalysis::set_var(EntryPerso& entry, Variables var_name, double value) 
             entry.set_screen_time(value);
         }
 }
-
-std::vector<double> DataAnalysis::get_vect(const std::vector<EntryPerso>& entries, Variables var_name) const{
+*/
+std::vector<double> DataAnalysis::get_vect(const std::vector<EntryPerso>& entries, int var_index) const{
     /**
      * @param vector of entries
      *        var_name : represents the variable we consider
@@ -206,12 +208,12 @@ std::vector<double> DataAnalysis::get_vect(const std::vector<EntryPerso>& entrie
      */
     std::vector<double> res;
     for (auto& entry : entries){
-        res.push_back(get_var(entry, var_name));
+        res.push_back(entry.get_var_value(var_index));
     }
     return res;
 }
 
-double DataAnalysis::get_lastn_average(int n, Variables var_name) const{
+double DataAnalysis::get_lastn_average(int n, int var_index) const{
     /**
      * @param int n: number of n last entries we take into account
      * @return double average of the values of the variable represented by var_name for last n entries
@@ -219,13 +221,13 @@ double DataAnalysis::get_lastn_average(int n, Variables var_name) const{
     std::vector<double> val_list{};
 
     for (int i = std::max<int>(0, log.size() - n); i < log.size(); ++i) {
-        val_list.push_back(get_var(log[i], var_name));
+        val_list.push_back(log[i].get_var_value(var_index));
     }
     return avg<double>(val_list);
 }
 
 
-std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<EntryPerso>& entries, Variables var_name) const{
+std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<EntryPerso>& entries, int var_index) const{
     /**
      * @param vector of EntryPersos.
      * @return vector of entries at which anomalie in the variable was detected (value is 2 SDs far from its mean).
@@ -233,11 +235,11 @@ std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<Entr
 
     std::vector<EntryPerso> res;
 
-    double mean = avg(entries, var_name);
-    double st_dev = stddev(entries, var_name);
+    double mean = avg(entries, var_index);
+    double st_dev = stddev(entries, var_index);
 
     for (auto& entry : entries){
-        if (get_var(entry, var_name) - mean >= 2 * st_dev){
+        if (entry.get_var_value(var_index) - mean >= 2 * st_dev){
             res.push_back(entry);
         }
     }
