@@ -20,10 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
     textEditor = new TextEditor();
     textEditor->mainUi = this;
 
-    ui->stackedWidget->addWidget(textEditor);
-    ui->stackedWidget->setWindowTitle("Text Editor");
-    ui->stackedWidget->setCurrentWidget(textEditor);
-
     Entry en = Entry("text", "title");
     save_entry_encrypt(en, "./output", "123");
     std::cout << "saving" << std::endl;
