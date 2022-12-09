@@ -15,12 +15,16 @@ std::vector<Entry*> filter(
 
 std::vector<EntryPerso*> filter(
     std::vector<EntryPerso>& entries,
-    bool (*filterFn)(const EntryPerso&));
+    bool (*filterFn)(const EntryPerso&, std::string keyword, std::string opt, int value),
+    std::string keyword,
+    std::string opt,
+    int value);
 
 bool compare_long_text(const Entry& e);
 
-bool compare_long_text(const EntryPerso& e);
+// simple value comparison function for EntryPerso
+bool compare_value(const EntryPerso& e, std::string keyword, std::string opt, int value);
 
-bool compare_mood(const EntryPerso& e);
+std::vector<EntryPerso> random_entryperso(int num);
 
 #endif // ENTRYFILTER_H
