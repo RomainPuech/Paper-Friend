@@ -11,4 +11,3 @@ imagepath_strings_vect = {":/pictures/rsc/peaceout-resized.png",
 
 string Mascot::image_to_display(){;}
 
-void Mascot::display(){;}

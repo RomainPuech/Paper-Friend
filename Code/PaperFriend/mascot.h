@@ -10,8 +10,6 @@ class Mascot
 {
 public:
     Mascot();
-    void display();// takes the message from the analysis function,
-                   //displays the message with the image in mascot
 private:
     vector<string> imagepath_strings_vect; // vector of all the mascot images' paths
                                              //as strings
