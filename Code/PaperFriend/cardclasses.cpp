@@ -119,7 +119,7 @@ void generate_rgb(QString &red, QString &green, double m){
 EntryCard::EntryCard(int border_radius, int width, int height, QString color, Entry *entry, bool readOnly) : Card(border_radius, width, height, color), entry(entry), readOnly(readOnly){
     display_layout = new QVBoxLayout();
     entry_perso = nullptr;
-    mood_slider = new QSlider(nullptr);
+    mood_slider = new QSlider(Qt::Horizontal, this);
     if(static_cast<EntryPerso*>(entry) != nullptr){
         entry_perso = static_cast<EntryPerso*>(entry);
     }
@@ -232,13 +232,25 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
 
         //get mood
         mood_slider->setMinimum(0);
-        mood_slider->setMaximum(1);
+        mood_slider->setMaximum(100);
+        mood_slider->setValue(int(this->entry_perso->get_mood()*100));
+        mood_slider->setMinimumWidth(this->get_width()/3);
+        mood_slider->setMaximumHeight(40);
+        mood_slider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        mood_slider->setTickInterval(1);
+        mood_slider->setTickPosition(QSlider::TicksBelow);
+        mood_slider->setStyleSheet("QSlider::groove:horizontal{border: 1px solid grey; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); height: 10px; border-radius: 5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::add-page:horizontal {background: white; border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal {background: grey; border: 1px solid dark-grey; width: 16px;margin-top: -3px;margin-bottom: -3px;border-radius: 5px;} QSlider::handle:horizontal:hover {background: dark-grey; border: 1px solid black; border-radius: 5px;}");
 
         // top menu
         fr_act_display->setParent(this);
         top_menu->addWidget(fr_act_display);
         mood_display->setParent(this);
-        top_menu->addWidget(mood_display);
+        if(isReadOnly()){
+            top_menu->addWidget(mood_display);
+        }
+        else{
+            top_menu->addWidget(mood_slider);
+        }
 
     }
     //add to the layout
@@ -297,7 +309,6 @@ void EntryCard::handleBack(){
         break;
     case QMessageBox::Discard:
         this->change();
-        this->update();
         break;
     alert.close();
     }
@@ -313,10 +324,10 @@ void EntryCard::change(){
         edit_and_return->setVisible(false);
         vb_layout->addWidget(text_title_w); // for readOnly text
         if(entry_perso != nullptr){
-            top_menu->removeWidget(mood_display);
-            mood_display->setVisible(false);
-            mood_slider->setVisible(true);
-            top_menu->addWidget(mood_slider);
+            top_menu->removeWidget(mood_slider);
+            mood_slider->setVisible(false);
+            mood_display->setVisible(true);
+            top_menu->addWidget(mood_display);
         }
     }
     else{
@@ -327,10 +338,10 @@ void EntryCard::change(){
         edit_and_return->setVisible(true);
         vb_layout->addWidget(edit_and_return); // for editor
         if(entry_perso != nullptr){
-            top_menu->removeWidget(mood_slider);
-            mood_slider->setVisible(false);
-            mood_display->setVisible(true);
-            top_menu->addWidget(mood_display);
+            top_menu->removeWidget(mood_display);
+            mood_display->setVisible(false);
+            mood_slider->setVisible(true);
+            top_menu->addWidget(mood_slider);
         }
     }
 }
@@ -340,12 +351,15 @@ void EntryCard::update(){
     date_display->setText(generate_date_string(entry->get_qdate()));
     title->setText(QString::fromStdString(entry->get_title()));
     text_field->setText(QString::fromStdString(entry->get_text()));
+    this->entry_perso->set_mood(1.0*(this->mood_slider->value())/100);
     if(entry_perso != nullptr){
         mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood() * 100)) + "%");
+        mood_slider->setValue(int(this->entry_perso->get_mood()*100));
         //friends and activities
     }
 
     //update style
+    this->setStyleSheet("background-color: " + get_background_color() + "; border: 1px solid black; border-radius:" + QString::number(get_border_radius()) + "px;");
     date_display->setStyleSheet("font-weight: bold; border-radius: 0px; border-top-left-radius: " + QString::number(this->get_border_radius()) + "px; border: 1px solid black;");
     text_title_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
     edit_text_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
@@ -353,8 +367,8 @@ void EntryCard::update(){
         QString red, green;
         generate_rgb(red, green, entry_perso->get_mood());
         mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-left: 1px solid black; border-radius: 0px; border-top-right-radius:" + QString::number(this->get_border_radius()) + "px;");
+        mood_slider->setStyleSheet("QSlider::groove:horizontal{border: 1px solid grey; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); height: 10px; border-radius: 5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::add-page:horizontal {background: white; border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal {background: grey; border: 1px solid dark-grey; width: 16px;margin-top: -3px;margin-bottom: -3px;border-radius: 5px;} QSlider::handle:horizontal:hover {background: dark-grey; border: 1px solid black; border-radius: 5px;}");
     }
-    this->setStyleSheet("background-color: " + get_background_color() + "; border: 1px solid black; border-radius:" + QString::number(get_border_radius()) + "px;");
 }
 
 void EntryCard::display(QLayout *layout){
