@@ -144,7 +144,7 @@ std::vector<EntryPerso*> MainWindow::test(int n) {
     std::vector<EntryPerso*> entries;
     for (int i = 1; i <= n; i++) {
         EntryPerso *e = new EntryPerso();
-        e->set_mood(1+std::rand()%20);
+        e->set_mood(1+std::rand()%100);
         e->set_qdate(QDate(2022,11,i));
         std::vector<Friend*> fr;
         fr.push_back(new Friend("fr", 1));

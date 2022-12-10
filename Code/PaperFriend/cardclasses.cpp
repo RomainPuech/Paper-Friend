@@ -222,19 +222,19 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
 
         //display mood
         mood_display = new QLabel();
-        mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood() * 100)) + "%");
+        mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood())) + "%");
         mood_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
         mood_display->setMaximumHeight(40);
         mood_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
         mood_display->setAlignment(Qt::AlignCenter);
         QString red, green;
-        generate_rgb(red, green, entry_perso->get_mood());
+        generate_rgb(red, green, entry_perso->get_mood()/100);
         mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-left: 1px solid black; border-radius: 0px; border-top-right-radius: " + QString::number(border_radius) + "px;");
 
         //get mood
         mood_slider->setMinimum(0);
         mood_slider->setMaximum(100);
-        mood_slider->setValue(int(this->entry_perso->get_mood()*100));
+        mood_slider->setValue(int(this->entry_perso->get_mood()));
         mood_slider->setMinimumWidth(this->get_width()/3);
         mood_slider->setMaximumHeight(40);
         mood_slider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -352,10 +352,10 @@ void EntryCard::update(){
     date_display->setText(generate_date_string(entry->get_qdate()));
     title->setText(QString::fromStdString(entry->get_title()));
     text_field->setText(QString::fromStdString(entry->get_text()));
-    this->entry_perso->set_mood(1.0*(this->mood_slider->value())/100);
+    this->entry_perso->set_mood(this->mood_slider->value());
     if(entry_perso != nullptr){
-        mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood() * 100)) + "%");
-        mood_slider->setValue(int(this->entry_perso->get_mood()*100));
+        mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood())) + "%");
+        mood_slider->setValue(int(this->entry_perso->get_mood()));
         //friends and activities
     }
 
@@ -366,7 +366,7 @@ void EntryCard::update(){
     edit_text_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
     if(entry_perso != nullptr){
         QString red, green;
-        generate_rgb(red, green, entry_perso->get_mood());
+        generate_rgb(red, green, entry_perso->get_mood()/100);
         mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-left: 1px solid black; border-radius: 0px; border-top-right-radius:" + QString::number(this->get_border_radius()) + "px;");
         mood_slider->setStyleSheet("QSlider::groove:horizontal{border: 1px solid grey; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); height: 10px; border-radius: 5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::add-page:horizontal {background: white; border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal {background: grey; border: 1px solid dark-grey; width: 16px;margin-top: -3px;margin-bottom: -3px;border-radius: 5px;} QSlider::handle:horizontal:hover {background: dark-grey; border: 1px solid black; border-radius: 5px;}");
     }
