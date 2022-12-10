@@ -180,6 +180,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
 
     //text-editor
     edit_text_w->setMinimumWidth(this->get_width());
+    edit_text_w->setMinimumHeight(this->get_height());
     edit_text_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     edit_text_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
     edit_text_w->setContentsMargins(10, 0, 10, 5);

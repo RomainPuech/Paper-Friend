@@ -79,18 +79,18 @@ void DynamicGraph::get_dummy_point(double y1,double y2, double x1, double x2, do
 
 /////////////////////
 //Constructor
-DynamicGraph::DynamicGraph(std::vector<EntryPerso> entries)
+DynamicGraph::DynamicGraph(std::vector<EntryPerso*> entries)
     :listofseries(std::vector<QLineSeries*>()),entries(entries)
 {   
     QDate today = QDate::currentDate();
     QLineSeries *series= new QLineSeries();//series in which we add the points to display on the graph
-    moodlevel current_mood_level = associated_mood_level(entries[0].get_mood());
+    moodlevel current_mood_level = associated_mood_level(entries[0]->get_mood());
     set_color(series,current_mood_level);//initialize the right color for the first point
     int n = entries.size()-1;//the x axis will be negative numbers: x days ago = -x.
     int i=0;
     double y1;
     double x1;
-    for(std::vector<EntryPerso>::iterator e=entries.begin();e!=entries.end();e++){
+    for(auto e: entries){
         double x2 = - (e->get_qdate().daysTo(today));
         double y2 = e->get_mood();//current point
         moodlevel level = associated_mood_level(y2);
@@ -130,7 +130,7 @@ DynamicGraph::DynamicGraph(std::vector<EntryPerso> entries)
 
 ////////////////////////
 //setters and getters
-std::vector<EntryPerso> DynamicGraph::get_entries() const{return entries;}
+std::vector<EntryPerso*> DynamicGraph::get_entries() const{return entries;}
 
 ////////////////////////
 //display the graph
