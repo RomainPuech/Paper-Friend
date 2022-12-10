@@ -104,7 +104,12 @@ MainWindow::MainWindow(QWidget *parent)
     entries.push_back(e8);
     entries.push_back(e9);
     entries.push_back(e10);
-    DynamicGraph moodGraph = DynamicGraph(entries);
+
+    //test sample entries function
+    std::vector<EntryPerso> test = sample_entries(10);
+
+    //DynamicGraph moodGraph = DynamicGraph(entries);
+    DynamicGraph moodGraph = DynamicGraph(test);
     moodGraph.display(ui->graph_frame); //displays the graph
     this -> showMaximized();
 
@@ -116,6 +121,8 @@ MainWindow::MainWindow(QWidget *parent)
     }
     QString lastm = chat.get_last_message();
     chat<<lastm;
+
+
 
 
 
