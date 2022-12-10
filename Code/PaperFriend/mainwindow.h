@@ -42,6 +42,7 @@ private slots:
     void on_save_settings_clicked();
     void on_activitie_button_clicked();
     void on_filterButton_clicked();
+    void on_newEntryButton_clicked();
 
 
 private:
@@ -50,6 +51,7 @@ private:
     void display_graph(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
     Ui::MainWindow *ui;
     All_Habits *all_habits;
+    std::vector<EntryPerso*> entries;
 
     std::vector<EntryPerso*> test(int n); //generate n random entries
 };
