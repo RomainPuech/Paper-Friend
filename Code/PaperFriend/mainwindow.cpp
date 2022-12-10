@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     textEditor = new TextEditor();
     textEditor->mainUi = this;
 
-    std::vector<EntryPerso> entries = test(10);
+    std::vector<EntryPerso*> entries = test(10);
     display_graph(entries, ui);
     display_entries(entries, ui);
 
@@ -71,17 +71,17 @@ void MainWindow::toggle_visibility(QWidget *component){
     }
 }
 
-void MainWindow::display_entries(std::vector<EntryPerso> entries, Ui::MainWindow *ui) {
+void MainWindow::display_entries(std::vector<EntryPerso*> entries, Ui::MainWindow *ui) {
     while(!ui->EntriesScroll->widget()->layout()->isEmpty()) {
         ui->graph_frame->removeItem(ui->EntriesScroll->widget()->layout()->takeAt(0));
     }
     for (auto entry: entries) {
-        EntryCard *c = new EntryCard(20, 300, 300, "white", &entry);
+        EntryCard *c = new EntryCard(20, 300, 300, "white", entry);
         c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
     }
 }
 
-void MainWindow::display_graph(std::vector<EntryPerso> entries, Ui::MainWindow *ui) {
+void MainWindow::display_graph(std::vector<EntryPerso*> entries, Ui::MainWindow *ui) {
     while(!ui->graph_frame->isEmpty()) {
         ui->graph_frame->removeItem(ui->graph_frame->takeAt(0));
     }
@@ -134,26 +134,26 @@ void MainWindow::on_save_settings_clicked() {
 void MainWindow::on_filterButton_clicked() {
     auto spinBox = findChild<QSpinBox*>("numberOfEntries");
     int n = spinBox->value();
-    std::vector<EntryPerso> entries = test(n);
+    std::vector<EntryPerso*> entries = test(n);
     display_graph(entries, ui);
     display_entries(entries, ui);
 }
 
-//helps with debugging to be replaced later
-std::vector<EntryPerso> MainWindow::test(int n) {
-    std::vector<EntryPerso> entries;
+//helps with debugging; to be replaced later
+std::vector<EntryPerso*> MainWindow::test(int n) {
+    std::vector<EntryPerso*> entries;
     for (int i = 1; i <= n; i++) {
-        EntryPerso e = EntryPerso();
-        e.set_mood(1+std::rand()%20);
-        e.set_qdate(QDate(2022,11,i));
+        EntryPerso *e = new EntryPerso();
+        e->set_mood(1+std::rand()%20);
+        e->set_qdate(QDate(2022,11,i));
         std::vector<Friend*> fr;
         fr.push_back(new Friend("fr", 1));
         std::vector<Activity*> activity;
         activity.push_back(new Activity("act", 1));
-        e.set_friends(fr);
-        e.set_activities(activity);
-        e.set_title("THIS IS A TITLE2");
-        e.set_text("some text ...");
+        e->set_friends(fr);
+        e->set_activities(activity);
+        e->set_title("THIS IS A TITLE2");
+        e->set_text("some text ...");
         entries.push_back(e);
     }
     return entries;

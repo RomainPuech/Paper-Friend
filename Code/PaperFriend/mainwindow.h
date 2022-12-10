@@ -46,12 +46,12 @@ private slots:
 
 private:
     void toggle_visibility(QWidget *component);
-    void display_entries(std::vector<EntryPerso> entries, Ui::MainWindow *ui);
-    void display_graph(std::vector<EntryPerso> entries, Ui::MainWindow *ui);
+    void display_entries(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
+    void display_graph(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
     Ui::MainWindow *ui;
     All_Habits *all_habits;
 
-    std::vector<EntryPerso> test(int n); //generate n random entries
+    std::vector<EntryPerso*> test(int n); //generate n random entries
 };
 
 #endif // MAINWINDOW_H
