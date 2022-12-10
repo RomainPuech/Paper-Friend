@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "mascot.h"
 #include "ui_mainwindow.h"
 #include "dynamicgraph.h"
 #include "cardclasses.h"
@@ -8,6 +9,7 @@
 #include "ui_texteditor.h"
 #include "settings.h"
 #include "mascotchat.h"
+
 
 #include <iostream>
 #include <fstream>
