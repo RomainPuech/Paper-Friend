@@ -122,19 +122,8 @@ MainWindow::MainWindow(QWidget *parent)
     QString lastm = chat.get_last_message();
     chat<<lastm;
 
-
-
-
-
-
     auto settings = findChild<QWidget*>("settings_frame");
     settings->hide(); //hide the settings menu on launch
-    findChild<QCheckBox*>("mood")->setChecked(saved_mood());
-    findChild<QCheckBox*>("sleep")->setChecked(saved_sleep());
-    findChild<QCheckBox*>("eating_healthy")->setChecked(saved_eating_healthy());
-    findChild<QCheckBox*>("productivity")->setChecked(saved_productivity());
-    findChild<QCheckBox*>("communications")->setChecked(saved_communications());
-    findChild<QCheckBox*>("screen_time")->setChecked(saved_screen_time());
     //setting the icon for the setting button
     QPixmap pix(":/pictures/rsc/checklist icon.png");
     int w = ui->settingsButton->width();
@@ -165,25 +154,25 @@ void MainWindow::closeEvent (QCloseEvent *event){
     }
 }
 
-
 void MainWindow::on_pushButton_clicked() {
     hide();
     all_habits = new All_Habits(this);
     all_habits -> showMaximized();
 }
 
-
-
-void MainWindow::on_activitie_button_clicked()
-{
+void MainWindow::on_activitie_button_clicked() {
     all_activities my_activities;
     my_activities.setModal(true);
     my_activities.exec();
-
 }
 
-
 void MainWindow::on_settingsButton_clicked() {
+    findChild<QCheckBox*>("mood")->setChecked(saved_mood());
+    findChild<QCheckBox*>("sleep")->setChecked(saved_sleep());
+    findChild<QCheckBox*>("eating_healthy")->setChecked(saved_eating_healthy());
+    findChild<QCheckBox*>("productivity")->setChecked(saved_productivity());
+    findChild<QCheckBox*>("communications")->setChecked(saved_communications());
+    findChild<QCheckBox*>("screen_time")->setChecked(saved_screen_time());
     auto settings = findChild<QWidget*>("settings_frame");
     toggle_visibility(settings);
     auto chat = findChild<QWidget*>("scrollArea");
@@ -205,4 +194,3 @@ void MainWindow::on_save_settings_clicked() {
     auto chat = findChild<QWidget*>("scrollArea");
     chat->show();
 }
-
