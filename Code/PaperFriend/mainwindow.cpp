@@ -26,92 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
     textEditor = new TextEditor();
     textEditor->mainUi = this;
 
-    Entry en = Entry("text", "title");
-    save_entry_encrypt(en, "./output", "123");
-    std::cout << "saving" << std::endl;
-    Entry en2 = load_entry_decrypt("./output/12.02.2022.json", "123");
-    std::cout << "loading" << std::endl;
-    std::cout << en2.get_text() << std::endl;
-    std::cout << en2.get_title() << std::endl;
-
-    // test for the EntryCard class
-    EntryPerso *e = new EntryPerso();
-    std::vector<Friend*> fr;
-    fr.push_back(new Friend("fr1", 1));
-    std::vector<Activity*> activity;
-    activity.push_back( new Activity("act1", 1));
-    e->set_friends(fr);
-    e->set_activities(activity);
-    e->set_title("THIS IS A TITLE");
-    e->set_text("some text...");
-    EntryCard *c = new EntryCard(20, 300, 300, "white", e);
-    //Card *c = new Card();
-    ///////
-    EntryPerso *e_bis = new EntryPerso();
-    std::vector<Friend*> fr2;
-    fr2.push_back(new Friend("fr2", 1));
-    std::vector<Activity*> activity2;
-    activity2.push_back( new Activity("act2", 1));
-    e_bis->set_friends(fr);
-    e_bis->set_activities(activity);
-    e_bis->set_title("THIS IS A TITLE2");
-    e_bis->set_text("some text 2 ...");
-    EntryCard *c2 = new EntryCard(20, 300, 300, "white", e_bis);
-    ///////
-    c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
-    c2->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
-
-    //test for the DynamicGraph class
-    //std::vector<EntryPerso> entries = sample_entries(10);
-    EntryPerso e1 =EntryPerso();
-    EntryPerso e2 =EntryPerso();
-    EntryPerso e3 =EntryPerso();
-    EntryPerso e4 =EntryPerso();
-    EntryPerso e5 =EntryPerso();
-    EntryPerso e6 =EntryPerso();
-    EntryPerso e7 =EntryPerso();
-    EntryPerso e8 =EntryPerso();
-    EntryPerso e9 =EntryPerso();
-    EntryPerso e10 =EntryPerso();
-    e1.set_mood(7);
-    e2.set_mood(8);
-    e3.set_mood(6);
-    e4.set_mood(5);
-    e5.set_mood(18);
-    e6.set_mood(13);
-    e7.set_mood(15);
-    e8.set_mood(16.);
-    e9.set_mood(17.);
-    e10.set_mood(12.);
-    e1.set_qdate(QDate(2022,11,25));
-    e2.set_qdate(QDate(2022,11,26));
-    e3.set_qdate(QDate(2022,11,30));
-    e4.set_qdate(QDate(2022,12,1));
-    e5.set_qdate(QDate(2022,12,2));
-    e6.set_qdate(QDate(2022,12,3));
-    e7.set_qdate(QDate(2022,12,4));
-    e8.set_qdate(QDate(2022,12,6));
-    e9.set_qdate(QDate(2022,12,7));
-    e10.set_qdate(QDate(2022,12,8));
-    std::vector<EntryPerso> entries;
-    entries.push_back(e1);
-    entries.push_back(e2);
-    entries.push_back(e3);
-    entries.push_back(e4);
-    entries.push_back(e5);
-    entries.push_back(e6);
-    entries.push_back(e7);
-    entries.push_back(e8);
-    entries.push_back(e9);
-    entries.push_back(e10);
-
-    //test sample entries function
-    std::vector<EntryPerso> test = sample_entries(10);
-
-    //DynamicGraph moodGraph = DynamicGraph(entries);
-    DynamicGraph moodGraph = DynamicGraph(test);
-    moodGraph.display(ui->graph_frame); //displays the graph
-    this -> showMaximized();
+    std::vector<EntryPerso> entries = test(10);
+    display_graph(entries, ui);
+    display_entries(entries, ui);
 
     //Chatbox
     MascotChat chat = MascotChat(ui->scrollArea);
@@ -129,19 +46,10 @@ MainWindow::MainWindow(QWidget *parent)
     int w = ui->settingsButton->width();
     int h = ui->settingsButton->height();
     ui->settingsButton->setIcon(QIcon(pix.scaled(w,h,Qt::KeepAspectRatio)));
-    //
 }
 
 MainWindow::~MainWindow() {
     delete ui;
-}
-void MainWindow::toggle_visibility(QWidget *component){
-    if(component->isVisible()){
-        component->hide();
-    }
-    else{
-        component->show();
-    }
 }
 
 void MainWindow::closeEvent (QCloseEvent *event){
@@ -152,6 +60,34 @@ void MainWindow::closeEvent (QCloseEvent *event){
     } else {
         event->accept();
     }
+}
+
+void MainWindow::toggle_visibility(QWidget *component){
+    if(component->isVisible()){
+        component->hide();
+    }
+    else{
+        component->show();
+    }
+}
+
+void MainWindow::display_entries(std::vector<EntryPerso> entries, Ui::MainWindow *ui) {
+    while(!ui->EntriesScroll->widget()->layout()->isEmpty()) {
+        ui->graph_frame->removeItem(ui->EntriesScroll->widget()->layout()->takeAt(0));
+    }
+    for (auto entry: entries) {
+        EntryCard *c = new EntryCard(20, 300, 300, "white", &entry);
+        c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
+    }
+}
+
+void MainWindow::display_graph(std::vector<EntryPerso> entries, Ui::MainWindow *ui) {
+    while(!ui->graph_frame->isEmpty()) {
+        ui->graph_frame->removeItem(ui->graph_frame->takeAt(0));
+    }
+    DynamicGraph moodGraph = DynamicGraph(entries);
+    moodGraph.display(ui->graph_frame); //displays the graph
+    this -> showMaximized();
 }
 
 void MainWindow::on_pushButton_clicked() {
@@ -193,4 +129,32 @@ void MainWindow::on_save_settings_clicked() {
     settings->hide();
     auto chat = findChild<QWidget*>("scrollArea");
     chat->show();
+}
+
+void MainWindow::on_filterButton_clicked() {
+    auto spinBox = findChild<QSpinBox*>("numberOfEntries");
+    int n = spinBox->value();
+    std::vector<EntryPerso> entries = test(n);
+    display_graph(entries, ui);
+    display_entries(entries, ui);
+}
+
+//helps with debugging to be replaced later
+std::vector<EntryPerso> MainWindow::test(int n) {
+    std::vector<EntryPerso> entries;
+    for (int i = 1; i <= n; i++) {
+        EntryPerso e = EntryPerso();
+        e.set_mood(1+std::rand()%20);
+        e.set_qdate(QDate(2022,11,i));
+        std::vector<Friend*> fr;
+        fr.push_back(new Friend("fr", 1));
+        std::vector<Activity*> activity;
+        activity.push_back(new Activity("act", 1));
+        e.set_friends(fr);
+        e.set_activities(activity);
+        e.set_title("THIS IS A TITLE2");
+        e.set_text("some text ...");
+        entries.push_back(e);
+    }
+    return entries;
 }
