@@ -175,8 +175,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>177</width>
-             <height>85</height>
+             <width>176</width>
+             <height>72</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -350,8 +350,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>523</width>
-               <height>433</height>
+               <width>517</width>
+               <height>424</height>
               </rect>
              </property>
             </widget>
@@ -395,6 +395,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="habits_label">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer_2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -419,7 +426,7 @@
      <x>0</x>
      <y>0</y>
      <width>1134</width>
-     <height>26</height>
+     <height>37</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

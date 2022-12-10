@@ -9,6 +9,7 @@
 #include "ui_texteditor.h"
 #include "settings.h"
 #include "mascotchat.h"
+#include "loadHabits.h"
 
 
 #include <iostream>
@@ -48,6 +49,11 @@ MainWindow::MainWindow(QWidget *parent)
     int w = ui->settingsButton->width();
     int h = ui->settingsButton->height();
     ui->settingsButton->setIcon(QIcon(pix.scaled(w,h,Qt::KeepAspectRatio)));
+
+    std::vector<std::string> current_habits = load_habits();
+    for (int i = 0; i<current_habits.size(); i++) {
+        ui->habits_label->setText(ui->habits_label->text() + "\n" +QString::fromStdString (current_habits[i]));
+    }
 }
 
 MainWindow::~MainWindow() {
