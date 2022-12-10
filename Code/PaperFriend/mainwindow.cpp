@@ -135,6 +135,7 @@ MainWindow::MainWindow(QWidget *parent)
     findChild<QCheckBox*>("productivity")->setChecked(saved_productivity());
     findChild<QCheckBox*>("communications")->setChecked(saved_communications());
     findChild<QCheckBox*>("screen_time")->setChecked(saved_screen_time());
+
     //setting the icon for the setting button
     QPixmap pix(":/pictures/rsc/checklist icon.png");
     int w = ui->settingsButton->width();

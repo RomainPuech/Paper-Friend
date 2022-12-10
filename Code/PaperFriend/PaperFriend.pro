@@ -26,6 +26,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp\
     dynamicgraph.cpp \
+    mascot.cpp \
     mascotchat.cpp \
     settings.cpp \
     texteditor.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     friendclasses.h \
     mainwindow.h\
     dynamicgraph.h \
+    mascot.h \
     mascotchat.h \
     mascotchat.h \
     settings.h \
