@@ -1,5 +1,5 @@
 #include "cardclasses.h"
-#include "file_processing\file_processing\file_save_and_load.h"
+//#include "file_processing\file_processing\file_save_and_load.h"
 
 #include <QDate>
 #include <QCalendar>
@@ -351,7 +351,7 @@ void EntryCard::handleBack(){
         entry->set_text(new_text);
         this->change();
         this->update();
-        saved = save_entryperso(*entry_perso);
+        /*saved = save_entryperso(*entry_perso);
         if(saved){
             QMessageBox msg;
             msg.setText("successfully saved changes to the file");
@@ -361,7 +361,7 @@ void EntryCard::handleBack(){
             QMessageBox msg;
             msg.setText("saving changes to the file failed");
             msg.exec();
-        }
+        }*/
         break;
     case QMessageBox::Discard:
         this->change();
