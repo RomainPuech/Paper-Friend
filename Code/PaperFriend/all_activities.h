@@ -16,8 +16,9 @@ class all_activities : public QDialog
 public:
     explicit all_activities(QWidget *parent = nullptr);
     ~all_activities();
-    int ActivitiesCellNumberTotal; // The total number of the activities.
-    QVector<activity_cell *> allCellPtr; // This vector saves all the data of the activity cell.
+    static int ActivitiesCellNumberTotal; // The total number of the activities.
+    static QVector<activity_cell *> allCellPtr; // This vector saves all the data of the activity cell.
+    void add_previous_cells();
 
 private slots:
     void on_add_activity_button_clicked();
