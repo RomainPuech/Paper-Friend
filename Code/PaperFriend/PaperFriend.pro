@@ -22,6 +22,7 @@ SOURCES += \
     entryclasses.cpp \
     entryfilter.cpp \
     file_processing/file_processing/file_save_and_load.cpp \
+    filter_widget.cpp \
     friendclasses.cpp \
     main.cpp \
     mainwindow.cpp\
@@ -47,6 +48,7 @@ HEADERS += \
     entryclasses.h \
     entryfilter.h \
     file_processing/file_processing/file_save_and_load.h \
+    filter_widget.h \
     friendclasses.h \
     mainwindow.h\
     dynamicgraph.h \
@@ -60,6 +62,7 @@ FORMS += \
     activity_cell.ui \
     all_activities.ui \
     all_habits.ui \
+    filter_widget.ui \
     mainwindow.ui \
     texteditor.ui \
 
