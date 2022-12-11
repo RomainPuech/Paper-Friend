@@ -251,10 +251,20 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="main_frame" stretch="0">
+     <layout class="QVBoxLayout" name="main_frame" stretch="0,0">
       <property name="spacing">
        <number>6</number>
       </property>
+      <item>
+       <widget class="filter_widget" name="widget" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>60</width>
+          <height>50</height>
+         </size>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
@@ -593,6 +603,14 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>filter_widget</class>
+   <extends>QWidget</extends>
+   <header location="global">filter_widget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="myresources.qrc"/>
  </resources>
