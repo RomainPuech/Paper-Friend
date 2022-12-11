@@ -8,7 +8,7 @@ Card::Card(int border_radius, int width, int height, QString color) : border_rad
     this->resize(width, height);
     this->rect().setHeight(height);
     this->rect().setWidth(width);
-    this->setStyleSheet("background-color: " + color + "; border: 1px solid black; border-radius:" + QString::number(border_radius) + "px;");
+    this->setStyleSheet("background-color: " + color + "; border: 1px solid black; border-radius: " + QString::number(border_radius) + "px;");
     vb_layout = new QVBoxLayout(this);
     vb_layout->setContentsMargins(0, 0, 0, 0);
     vb_layout->setSpacing(0);
@@ -119,18 +119,21 @@ void generate_rgb(QString &red, QString &green, double m){
 EntryCard::EntryCard(int border_radius, int width, int height, QString color, Entry *entry, bool readOnly) : Card(border_radius, width, height, color), entry(entry), readOnly(readOnly){
     display_layout = new QVBoxLayout();
     entry_perso = nullptr;
-    mood_slider = new QSlider(Qt::Horizontal, this);
+    mood_slider_w = new QWidget(this);
+    mood_slider_instr = new QLabel(mood_slider_w);
+    mood_slider = new QSlider(Qt::Horizontal, mood_slider_w);
+    mood_slider_vb = new QVBoxLayout(mood_slider_w);
     if(static_cast<EntryPerso*>(entry) != nullptr){
         entry_perso = static_cast<EntryPerso*>(entry);
     }
+
     // display date
     date_display = new QLabel();
-    date_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-    date_display->setMaximumHeight(40);
+    date_display->setMaximumHeight(45);
     date_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     date_display->setText(generate_date_string(entry->get_qdate()));
     date_display->setAlignment(Qt::AlignCenter);
-    date_display->setStyleSheet("font-weight: bold; border-right: 1px solid black; border-radius: 0px; border-top-left-radius: " + QString::number(border_radius) + "px;");
+    date_display->setStyleSheet("font-weight: bold; border-right: 1px solid black; border-radius: 0px; border-top-left-radius: " + QString::number(border_radius) + "px; border: 1px solid black;");
 
     //entry text and title
     text_title_w = new QWidget(this);
@@ -181,7 +184,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     //text-editor
     edit_text_w->setMinimumWidth(this->get_width());
     edit_text_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    edit_text_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
+    edit_text_w->setStyleSheet("border-style: none;");
     edit_text_w->setContentsMargins(10, 0, 10, 5);
 
 
@@ -198,6 +201,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     edit_vb->addWidget(edit_text_w);
     edit_vb->addWidget(back_to_display);
     edit_and_return->setLayout(edit_vb);
+    edit_and_return->setStyleSheet("border-style: none;");
 
     //top menu
     top_menu = new QHBoxLayout(this);
@@ -205,25 +209,31 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     top_menu->setSpacing(0);
     date_display->setParent(this);
     top_menu->addWidget(date_display);
+    fr_act_display = new QListWidget(this);
 
     //display specific for entryPerso
     if(entry_perso != nullptr){
 
         // display activities and friends
-        fr_act_display = new QListWidget(this);
-        fr_act_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-        fr_act_display->setMaximumHeight(40);
+        fr_act_display->setMaximumHeight(45);
         fr_act_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-        fr_act_display->setStyleSheet("font-weight: bold; border-radius: 0px;");
-        fr_act_labels = new QLabel[15]; // to be adjusted to store all friends and activities
-        fr_act_display->addItem(QString::fromStdString((entry_perso->get_friends()[0])->get_name()));
-        fr_act_display->addItem(QString::fromStdString(entry_perso->get_activities()[0]->get_name()));
+        fr_act_display->setStyleSheet("font-weight: bold; border-radius: 0px; border: 1px solid black;");
+        for(long long unsigned fr = 0; fr < (entry_perso->get_friends()).size(); fr++){
+            fr_act_display->addItem(QString::fromStdString((entry_perso->get_friends()[fr])->get_name()));
+
+        }
+        for(long long unsigned act = 0; act < (entry_perso->get_activities()).size(); act++){
+            fr_act_display->addItem(QString::fromStdString((entry_perso->get_activities()[act])->get_name()));
+
+        }
+
+        //fr_act_display->addItem(QString::fromStdString((entry_perso->get_friends()[0])->get_name()));
+        //fr_act_display->addItem(QString::fromStdString(entry_perso->get_activities()[0]->get_name()));
 
         //display mood
         mood_display = new QLabel();
         mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood() * 100)) + "%");
-        mood_display->setMinimumWidth(this->get_width() / 3); // to be changed depending on the number of widgets
-        mood_display->setMaximumHeight(40);
+        mood_display->setMaximumHeight(45);
         mood_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
         mood_display->setAlignment(Qt::AlignCenter);
         QString red, green;
@@ -234,32 +244,61 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
         mood_slider->setMinimum(0);
         mood_slider->setMaximum(100);
         mood_slider->setValue(int(this->entry_perso->get_mood()*100));
-        mood_slider->setMinimumWidth(this->get_width()/3);
-        mood_slider->setMaximumHeight(40);
-        mood_slider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-        mood_slider->setTickInterval(1);
+        mood_slider->setTickInterval(50);
         mood_slider->setTickPosition(QSlider::TicksBelow);
         mood_slider->setStyleSheet("QSlider::groove:horizontal{border: 1px solid grey; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); height: 10px; border-radius: 5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::add-page:horizontal {background: white; border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal {background: grey; border: 1px solid dark-grey; width: 16px;margin-top: -3px;margin-bottom: -3px;border-radius: 5px;} QSlider::handle:horizontal:hover {background: dark-grey; border: 1px solid black; border-radius: 5px;}");
+        mood_slider_instr->setText("Slide the bar to enter your mood");
+        mood_slider_instr->setStyleSheet("font-weight: bold; border-style: none; border-radius: " + QString::number(get_border_radius()) + "px;");
+        mood_slider_w->setMaximumHeight(45);
+        mood_slider_w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        mood_slider_instr->setAlignment(Qt::AlignCenter);
+        mood_slider_vb->addWidget(mood_slider_instr);
+        mood_slider_vb->addWidget(mood_slider);
+        mood_slider_w->setLayout(mood_slider_vb);
+        mood_slider_w->setStyleSheet("border-radius: 0px; border-top-right-radius: " + QString::number(get_border_radius()) + "px;");
+
+        if(fr_act_display->count() != 0){
+            date_display->setMinimumWidth(this->get_width() / 3);
+            fr_act_display->setMinimumWidth(this->get_width() / 3);
+            mood_display->setMinimumWidth(this->get_width() / 3);
+            mood_slider_w->setMinimumWidth(this->get_width() / 3);
+        }
+        else{
+            date_display->setMinimumWidth(this->get_width() / 2);
+            fr_act_display->setMaximumWidth(0);
+            fr_act_display->setVisible(false);
+            mood_display->setMinimumWidth(this->get_width() / 2);
+            mood_slider_w->setMinimumWidth(this->get_width() / 2);
+        }
+
 
         // top menu
         fr_act_display->setParent(this);
         top_menu->addWidget(fr_act_display);
         mood_display->setParent(this);
+        top_menu->addWidget(mood_display);
+        top_menu->addWidget(mood_slider_w);
         if(isReadOnly()){
-            top_menu->addWidget(mood_display);
+            mood_display->setVisible(true);
+            mood_slider_w->setVisible(false);
         }
         else{
-            top_menu->addWidget(mood_slider);
+            mood_slider_w->setVisible(true);
+            mood_display->setVisible(false);
         }
 
     }
     //add to the layout
     vb_layout->addItem(top_menu);
+    vb_layout->addWidget(text_title_w);
+    vb_layout->addWidget(edit_and_return);
     if(isReadOnly()){
-        vb_layout->addWidget(text_title_w); // for readOnly
+        text_title_w->setVisible(true); // for readOnly
+        edit_and_return->setVisible(false);
     }
     else{
-        vb_layout->addWidget(edit_and_return); // for editor
+        edit_and_return->setVisible(true); // for editor
+        text_title_w->setVisible(false);
     }
     this->setLayout(vb_layout);
 }
@@ -269,7 +308,6 @@ EntryCard::~EntryCard(){
     delete date_display;
     delete mood_display;
     delete fr_act_display;
-    delete fr_act_labels;
     delete top_menu;
     delete title;
     delete text_field;
@@ -283,6 +321,10 @@ EntryCard::~EntryCard(){
     delete modify;
     delete back_to_display;
     delete display_layout;
+    delete mood_slider_w;
+    delete mood_slider_instr;
+    delete mood_slider;
+    delete mood_slider_vb;
 }
 
 void EntryCard::handleModify(){
@@ -319,29 +361,19 @@ void EntryCard::handleBack(){
 void EntryCard::change(){
     readOnly = !readOnly;
     if(isReadOnly()){
-        vb_layout->removeWidget(edit_and_return);
         text_title_w->setVisible(true);
-        edit_and_return->setVisible(false);
-        vb_layout->addWidget(text_title_w); // for readOnly text
+        edit_and_return->setVisible(false); // for readOnly text
         if(entry_perso != nullptr){
-            top_menu->removeWidget(mood_slider);
-            mood_slider->setVisible(false);
+            mood_slider_w->setVisible(false);
             mood_display->setVisible(true);
-            top_menu->addWidget(mood_display);
         }
     }
     else{
-        edit_text->set_title(QString::fromStdString(entry->get_title() + "\n"));
-        edit_text->append_text(QString::fromStdString(entry->get_text()));
-        vb_layout->removeWidget(text_title_w);
         text_title_w->setVisible(false);
-        edit_and_return->setVisible(true);
-        vb_layout->addWidget(edit_and_return); // for editor
+        edit_and_return->setVisible(true); // for editor
         if(entry_perso != nullptr){
-            top_menu->removeWidget(mood_display);
             mood_display->setVisible(false);
-            mood_slider->setVisible(true);
-            top_menu->addWidget(mood_slider);
+            mood_slider_w->setVisible(true);
         }
     }
 }
@@ -351,23 +383,29 @@ void EntryCard::update(){
     date_display->setText(generate_date_string(entry->get_qdate()));
     title->setText(QString::fromStdString(entry->get_title()));
     text_field->setText(QString::fromStdString(entry->get_text()));
-    this->entry_perso->set_mood(1.0*(this->mood_slider->value())/100);
+    edit_text->set_title(QString::fromStdString(entry->get_title() + "\n"));
+    edit_text->append_text(QString::fromStdString(entry->get_text()));
     if(entry_perso != nullptr){
+        this->entry_perso->set_mood(1.0*(this->mood_slider->value())/100);
         mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood() * 100)) + "%");
         mood_slider->setValue(int(this->entry_perso->get_mood()*100));
         //friends and activities
     }
 
     //update style
-    this->setStyleSheet("background-color: " + get_background_color() + "; border: 1px solid black; border-radius:" + QString::number(get_border_radius()) + "px;");
-    date_display->setStyleSheet("font-weight: bold; border-radius: 0px; border-top-left-radius: " + QString::number(this->get_border_radius()) + "px; border: 1px solid black;");
+    this->setStyleSheet("background-color: " + get_background_color() + "; border: 1px solid black; border-radius: " + QString::number(get_border_radius()) + "px;");
+    date_display->setStyleSheet("font-weight: bold; border-style: none; border-radius: 0px; border-top-left-radius: " + QString::number(this->get_border_radius()) + "px; border: 1px solid black;");
     text_title_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
-    edit_text_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
+    edit_text_w->setStyleSheet("border-style: none;");
+    edit_and_return->setStyleSheet("border-style: none;");
     if(entry_perso != nullptr){
         QString red, green;
         generate_rgb(red, green, entry_perso->get_mood());
         mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-left: 1px solid black; border-radius: 0px; border-top-right-radius:" + QString::number(this->get_border_radius()) + "px;");
         mood_slider->setStyleSheet("QSlider::groove:horizontal{border: 1px solid grey; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); height: 10px; border-radius: 5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::add-page:horizontal {background: white; border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal {background: grey; border: 1px solid dark-grey; width: 16px;margin-top: -3px;margin-bottom: -3px;border-radius: 5px;} QSlider::handle:horizontal:hover {background: dark-grey; border: 1px solid black; border-radius: 5px;}");
+        mood_slider_instr->setStyleSheet("font-weight: bold; border-style: none; border-radius: " + QString::number(get_border_radius()) + "px;");
+        mood_slider_w->setStyleSheet("border-radius: 0px; border-top-right-radius: " + QString::number(get_border_radius()) + "px;");
+
     }
 }
 
