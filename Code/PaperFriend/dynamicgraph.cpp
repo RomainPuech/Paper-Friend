@@ -25,9 +25,9 @@ DynamicGraph::moodlevel DynamicGraph::associated_mood_level(double mood) const{
     /*
      returns the mood level corresponding to the given mood value
      */
-    if(mood>=15){
+    if(mood>=75){
         return good;
-    }else if(mood>=7){
+    }else if(mood>=35){
         return medium;
     }
     return bad;
@@ -56,16 +56,16 @@ void DynamicGraph::get_dummy_point(double y1,double y2, double x1, double x2, do
 
     //we first get the target
     if(previous==0){//then the mood was bad and it turns medium
-        target = 7;
+        target = 35;
     }else if(previous==1){
         if(current==2){//then it was medium before and good now
-            target=15;
+            target=75;
         }
         else{
-            target=7;
+            target=35;
         }
     }else{//the mood was good and is now medium
-        target = 15;
+        target = 75;
     }
 
     // We got the target. Now, let's compute the slope between our two points (x1,y1) and (x2,y2) and find what should be x so that (x,target) is correctly placed
@@ -79,18 +79,18 @@ void DynamicGraph::get_dummy_point(double y1,double y2, double x1, double x2, do
 
 /////////////////////
 //Constructor
-DynamicGraph::DynamicGraph(std::vector<EntryPerso> entries)
+DynamicGraph::DynamicGraph(std::vector<EntryPerso*> entries)
     :listofseries(std::vector<QLineSeries*>()),entries(entries)
 {   
     QDate today = QDate::currentDate();
     QLineSeries *series= new QLineSeries();//series in which we add the points to display on the graph
-    moodlevel current_mood_level = associated_mood_level(entries[0].get_mood());
+    moodlevel current_mood_level = associated_mood_level(entries[0]->get_mood());
     set_color(series,current_mood_level);//initialize the right color for the first point
     int n = entries.size()-1;//the x axis will be negative numbers: x days ago = -x.
     int i=0;
     double y1;
     double x1;
-    for(std::vector<EntryPerso>::iterator e=entries.begin();e!=entries.end();e++){
+    for(auto e: entries){
         double x2 = - (e->get_qdate().daysTo(today));
         double y2 = e->get_mood();//current point
         moodlevel level = associated_mood_level(y2);
@@ -130,7 +130,7 @@ DynamicGraph::DynamicGraph(std::vector<EntryPerso> entries)
 
 ////////////////////////
 //setters and getters
-std::vector<EntryPerso> DynamicGraph::get_entries() const{return entries;}
+std::vector<EntryPerso*> DynamicGraph::get_entries() const{return entries;}
 
 ////////////////////////
 //display the graph
@@ -146,7 +146,7 @@ void DynamicGraph::display(QLayout *layout) const
 
 
     mood_chart->createDefaultAxes();
-    mood_chart->axes(Qt::Vertical).first()->setRange(0, 20);
+    mood_chart->axes(Qt::Vertical).first()->setRange(0, 100);
     //mood_chart->axes(Qt::Vertical).first()->setTitleText(QString::fromStdString("Mood"));
     QFont font = QFont();
     font.setWeight(QFont::Thin);

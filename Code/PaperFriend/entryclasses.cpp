@@ -1,4 +1,6 @@
 #include "entryclasses.h"
+#include"friendclasses.h"
+#include"activityclasses.h"
 
 #include <iostream>
 #include <string>
@@ -95,8 +97,10 @@ EntryPerso::EntryPerso(std::string text, std::string title, std::vector<Activity
 }
 
 EntryPerso::~EntryPerso() {
+    /* makes the build crash, btw this is unecessary as the destructors of vectors are called by themselves by the default destructor.
     activities.~vector();
     friends.~vector();
+    */
 }
 
 double EntryPerso::get_var_value(int index) const{
@@ -173,21 +177,30 @@ void EntryPerso::set_screen_time(double screen_time) {
 }
 
 
-std::vector<EntryPerso> sample_entries(int n){
+std::vector<EntryPerso> sample_entries(int n,std::vector<Activity*> possible_activities, std::vector<Friend*> possible_friends )
+{
     std::vector<EntryPerso> res = std::vector<EntryPerso>();
-    for(int i=0;i<n;i++){
+    for(int i=0;i<n;++i){
         std::vector<Activity*> activities;
-        activities.push_back(new Activity());
         std::vector<Friend*> friends;
-        friends.push_back(new Friend());
-        double mood = rand()%20;
+
+
+        int activity_index = rand()%possible_activities.size();
+        activities.push_back(possible_activities[activity_index]);
+
+        int friend_index = rand()%possible_friends.size();
+        friends.push_back(possible_friends[friend_index]);
+
+
+        double mood = rand()%21;
         double sleep = 6+rand()%6;
         double eating_healthy = rand()%2;
-        double productivity = rand()%20;
-        double communications = rand()%10;
+        double productivity = rand()%21;
+        double communications = rand()%11;
         double screen_time = (rand()%240)/10;
-        EntryPerso *entry = new EntryPerso("sample entry text","The title of the entry",activities,friends,mood,sleep,eating_healthy,productivity,communications,screen_time);
-        res.push_back(*entry);
+        EntryPerso entry = EntryPerso("sample entry text","The title of the entry",activities,friends,mood,sleep,eating_healthy,productivity,communications,screen_time);
+        entry.set_qdate((QDate::currentDate()).addDays(-n+i));
+        res.push_back(entry);
     }
     return res;
 }

@@ -19,7 +19,9 @@ QString MascotChat::get_last_message() const{
     return QString();
     // to implement. Get last message from the scrollArea. Be careful if it is empty!
 }
-
+QScrollArea* MascotChat::get_scrollArea(){
+    return scrollArea;
+}
 //public methods
 void MascotChat::operator<<(std::string txt){
     add_message(txt);

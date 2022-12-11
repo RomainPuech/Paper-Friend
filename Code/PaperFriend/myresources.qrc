@@ -26,5 +26,11 @@
         <file>rsc/underline.png</file>
         <file>rsc/undo.png</file>
         <file>rsc/checklist icon.png</file>
+        <file>rsc/excited-resized.png</file>
+        <file>rsc/heartbroken-resized.png</file>
+        <file>rsc/peaceout-resized.png</file>
+        <file>rsc/playful-resized.png</file>
+        <file>rsc/pleading-resized.png</file>
+        <file>rsc/welldone-resized.png</file>
     </qresource>
 </RCC>

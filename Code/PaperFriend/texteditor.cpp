@@ -23,6 +23,7 @@ TextEditor::TextEditor(QWidget *parent) : QWidget(parent),
     curFile = tr("Untitled.txt");              // initialize the current file name as "untitled.txt"
     strUndo.push(ui->textEdit->toPlainText()); // Here the strUndo is a stack
     connect(ui->textEdit, SIGNAL(textChanged(QString)), this, SLOT(on_textEdit_textChanged));
+    ui->textEdit->setPlaceholderText("Edit Title\nEdit Entry Text");
 }
 
 TextEditor::~TextEditor()
@@ -249,6 +250,28 @@ void TextEditor::on_action_Right_triggered()
     {
         ui->action_Left->setChecked(false);
         ui->action_Right->setChecked(true);
+        ui->action_Center->setChecked(false);
+    }
+}
+
+void TextEditor::on_action_Center_triggered()
+{
+    ui->textEdit->setAlignment( Qt::AlignCenter );
+    if (ui->textEdit->alignment() == Qt::AlignCenter)
+    {
+        ui->action_Left->setChecked(false);
+        ui->action_Right->setChecked(false);
+        ui->action_Center->setChecked(true);
+    }
+}
+
+void TextEditor::on_action_Justify_triggered()
+{
+    ui->textEdit->setAlignment( Qt::AlignJustify );
+    if (ui->textEdit->alignment() == Qt::AlignJustify)
+    {
+        ui->action_Left->setChecked(false);
+        ui->action_Right->setChecked(false);
         ui->action_Center->setChecked(false);
     }
 }

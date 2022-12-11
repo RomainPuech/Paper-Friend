@@ -5,12 +5,13 @@
 #include <numeric>
 #include <vector>
 
+/*
 enum Variables {    // These are the variables to analyze. This definition allows to parametrize
                     // which variable is being analyzed in a given method. (we avoid writing the
                     // same funcitons for each variable.)
     MOOD, SLEEP, EATING_HEALTHY, PRODUCTIVITY, COMMUNICATIONS, SCREEN_TIME
 };
-
+*/
 struct LinearRegressionCoeffs{
                     // A simple struct that contains linear regression coefficients.
 
@@ -31,12 +32,12 @@ public:
 
   std::vector<EntryPerso> log; // Data to be analysed
 
-  double get_var(const EntryPerso& entry, int var_index) const; // gets the value of the
+  //double get_var(const EntryPerso& entry, int var_index) const; // gets the value of the
                                                                      // specified variable
   std::vector<double> get_vect(const std::vector<EntryPerso>& entries, int var_index) const; // returns
                                                                      // the vector of values of the variable across the
                                                                      // entries
-  void set_var(EntryPerso& entry, int var_index, double value) const;  // sets the value of the
+  //void set_var(EntryPerso& entry, int var_index, double value) const;  // sets the value of the
                                                                      // specified variable
                                 // This method will probably not be used that much but here just in case it is needed to generate randomized entries for testing.
 
@@ -84,7 +85,7 @@ public:
       return log[0].get_num_activities();
   }
 
-  std::vector<int> item_priority(int var_index);
+  std::vector<int> item_priority(int var_index); // Arranges all other variables w.r.t their influence on the specified variable
   std::string suggestion(int var_index);  // text that will be suggested to user daily
 
 };

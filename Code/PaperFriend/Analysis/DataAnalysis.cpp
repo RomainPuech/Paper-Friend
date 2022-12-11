@@ -216,7 +216,7 @@ std::vector<double> DataAnalysis::get_vect(const std::vector<EntryPerso>& entrie
 double DataAnalysis::get_lastn_average(int n, int var_index) const{
     /**
      * @param int n: number of n last entries we take into account
-     * @return double average of the values of the variable represented by var_name for last n entries
+     * @return double average of the values of the variable represented by var_index for last n entries
      */
     std::vector<double> val_list{};
 

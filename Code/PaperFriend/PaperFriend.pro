@@ -24,9 +24,11 @@ SOURCES += \
     file_processing/file_processing/file_save_and_load.cpp \
     filter_widget.cpp \
     friendclasses.cpp \
+    loadHabits.cpp \
     main.cpp \
     mainwindow.cpp\
     dynamicgraph.cpp \
+    mascot.cpp \
     mascotchat.cpp \
     settings.cpp \
     texteditor.cpp \
@@ -50,8 +52,10 @@ HEADERS += \
     file_processing/file_processing/file_save_and_load.h \
     filter_widget.h \
     friendclasses.h \
+    loadHabits.h \
     mainwindow.h\
     dynamicgraph.h \
+    mascot.h \
     mascotchat.h \
     mascotchat.h \
     settings.h \
