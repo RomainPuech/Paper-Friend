@@ -2,7 +2,7 @@
 |:----------------------:|:-----------------:|:-------------------------|:------------------|
 | Romain Puech         |Frontend (specific)|- [Use entries'dates](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/54) as x-axis for DynamicGraph<br>- [Style modifications](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/53) to DynamicGraph <br>- Created [MascotChat](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/55) class and implemented all basic functionalities of the class. Changed UI accordingly to display the messages in a scrollable area <br>- Implemented [scrollable area](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/21) in the main window to be able to display many entries on the screen, one below the other<br>- fixed various compilation problems <br>- Organised new [tasks](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/64) ||
 | Bogdana Kolic        |Frontend (general)|||
-| Liam Loughman        |Frontend (specific)|||
+| Liam Loughman        |Frontend (specific)|Implemented load_habits function which loads presaved habits onto a file and displays them in the mainwindown.||
 | Yubo Cai             |Frontend (general)| - Clean some unnesseary function in TextEditor and fixed some bugs and add more functions of it. <br> - Work with Bogdana with on put `TextEditor` class in to the `EntryCard`. <br> - Work with Bogdana on the `EntryCard` class for writing/display mode distinction of the TextEditor||
 | Luigi Massacci       |Frontend (general) |||
 | Safaa Arbai          |Frontend (specific) |||
