@@ -7,7 +7,7 @@
 | Luigi Massacci       |Frontend (general) |||
 | Safaa Arbai          |Frontend (specific) |||
 | Ahmed Benchekroun    |Frontend (specific) |||
-| Mihaela Gledacheva   |Frontend (general) |||
+| Mihaela Gledacheva   |Frontend (general) | - Implemented functions to read the settings from a file <br> - Changed the main window to display n (randomly generated for now) entries and the mood graph corresponding to them <br> - Added option for the user to create a new entry | - Continue synchronizing different components |
 | Thomas Turkieh       |File processing    |||
 | Junyuan (Frank) Wang |File processing    |||
 | Octave Gaspard       |Data analysis      |||
