@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "mascot.h"
+#include "ui_all_activities.h"
 #include "ui_mainwindow.h"
 #include "dynamicgraph.h"
 #include "cardclasses.h"
@@ -103,9 +104,10 @@ void MainWindow::on_pushButton_clicked() {
 }
 
 void MainWindow::on_activitie_button_clicked() {
-    all_activities my_activities;
-    my_activities.setModal(true);
-    my_activities.exec();
+    all_activities *my_activities = new all_activities();
+    my_activities->add_previous_cells();
+    my_activities->setModal(true);
+    my_activities->exec();
 }
 
 void MainWindow::on_settingsButton_clicked() {
