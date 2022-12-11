@@ -1,4 +1,5 @@
 #include "cardclasses.h"
+#include "file_processing\file_processing\file_save_and_load.h"
 
 #include <QDate>
 #include <QCalendar>
@@ -144,8 +145,10 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     edit_and_return = new QGroupBox(this);
     edit_text_w = new QStackedWidget();
     edit_text = new TextEditor();
+    if((entry->get_title() + entry->get_text()) != ""){
     edit_text->set_title(QString::fromStdString(entry->get_title() + "\n"));
     edit_text->append_text(QString::fromStdString(entry->get_text()));
+    }
 
     //buttons
     modify = new QPushButton("Modify this entry", text_title_w);
@@ -227,9 +230,6 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
             fr_act_display->addItem(QString::fromStdString((entry_perso->get_activities()[act])->get_name()));
 
         }
-
-        //fr_act_display->addItem(QString::fromStdString((entry_perso->get_friends()[0])->get_name()));
-        //fr_act_display->addItem(QString::fromStdString(entry_perso->get_activities()[0]->get_name()));
 
         //display mood
         mood_display = new QLabel();
@@ -385,8 +385,13 @@ void EntryCard::update(){
     date_display->setText(generate_date_string(entry->get_qdate()));
     title->setText(QString::fromStdString(entry->get_title()));
     text_field->setText(QString::fromStdString(entry->get_text()));
+    if((entry->get_title() + entry->get_text()) != ""){
     edit_text->set_title(QString::fromStdString(entry->get_title() + "\n"));
     edit_text->append_text(QString::fromStdString(entry->get_text()));
+    }
+    else{
+        edit_text->set_title("");
+    }
     if(entry_perso != nullptr){
         this->entry_perso->set_mood(this->mood_slider->value());
         mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood())) + "%");
@@ -407,7 +412,7 @@ void EntryCard::update(){
         mood_slider->setStyleSheet("QSlider::groove:horizontal{border: 1px solid grey; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); height: 10px; border-radius: 5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::add-page:horizontal {background: white; border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal {background: grey; border: 1px solid dark-grey; width: 16px;margin-top: -3px;margin-bottom: -3px;border-radius: 5px;} QSlider::handle:horizontal:hover {background: dark-grey; border: 1px solid black; border-radius: 5px;}");
         mood_slider_instr->setStyleSheet("font-weight: bold; border-style: none; border-radius: " + QString::number(get_border_radius()) + "px;");
         mood_slider_w->setStyleSheet("border-radius: 0px; border-top-right-radius: " + QString::number(get_border_radius()) + "px;");
-
+        save_entryperso(*entry_perso);
     }
 }
 

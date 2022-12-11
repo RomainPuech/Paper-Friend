@@ -23,6 +23,7 @@ TextEditor::TextEditor(QWidget *parent) : QWidget(parent),
     curFile = tr("Untitled.txt");              // initialize the current file name as "untitled.txt"
     strUndo.push(ui->textEdit->toPlainText()); // Here the strUndo is a stack
     connect(ui->textEdit, SIGNAL(textChanged(QString)), this, SLOT(on_textEdit_textChanged));
+    ui->textEdit->setPlaceholderText("Edit Title\nEdit Entry Text");
 }
 
 TextEditor::~TextEditor()
