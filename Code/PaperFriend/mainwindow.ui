@@ -175,8 +175,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>176</width>
-             <height>72</height>
+             <width>177</width>
+             <height>85</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -278,8 +278,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>517</width>
-               <height>424</height>
+               <width>523</width>
+               <height>432</height>
               </rect>
              </property>
             </widget>
@@ -406,7 +406,7 @@
           </property>
           <layout class="QVBoxLayout" name="newEntry">
            <property name="sizeConstraint">
-            <enum>QLayout::SetMinimumSize</enum>
+            <enum>QLayout::SetDefaultConstraint</enum>
            </property>
           </layout>
          </widget>
@@ -477,7 +477,7 @@
      <x>0</x>
      <y>0</y>
      <width>1134</width>
-     <height>37</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
