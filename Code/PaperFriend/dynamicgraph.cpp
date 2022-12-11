@@ -79,7 +79,7 @@ void DynamicGraph::get_dummy_point(double y1,double y2, double x1, double x2, do
 
 /////////////////////
 //Constructor
-DynamicGraph::DynamicGraph(std::vector<EntryPerso*> entries)
+DynamicGraph::DynamicGraph(std::vector<EntryPerso*>& entries)
     :listofseries(std::vector<QLineSeries*>()),entries(entries)
 {   
     QDate today = QDate::currentDate();

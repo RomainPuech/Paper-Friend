@@ -1,7 +1,7 @@
 #include "entryclasses.h"
 #include"friendclasses.h"
 #include"activityclasses.h"
-
+#include <random>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -179,6 +179,8 @@ void EntryPerso::set_screen_time(double screen_time) {
 
 std::vector<EntryPerso> sample_entries(int n,std::vector<Activity*> possible_activities, std::vector<Friend*> possible_friends )
 {
+    std::default_random_engine generator;
+    std::normal_distribution<double> distribution(13,5);
     std::vector<EntryPerso> res = std::vector<EntryPerso>();
     for(int i=0;i<n;++i){
         std::vector<Activity*> activities;
@@ -192,7 +194,9 @@ std::vector<EntryPerso> sample_entries(int n,std::vector<Activity*> possible_act
         friends.push_back(possible_friends[friend_index]);
 
 
-        double mood = rand()%21;
+        double mood = distribution(generator) ;
+        mood = std::llround(mood*2) / 2.0;
+        if(mood>20){mood=20;}
         double sleep = 6+rand()%6;
         double eating_healthy = rand()%2;
         double productivity = rand()%21;
