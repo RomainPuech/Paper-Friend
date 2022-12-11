@@ -183,6 +183,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
 
     //text-editor
     edit_text_w->setMinimumWidth(this->get_width());
+    edit_text_w->setMinimumHeight(this->get_height());
     edit_text_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     edit_text_w->setStyleSheet("border-style: none;");
     edit_text_w->setContentsMargins(10, 0, 10, 5);

@@ -10,14 +10,14 @@
 class DynamicGraph
 {
 public:
-    DynamicGraph(std::vector<EntryPerso> entries);
+    DynamicGraph(std::vector<EntryPerso*> entries);
     void display(QLayout *parent_frame) const;
     //getters and setters
-    std::vector<EntryPerso> get_entries() const;
+    std::vector<EntryPerso*> get_entries() const;
 
 private:
     std::vector<QLineSeries*> listofseries;
-    std::vector<EntryPerso> entries;
+    std::vector<EntryPerso*> entries;
     QColor level_colors[3] = {"red","orange","green"};
     enum moodlevel{
         bad,

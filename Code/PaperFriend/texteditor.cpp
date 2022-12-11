@@ -253,6 +253,28 @@ void TextEditor::on_action_Right_triggered()
     }
 }
 
+void TextEditor::on_action_Center_triggered()
+{
+    ui->textEdit->setAlignment( Qt::AlignCenter );
+    if (ui->textEdit->alignment() == Qt::AlignCenter)
+    {
+        ui->action_Left->setChecked(false);
+        ui->action_Right->setChecked(false);
+        ui->action_Center->setChecked(true);
+    }
+}
+
+void TextEditor::on_action_Justify_triggered()
+{
+    ui->textEdit->setAlignment( Qt::AlignJustify );
+    if (ui->textEdit->alignment() == Qt::AlignJustify)
+    {
+        ui->action_Left->setChecked(false);
+        ui->action_Right->setChecked(false);
+        ui->action_Center->setChecked(false);
+    }
+}
+
 void TextEditor::textColor()
 {
     QColor c = QColorDialog::getColor(Qt::red, this); // get the color tool box from out side API

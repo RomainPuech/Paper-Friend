@@ -15,6 +15,7 @@ public:
     void operator<<(QString txt);
     //getters
     QString get_last_message() const;
+    QScrollArea* get_scrollArea();
 
 private:
     void add_message(QString txt);

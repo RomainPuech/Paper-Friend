@@ -81,6 +81,10 @@ private slots:
 
     void on_action_Right_triggered();
 
+    void on_action_Center_triggered();
+
+    void on_action_Justify_triggered();
+
 private:
     Edit edit;
     Ui::TextEditor *ui;

@@ -11,5 +11,5 @@
 | Thomas Turkieh       |File processing    |||
 | Junyuan (Frank) Wang |File processing    |||
 | Octave Gaspard       |Data analysis      |||
-| Brook Nigatu         |Data analysis      |||
+| Brook Nigatu         |Data analysis      |- Changed the way we parametrize variables to be analyzed so that both predefined and user-defined activities and parameters can be considered in the analysis. <br> - Modified all methods in data analysis class to work with this new system <br>|- Discuss more ways of analyzing data with the team and implement them|
 | Artem Mamichev       |Data analysis      |||    
