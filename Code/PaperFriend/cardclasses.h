@@ -72,7 +72,6 @@ private:
     QLabel *date_display;
     QLabel *mood_display;
     QListWidget *fr_act_display;
-    QLabel *fr_act_labels;
     QLabel *title;
     QTextEdit *text_field;
     QWidget *text_title_w; // widget for title, text_field and modify
@@ -80,11 +79,14 @@ private:
     TextEditor *edit_text;
     QStackedWidget *edit_text_w; // contains only the text editor
     QGroupBox *edit_and_return; // contains text editor and back_to_display
-    QVBoxLayout *edit_vb;
+    QVBoxLayout *edit_vb; // layout for edit_and_return
     QPushButton *modify;
     QPushButton *back_to_display;
-    QLayout *display_layout;
+    QLayout *display_layout; // parent layout of the card
+    QWidget *mood_slider_w; // widget for displaying mood slider
+    QLabel *mood_slider_instr; // label for the mood slider
     QSlider *mood_slider;
+    QVBoxLayout *mood_slider_vb; // layout of mood_slider_w;
 };
 
 #endif // CARDCLASSES_H

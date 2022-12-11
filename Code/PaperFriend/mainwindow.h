@@ -20,6 +20,7 @@
 #include <QtCharts/QCategoryAxis>
 #include "all_habits.h"
 #include "entryclasses.h"
+#include "cardclasses.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -42,7 +43,8 @@ private slots:
     void on_save_settings_clicked();
     void on_activitie_button_clicked();
     void on_filterButton_clicked();
-
+    void on_newEntryButton_clicked();
+    void on_saveEntryButton_clicked();
 
 private:
     void toggle_visibility(QWidget *component);
@@ -50,6 +52,9 @@ private:
     void display_graph(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
     Ui::MainWindow *ui;
     All_Habits *all_habits;
+    std::vector<EntryPerso*> entries;
+    EntryPerso entry;
+    EntryCard *card;
 
     std::vector<EntryPerso*> test(int n); //generate n random entries
 };

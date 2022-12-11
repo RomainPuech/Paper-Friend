@@ -1,4 +1,6 @@
 #include "mainwindow.h"
+#include "mascot.h"
+#include "ui_all_activities.h"
 #include "ui_mainwindow.h"
 #include "dynamicgraph.h"
 #include "cardclasses.h"
@@ -8,6 +10,7 @@
 #include "ui_texteditor.h"
 #include "settings.h"
 #include "mascotchat.h"
+#include "loadHabits.h"
 
 #include <iostream>
 #include <fstream>
@@ -26,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     textEditor = new TextEditor();
     textEditor->mainUi = this;
 
-    std::vector<EntryPerso*> entries = test(10);
+    entries = test(10);
     display_graph(entries, ui);
     display_entries(entries, ui);
 
@@ -46,6 +49,11 @@ MainWindow::MainWindow(QWidget *parent)
     int w = ui->settingsButton->width();
     int h = ui->settingsButton->height();
     ui->settingsButton->setIcon(QIcon(pix.scaled(w,h,Qt::KeepAspectRatio)));
+
+    std::vector<std::string> current_habits = load_habits();
+    for (int i = 0; i<current_habits.size(); i++) {
+        ui->habits_label->setText(ui->habits_label->text() + "\n" +QString::fromStdString (current_habits[i]));
+    }
 }
 
 MainWindow::~MainWindow() {
@@ -65,8 +73,7 @@ void MainWindow::closeEvent (QCloseEvent *event){
 void MainWindow::toggle_visibility(QWidget *component){
     if(component->isVisible()){
         component->hide();
-    }
-    else{
+    } else {
         component->show();
     }
 }
@@ -97,9 +104,10 @@ void MainWindow::on_pushButton_clicked() {
 }
 
 void MainWindow::on_activitie_button_clicked() {
-    all_activities my_activities;
-    my_activities.setModal(true);
-    my_activities.exec();
+    all_activities *my_activities = new all_activities();
+    my_activities->add_previous_cells();
+    my_activities->setModal(true);
+    my_activities->exec();
 }
 
 void MainWindow::on_settingsButton_clicked() {
@@ -134,17 +142,44 @@ void MainWindow::on_save_settings_clicked() {
 void MainWindow::on_filterButton_clicked() {
     auto spinBox = findChild<QSpinBox*>("numberOfEntries");
     int n = spinBox->value();
-    std::vector<EntryPerso*> entries = test(n);
+    entries = test(n);
     display_graph(entries, ui);
     display_entries(entries, ui);
+}
+
+void MainWindow::on_newEntryButton_clicked() {
+    ui->stackedWidget->setCurrentIndex(1);
+    EntryPerso *e = new EntryPerso();
+    e->set_mood(0);
+    e->set_qdate(QDate::currentDate());
+    std::vector<Friend*> fr;
+    fr.push_back(new Friend("fr", 1));
+    std::vector<Activity*> activity;
+    activity.push_back(new Activity("act", 1));
+    e->set_friends(fr);
+    e->set_activities(activity);
+    e->set_title("");
+    e->set_text("");
+    entries.insert(entries.begin(), e);
+    card = new EntryCard(20, 300, 300, "white", e);
+    card->display(ui->newEntry);
+    card->change();
+    card->update();
+}
+
+void MainWindow::on_saveEntryButton_clicked() {
+    display_graph(entries, ui);
+    display_entries(entries, ui);
+    ui->stackedWidget->setCurrentIndex(0);
+    ui->newEntry->removeItem(ui->newEntry->takeAt(0));
 }
 
 //helps with debugging; to be replaced later
 std::vector<EntryPerso*> MainWindow::test(int n) {
     std::vector<EntryPerso*> entries;
-    for (int i = 1; i <= n; i++) {
+    for (int i = n; i >= 1; i--) {
         EntryPerso *e = new EntryPerso();
-        e->set_mood(1+std::rand()%20);
+        e->set_mood(1+std::rand()%100);
         e->set_qdate(QDate(2022,11,i));
         std::vector<Friend*> fr;
         fr.push_back(new Friend("fr", 1));
@@ -152,7 +187,7 @@ std::vector<EntryPerso*> MainWindow::test(int n) {
         activity.push_back(new Activity("act", 1));
         e->set_friends(fr);
         e->set_activities(activity);
-        e->set_title("THIS IS A TITLE2");
+        e->set_title("THIS IS A TITLE");
         e->set_text("some text ...");
         entries.push_back(e);
     }
