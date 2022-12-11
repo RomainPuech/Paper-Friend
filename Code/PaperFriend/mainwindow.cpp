@@ -8,6 +8,7 @@
 #include "ui_texteditor.h"
 #include "settings.h"
 #include "mascotchat.h"
+#include "file_processing/file_processing/file_save_and_load.h"
 
 #include <iostream>
 #include <fstream>
@@ -65,8 +66,7 @@ void MainWindow::closeEvent (QCloseEvent *event){
 void MainWindow::toggle_visibility(QWidget *component){
     if(component->isVisible()){
         component->hide();
-    }
-    else{
+    } else {
         component->show();
     }
 }
@@ -140,20 +140,30 @@ void MainWindow::on_filterButton_clicked() {
 }
 
 void MainWindow::on_newEntryButton_clicked() {
+    ui->stackedWidget->setCurrentIndex(1);
     EntryPerso *e = new EntryPerso();
-    e->set_mood(100);
-    e->set_qdate(QDate(2022,12,11));
+    e->set_mood(0);
+    e->set_qdate(QDate::currentDate());
     std::vector<Friend*> fr;
     fr.push_back(new Friend("fr", 1));
-    e->set_friends(fr);
     std::vector<Activity*> activity;
     activity.push_back(new Activity("act", 1));
+    e->set_friends(fr);
     e->set_activities(activity);
     e->set_title("");
     e->set_text("");
     entries.insert(entries.begin(), e);
-    display_entries(entries, ui);
+    card = new EntryCard(20, 300, 300, "white", e);
+    card->display(ui->newEntry);
+    card->change();
+    card->update();
+}
+
+void MainWindow::on_saveEntryButton_clicked() {
     display_graph(entries, ui);
+    display_entries(entries, ui);
+    ui->stackedWidget->setCurrentIndex(0);
+    ui->newEntry->removeItem(ui->newEntry->takeAt(0));
 }
 
 //helps with debugging; to be replaced later
@@ -169,7 +179,7 @@ std::vector<EntryPerso*> MainWindow::test(int n) {
         activity.push_back(new Activity("act", 1));
         e->set_friends(fr);
         e->set_activities(activity);
-        e->set_title("THIS IS A TITLE2");
+        e->set_title("THIS IS A TITLE");
         e->set_text("some text ...");
         entries.push_back(e);
     }
