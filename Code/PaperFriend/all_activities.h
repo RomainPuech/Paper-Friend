@@ -4,6 +4,7 @@
 #include <QDialog>
 #include<QVector>
 #include<activity_cell.h>>
+#include"activityclasses.h"
 
 namespace Ui {
 class all_activities;
@@ -29,6 +30,7 @@ public slots:
     void closeCell(int);
 
 private:
+    std::vector<Activity> all_custom_activities;
     Ui::all_activities *ui;
 };
 
