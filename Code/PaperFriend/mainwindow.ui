@@ -175,8 +175,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>176</width>
-             <height>72</height>
+             <width>173</width>
+             <height>69</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -251,20 +251,10 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="main_frame" stretch="0,0">
+     <layout class="QVBoxLayout" name="main_frame" stretch="0">
       <property name="spacing">
        <number>6</number>
       </property>
-      <item>
-       <widget class="filter_widget" name="widget" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>60</width>
-          <height>50</height>
-         </size>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
@@ -288,8 +278,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>517</width>
-               <height>401</height>
+               <width>544</width>
+               <height>477</height>
               </rect>
              </property>
             </widget>
@@ -311,6 +301,12 @@
             </property>
             <item>
              <widget class="QPushButton" name="newEntryButton">
+              <property name="maximumSize">
+               <size>
+                <width>70</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
                <string>New entry</string>
               </property>
@@ -330,6 +326,55 @@
              </spacer>
             </item>
             <item>
+             <widget class="QComboBox" name="type_filter">
+              <item>
+               <property name="text">
+                <string>mood</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>sleep</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="operation_filter">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <item>
+               <property name="text">
+                <string>&lt;</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>=</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>&gt;</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="value_filter">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QLabel" name="label_2">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -338,7 +383,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Show last</string>
+               <string>last</string>
               </property>
              </widget>
             </item>
@@ -382,8 +427,27 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
-               <string>Filter</string>
+               <string>Add</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_2">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>clear</string>
               </property>
              </widget>
             </item>
@@ -566,14 +630,6 @@
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>filter_widget</class>
-   <extends>QWidget</extends>
-   <header location="global">filter_widget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="myresources.qrc"/>
  </resources>
