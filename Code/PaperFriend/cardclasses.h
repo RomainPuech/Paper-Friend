@@ -3,6 +3,7 @@
 
 #include "entryclasses.h"
 #include "texteditor.h"
+#include "file_processing/file_processing/file_save_and_load.h"
 
 #include <QWidget>
 #include <QPainterPath>

@@ -1,5 +1,4 @@
 #include "cardclasses.h"
-//#include "file_processing\file_processing\file_save_and_load.h"
 
 #include <QDate>
 #include <QCalendar>
@@ -351,7 +350,7 @@ void EntryCard::handleBack(){
         entry->set_text(new_text);
         this->change();
         this->update();
-        /*saved = save_entryperso(*entry_perso);
+        saved = save_entryperso(*entry_perso);
         if(saved){
             QMessageBox msg;
             msg.setText("successfully saved changes to the file");
@@ -361,7 +360,7 @@ void EntryCard::handleBack(){
             QMessageBox msg;
             msg.setText("saving changes to the file failed");
             msg.exec();
-        }*/
+        }
         break;
     case QMessageBox::Discard:
         this->change();
@@ -420,7 +419,7 @@ void EntryCard::update(){
     if(entry_perso != nullptr){
         QString red, green;
         generate_rgb(red, green, entry_perso->get_mood()/100);
-        mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-left: 1px solid black; border-radius: 0px; border-top-right-radius:" + QString::number(this->get_border_radius()) + "px;");
+        mood_display->setStyleSheet("outline: 1px black; font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-left: 1px solid black; border-radius: 0px; border-top-right-radius:" + QString::number(this->get_border_radius()) + "px;");
         mood_slider->setStyleSheet("QSlider::groove:horizontal{border: 1px solid grey; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); height: 10px; border-radius: 5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::add-page:horizontal {background: white; border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal {background: grey; border: 1px solid dark-grey; width: 16px;margin-top: -3px;margin-bottom: -3px;border-radius: 5px;} QSlider::handle:horizontal:hover {background: dark-grey; border: 1px solid black; border-radius: 5px;}");
         mood_slider_instr->setStyleSheet("font-weight: bold; border-style: none; border-radius: " + QString::number(get_border_radius()) + "px;");
         mood_slider_w->setStyleSheet("border-radius: 0px; border-top-right-radius: " + QString::number(get_border_radius()) + "px;");
