@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "entryfilter.h"
+#include "error_dlg.h"
 #include "mascot.h"
 #include "ui_all_activities.h"
 #include "ui_mainwindow.h"
@@ -156,7 +157,12 @@ void MainWindow::on_filterButton_clicked() {
     std::cout << "filtered" << std::endl;
     if (filtered_entries.size() == 0) {
         std::cout << "no entries" << std::endl;
-        // To implement a error dialog here.
+        // To implement a error dialog here. we have a filter_error.ui file. show the dialog
+        QMessageBox::warning(this, "Error", "No entries found with the given filter");
+        
+
+
+
         return;
     }
     if(filtered_entries.size() < n) {
