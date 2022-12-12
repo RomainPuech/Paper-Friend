@@ -5,7 +5,7 @@
 | Liam Loughman        |Frontend (specific)|Implemented load_habits function which loads presaved habits onto a file and displays them in the mainwindown.||
 | Yubo Cai             |Frontend (general)| - Clean some unnesseary function in TextEditor and fixed some bugs and add more functions of it. <br> - Work with Bogdana with on put `TextEditor` class in to the `EntryCard`. <br> - Work with Bogdana on the `EntryCard` class for writing/display mode distinction of the TextEditor||
 | Luigi Massacci       |Frontend (general) |||
-| Safaa Arbai          |Frontend (specific) |||
+| Safaa Arbai          |Frontend (specific) | - Implemented the mascot class. | - Fix the mascot display function and change the style of the chat messages.| 
 | Ahmed Benchekroun    |Frontend (specific) |||
 | Mihaela Gledacheva   |Frontend (general) | - Implemented functions to read the settings from a file <br> - Changed the main window to display n (randomly generated for now) entries and the mood graph corresponding to them <br> - Added option for the user to create a new entry | - Continue synchronizing different components |
 | Thomas Turkieh       |File processing    |- Implemented functions to save and load an "EntryPerso" object in JSON file. Adapted the format of the file for that and designed algorithms to store automatically several objects like activities or friends which are themselves attributes of "EntryPerso" object. (used a string format for this).<br> - changed the implementation of the EntryPerso object to store its attributes Activities and Friends in vectors of pointers instead of simple arrays (so it's more practical for everyone).||
