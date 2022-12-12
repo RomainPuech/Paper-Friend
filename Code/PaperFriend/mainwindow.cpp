@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "entryfilter.h"
 #include "mascot.h"
 #include "ui_all_activities.h"
 #include "ui_mainwindow.h"
@@ -142,9 +143,35 @@ void MainWindow::on_save_settings_clicked() {
 void MainWindow::on_filterButton_clicked() {
     auto spinBox = findChild<QSpinBox*>("numberOfEntries");
     int n = spinBox->value();
-    entries = test(n);
-    display_graph(entries, ui);
-    display_entries(entries, ui);
+    entries = test(100); // this line should be changed to aquire source of entries
+
+    QString type_filter_value = findChild<QComboBox*>("type_filter")->currentText();
+    std::string type_filter_str = type_filter_value.toStdString();
+    QString operator_filter_value = findChild<QComboBox*>("operation_filter")->currentText();
+    std::string operator_filter_str = operator_filter_value.toStdString();
+    QString value_filter_value = findChild<QDoubleSpinBox*>("value_filter")->text();
+    double value = value_filter_value.toDouble();
+
+    std::vector<EntryPerso*> filtered_entries = filter(entries, compare_value, type_filter_str, operator_filter_str, value);
+    std::cout << "filtered" << std::endl;
+    if (filtered_entries.size() == 0) {
+        std::cout << "no entries" << std::endl;
+        // To implement a error dialog here.
+        return;
+    }
+    if(filtered_entries.size() < n) {
+        n = filtered_entries.size();
+    }
+    // select the n last entries
+    std::vector<EntryPerso*> entries_to_display;
+    for (int i=filtered_entries.size()-n; i<filtered_entries.size(); i++) {
+        entries_to_display.push_back(filtered_entries[i]);
+    }
+
+
+    display_graph(entries_to_display, ui);
+    display_entries(entries_to_display, ui);
+
 }
 
 void MainWindow::on_newEntryButton_clicked() {
@@ -173,6 +200,8 @@ void MainWindow::on_saveEntryButton_clicked() {
     ui->stackedWidget->setCurrentIndex(0);
     ui->newEntry->removeItem(ui->newEntry->takeAt(0));
 }
+
+
 
 //helps with debugging; to be replaced later
 std::vector<EntryPerso*> MainWindow::test(int n) {
