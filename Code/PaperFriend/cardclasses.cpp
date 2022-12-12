@@ -239,6 +239,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
         mood_slider_instr->setText("Slide the bar to enter your mood");
         mood_slider_w->setMaximumHeight(45);
         mood_slider_w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        mood_slider_vb->setSpacing(5);
         mood_slider_instr->setAlignment(Qt::AlignCenter);
         mood_slider_vb->addWidget(mood_slider_instr);
         mood_slider_vb->addWidget(mood_slider);
@@ -412,21 +413,21 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items){
     }
 
     this->setStyleSheet("background-color: " + get_background_color() + "; border: 1px solid black; border-radius: " + QString::number(get_border_radius()) + "px;");
-    date_display->setStyleSheet("font-weight: bold; border-style: none; border-radius: 0px; border-top-left-radius: " + QString::number(this->get_border_radius()) + "px; border: 1px solid black;");
-    text_title_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom: 1px solid black;");
+    date_display->setStyleSheet("font-weight: bold; border-style: none; border-radius: 0px; border-top-left-radius: " + QString::number(this->get_border_radius()) + "px; border-right: 1px solid black; border-bottom: 1px solid black;");
+    text_title_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px;");
     title->setStyleSheet("font: 18px; font-weight: bold; border-style: none;");
     text_field->setStyleSheet("font: 14px; border-style: none;");
     edit_text_w->setStyleSheet("border-style: none;");
     edit_and_return->setStyleSheet("border-style: none;");
     modify->setStyleSheet("QPushButton{color: white; background-color: black; font-weight: bold; font: 15px; border: 2px solid black; border-radius: 5px;} QPushButton:hover{background-color:white; color:black;}");
     back_to_display->setStyleSheet("QPushButton{color: white; background-color: black; font-weight: bold; font: 15px; border: 2px solid black; border-radius: 5px;} QPushButton:hover{background-color:white; color:black;}");
-    fr_act_display->setStyleSheet("font-weight: bold; border-radius: 0px; border: 1px solid black;");
+    fr_act_display->setStyleSheet("font-weight: bold; border-style: none; border-radius: 0px; border-right: 1px solid black; border-bottom: 1px solid black;");
     QString red, green;
     generate_rgb(red, green, entry_perso->get_mood()/100);
-    mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-left: 1px solid black; border-radius: 0px; border-top-right-radius:" + QString::number(this->get_border_radius()) + "px;");
-    mood_slider->setStyleSheet("QSlider::groove:horizontal{border: 1px solid grey; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); height: 10px; border-radius: 5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::add-page:horizontal {background: white; border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal {background: grey; border: 1px solid dark-grey; width: 16px;margin-top: -3px;margin-bottom: -3px;border-radius: 5px;} QSlider::handle:horizontal:hover {background: dark-grey; border: 1px solid black; border-radius: 5px;}");
-    mood_slider_instr->setStyleSheet("font-weight: bold; border-style: none; border-radius: " + QString::number(get_border_radius()) + "px;");
-    mood_slider_w->setStyleSheet("border-radius: 0px; border-top-right-radius: " + QString::number(get_border_radius()) + "px;");
+    mood_display->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " + green + ", 0); border-style: none; border-bottom: 1px solid black; border-radius: 0px; border-top-right-radius:" + QString::number(this->get_border_radius()) + "px;");
+    mood_slider_w->setStyleSheet("border-style: none; border-bottom: 1px solid black; border-radius: 0px; border-top-right-radius: " + QString::number(get_border_radius()) + "px;");
+    mood_slider->setStyleSheet("QSlider::groove:horizontal{border-style: none; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); height: 10px; border-radius: 5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::add-page:horizontal {background: white; border: 1px solid grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal {background: grey; border: 1px solid dark-grey; width: 16px;margin-top: -3px;margin-bottom: -3px;border-radius: 5px;} QSlider::handle:horizontal:hover {background: dark-grey; border: 1px solid black; border-radius: 5px;}");
+    mood_slider_instr->setStyleSheet("font-weight: bold; border-style: none;");
 
 }
 
