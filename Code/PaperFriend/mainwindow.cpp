@@ -21,6 +21,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this); // display canvas created in drag-and-drop
 
+    ////////////////////////////////////////////////////////////////
+    /// WHAT YOU CAN ASSUME WE HAVE:
+    /// VECTORS THAT ARE SHARED BY ALL COMPONENTS
+    ///    std::vector<EntryPerso*>vector_entries;  All the entries
+    ///    std::vector<Activity>vector_activities;  All the possible activities to choose from
+    ///    std::vector<Friend>vector_friends;       All the friends we can choose from
+
+
     //create layout for central scrollable area
     QVBoxLayout *entries_layout = new QVBoxLayout();
     ui->EntriesScroll->widget()->setLayout(entries_layout);
@@ -29,9 +37,9 @@ MainWindow::MainWindow(QWidget *parent)
     textEditor = new TextEditor();
     textEditor->mainUi = this;
 
-    entries = test(10);
-    display_graph(entries, ui);
-    display_entries(entries, ui);
+    vector_entries = test(10);
+    display_graph(vector_entries, ui);
+    display_entries(vector_entries, ui);
 
     //Chatbox
     MascotChat chat = MascotChat(ui->scrollArea);
@@ -39,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     for(int i = 0; i<20 ; i++){
         chat<<QString::number(i);
     }
+    chat<<std::string("Hello! this is quite a long message  ahbybf zuxh eudh euhfxz xu_ehdx <br>**yezhx**<b>zfhfx</b> zy_h xze hyzehfhx yzeefbxy_zehxy_ze hyehxf uyzhe xfyzehxyzxe hyezh xyzehe hxfyzeh fzyehfx zyehexyzeh f yzehf zef ezyh yze  hfyzeh efzeh uz eh fuzeudh  we can try to add a lot of lines to see what happends...");
     QString lastm = chat.get_last_message();
     chat<<lastm;
 
@@ -142,9 +151,9 @@ void MainWindow::on_save_settings_clicked() {
 void MainWindow::on_filterButton_clicked() {
     auto spinBox = findChild<QSpinBox*>("numberOfEntries");
     int n = spinBox->value();
-    entries = test(n);
-    display_graph(entries, ui);
-    display_entries(entries, ui);
+    vector_entries = test(n);
+    display_graph(vector_entries, ui);
+    display_entries(vector_entries, ui);
 }
 
 void MainWindow::on_newEntryButton_clicked() {
@@ -160,7 +169,7 @@ void MainWindow::on_newEntryButton_clicked() {
     e->set_activities(activity);
     e->set_title("");
     e->set_text("");
-    entries.insert(entries.begin(), e);
+    vector_entries.insert(vector_entries.begin(), e);
     card = new EntryCard(20, 300, 300, "white", e);
     card->display(ui->newEntry);
     card->change();
@@ -168,8 +177,8 @@ void MainWindow::on_newEntryButton_clicked() {
 }
 
 void MainWindow::on_saveEntryButton_clicked() {
-    display_graph(entries, ui);
-    display_entries(entries, ui);
+    display_graph(vector_entries, ui);
+    display_entries(vector_entries, ui);
     ui->stackedWidget->setCurrentIndex(0);
     ui->newEntry->removeItem(ui->newEntry->takeAt(0));
 }

@@ -52,7 +52,9 @@ private:
     void display_graph(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
     Ui::MainWindow *ui;
     All_Habits *all_habits;
-    std::vector<EntryPerso*> entries;
+    std::vector<EntryPerso*>vector_entries;
+    std::vector<Activity>vector_activities;
+    std::vector<Friend>vector_friends;
     EntryPerso entry;
     EntryCard *card;
 
