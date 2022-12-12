@@ -60,6 +60,7 @@ public:
     bool isReadOnly();
     void setReadOnly(bool readOnly);
     void update();
+    void set_entryPerso_style(int top_menu_num_items = 3);
 
 private slots:
   void handleModify();

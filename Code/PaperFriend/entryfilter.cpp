@@ -34,6 +34,23 @@ std::vector<EntryPerso*> filter(
     return filteredEntries;
 }
 
+std::vector<EntryPerso*> filter(
+    std::vector<EntryPerso*> entries,
+    bool (*filterFn)(const EntryPerso&, std::string keyword, std::string opt, int value),
+    std::string keyword,
+    std::string opt,
+    int value) {
+
+    std::vector<EntryPerso*> filteredEntries;
+    for(int i=0;i<entries.size();i++){
+        if (filterFn(*(entries[i]), keyword , opt, value)) {
+            filteredEntries.push_back(entries[i]);
+        }
+    }
+    return filteredEntries;
+
+}
+
 bool compare_long_text(Entry& e) {
     return e.get_text().length() < 15;
 }

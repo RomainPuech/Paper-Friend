@@ -20,6 +20,13 @@ std::vector<EntryPerso*> filter(
     std::string opt,
     int value);
 
+std::vector<EntryPerso*> filter(
+    std::vector<EntryPerso*> entries,
+    bool (*filterFn)(const EntryPerso&, std::string keyword, std::string opt, int value),
+    std::string keyword,
+    std::string opt,
+    int value);
+
 bool compare_long_text(const Entry& e);
 
 // simple value comparison function for EntryPerso
