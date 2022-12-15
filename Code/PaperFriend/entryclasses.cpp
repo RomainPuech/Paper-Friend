@@ -27,7 +27,7 @@ std::string Entry::get_text() const {
 }
 
 void Entry::set_text(std::string text) {
-    this->text=text;
+    this->text= text;
 }
 
 std::string Entry::get_title() const {

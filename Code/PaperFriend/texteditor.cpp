@@ -19,8 +19,8 @@ TextEditor::TextEditor(QWidget *parent) : QWidget(parent),
                                           ui(new Ui::TextEditor)
 {
     ui->setupUi(this);
-    isUntitled = true;                         // initialize the text as the status of unsaved
-    curFile = tr("Untitled.txt");              // initialize the current file name as "untitled.txt"
+    isUntitled = true;                    // initialize the text as the status of unsaved
+    curFile = tr("Untitled.txt");         // initialize the current file name as "untitled.txt"
     strUndo.push(ui->textEdit->toHtml()); // Here the strUndo is a stack
     connect(ui->textEdit, SIGNAL(textChanged(QString)), this, SLOT(on_textEdit_textChanged));
     ui->textEdit->setPlaceholderText("Edit Title\nEdit Entry Text");
@@ -31,23 +31,24 @@ TextEditor::~TextEditor()
     delete ui;
 }
 
-void TextEditor::set_title(QString text){
+void TextEditor::set_title(QString text)
+{
     // set the title of the text editor
     // We want to display the title in indipendent line writen in html and css
     ui->textEdit->setFontWeight(QFont::Bold);
     ui->textEdit->clear();
-    text = "<h1>" + text + "</h1>";
-    text += "<br>";
+    text = "<h1>" + text + "</h1>" + "<br>";
     ui->textEdit->insertHtml(text);
     ui->textEdit->setFontWeight(1);
 }
 
-QString TextEditor::get_text() const{
+QString TextEditor::get_text() const
+{
     return ui->textEdit->toHtml();
 }
 
-
-void TextEditor::append_text(QString text){
+void TextEditor::append_text(QString text)
+{
     ui->textEdit->insertHtml(text);
 }
 
@@ -64,7 +65,7 @@ void TextEditor::newFile()
         ui->textEdit->setVisible(true);
         strUndo.push(ui->textEdit->toHtml());
     }
-    resetStack();                              // clean and reset the stack and return to the initial state of 0
+    resetStack();                         // clean and reset the stack and return to the initial state of 0
     strUndo.push(ui->textEdit->toHtml()); // push the current text into the stack
 }
 
@@ -239,7 +240,7 @@ void TextEditor::textUnderline()
 // Justify part, left justiy, right justify, center justify
 void TextEditor::on_action_Left_triggered()
 {
-    ui->textEdit->setAlignment( Qt::AlignLeft );
+    ui->textEdit->setAlignment(Qt::AlignLeft);
     if (ui->textEdit->alignment() == Qt::AlignLeft)
     {
         ui->action_Left->setChecked(true);
@@ -250,7 +251,7 @@ void TextEditor::on_action_Left_triggered()
 
 void TextEditor::on_action_Right_triggered()
 {
-    ui->textEdit->setAlignment( Qt::AlignRight );
+    ui->textEdit->setAlignment(Qt::AlignRight);
     if (ui->textEdit->alignment() == Qt::AlignRight)
     {
         ui->action_Left->setChecked(false);
@@ -261,7 +262,7 @@ void TextEditor::on_action_Right_triggered()
 
 void TextEditor::on_action_Center_triggered()
 {
-    ui->textEdit->setAlignment( Qt::AlignCenter );
+    ui->textEdit->setAlignment(Qt::AlignCenter);
     if (ui->textEdit->alignment() == Qt::AlignCenter)
     {
         ui->action_Left->setChecked(false);
@@ -272,7 +273,7 @@ void TextEditor::on_action_Center_triggered()
 
 void TextEditor::on_action_Justify_triggered()
 {
-    ui->textEdit->setAlignment( Qt::AlignJustify );
+    ui->textEdit->setAlignment(Qt::AlignJustify);
     if (ui->textEdit->alignment() == Qt::AlignJustify)
     {
         ui->action_Left->setChecked(false);
@@ -371,8 +372,6 @@ void TextEditor::on_action_Underline_triggered()
 {
     textUnderline();
 }
-
-
 
 void TextEditor::on_action_selectAll_triggered()
 {
