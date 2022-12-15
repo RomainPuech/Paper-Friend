@@ -88,6 +88,9 @@ public:
   std::vector<int> item_priority(int var_index); // Arranges all other variables w.r.t their influence on the specified variable
   std::string suggestion(int var_index);  // text that will be suggested to user daily
 
+
+  auto stl_regression(std::vector<double> dataY, std::vector<double> dataX); // NOT IMPLEMENTED; STL regression results; exact output to determine at the end
+
 };
 
 
