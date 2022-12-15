@@ -13,7 +13,7 @@
 #include "settings.h"
 #include "mascotchat.h"
 #include "loadHabits.h"
-
+#include <sstream>
 #include <iostream>
 #include <fstream>
 
