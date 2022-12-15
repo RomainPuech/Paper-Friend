@@ -48,7 +48,7 @@ QString TextEditor::get_text() const{
 
 
 void TextEditor::append_text(QString text){
-    ui->textEdit->insertPlainText(text);
+    ui->textEdit->insertHtml(text);
 }
 
 // Create a new file - checked
