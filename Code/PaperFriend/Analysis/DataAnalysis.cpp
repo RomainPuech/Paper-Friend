@@ -322,6 +322,27 @@ std::string DataAnalysis::suggestion(int var_index){  // some more exciting game
     return str;
 }
 
+std::string DataAnalysis::generate_recap_text(const std::vector<EntryPerso>& entries){
+    return "";
+}
+
+EntryRecap DataAnalysis::weekly_recap(){
+    /**
+    * @param
+    *
+    * @returns an EntryRecap object containing info about the week. For now focuses on mood
+    */
+    std::vector<EntryPerso> period = get_lastn_days_data(7);
+    auto comp{[](EntryPerso& entry1, EntryPerso& entry2) -> bool {return entry1.get_var_value(0) < entry2.get_var_value(0);}};
+
+    EntryPerso best_day = *(std::max_element(period.begin(), period.end(), comp));
+    EntryPerso worst_day = *(std::min_element(period.begin(), period.end(), comp));
+
+    double avg_mood = avg(period, 0);
+
+    std::string text = generate_recap_text(period);
+    return EntryRecap(best_day, worst_day, text, avg_mood, 0);
+}
 
 
 

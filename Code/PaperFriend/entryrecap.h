@@ -3,6 +3,7 @@
 #include "entryclasses.h"
 
 class EntryRecap : public Entry{ // creation of en EntryRecap class, more information abt this class can be found in the wiki
+public:
     EntryRecap();
     EntryRecap(EntryPerso best_day, EntryPerso worst_day, std::string text,double average_mood, int type);
     //~EntryRecap();
