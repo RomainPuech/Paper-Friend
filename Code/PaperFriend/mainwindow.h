@@ -36,6 +36,8 @@ public:
     friend class TextEditor;
     class TextEditor *textEditor;
     void closeEvent (QCloseEvent *event);
+    static std::vector<Activity> get_activities();
+    static std::vector<Friend> get_friends();
 
 private slots:
     void on_pushButton_clicked();
@@ -53,9 +55,9 @@ private:
     void display_graph(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
     Ui::MainWindow *ui;
     All_Habits *all_habits;
-    std::vector<EntryPerso*>vector_entries;
-    std::vector<Activity>vector_activities;
-    std::vector<Friend>vector_friends;
+    static std::vector<EntryPerso*>vector_entries;
+    static std::vector<Activity>vector_activities;
+    static std::vector<Friend>vector_friends;
     EntryPerso entry;
     EntryCard *card;
 

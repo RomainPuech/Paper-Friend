@@ -17,6 +17,7 @@
 #include <QPushButton>
 #include <QGroupBox>
 #include <QSlider>
+#include <QCheckBox>
 
 class Card : public QFrame{
 public:
@@ -89,6 +90,9 @@ private:
     QLabel *mood_slider_instr; // label for the mood slider
     QSlider *mood_slider;
     QVBoxLayout *mood_slider_vb; // layout of mood_slider_w;
+    QGroupBox *fr_act_select;
+    std::vector <QCheckBox*> *fr_act_select_list;
+    QVBoxLayout *fr_act_select_vb;
 };
 
 #endif // CARDCLASSES_H

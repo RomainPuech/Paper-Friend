@@ -19,6 +19,10 @@
 
 std::vector<Filter_param> filter_params;
 
+std::vector<EntryPerso*> MainWindow::vector_entries;
+std::vector<Activity> MainWindow::vector_activities;
+std::vector<Friend> MainWindow::vector_friends;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -80,8 +84,18 @@ MainWindow::MainWindow(QWidget *parent)
     }
 }
 
+
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+
+std::vector<Activity> MainWindow::get_activities(){
+    return vector_activities;
+}
+
+std::vector<Friend> MainWindow::get_friends(){
+    return vector_friends;
 }
 
 void MainWindow::closeEvent (QCloseEvent *event){
