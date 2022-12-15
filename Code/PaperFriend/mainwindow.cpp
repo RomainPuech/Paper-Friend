@@ -172,7 +172,43 @@ void MainWindow::on_filterButton_clicked() {
     filt.opt = operator_filter_str;
     filt.value = value;
     filt.display_num = n;
-    filter_params.push_back(filt);
+
+    //handling duplicated filters
+    bool is_insert = true;
+    for (int i=0; i<filter_params.size(); i++) {
+        if (filter_params[i].keyword == filt.keyword && filter_params[i].opt == filt.opt && filter_params[i].value == filt.value) {
+            is_insert = false;
+            break;
+        }
+        if (filter_params[i].keyword == filt.keyword && filt.opt == "=") {
+            filter_params.erase(filter_params.begin() + i);
+            i--;
+        }
+        else if (filter_params[i].keyword == filt.keyword && filter_params[i].opt == "=") {
+            is_insert = false;
+            break;
+        }
+        if (filter_params[i].keyword == filt.keyword && filter_params[i].opt == filt.opt) {
+            if (filt.opt == "<" && filt.value > filter_params[i].value) {
+                is_insert = false;
+                break;
+            }
+            else if (filt.opt == "<" && filt.value < filter_params[i].value) {
+                filter_params.erase(filter_params.begin() + i);
+            }
+            else if (filt.opt == ">" && filt.value < filter_params[i].value) {
+                is_insert = false;
+                break;
+            }
+            else if (filt.opt == ">" && filt.value > filter_params[i].value) {
+                filter_params.erase(filter_params.begin() + i);
+            }
+        }
+    }
+
+    if(is_insert) {
+        filter_params.push_back(filt);
+    }
 
     //filter the entries
     std::vector<EntryPerso*> filtered_entries = filter(vector_entries, filter_params[0]);
@@ -184,45 +220,15 @@ void MainWindow::on_filterButton_clicked() {
     std::cout << "filtered" << std::endl;
     if (filtered_entries.size() == 0) {
         std::cout << "no entries" << std::endl;
-        filter_params.pop_back();
+        if(is_insert) {
+            filter_params.pop_back();
+        }
         // To implement a error dialog here. we have a filter_error.ui file. show the dialog
         QMessageBox::warning(this, "Error", "No entries found with the given filter");
         return;
     }
 
-    // deal with the duplicated filters
-    for (int i=0; i<filter_params.size()-1; i++) {
-        for(int j=i+1; j<filter_params.size(); j++) {
-            if (filter_params[i].keyword == filter_params[j].keyword && filter_params[i].opt == filter_params[j].opt && filter_params[i].value == filter_params[j].value) {
-                filter_params.erase(filter_params.begin()+j);
-                j--;
-            }
-            if (filter_params[i].keyword == filter_params[j].keyword && filter_params[i].opt == filter_params[j].opt) {
-                if (filter_params[i].opt == "<") {
-                    if (filter_params[i].value < filter_params[j].value) {
-                        filter_params.erase(filter_params.begin()+j);
-                        j--;
-                    }
-                    else {
-                        filter_params.erase(filter_params.begin()+i);
-                        i--;
-                        break;
-                    }
-                }
-                else if (filter_params[i].opt == ">") {
-                    if (filter_params[i].value > filter_params[j].value) {
-                        filter_params.erase(filter_params.begin()+j);
-                        j--;
-                    }
-                    else {
-                        filter_params.erase(filter_params.begin()+i);
-                        i--;
-                        break;
-                    }
-                }
-            }
-        }
-    }
+    
 
     // update and display the filters
     std::string f = "Filters:   ";
