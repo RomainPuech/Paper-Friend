@@ -363,7 +363,10 @@ int find_index_sorted(double x, std::vector<double>& data, int start = 0, int en
 }
 std::vector<int> closest_q_index_in_sorted(double x, int q, std::vector<double>& data){ // Data needs to be sorted
     // Returns a vector containing the index of the closest q elements to x in data
-    if (q>data.size()){throw std::invalid_argument("Asking to retrieve more values than the length of the vector (q > data.size())");}
+    if (q>data.size()){
+        qDebug() << "closest_q_index_in_sorted unsuccessful call : asking to retrieve more values than the length of the vector (q: " << QString::number(q) << " > data size: " << QString::number(data.size()) << ")\n";
+        throw std::invalid_argument("Asking to retrieve more values than the length of the vector (q > data.size())");
+    }
     int biggest_smaller_than_x_index = find_index_sorted(x, data);
     int iterLow = biggest_smaller_than_x_index; // Iterates on values smaller than (or equal to) x
     int iterHigh = biggest_smaller_than_x_index + 1; // Iterates on values bigger than x
@@ -401,26 +404,13 @@ double furthest_distance(double x, std::vector<double> data){ // Used to compute
     }
     return max;
 }
+
 double tricube_weight(double u){if (u>=1){return 0;} else{return std::pow( (1-(std::pow(u, 3))) , 3);}} // W(u)
 double neighborhood_weight(double xi, double x, double distance_furthest){ // v_i(x)
     return tricube_weight(std::abs(xi - x) / distance_furthest);
 }
-double g_hat (std::vector<double> dataX, int x){
-    // Computes g_hat (extrapolation of the trend-cycle ?) assuming dataX is sorted
-    double f = 0.1;
-    int q = f*(static_cast<double>(dataX.size())); // Number of neighbors CONSTANT choose Q thanks to M diagram (=q/n) in loess details)
-    std::vector<int> closest_xi = closest_q_index_in_sorted(x, q, dataX);
-    double furthest_distance = std::max(std::abs(x-closest_xi[0]), std::abs(x-closest_xi[closest_xi.size()-1]));
-    std::vector<int> weights;
-    for (int i=0; i<closest_xi.size(); i++){
-        weights.push_back(neighborhood_weight(closest_xi[i], i, furthest_distance));
-    }
-    // Residual = sum wi * (yi - (x^2 b_2 + x b_1 + b_0)^2) = (Y - XB)
 
-    return 0;
-}
-
-double eval_poly(std::vector<double> coeffs, double x){
+double eval_poly(std::vector<double> coeffs, double x){ // coeffs for [x^n, x^n-1, ...]
     // Evaluates a polynomial at x using Horner scheme
     double value = coeffs[0];
     for (int i=1; i<coeffs.size(); i++){
@@ -430,12 +420,82 @@ double eval_poly(std::vector<double> coeffs, double x){
     return value;
 }
 
-auto DataAnalysis::stl_regression(std::vector<double> dataY, std::vector<double> dataX){ // Definitely need to change this and the hpp file
+
+double determinant_m3(std::vector<std::vector<double>> matrix){
+    if (matrix.size() != 3 || matrix[0].size() != 3 || matrix[1].size() != 3 || matrix[2].size() != 3){
+        qDebug() << "Matrix size not 3x3 but " << QString::number(matrix.size()) << " rows and " << QString::number(matrix[0].size()) << " columns (on first line)";
+        throw std::invalid_argument("Matrix not of correct size");}
+
+    return (matrix[0][0] * (matrix[1][1]*matrix[2][2] - matrix[1][2]*matrix[2][1])) - (matrix[0][1] * (matrix[1][0]*matrix[2][2] - matrix[1][2]*matrix[2][0])) + (matrix[0][2] * (matrix[1][0]*matrix[2][1] - matrix[1][1]*matrix[2][0]));
+}
+
+std::vector<double> weighted_least_squares(std::vector<double> dataX, std::vector<double> dataY, std::vector<double> weights = {-1}){
+    if (weights.size() == 1 && weights[0] == -1){weights = std::vector<double>(dataX.size(), 1);}
+
+    if (dataX.size() == 0){
+        qDebug() << "Weighted least_squares unsuccessful call : data size is 0\n";
+        throw std::invalid_argument("Length of data is 0");}
+    else if (dataX.size() != dataY.size() || dataY.size() != weights.size()){
+        qDebug() << "Weighted least_squares unsuccessful call : data not of same sizes (dataX :" << QString::number(dataX.size()) << ", dataY :" << QString::number(dataY.size()) << ", weights :" << QString::number(weights.size()) << ")\n";
+        throw std::invalid_argument("Data not all of same length");}
+
+    // We solve this as a linear system using cramer's rule.
+    double sum_x=0, sum_x2=0, sum_x3=0, sum_x4=0, sum_x2y=0, sum_xy=0, sum_y=0, xwi, xi, yi;
+    double sum_1 = dataX.size();
+    for (int i=0; i<dataX.size(); i++){
+        // I tried to reduce the amount of multiplications but it increased the amount of memory accesses
+        xi = dataX[i];
+        yi = dataY[i];
+        xwi = xi*weights[i];
+        sum_x += xwi;
+        sum_y += yi * weights[i];
+        sum_xy += xwi * yi;
+        sum_x2y += xwi*xi * yi;
+        sum_x2 += xwi*xi;
+        sum_x3 += xi*xi * xwi;
+        sum_x4 += std::pow(xi, 3) * xwi;
+    }
+    double detMat = determinant_m3(std::vector<std::vector<double>> {{sum_x4, sum_x3, sum_x2}, {sum_x3, sum_x2, sum_x}, {sum_x2, sum_x, sum_1}});
+    double detA = determinant_m3(std::vector<std::vector<double>> {{sum_x2y, sum_x3, sum_x2}, {sum_xy, sum_x2, sum_x}, {sum_y, sum_x, sum_1}});
+    double detB = determinant_m3(std::vector<std::vector<double>> {{sum_x4, sum_x2y, sum_x2}, {sum_x3, sum_xy, sum_x}, {sum_x2, sum_y, sum_1}});
+    double detC = determinant_m3(std::vector<std::vector<double>> {{sum_x4, sum_x3, sum_x2y}, {sum_x3, sum_x2, sum_xy}, {sum_x2, sum_x, sum_y}});
+    std::vector<double> coefficients = std::vector<double> {detA/detMat, detB/detMat, detC/detMat};
+    return coefficients;
+}
+
+double g_hat_x (std::vector<double> dataX, std::vector<double> dataY, double x){
+    // Computes g_hat (extrapolation of the trend-cycle ?) assuming dataX is sorted
+    double f = 0.1;
+    int q = std::max(std::min(3.0, static_cast<double>(dataX.size())), f*(static_cast<double>(dataX.size()))); // Number of neighbors CONSTANT choose Q thanks to M diagram (=q/n) in loess details)
+    std::vector<int> closest_xi_index = closest_q_index_in_sorted(x, q, dataX);
+    double furthest_distance = std::max(std::abs(x-dataX[closest_xi_index[0]]), std::abs(x-dataX[closest_xi_index[closest_xi_index.size()-1]]));
+    std::vector<double> weights, closest_xi, closest_yi;
+    for (int i=0; i<closest_xi_index.size(); i++){
+        weights.push_back(neighborhood_weight(dataX[closest_xi_index[i]], x, furthest_distance));
+        closest_xi.push_back(dataX[closest_xi_index[i]]);
+        closest_yi.push_back(dataY[closest_xi_index[i]]);
+    }
+    // Residual = sum wi * (yi - (x^2 b_2 + x b_1 + b_0)^2) = (Y - XB)
+    return eval_poly(weighted_least_squares(closest_xi, closest_yi, weights), x);
+}
+
+auto DataAnalysis::stl_regression(std::vector<double> dataX, std::vector<double> dataY){ // Definitely need to change this and the hpp file
     // TODO : Do the testing
     // TODO : replace find_index by a composition of stl's lower_bound and distance to make the code better
     // TODO : make the choice of constants for mood/other stuff if needed
     //          q increase -> smoother
-    return 0.1;
+    if (dataX.size() == 0){
+        qDebug() << "stl_regression unsuccessful call : data size is 0\n";
+        throw std::invalid_argument("Length of data is 0");
+    }
+    else if (dataX.size() != dataY.size()){
+        qDebug() << "stl_regression unsuccessful call : dataX size " << QString::number(dataX.size()) << " != dataY size " << QString::number(dataY.size()) << ".\n";
+        throw std::invalid_argument("Data not all of same length");
+    }
+
+    // TODO continue implementation now that q_hat_x() works.
+
+    return 0;
 }
 
 // STL decomposition implementation end
