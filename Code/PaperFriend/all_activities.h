@@ -4,6 +4,7 @@
 #include <QDialog>
 #include<QVector>
 #include<activity_cell.h>>
+#include"activityclasses.h"
 
 namespace Ui {
 class all_activities;
@@ -16,8 +17,9 @@ class all_activities : public QDialog
 public:
     explicit all_activities(QWidget *parent = nullptr);
     ~all_activities();
-    int ActivitiesCellNumberTotal; // The total number of the activities.
-    QVector<activity_cell *> allCellPtr; // This vector saves all the data of the activity cell.
+    static int ActivitiesCellNumberTotal; // The total number of the activities.
+    static QVector<activity_cell *> allCellPtr; // This vector saves all the data of the activity cell.
+    void add_previous_cells();
 
 private slots:
     void on_add_activity_button_clicked();
@@ -28,6 +30,7 @@ public slots:
     void closeCell(int);
 
 private:
+    std::vector<Activity> all_custom_activities;
     Ui::all_activities *ui;
 };
 

@@ -175,8 +175,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>177</width>
-             <height>85</height>
+             <width>175</width>
+             <height>83</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -251,20 +251,10 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="main_frame" stretch="0,0">
+     <layout class="QVBoxLayout" name="main_frame" stretch="0">
       <property name="spacing">
        <number>6</number>
       </property>
-      <item>
-       <widget class="filter_widget" name="widget" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>60</width>
-          <height>50</height>
-         </size>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
@@ -278,23 +268,6 @@
           </sizepolicy>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="1" column="0">
-           <widget class="QScrollArea" name="EntriesScroll">
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>523</width>
-               <height>432</height>
-              </rect>
-             </property>
-            </widget>
-           </widget>
-          </item>
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <property name="leftMargin">
@@ -307,10 +280,16 @@
              <number>11</number>
             </property>
             <property name="bottomMargin">
-             <number>10</number>
+             <number>3</number>
             </property>
             <item>
              <widget class="QPushButton" name="newEntryButton">
+              <property name="maximumSize">
+               <size>
+                <width>70</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
                <string>New entry</string>
               </property>
@@ -330,6 +309,75 @@
              </spacer>
             </item>
             <item>
+             <widget class="QComboBox" name="type_filter">
+              <item>
+               <property name="text">
+                <string>mood</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>sleep</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>eating_healthy</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>productivity</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>communications</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>screen_time</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="operation_filter">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <item>
+               <property name="text">
+                <string>&lt;</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>=</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>&gt;</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="value_filter">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QLabel" name="label_2">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -338,7 +386,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Show last</string>
+               <string>show last</string>
               </property>
              </widget>
             </item>
@@ -382,12 +430,58 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
-               <string>Filter</string>
+               <string>Add</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="clear_button">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>clear</string>
               </property>
              </widget>
             </item>
            </layout>
+          </item>
+          <item row="3" column="0">
+           <widget class="QScrollArea" name="EntriesScroll">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>634</width>
+               <height>439</height>
+              </rect>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="existing_filters">
+            <property name="text">
+             <string>Filters:</string>
+            </property>
+            <property name="indent">
+             <number>20</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -481,43 +575,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1134</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="action_New"/>
-    <addaction name="action_Open"/>
-    <addaction name="separator"/>
-    <addaction name="action_Save"/>
-    <addaction name="action_SaveAs"/>
-   </widget>
-   <widget class="QMenu" name="menuEdit">
-    <property name="title">
-     <string>Edit</string>
-    </property>
-    <addaction name="action_Copy"/>
-    <addaction name="action_Cut"/>
-    <addaction name="action_Paste"/>
-    <addaction name="separator"/>
-   </widget>
-   <widget class="QMenu" name="menuFormat">
-    <property name="title">
-     <string>Format</string>
-    </property>
-   </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
-   <addaction name="menuFormat"/>
-  </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Open">
    <property name="icon">
@@ -603,14 +660,6 @@
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>filter_widget</class>
-   <extends>QWidget</extends>
-   <header location="global">filter_widget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="myresources.qrc"/>
  </resources>

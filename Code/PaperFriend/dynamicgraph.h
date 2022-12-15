@@ -10,7 +10,7 @@
 class DynamicGraph
 {
 public:
-    DynamicGraph(std::vector<EntryPerso*> entries);
+    DynamicGraph(std::vector<EntryPerso*> &entries);
     void display(QLayout *parent_frame) const;
     //getters and setters
     std::vector<EntryPerso*> get_entries() const;

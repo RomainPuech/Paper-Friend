@@ -23,7 +23,6 @@ SOURCES += \
     entryfilter.cpp \
     entryrecap.cpp \
     file_processing/file_processing/file_save_and_load.cpp \
-    filter_widget.cpp \
     friendclasses.cpp \
     loadHabits.cpp \
     main.cpp \
@@ -52,7 +51,6 @@ HEADERS += \
     entryfilter.h \
     entryrecap.h \
     file_processing/file_processing/file_save_and_load.h \
-    filter_widget.h \
     friendclasses.h \
     loadHabits.h \
     mainwindow.h\
@@ -68,7 +66,6 @@ FORMS += \
     activity_cell.ui \
     all_activities.ui \
     all_habits.ui \
-    filter_widget.ui \
     mainwindow.ui \
     texteditor.ui \
 

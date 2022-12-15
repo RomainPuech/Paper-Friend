@@ -3,6 +3,7 @@
 
 #include "entryclasses.h"
 #include "texteditor.h"
+#include "file_processing/file_processing/file_save_and_load.h"
 
 #include <QWidget>
 #include <QPainterPath>
@@ -16,6 +17,7 @@
 #include <QPushButton>
 #include <QGroupBox>
 #include <QSlider>
+#include <QCheckBox>
 
 class Card : public QFrame{
 public:
@@ -59,6 +61,7 @@ public:
     bool isReadOnly();
     void setReadOnly(bool readOnly);
     void update();
+    void set_entryPerso_style(int top_menu_num_items = 3);
 
 private slots:
   void handleModify();
@@ -87,6 +90,9 @@ private:
     QLabel *mood_slider_instr; // label for the mood slider
     QSlider *mood_slider;
     QVBoxLayout *mood_slider_vb; // layout of mood_slider_w;
+    QGroupBox *fr_act_select;
+    std::vector <QCheckBox*> *fr_act_select_list;
+    QVBoxLayout *fr_act_select_vb;
 };
 
 #endif // CARDCLASSES_H

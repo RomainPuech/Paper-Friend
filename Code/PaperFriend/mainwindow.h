@@ -36,6 +36,8 @@ public:
     friend class TextEditor;
     class TextEditor *textEditor;
     void closeEvent (QCloseEvent *event);
+    static std::vector<Activity> get_activities();
+    static std::vector<Friend> get_friends();
 
 private slots:
     void on_pushButton_clicked();
@@ -45,6 +47,7 @@ private slots:
     void on_filterButton_clicked();
     void on_newEntryButton_clicked();
     void on_saveEntryButton_clicked();
+    void on_clear_button_clicked();
 
 private:
     void toggle_visibility(QWidget *component);
@@ -52,7 +55,9 @@ private:
     void display_graph(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
     Ui::MainWindow *ui;
     All_Habits *all_habits;
-    std::vector<EntryPerso*> entries;
+    static std::vector<EntryPerso*>vector_entries;
+    static std::vector<Activity>vector_activities;
+    static std::vector<Friend>vector_friends;
     EntryPerso entry;
     EntryCard *card;
 
