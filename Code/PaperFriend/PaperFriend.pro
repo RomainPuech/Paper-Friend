@@ -21,6 +21,7 @@ SOURCES += \
     Analysis/moodanalysis.cpp \
     entryclasses.cpp \
     entryfilter.cpp \
+    entryrecap.cpp \
     file_processing/file_processing/file_save_and_load.cpp \
     friendclasses.cpp \
     loadHabits.cpp \
@@ -48,6 +49,7 @@ HEADERS += \
     Analysis/moodanalysis.h \
     entryclasses.h \
     entryfilter.h \
+    entryrecap.h \
     file_processing/file_processing/file_save_and_load.h \
     friendclasses.h \
     loadHabits.h \
