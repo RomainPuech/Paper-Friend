@@ -51,6 +51,26 @@ std::vector<EntryPerso*> filter(
 
 }
 
+std::vector<EntryPerso*> filter(
+    std::vector<EntryPerso*> entries,
+    Filter_param param) {
+
+    std::vector<EntryPerso*> filteredEntries;
+    for(int i=0;i<entries.size();i++){
+        if (param.is_value_compare) {
+            if (compare_value(*(entries[i]), param.keyword, param.opt, param.value)) {
+                filteredEntries.push_back(entries[i]);
+            }
+        } else {
+            std::cout << "not implemented yet" << std::endl;
+        }
+    }
+    return filteredEntries;
+
+}
+
+
+
 bool compare_long_text(Entry& e) {
     return e.get_text().length() < 15;
 }

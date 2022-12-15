@@ -175,8 +175,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>173</width>
-             <height>69</height>
+             <width>175</width>
+             <height>83</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -268,23 +268,6 @@
           </sizepolicy>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="1" column="0">
-           <widget class="QScrollArea" name="EntriesScroll">
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>544</width>
-               <height>477</height>
-              </rect>
-             </property>
-            </widget>
-           </widget>
-          </item>
           <item row="0" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <property name="leftMargin">
@@ -297,7 +280,7 @@
              <number>11</number>
             </property>
             <property name="bottomMargin">
-             <number>10</number>
+             <number>3</number>
             </property>
             <item>
              <widget class="QPushButton" name="newEntryButton">
@@ -335,6 +318,26 @@
               <item>
                <property name="text">
                 <string>sleep</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>eating_healthy</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>productivity</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>communications</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>screen_time</string>
                </property>
               </item>
              </widget>
@@ -383,7 +386,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>last</string>
+               <string>show last</string>
               </property>
              </widget>
             </item>
@@ -439,7 +442,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_2">
+             <widget class="QPushButton" name="clear_button">
               <property name="maximumSize">
                <size>
                 <width>50</width>
@@ -452,6 +455,33 @@
              </widget>
             </item>
            </layout>
+          </item>
+          <item row="3" column="0">
+           <widget class="QScrollArea" name="EntriesScroll">
+            <property name="widgetResizable">
+             <bool>true</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>634</width>
+               <height>439</height>
+              </rect>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="existing_filters">
+            <property name="text">
+             <string>Filters:</string>
+            </property>
+            <property name="indent">
+             <number>20</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

@@ -17,6 +17,8 @@
 #include <iostream>
 #include <fstream>
 
+std::vector<Filter_param> filter_params;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -163,18 +165,43 @@ void MainWindow::on_filterButton_clicked() {
     QString value_filter_value = findChild<QDoubleSpinBox*>("value_filter")->text();
     double value = value_filter_value.toDouble();
 
-    std::vector<EntryPerso*> filtered_entries = filter(vector_entries, compare_value, type_filter_str, operator_filter_str, value);
+    //construct a filter_param object
+    struct Filter_param filt;
+    filt.is_value_compare = true;
+    filt.keyword = type_filter_str;
+    filt.opt = operator_filter_str;
+    filt.value = value;
+    filt.display_num = n;
+    filter_params.push_back(filt);
+    std::cout << "filter_params.size() = " << filter_params.size() << std::endl;
+
+    // std::vector<EntryPerso*> filtered_entries = filter(vector_entries, compare_value, type_filter_str, operator_filter_str, value);
+    std::vector<EntryPerso*> filtered_entries = filter(vector_entries, filter_params[0]);
+    for(int i=1; i<filter_params.size(); i++) {
+        filtered_entries = filter(filtered_entries, filter_params[i]);
+    }
+
     std::cout << "filtered" << std::endl;
     if (filtered_entries.size() == 0) {
         std::cout << "no entries" << std::endl;
+        filter_params.pop_back();
+        // std::cout << "filtered_entries.size() = " << filtered_entries.size() << std::endl;
+        // std::string v = std::to_string(filter_params[filter_params.size()-1].value);
+        // std::cout << "last filter" << v << std::endl;
         // To implement a error dialog here. we have a filter_error.ui file. show the dialog
         QMessageBox::warning(this, "Error", "No entries found with the given filter");
-        
-
-
-
         return;
     }
+
+    std::string f = "Filters:   ";
+    for (int i=0; i<filter_params.size(); i++) {
+        // value keeps 2 digits after the decimal point
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(1) << filter_params[i].value;
+        std::string s = stream.str();
+        f += filter_params[i].keyword + " " + filter_params[i].opt + " " + s + ";  ";
+    }
+    findChild<QLabel*>("existing_filters")->setText(QString::fromStdString(f));
     if(filtered_entries.size() < n) {
         n = filtered_entries.size();
     }
@@ -183,11 +210,17 @@ void MainWindow::on_filterButton_clicked() {
     for (int i=filtered_entries.size()-n; i<filtered_entries.size(); i++) {
         entries_to_display.push_back(filtered_entries[i]);
     }
-
-
     display_graph(entries_to_display, ui);
     display_entries(entries_to_display, ui);
 
+}
+
+void MainWindow::on_clear_button_clicked() {
+    filter_params.clear();
+    findChild<QLabel*>("existing_filters")->setText("Filters: ");
+    vector_entries = test(10); // this line should be changed to aquire source of entries
+    display_graph(vector_entries, ui);
+    display_entries(vector_entries, ui);
 }
 
 void MainWindow::on_newEntryButton_clicked() {
