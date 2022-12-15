@@ -13,7 +13,7 @@
 #include "settings.h"
 #include "mascotchat.h"
 #include "loadHabits.h"
-
+#include <sstream>
 #include <iostream>
 #include <fstream>
 
@@ -96,6 +96,14 @@ std::vector<Activity> MainWindow::get_activities(){
 
 std::vector<Friend> MainWindow::get_friends(){
     return vector_friends;
+}
+
+void MainWindow::update_activities(std::vector<Activity> activities){
+    vector_activities = activities;
+}
+
+void MainWindow::update_friends(std::vector<Friend> friends){
+    vector_friends = friends;
 }
 
 void MainWindow::closeEvent (QCloseEvent *event){

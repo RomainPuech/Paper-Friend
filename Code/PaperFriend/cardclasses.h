@@ -62,6 +62,8 @@ public:
     void setReadOnly(bool readOnly);
     void update();
     void set_entryPerso_style(int top_menu_num_items = 3);
+    void update_fr_act_select();
+    void update_fr_act();
 
 private slots:
   void handleModify();
@@ -91,7 +93,6 @@ private:
     QSlider *mood_slider;
     QVBoxLayout *mood_slider_vb; // layout of mood_slider_w;
     QGroupBox *fr_act_select;
-    std::vector <QCheckBox*> *fr_act_select_list;
     QVBoxLayout *fr_act_select_vb;
 };
 
