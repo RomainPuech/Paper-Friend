@@ -2,6 +2,7 @@
 #define DATAANALYSIS_H
 
 #include "entryclasses.h"
+#include "entryrecap.h"
 #include <numeric>
 #include <vector>
 
@@ -87,7 +88,8 @@ public:
 
   std::vector<int> item_priority(int var_index); // Arranges all other variables w.r.t their influence on the specified variable
   std::string suggestion(int var_index);  // text that will be suggested to user daily
-
+  std::string generate_recap_text(const std::vector<EntryPerso>& entries);
+  EntryRecap weekly_recap();
 };
 
 
