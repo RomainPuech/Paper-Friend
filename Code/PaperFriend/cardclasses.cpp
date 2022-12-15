@@ -206,7 +206,6 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     //friends and activities
     fr_act_display = new QListWidget(this);
     fr_act_select = new QGroupBox(this);
-    fr_act_select_list = new std::vector <QCheckBox*>;
     fr_act_select_vb = new QVBoxLayout(fr_act_select);
 
     //declare mood
@@ -340,13 +339,11 @@ EntryCard::~EntryCard(){
     delete mood_slider;
     delete mood_slider_vb;
     delete fr_act_select;
-    delete []fr_act_select_list;
     delete fr_act_select_vb;
 }
 
 void EntryCard::handleModify(){
     this->change();
-
 }
 
 void EntryCard::handleBack(){
@@ -394,8 +391,6 @@ void EntryCard::change(){
         if(entry_perso != nullptr){
             mood_slider_w->setVisible(false);
             mood_display->setVisible(true);
-            fr_act_display->setVisible(true);
-            fr_act_select->setVisible(false);
         }
     }
     else{
@@ -404,9 +399,13 @@ void EntryCard::change(){
         if(entry_perso != nullptr){
             mood_display->setVisible(false);
             mood_slider_w->setVisible(true);
-            fr_act_display->setVisible(false);
-            fr_act_select->setVisible(true);
         }
+    }
+    if(fr_act_display->count() != 0){
+        set_entryPerso_style(3);
+    }
+    else{
+        set_entryPerso_style(2);
     }
 }
 
@@ -427,6 +426,8 @@ void EntryCard::update(){
         mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood())) + "%");
         mood_slider->setValue(int(this->entry_perso->get_mood()));
         //friends and activities
+        update_fr_act_select();
+        update_fr_act();
     }
 
     //update style
@@ -437,6 +438,54 @@ void EntryCard::update(){
         set_entryPerso_style(2);
     }
 
+}
+
+void EntryCard::update_fr_act_select(){
+    for(int i = 0; i < (fr_act_select_vb->children()).length(); i++){
+       QLayoutItem* item = fr_act_select_vb->takeAt(0);
+       delete item;
+    }
+    for(long long unsigned fr = 0; fr < (MainWindow::get_friends()).size(); fr++){
+        QCheckBox *cb = new QCheckBox(QString::fromStdString((MainWindow::get_friends()[fr]).get_name()), fr_act_select);
+        fr_act_select_vb->addWidget(cb);
+        cb->setMinimumHeight(15);
+        cb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        cb->setStyleSheet("border-style: none;");
+
+    }
+    for(long long unsigned act = 0; act < (MainWindow::get_activities()).size(); act++){
+        QCheckBox *cb = new QCheckBox(QString::fromStdString((MainWindow::get_activities()[act]).get_name()), fr_act_select);
+        fr_act_select_vb->addWidget(cb);
+        cb->setMinimumHeight(15);
+        cb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        cb->setStyleSheet("border-style: none;");
+    }
+}
+
+void EntryCard::update_fr_act(){
+    std::vector<Activity*> activities;
+    std::vector<Friend*> friends;
+    int num_friends = (MainWindow::get_friends()).size();
+    int num_activities = (MainWindow::get_activities()).size();
+    for(int i = 0; i < num_friends; i++){
+        if((static_cast<QCheckBox*>(fr_act_select_vb->children()[i]))->isChecked()){
+            friends.push_back(&(MainWindow::get_friends()).at(i));
+        }
+    }
+    for(int i = 0; i < num_activities; i++){
+        if((static_cast<QCheckBox*>(fr_act_select_vb->children()[num_friends + i]))->isChecked()){
+            activities.push_back(&(MainWindow::get_activities()).at(i));
+        }
+    }
+    entry_perso->set_activities(activities);
+    entry_perso->set_friends(friends);
+
+    for(long long unsigned fr = 0; fr < (entry_perso->get_friends()).size(); fr++){
+        fr_act_display->addItem(QString::fromStdString((entry_perso->get_friends()[fr])->get_name()));
+    }
+    for(long long unsigned act = 0; act < (entry_perso->get_activities()).size(); act++){
+        fr_act_display->addItem(QString::fromStdString((entry_perso->get_activities()[act])->get_name()));
+    }
 }
 
 void EntryCard::set_entryPerso_style(int top_menu_num_items){
@@ -461,7 +510,6 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items){
     date_display->setStyleSheet("font-weight: bold; border-style: none; border-radius: 0px; border-top-left-radius: " + QString::number(this->get_border_radius()) + "px; border-right: 1px solid black; border-bottom: 1px solid black;");
     text_title_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px;");
     title->setStyleSheet("font: 18px; font-weight: bold; border-style: none;");
-    text_field->setStyleSheet("font: 14px; border-style: none;");
     edit_text_w->setStyleSheet("border-style: none;");
     edit_and_return->setStyleSheet("border-style: none;");
     modify->setStyleSheet("QPushButton{color: white; background-color: black; font-weight: bold; font: 15px; border: 2px solid black; border-radius: 5px;} QPushButton:hover{background-color:white; color:black;}");

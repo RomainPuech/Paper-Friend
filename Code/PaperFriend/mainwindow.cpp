@@ -98,6 +98,14 @@ std::vector<Friend> MainWindow::get_friends(){
     return vector_friends;
 }
 
+void MainWindow::update_activities(std::vector<Activity> activities){
+    vector_activities = activities;
+}
+
+void MainWindow::update_friends(std::vector<Friend> friends){
+    vector_friends = friends;
+}
+
 void MainWindow::closeEvent (QCloseEvent *event){
     QMessageBox::StandardButton answr_btn = QMessageBox::question( this, tr("Paper friend"), tr("Are you sure?\n"),
                                          QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);

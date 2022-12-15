@@ -321,3 +321,121 @@ std::string DataAnalysis::suggestion(int var_index){  // some more exciting game
 
     return str;
 }
+
+std::string DataAnalysis::generate_recap_text(const std::vector<EntryPerso>& entries){
+    return "";
+}
+
+EntryRecap DataAnalysis::weekly_recap(){
+    /**
+    * @param
+    *
+    * @returns an EntryRecap object containing info about the week. For now focuses on mood
+    */
+    std::vector<EntryPerso> period = get_lastn_days_data(7);
+    auto comp{[](EntryPerso& entry1, EntryPerso& entry2) -> bool {return entry1.get_var_value(0) < entry2.get_var_value(0);}};
+
+    EntryPerso best_day = *(std::max_element(period.begin(), period.end(), comp));
+    EntryPerso worst_day = *(std::min_element(period.begin(), period.end(), comp));
+
+    double avg_mood = avg(period, 0);
+
+    std::string text = generate_recap_text(period);
+    return EntryRecap(best_day, worst_day, text, avg_mood, 0);
+}
+
+
+
+// STL decomposition implementation start
+
+
+int find_index_sorted(double x, std::vector<double>& data, int start = 0, int end = -1){ // Basic dichotomy implementation
+    // Returns the biggest index corresponding in data to a number <= x   (for ex, find_index(2.5, {0, 1, 2, 3}) returns 2)
+    if (end == -1){end = data.size();}
+    if (end-start == 1){return start;}
+    if (end-start == 2){
+        if (data[start + 1] <= x){return start+1;}
+        else {return start;}
+    }
+    int middle = (end-start)/2;
+    if (data[middle]<=x){return find_index_sorted(x, data, middle, end);}
+    else{return find_index_sorted(x, data, start, middle);}
+}
+std::vector<int> closest_q_index_in_sorted(double x, int q, std::vector<double>& data){ // Data needs to be sorted
+    // Returns a vector containing the index of the closest q elements to x in data
+    if (q>data.size()){throw std::invalid_argument("Asking to retrieve more values than the length of the vector (q > data.size())");}
+    int biggest_smaller_than_x_index = find_index_sorted(x, data);
+    int iterLow = biggest_smaller_than_x_index; // Iterates on values smaller than (or equal to) x
+    int iterHigh = biggest_smaller_than_x_index + 1; // Iterates on values bigger than x
+    std::vector<int> answer;
+    while (answer.size() < q){
+        // If we reach the end of the vector, we need to take values from the other side
+        if (iterLow == -1){
+            answer.push_back(iterHigh);
+            iterHigh++;
+        }
+        else if (iterHigh == data.size()){
+            answer.push_back(iterLow);
+            iterLow--;
+        }
+        else {
+            // Otherwise, add value closest to x
+            if (x - data[iterLow] < data[iterHigh] - x){
+                answer.push_back(iterLow);
+                iterLow--;
+            }
+            else{
+                answer.push_back(iterHigh);
+                iterHigh++;
+            }
+        }
+    }
+    std::sort(answer.begin(), answer.end());
+    return answer;
+}
+double furthest_distance(double x, std::vector<double> data){ // Used to compute Gamma_q on the data subset gained by closest_q, to compute Gamma_n on the whole dataset
+    // Returns the maximum "distance" between x and points in the data
+    double max = 0;
+    for (int i=0; i<data.size(); i++){
+        if (max < std::abs(x-data[i])){max = std::abs(x-data[i]);}
+    }
+    return max;
+}
+double tricube_weight(double u){if (u>=1){return 0;} else{return std::pow( (1-(std::pow(u, 3))) , 3);}} // W(u)
+double neighborhood_weight(double xi, double x, double distance_furthest){ // v_i(x)
+    return tricube_weight(std::abs(xi - x) / distance_furthest);
+}
+double g_hat (std::vector<double> dataX, int x){
+    // Computes g_hat (extrapolation of the trend-cycle ?) assuming dataX is sorted
+    double f = 0.1;
+    int q = f*(static_cast<double>(dataX.size())); // Number of neighbors CONSTANT choose Q thanks to M diagram (=q/n) in loess details)
+    std::vector<int> closest_xi = closest_q_index_in_sorted(x, q, dataX);
+    double furthest_distance = std::max(std::abs(x-closest_xi[0]), std::abs(x-closest_xi[closest_xi.size()-1]));
+    std::vector<int> weights;
+    for (int i=0; i<closest_xi.size(); i++){
+        weights.push_back(neighborhood_weight(closest_xi[i], i, furthest_distance));
+    }
+    // Residual = sum wi * (yi - (x^2 b_2 + x b_1 + b_0)^2) = (Y - XB)
+
+    return 0;
+}
+
+double eval_poly(std::vector<double> coeffs, double x){
+    // Evaluates a polynomial at x using Horner scheme
+    double value = coeffs[0];
+    for (int i=1; i<coeffs.size(); i++){
+        value *= x;
+        value += coeffs[i];
+    }
+    return value;
+}
+
+auto DataAnalysis::stl_regression(std::vector<double> dataY, std::vector<double> dataX){ // Definitely need to change this and the hpp file
+    // TODO : Do the testing
+    // TODO : replace find_index by a composition of stl's lower_bound and distance to make the code better
+    // TODO : make the choice of constants for mood/other stuff if needed
+    //          q increase -> smoother
+    return 0.1;
+}
+
+// STL decomposition implementation end
