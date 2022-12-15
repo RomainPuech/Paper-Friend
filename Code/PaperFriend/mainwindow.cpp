@@ -42,6 +42,17 @@ MainWindow::MainWindow(QWidget *parent)
     textEditor->mainUi = this;
 
     vector_entries = sample_entries(10);
+    EntryPerso *e2 = new EntryPerso();
+    e2->set_mood(30);
+    e2->set_qdate(QDate::currentDate().addDays(-2));
+
+    EntryPerso *e3 = new EntryPerso();
+    e3->set_mood(30);
+    e3->set_qdate(QDate::currentDate().addDays(-1));
+
+    vector_entries.push_back(e2);
+    vector_entries.push_back(e3);
+
     display_graph(vector_entries, ui);
     display_entries(vector_entries, ui);
 
