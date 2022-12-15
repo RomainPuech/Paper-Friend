@@ -1,4 +1,6 @@
 #include "mascotchat.h"
+#include "mascot.h"
+#include "qpainter.h"
 #include <string>
 #include<QLabel>
 #include <QVBoxLayout>
@@ -24,21 +26,40 @@ QScrollArea* MascotChat::get_scrollArea(){
 }
 //public methods
 void MascotChat::operator<<(std::string txt){
-    add_message(txt);
+    add_message_mascot(txt);
+    //add_message(txt);
 }
 void MascotChat::operator<<(QString txt){
-    add_message(txt);
+    add_message_mascot(txt);
+    //add_message(txt);
 }
 
 //private methods
-void MascotChat::add_message(QString txt){
+/*void MascotChat::add_message(QString txt){
     QLabel *label = new QLabel();
     label->setText(txt);
     scrollArea->widget()->layout()->addWidget(label);
+}*/
+void MascotChat::add_message_mascot(QString txt){
+    QLabel *l = new QLabel;
+    l->setTextFormat(Qt::RichText);
+    l->setText("<img src=:/pictures/rsc/peaceout-resized.png align=middle> " + txt);;
+    scrollArea->widget()->layout()->addWidget(l);
+    //QLabel * textLabel = new QLabel();
+    //QLabel * imageLabel = new QLabel();
+    //imageLabel->setPixmap(QPixmap(":/pictures/rsc/peaceout-resized.png"));
+    //textLabel->setText(txt);
+    //scrollArea->widget()->layout()->addWidget(imageLabel);
+    //scrollArea->widget()->layout()->addWidget(textLabel);
 }
 
-void MascotChat::add_message(std::string txt){
+/*void MascotChat::add_message(std::string txt){
+    add_message_mascot(QString::fromStdString(txt));
     add_message(QString::fromStdString(txt));
-}
+}*/
+void MascotChat::add_message_mascot(std::string txt){
+    add_message_mascot(QString::fromStdString(txt));}
+
+
 
 

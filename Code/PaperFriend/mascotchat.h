@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <string>
 #include <vector>
-
+#include <mascot.h>
 
 class MascotChat
 {
@@ -18,9 +18,12 @@ public:
     QScrollArea* get_scrollArea();
 
 private:
-    void add_message(QString txt);
-    void add_message(std::string txt);
+    //void add_message(QString txt);
+    void add_message_mascot(QString txt);
+    //void add_message(std::string txt);
+    void add_message_mascot(std::string txt);
     QScrollArea *scrollArea;
+    Mascot *mascot;
 };
 
 
