@@ -182,7 +182,7 @@ std::vector<EntryPerso*> sample_entries(int n,std::vector<Activity*> possible_ac
     std::default_random_engine generator;
     std::normal_distribution<double> distribution(65,25);
     std::vector<EntryPerso*> res = std::vector<EntryPerso*>();
-    for(int i=0;i<n;++i){
+    for(int i=5;i<n;++i){
         std::vector<Activity*> activities;
         std::vector<Friend*> friends;
 
@@ -204,7 +204,7 @@ std::vector<EntryPerso*> sample_entries(int n,std::vector<Activity*> possible_ac
         double communications = rand()%11;
         double screen_time = (rand()%240)/10;
         EntryPerso *entry = new EntryPerso("sample entry text","The title of the entry",activities,friends,mood,sleep,eating_healthy,productivity,communications,screen_time);
-        entry->set_qdate((QDate::currentDate()).addDays(-n+i));
+        entry->set_qdate((QDate::currentDate()).addDays(-i));
         res.push_back(entry);
     }
     return res;
