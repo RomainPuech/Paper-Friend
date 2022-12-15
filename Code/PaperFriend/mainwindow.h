@@ -38,6 +38,8 @@ public:
     void closeEvent (QCloseEvent *event);
     static std::vector<Activity> get_activities();
     static std::vector<Friend> get_friends();
+    static void update_activities(std::vector<Activity> activities);
+    static void update_friends(std::vector<Friend> friends);
 
 private slots:
     void on_pushButton_clicked();
