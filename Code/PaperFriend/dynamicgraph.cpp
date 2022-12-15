@@ -18,6 +18,7 @@
 // Used to change names on axis
 #include <QtCharts/QCategoryAxis>
 #include "entryclasses.h"
+#include <QtDebug>
 
 //////////////////
 //private methods useful for display
@@ -25,7 +26,7 @@ DynamicGraph::moodlevel DynamicGraph::associated_mood_level(double mood) const{
     /*
      returns the mood level corresponding to the given mood value
      */
-    if(mood>=75){
+    if(mood>75){// strict inequality otherwise problems in the creation of the two dummy points for transition from bad mood to good mood when the point is exactly at 75
         return good;
     }else if(mood>=35){
         return medium;
@@ -53,7 +54,6 @@ void DynamicGraph::get_dummy_point(double y1,double y2, double x1, double x2, do
     int previous = associated_mood_level(y1);
     int current = associated_mood_level(y2);
     //important: we assume here that the mood is only changing by 1 level. For example, if the new mood level is "good", we assume that it was "medium" before. If this goes from "bad" to "good", this function should be called twice with well chosen parameters.
-
     //we first get the target
     if(previous==0){//then the mood was bad and it turns medium
         target = 35;
@@ -103,9 +103,9 @@ DynamicGraph::DynamicGraph(std::vector<EntryPerso*>& entries)
                 *series<<QPointF(dummypoint1[0],dummypoint1[1]);
                 listofseries.push_back(series);
                 series = new QLineSeries();// we create anew curve with a different color
+                set_color(series,medium);
                 *series<<QPointF(dummypoint1[0],dummypoint1[1]);// the new series needs to start with the last point of the previous one to make them appear connected on the graph
                 *series<<QPointF(dummypoint2[0],dummypoint2[1]);
-                set_color(series,medium);
                 listofseries.push_back(series);
                 series = new QLineSeries();
                 *series<<QPointF(dummypoint2[0],dummypoint2[1]);
