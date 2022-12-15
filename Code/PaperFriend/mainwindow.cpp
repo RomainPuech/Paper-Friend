@@ -218,24 +218,12 @@ void MainWindow::on_filterButton_clicked() {
             i--;
         }
         else if (filter_params[i].keyword == filt.keyword && filter_params[i].opt == "=") {
-            is_insert = false;
-            break;
+            filter_params.erase(filter_params.begin() + i);
+            i--;
         }
         if (filter_params[i].keyword == filt.keyword && filter_params[i].opt == filt.opt) {
-            if (filt.opt == "<" && filt.value > filter_params[i].value) {
-                is_insert = false;
-                break;
-            }
-            else if (filt.opt == "<" && filt.value < filter_params[i].value) {
-                filter_params.erase(filter_params.begin() + i);
-            }
-            else if (filt.opt == ">" && filt.value < filter_params[i].value) {
-                is_insert = false;
-                break;
-            }
-            else if (filt.opt == ">" && filt.value > filter_params[i].value) {
-                filter_params.erase(filter_params.begin() + i);
-            }
+            filter_params.erase(filter_params.begin() + i);
+            i--;
         }
     }
 
@@ -261,8 +249,6 @@ void MainWindow::on_filterButton_clicked() {
         return;
     }
 
-    
-
     // update and display the filters
     std::string f = "Filters:   ";
     for (int i=0; i<filter_params.size(); i++) {
@@ -285,9 +271,12 @@ void MainWindow::on_filterButton_clicked() {
 
     display_graph(entries_to_display, ui);
     display_entries(entries_to_display, ui);
-
 }
 
+void MainWindow::on_helpFilterBox_clicked() {
+    // implement a help dialog here. show the dialog.
+    QMessageBox::information(this, "Help", "This is a help dialog");
+}
 void MainWindow::on_clear_button_clicked() {
     filter_params.clear();
     findChild<QLabel*>("existing_filters")->setText("Filters: ");
