@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
     textEditor = new TextEditor();
     textEditor->mainUi = this;
 
-    vector_entries = test(10);
+    vector_entries = sample_entries(10);
     display_graph(vector_entries, ui);
     display_entries(vector_entries, ui);
 
@@ -156,7 +156,7 @@ void MainWindow::on_filterButton_clicked() {
     auto spinBox = findChild<QSpinBox*>("numberOfEntries");
     int n = spinBox->value();
 
-    vector_entries = test(100); // this line should be changed to aquire source of entries
+    vector_entries = sample_entries(100); // this line should be changed to aquire source of entries
 
     QString type_filter_value = findChild<QComboBox*>("type_filter")->currentText();
     std::string type_filter_str = type_filter_value.toStdString();
@@ -252,7 +252,7 @@ void MainWindow::on_filterButton_clicked() {
 void MainWindow::on_clear_button_clicked() {
     filter_params.clear();
     findChild<QLabel*>("existing_filters")->setText("Filters: ");
-    vector_entries = test(10); // this line should be changed to aquire source of entries
+    vector_entries = sample_entries(10); // this line should be changed to aquire source of entries
     display_graph(vector_entries, ui);
     display_entries(vector_entries, ui);
 }
