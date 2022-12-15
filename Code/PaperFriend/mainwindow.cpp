@@ -173,26 +173,58 @@ void MainWindow::on_filterButton_clicked() {
     filt.value = value;
     filt.display_num = n;
     filter_params.push_back(filt);
-    std::cout << "filter_params.size() = " << filter_params.size() << std::endl;
 
-    // std::vector<EntryPerso*> filtered_entries = filter(vector_entries, compare_value, type_filter_str, operator_filter_str, value);
+    //filter the entries
     std::vector<EntryPerso*> filtered_entries = filter(vector_entries, filter_params[0]);
     for(int i=1; i<filter_params.size(); i++) {
         filtered_entries = filter(filtered_entries, filter_params[i]);
     }
 
+    //error handling
     std::cout << "filtered" << std::endl;
     if (filtered_entries.size() == 0) {
         std::cout << "no entries" << std::endl;
         filter_params.pop_back();
-        // std::cout << "filtered_entries.size() = " << filtered_entries.size() << std::endl;
-        // std::string v = std::to_string(filter_params[filter_params.size()-1].value);
-        // std::cout << "last filter" << v << std::endl;
         // To implement a error dialog here. we have a filter_error.ui file. show the dialog
         QMessageBox::warning(this, "Error", "No entries found with the given filter");
         return;
     }
 
+    // deal with the duplicated filters
+    for (int i=0; i<filter_params.size()-1; i++) {
+        for(int j=i+1; j<filter_params.size(); j++) {
+            if (filter_params[i].keyword == filter_params[j].keyword && filter_params[i].opt == filter_params[j].opt && filter_params[i].value == filter_params[j].value) {
+                filter_params.erase(filter_params.begin()+j);
+                j--;
+            }
+            if (filter_params[i].keyword == filter_params[j].keyword && filter_params[i].opt == filter_params[j].opt) {
+                if (filter_params[i].opt == "<") {
+                    if (filter_params[i].value < filter_params[j].value) {
+                        filter_params.erase(filter_params.begin()+j);
+                        j--;
+                    }
+                    else {
+                        filter_params.erase(filter_params.begin()+i);
+                        i--;
+                        break;
+                    }
+                }
+                else if (filter_params[i].opt == ">") {
+                    if (filter_params[i].value > filter_params[j].value) {
+                        filter_params.erase(filter_params.begin()+j);
+                        j--;
+                    }
+                    else {
+                        filter_params.erase(filter_params.begin()+i);
+                        i--;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    // update and display the filters
     std::string f = "Filters:   ";
     for (int i=0; i<filter_params.size(); i++) {
         // value keeps 2 digits after the decimal point
@@ -205,11 +237,13 @@ void MainWindow::on_filterButton_clicked() {
     if(filtered_entries.size() < n) {
         n = filtered_entries.size();
     }
+
     // select the n last entries
     std::vector<EntryPerso*> entries_to_display;
     for (int i=filtered_entries.size()-n; i<filtered_entries.size(); i++) {
         entries_to_display.push_back(filtered_entries[i]);
     }
+
     display_graph(entries_to_display, ui);
     display_entries(entries_to_display, ui);
 
