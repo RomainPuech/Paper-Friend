@@ -21,7 +21,7 @@ TextEditor::TextEditor(QWidget *parent) : QWidget(parent),
     ui->setupUi(this);
     isUntitled = true;                         // initialize the text as the status of unsaved
     curFile = tr("Untitled.txt");              // initialize the current file name as "untitled.txt"
-    strUndo.push(ui->textEdit->toPlainText()); // Here the strUndo is a stack
+    strUndo.push(ui->textEdit->toHtml()); // Here the strUndo is a stack
     connect(ui->textEdit, SIGNAL(textChanged(QString)), this, SLOT(on_textEdit_textChanged));
     ui->textEdit->setPlaceholderText("Edit Title\nEdit Entry Text");
 }
@@ -31,16 +31,21 @@ TextEditor::~TextEditor()
     delete ui;
 }
 
-QString TextEditor::get_text() const{
-    return ui->textEdit->toPlainText();
-}
-
 void TextEditor::set_title(QString text){
+    // set the title of the text editor
+    // We want to display the title in indipendent line writen in html and css
     ui->textEdit->setFontWeight(QFont::Bold);
     ui->textEdit->clear();
-    ui->textEdit->insertPlainText(text);
+    text = "<h1>" + text + "</h1>";
+    text += "<br>";
+    ui->textEdit->insertHtml(text);
     ui->textEdit->setFontWeight(1);
 }
+
+QString TextEditor::get_text() const{
+    return ui->textEdit->toHtml();
+}
+
 
 void TextEditor::append_text(QString text){
     ui->textEdit->insertPlainText(text);
@@ -57,10 +62,10 @@ void TextEditor::newFile()
         setWindowTitle(curFile);
         ui->textEdit->clear();
         ui->textEdit->setVisible(true);
-        strUndo.push(ui->textEdit->toPlainText());
+        strUndo.push(ui->textEdit->toHtml());
     }
     resetStack();                              // clean and reset the stack and return to the initial state of 0
-    strUndo.push(ui->textEdit->toPlainText()); // push the current text into the stack
+    strUndo.push(ui->textEdit->toHtml()); // push the current text into the stack
 }
 
 // Check if the file is saved - checked
@@ -130,7 +135,7 @@ bool TextEditor::saveFile(const QString &fileName)
     QTextStream out(&file);
     // mouse pointer change to wait
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    out << ui->textEdit->toPlainText();
+    out << ui->textEdit->toHtml();
     // mouse pointer change to original
     QApplication::restoreOverrideCursor();
     isUntitled = false;
@@ -149,9 +154,9 @@ bool TextEditor::loadFile(const QString &fileName)
     QTextStream in(&file); // create a new QTextStream object
     QApplication::setOverrideCursor(Qt::WaitCursor);
     // Read the file
-    ui->textEdit->setPlainText(in.readAll());
+    ui->textEdit->setHtml(in.readAll());
     resetStack();
-    strUndo.push(ui->textEdit->toPlainText());
+    strUndo.push(ui->textEdit->toHtml());
     QApplication::restoreOverrideCursor();
 
     // Set the current file name

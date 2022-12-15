@@ -461,7 +461,6 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items){
     date_display->setStyleSheet("font-weight: bold; border-style: none; border-radius: 0px; border-top-left-radius: " + QString::number(this->get_border_radius()) + "px; border-right: 1px solid black; border-bottom: 1px solid black;");
     text_title_w->setStyleSheet("border-style: none; border-radius: 0px; border-bottom-left-radius: " + QString::number(this->get_border_radius()) + "px; border-bottom-right-radius: " + QString::number(this->get_border_radius()) + "px;");
     title->setStyleSheet("font: 18px; font-weight: bold; border-style: none;");
-    text_field->setStyleSheet("font: 14px; border-style: none;");
     edit_text_w->setStyleSheet("border-style: none;");
     edit_and_return->setStyleSheet("border-style: none;");
     modify->setStyleSheet("QPushButton{color: white; background-color: black; font-weight: bold; font: 15px; border: 2px solid black; border-radius: 5px;} QPushButton:hover{background-color:white; color:black;}");

@@ -9,14 +9,14 @@
 
 
 Entry::Entry() {
-    this->text = "";
     this->title = "";
+    this->text = "";
     this->set_qdate(QDate::currentDate());
 }
 
 Entry::Entry(std::string text, std::string title){
-    this->text = text;
     this->title = title;
+    this->text = text;
     this->set_qdate(QDate::currentDate());
 }
 
@@ -72,13 +72,13 @@ int Entry::get_absolute_day() const{
 
 EntryPerso::EntryPerso() : Entry(), activities(NULL), friends(NULL), mood(0) {}
 
-EntryPerso::EntryPerso(std::string text, std::string title, std::vector<Activity*> p_activities, std::vector<Friend*> friends, double mood,
+EntryPerso::EntryPerso(std::string title, std::string text, std::vector<Activity*> p_activities, std::vector<Friend*> friends, double mood,
                                                                                                    double sleep,
                                                                                                    double eating_healthy,
                                                                                                    double productivity,
                                                                                                    double communications,
                                                                                                    double screen_time) :
-    Entry(text, title), activities(p_activities), friends(friends), mood(mood),
+    Entry(title, text), activities(p_activities), friends(friends), mood(mood),
                                                                   sleep(sleep),
                                                                   eating_healthy(eating_healthy),
                                                                   productivity(productivity),
