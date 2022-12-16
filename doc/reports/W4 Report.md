@@ -12,4 +12,4 @@
 | Junyuan (Frank) Wang |File processing    |||
 | Octave Gaspard       |Data analysis      |||
 | Brook Nigatu         |Data analysis      |||
-| Artem Mamichev       |Data analysis      |||    
+| Artem Mamichev       |Data analysis      |||
