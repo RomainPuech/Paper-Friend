@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     ///    std::vector<EntryPerso*>vector_entries;  All the entries
     ///    std::vector<Activity>vector_activities;  All the possible activities to choose from
     ///    std::vector<Friend>vector_friends;       All the friends we can choose from
-
+    vector_activities.push_back(Activity());
 
     //create layout for central scrollable area
     QVBoxLayout *entries_layout = new QVBoxLayout();

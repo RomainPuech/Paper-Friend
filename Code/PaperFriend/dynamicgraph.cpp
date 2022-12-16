@@ -113,11 +113,11 @@ DynamicGraph::DynamicGraph(std::vector<EntryPerso*>& entries)
 
         double x2 = - (e->get_qdate().daysTo(today));
         double y2 = e->get_mood();//current point
-        qDebug() << x2 << y2;
+        //qDebug() << x2 << y2;
 
         moodlevel level = associated_mood_level(y2);
         if(abs(x1-x2) > 3){
-            qDebug() << x1 << x2;
+            //qDebug() << x1 << x2;
             listofseries.push_back(series);
             series = new QLineSeries();
 
@@ -192,15 +192,15 @@ void DynamicGraph::display(QLayout *layout) const
     // mood_chart->axes(Qt::Horizontal).first()->setRange( - (entries[entries.size()-1]->get_qdate().daysTo(QDate::currentDate())) , - (entries[0]->get_qdate().daysTo(QDate::currentDate())) + 1 );
     int start = std::min((int)- (entries[entries.size()-1]->get_qdate().daysTo(QDate::currentDate())) +1,0) ;
     int end = - (entries[0]->get_qdate().daysTo(QDate::currentDate())) ;
-    qDebug() << "yo mec" << start << end;
+    //qDebug() << "yo mec" << start << end;
     mood_chart->axes(Qt::Horizontal).first()->setRange( end, start);
     mood_chart->axes(Qt::Horizontal).first()->setTitleFont(font);
     mood_chart->axes(Qt::Horizontal).first()->setTitleText(QString::fromStdString("Days ago"));
     QValueAxis* xaxis = static_cast<QValueAxis*>(mood_chart->axes(Qt::Horizontal).first()); //used to be able to call QValueAxis methods as we know that the axis is of type QValueAxis, which inherits from QAbstractAxis, returned by the function
     xaxis->setLabelFormat("%0.0f");
-    qDebug()<<"here";
+    //qDebug()<<"here";
 
-    qDebug()<<"et pas here";
+    //qDebug()<<"et pas here";
     //mood_chart->axes(Qt::Horizontal).first()->setLabelFormat("%.2f");
     //tests to put absolute value as an x axis.
     /*
