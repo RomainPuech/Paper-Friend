@@ -18,6 +18,9 @@ public:
 private:
     std::vector<QLineSeries*> listofseries;
     std::vector<EntryPerso*> entries;
+    QScatterSeries *visible_green_points;
+    QScatterSeries *visible_orange_points;
+    QScatterSeries *visible_red_points;
     QColor level_colors[3] = {"red","orange","green"};
     enum moodlevel{
         bad,
