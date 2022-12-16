@@ -41,10 +41,36 @@ void MascotChat::operator<<(QString txt){
     scrollArea->widget()->layout()->addWidget(label);
 }*/
 void MascotChat::add_message_mascot(QString txt){
+
+    QHBoxLayout *test = new QHBoxLayout();
+
     QLabel *l = new QLabel;
     l->setTextFormat(Qt::RichText);
-    l->setText("<img src=:/pictures/rsc/peaceout-resized.png align=middle> " + txt);;
-    scrollArea->widget()->layout()->addWidget(l);
+    l->setText("<img src=:/pictures/rsc/peaceout-resized.png align=middle height=\"100\">");
+    l->setFixedWidth(100);
+    // following commented code helps for debugging by showing the actual size of the label
+    /*
+    QPalette pali = QPalette();
+    pali.setColor(QPalette::Window, Qt::green);
+    l->setAutoFillBackground(true);
+    l->setPalette(pali);
+    */
+    QLabel *l2 = new QLabel;
+    l2->setTextFormat(Qt::RichText);
+    l2->setText(txt);
+    l2->setIndent(0);
+    //for debug
+    /*
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, Qt::black);
+    l2->setAutoFillBackground(true);
+    l2->setPalette(pal);
+    */
+    test->addWidget(l);
+    test->addWidget(l2);
+    QFrame *testu = new QFrame();
+    testu->setLayout(test);
+    scrollArea->widget()->layout()->addWidget(testu);
     //QLabel * textLabel = new QLabel();
     //QLabel * imageLabel = new QLabel();
     //imageLabel->setPixmap(QPixmap(":/pictures/rsc/peaceout-resized.png"));
