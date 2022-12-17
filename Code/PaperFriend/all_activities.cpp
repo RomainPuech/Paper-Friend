@@ -1,6 +1,7 @@
 #include "all_activities.h"
 #include"activity_cell.h"
 #include "ui_all_activities.h"
+#include<QFile>
 
 int all_activities::ActivitiesCellNumberTotal = 0;
 QVector<activity_cell *> all_activities::allCellPtr;
@@ -51,3 +52,21 @@ void all_activities::closeCell(int ActivitiesCellNumber){
     ActivitiesCellNumberTotal--;
     allCellPtr.remove(ActivitiesCellNumber);
 }
+
+void all_activities::on_save_activity_button_clicked()
+{
+    QFile activities_file("./activities.txt");
+    activities_file.open(QIODevice::WriteOnly | QIODevice::Text); //Opens activities_file and allow to write in the text file.
+    QApplication::processEvents();
+    QString name_activity;
+    QString type_activity;
+    for(int i=0;i<allCellPtr.size();++i){
+        name_activity = allCellPtr[i]->get_activity_name();
+        type_activity = allCellPtr[i]->get_activity_type();
+        qDebug()<< name_activity<<type_activity;
+        QTextStream out(&activities_file);
+        out << name_activity << " , " << type_activity << "⧵n";
+    }
+}
+
+

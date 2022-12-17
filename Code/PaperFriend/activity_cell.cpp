@@ -6,6 +6,12 @@ activity_cell::activity_cell(QWidget *parent) :
     ui(new Ui::activity_cell)
 {
     ui->setupUi(this);
+    ui->activity_type->addItem("Enter activity type");
+    ui->activity_type->addItem("Sport");
+    ui->activity_type->addItem("Spiritual");
+    ui->activity_type->addItem("Work");
+    ui->activity_type->addItem("Study");
+    ui->activity_type->addItem("Art");
 }
 
 activity_cell::~activity_cell()
@@ -19,7 +25,7 @@ activity_cell::~activity_cell()
 //}
 
 void activity_cell::set_activity_cell_name(QString cellName){
-    ui->activity_name_CB->setText(cellName);
+    ui->activity_name->setText(cellName);
 }
 
 void activity_cell::on_delete_activity_button_clicked()
@@ -31,4 +37,16 @@ void activity_cell::on_delete_activity_button_clicked()
         this->close();
     }
 }
+
+QString activity_cell::get_activity_name()
+{
+    return ui->activity_name->text();
+}
+
+QString activity_cell::get_activity_type()
+{
+    return ui->activity_type->currentText();
+}
+
+
 

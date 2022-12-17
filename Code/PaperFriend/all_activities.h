@@ -26,6 +26,8 @@ private slots:
 
     void addNewCell(QString cellText="", QString cellName="Cell Name");
 
+    void on_save_activity_button_clicked();
+
 public slots:
     void closeCell(int);
 
