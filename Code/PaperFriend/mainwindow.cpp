@@ -45,8 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     // We use Friend function to embed the TextEditor into the MainWindow
     textEditor = new TextEditor();
     textEditor->mainUi = this;
-
-    vector_entries = sample_entries(10);
+    /*vector_entries = sample_entries(10);
     EntryPerso *e2 = new EntryPerso();
     e2->set_mood(30);
     e2->set_qdate(QDate::currentDate().addDays(-2));
@@ -57,9 +56,13 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     vector_entries.push_back(e2);
-    vector_entries.push_back(e3);
+    vector_entries.push_back(e3);*/
 
-
+    // load previous entries
+    QDir dir(QDir::currentPath() + "/Entries");
+    for(const QString &filename : dir.entryList(QDir::Files)){
+        vector_entries.push_back(load_entryperso("Entries/" + filename.toStdString()));
+    }
     display_graph(vector_entries, ui);
     display_entries(vector_entries, ui);
 
@@ -134,7 +137,7 @@ void MainWindow::display_entries(std::vector<EntryPerso*> entries, Ui::MainWindo
         ui->graph_frame->removeItem(ui->EntriesScroll->widget()->layout()->takeAt(0));
     }
     for (auto entry: entries) {
-        EntryCard *c = new EntryCard(20, 300, 300, "white", entry);
+        EntryCard *c = new EntryCard(20, 300, 300, "white", entry, true, this);
         c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
     }
 }
@@ -295,19 +298,17 @@ void MainWindow::on_newEntryButton_clicked() {
     EntryPerso *e = new EntryPerso();
     e->set_mood(0);
     e->set_qdate(QDate::currentDate());
-    std::vector<Friend*> fr;
+    /*std::vector<Friend*> fr;
     fr.push_back(new Friend("fr", 1));
     std::vector<Activity*> activity;
     activity.push_back(new Activity("act", 1));
     e->set_friends(fr);
-    e->set_activities(activity);
+    e->set_activities(activity);*/
     e->set_title("");
     e->set_text("");
     vector_entries.insert(vector_entries.begin(), e);
-    card = new EntryCard(20, 300, 300, "white", e);
+    card = new EntryCard(20, 300, 300, "white", e, false, this);
     card->display(ui->newEntry);
-    card->change();
-    card->update();
 }
 
 void MainWindow::on_saveEntryButton_clicked() {
@@ -337,4 +338,9 @@ std::vector<EntryPerso*> MainWindow::test(int n) {
         entries.push_back(e);
     }
     return entries;
+}
+
+
+void MainWindow::update_graph(){
+    display_graph(vector_entries, ui);
 }

@@ -14,7 +14,7 @@ bool save_entry(Entry entry){ // I create and save the entry file, title format 
         {"date", entry.get_date()}};
     std::string filename = entry.get_qdate().toString("MM.dd.yyyy").toStdString()+".json";
 
-    std::ofstream o("./" + filename);
+    std::ofstream o("Entries/" + filename);
 
 
     if(!o.is_open()){
@@ -33,7 +33,7 @@ bool save_entry_encrypt(Entry entry, std::string path, std::string key){
         {"title", encode_string(entry.get_title(), key)},
         {"date", encode_string(entry.get_date(), key)}};
 
-    std::string filename = entry.get_qdate().toString("MM.dd.yyyy").toStdString()+".json";
+    std::string filename = "Entries/" + entry.get_qdate().toString("MM.dd.yyyy").toStdString()+".json";
     if (path.back() != '/'){
         path += "/";
     }// add a slash if there is none
@@ -204,9 +204,8 @@ bool save_entryperso(EntryPerso entry){ // I create and save the entry file, tit
 
         {"friends", friends}
     };
-    std::string filename = entry.get_qdate().toString("MM.dd.yyyy").toStdString()+".json";
-
-    std::ofstream o("./" + filename);
+    std::string filename = "Entries/" + entry.get_qdate().toString("MM.dd.yyyy").toStdString()+".json";
+    std::ofstream o(filename);
 
 
     if(!o.is_open()){
@@ -225,12 +224,12 @@ bool save_entryperso(EntryPerso entry){ // I create and save the entry file, tit
 
 
 
-EntryPerso load_entryperso(std::string filename){//retrieve the data of a Json file and return an initialized Entry object with this data
+EntryPerso* load_entryperso(std::string filename){//retrieve the data of a Json file and return an initialized Entry object with this data
     std::ifstream i(filename);
     nlohmann::json j;
     i >> j;
-    EntryPerso res = EntryPerso(j["text"], j["title"], str_to_vec_activities(j["activities"]), str_to_vec_friends(j["friends"]), j["mood"], j["sleep"], j["eating_healthy"], j["productivity"],j["communications"], j["screen_time"] );
-    res.set_date(j["date"]);
+    EntryPerso* res = new EntryPerso(j["text"], j["title"], str_to_vec_activities(j["activities"]), str_to_vec_friends(j["friends"]), j["mood"], j["sleep"], j["eating_healthy"], j["productivity"],j["communications"], j["screen_time"] );
+    res->set_date(j["date"]);
     return res;
 }
 

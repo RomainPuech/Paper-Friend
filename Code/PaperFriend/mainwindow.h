@@ -40,6 +40,7 @@ public:
     static std::vector<Friend> get_friends();
     static void update_activities(std::vector<Activity> activities);
     static void update_friends(std::vector<Friend> friends);
+    void update_graph();
 
 private slots:
     void on_pushButton_clicked();
