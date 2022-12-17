@@ -4,6 +4,7 @@
 #include <string>
 #include<QLabel>
 #include <QVBoxLayout>
+#include <QPainterPath>
 MascotChat::MascotChat(QScrollArea *area):scrollArea(area)
 {
     /*
@@ -42,49 +43,65 @@ void MascotChat::operator<<(QString txt){
 }*/
 void MascotChat::add_message_mascot(QString txt){
 
-    QHBoxLayout *test = new QHBoxLayout();
 
-    QLabel *l = new QLabel;
-    l->setTextFormat(Qt::RichText);
-    l->setText("<img src=:/pictures/rsc/peaceout-resized.png align=middle height=\"100\">");
-    l->setFixedWidth(100);
-    // following commented code helps for debugging by showing the actual size of the label
+    QLabel *image_label = new QLabel;
+    image_label->setTextFormat(Qt::RichText);
+    image_label->setText("<img src=:/pictures/rsc/excited-resized.png align=middle height=\"85\">");
+    image_label->setFixedWidth(85);
+    // setting a background color helps for debugging by showing the actual size of the label
     /*
     QPalette pali = QPalette();
     pali.setColor(QPalette::Window, Qt::green);
-    l->setAutoFillBackground(true);
-    l->setPalette(pali);
+    image_label->setAutoFillBackground(true);
+    image_label->setPalette(pali);
     */
-    QLabel *l2 = new QLabel;
-    l2->setTextFormat(Qt::RichText);
-    l2->setText(txt);
-    l2->setIndent(0);
-    //for debug
-    /*
-    QPalette pal = QPalette();
-    pal.setColor(QPalette::Window, Qt::black);
-    l2->setAutoFillBackground(true);
-    l2->setPalette(pal);
-    */
-    test->addWidget(l);
-    test->addWidget(l2);
-    QFrame *testu = new QFrame();
-    testu->setLayout(test);
-    scrollArea->widget()->layout()->addWidget(testu);
-    //QLabel * textLabel = new QLabel();
-    //QLabel * imageLabel = new QLabel();
-    //imageLabel->setPixmap(QPixmap(":/pictures/rsc/peaceout-resized.png"));
-    //textLabel->setText(txt);
-    //scrollArea->widget()->layout()->addWidget(imageLabel);
-    //scrollArea->widget()->layout()->addWidget(textLabel);
+
+    Message *text_label = new Message();
+    text_label->setTextFormat(Qt::RichText);
+    text_label->setText(txt);
+
+    scrollArea->widget()->layout()->addWidget(text_label);
+    scrollArea->widget()->layout()->addWidget(image_label);
+
+
 }
 
 /*void MascotChat::add_message(std::string txt){
     add_message_mascot(QString::fromStdString(txt));
     add_message(QString::fromStdString(txt));
 }*/
-void MascotChat::add_message_mascot(std::string txt){
-    add_message_mascot(QString::fromStdString(txt));}
+void MascotChat::add_message_mascot(std::string txt)
+{
+    add_message_mascot(QString::fromStdString(txt));
+}
+
+Message::Message()
+{
+    this->setStyleSheet("background-color: white; border: 1px solid white; border-radius:5px; border-bottom-left-radius:0px; margin-bottom:10px;");
+}
+
+void Message::paintEvent(QPaintEvent *pe)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    QPoint xy = this->rect().bottomLeft();
+    qDebug()<<this->rect().topLeft();
+    qDebug()<<this->rect().bottomLeft();
+
+    int x = xy.x();
+    int y = xy.y()-10;
+    QRectF mrect = QRectF(x, y, 10, 10);
+
+    QPainterPath path;
+    path.moveTo(mrect.left() + (mrect.width() / 2), mrect.bottom());
+    path.lineTo(mrect.topLeft());
+    path.lineTo(mrect.topRight());
+    path.lineTo(mrect.left() + (mrect.width() / 2), mrect.bottom());
+
+    painter.fillPath(path, QBrush(QColor ("white")));
+    QLabel::paintEvent(pe);
+
+}
 
 
 

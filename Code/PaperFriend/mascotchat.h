@@ -27,4 +27,12 @@ private:
 };
 
 
+class Message : public QLabel
+{
+public:
+    Message();
+    virtual void paintEvent( QPaintEvent* aEvent ) override;
+};
+
+
 #endif // MASCOTCHAT_H

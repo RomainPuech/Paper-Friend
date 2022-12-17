@@ -13,7 +13,7 @@ QString Mascot::get_mascot(){return mascot;}
 void Mascot::image_to_display(DataAnalysis *data_analysis){
     std::string str = data_analysis -> suggestion(0); //0 is just there until the analysis team
                                                   //make the funtion take no variable or sth else
-    size_t found = str.find(" today is better than averadge! \n");
+    size_t found = str.find(" today is better than average! \n");
     if (found != std::string::npos) {
         img_path = imagepath_strings_vect[0] ;
     }
