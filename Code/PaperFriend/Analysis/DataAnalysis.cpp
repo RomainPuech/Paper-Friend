@@ -76,6 +76,17 @@ LinearRegressionCoeffs DataAnalysis::general_trend(int n, int var_index) const{
     return compute_linear_regression_coeffs(no_of_days, values);
 }
 
+LinearRegressionCoeffs DataAnalysis::general_trend(const std::vector<EntryPerso>& entries, int var_index) const{
+    // Just the above function without the need to get the entries.
+    std::vector<double> values = get_vect(entries, var_index);
+    std::vector<double> no_of_days;
+
+    double first_day = entries.front().get_absolute_day();
+    for(auto& entry : entries)
+         no_of_days.push_back(entry.get_absolute_day() - first_day);
+    return compute_linear_regression_coeffs(no_of_days, values);
+}
+
 double DataAnalysis::stddev(const std::vector<double>& data) const{
     /**
      * @param vector data.
@@ -262,15 +273,15 @@ std::multimap<double, int> invert(std::map<int, double> & mymap){
     return multiMap;
 }
 
-std::vector<int> DataAnalysis::item_priority(int var_index){
+std::vector<int> DataAnalysis::item_priority(const std::vector<EntryPerso>& entries, int var_index){
     /**
-    * @param index of the variable concerned
+    * @param entries list, index of the variable concerned
     *
     * @returns list of indices (of other variables) with those coming first having the most effect on the given variable.
     */
 
-    int N = log.size();
-    std::vector<double> var_vect = get_vect(log, var_index);
+    int N = entries.size();
+    std::vector<double> var_vect = get_vect(entries, var_index);
     std::vector<double> current;
 
     double dev;
@@ -281,7 +292,7 @@ std::vector<int> DataAnalysis::item_priority(int var_index){
         if (var_index == i){
             continue;
         }
-        current = get_vect(log, var_index);
+        current = get_vect(entries, var_index);
         cor_with_var = cor(current, var_vect);
         dev = abs(get_lastn_average(std::min(7, N), i) - get_lastn_average(std::min(N, 30), i));
         influence[i] = cor_with_var * dev;
@@ -312,17 +323,85 @@ std::string DataAnalysis::suggestion(int var_index){  // some more exciting game
     std::string str{};
     if (log.end()->get_mood() >= get_lastn_average(7, var_index)){
         str += "Your " + log[0].get_var_name(var_index) + " today is better than averadge! \n";
-        str += "Your progress in" + var_to_str(*(item_priority(var_index).begin())) + " and " + var_to_str(*(item_priority(var_index).begin() + 1)) + "improves your " + log[0].get_var_name(var_index) + " the most, keep it up!";  // suggest top two items which affected the mood the most
+        str += "Your progress in" + var_to_str(*(item_priority(log, var_index).begin())) + " and " + var_to_str(*(item_priority(log, var_index).begin() + 1)) + "improves your " + log[0].get_var_name(var_index) + " the most, keep it up!";  // suggest top two items which affected the mood the most
     }
     else{
         str += "Your " + log[0].get_var_name(var_index) + " today is less than averadge:( \n";
-        str += "Try to wrok on your " + var_to_str(*(item_priority(var_index).begin())) + " and " + var_to_str(*(item_priority(var_index).begin() + 1)) + "!";
+        str += "Try to wrok on your " + var_to_str(*(item_priority(log, var_index).begin())) + " and " + var_to_str(*(item_priority(log, var_index).begin() + 1)) + "!";
     }
 
     return str;
 }
 
-std::string DataAnalysis::generate_recap_text(const std::vector<EntryPerso>& entries){
+std::string DataAnalysis::generate_weekly_recap_text(const std::vector<EntryPerso>& entries){
+    std::string res = "";
+
+    double slight_threshold = 0.5; // Some constants to guide judgement
+    double significant_threshold = 2;
+    double quality_threshold = 0.7;
+
+    for (int i = 0; i < get_num_activities(); ++i){
+
+        res += var_to_str(i) + "\n";
+
+        LinearRegressionCoeffs coeffs = general_trend(entries, i);
+
+        if (abs(coeffs.slope) < slight_threshold){
+
+            if (coeffs.quality_coeff > quality_threshold){
+                res += "This has been steady over the past week";
+            }
+            else{
+                res += "This has not shown any clear trend over the past week";
+            }
+        }
+
+        else if(abs(coeffs.slope) < significant_threshold){
+            if(coeffs.slope < 0){
+                res += "This has been slightly dipping over the past week";
+            }
+            else{
+                res += "This has been slightly improving over the past week";
+            }
+        }
+
+        else{
+            if (coeffs.slope < 0){
+
+                res += "This has shown a significant downward trend over the past week";
+
+            }
+            else{
+                res += "This has shown a significant upward trend over the past week";
+            }
+        }
+        res += "\n";
+        std::vector<int> influences = item_priority(entries, i);
+        res += "It seems like ";
+        res += var_to_str(influences[0]);
+        res += " ";
+        res += var_to_str(influences[1]);
+        res += " have the most effect.\n";
+
+        std::vector<EntryPerso> anomalies = anomalies_detection(entries, i);
+        if (anomalies.size() == 0){
+            res += "No anomalies were detected over the week";
+        }
+        else if(anomalies.size() == 1){
+            res += "An anomaly was detected on ";
+            res += anomalies[0].get_weekday();
+        }
+        else{
+            res += "Anomalies were detected on ";
+            for(unsigned int j = 0; j < anomalies.size() - 1; ++j){
+                res += anomalies[j].get_weekday();
+                res += ", ";
+            }
+            res += "and ";
+            res += anomalies[anomalies.size() - 1].get_weekday();
+        }
+        res += "\n";
+    }
     return "";
 }
 
@@ -330,7 +409,7 @@ EntryRecap DataAnalysis::weekly_recap(){
     /**
     * @param
     *
-    * @returns an EntryRecap object containing info about the week. For now focuses on mood
+    * @returns an EntryRecap object containing info about the week.
     */
     std::vector<EntryPerso> period = get_lastn_days_data(7);
     auto comp{[](EntryPerso& entry1, EntryPerso& entry2) -> bool {return entry1.get_var_value(0) < entry2.get_var_value(0);}};
@@ -340,7 +419,26 @@ EntryRecap DataAnalysis::weekly_recap(){
 
     double avg_mood = avg(period, 0);
 
-    std::string text = generate_recap_text(period);
+
+    double good_threshold = 6;
+    double great_threshold = 8;
+
+    std::string detailed_analysis = generate_weekly_recap_text(period);
+    std::string text = "";
+
+    if (avg_mood < good_threshold){
+        text += "Looks like you've had a tough week";
+    }
+    else if(avg_mood < great_threshold){
+        text += "Looks like you've had a good week";
+    }
+    else{
+        text += "Looks like you've had a great week";
+    }
+    text += "\n";
+    text += "Here is a short summary of your week across all areas\n";
+    text += detailed_analysis;
+
     return EntryRecap(best_day, worst_day, text, avg_mood, 0);
 }
 
