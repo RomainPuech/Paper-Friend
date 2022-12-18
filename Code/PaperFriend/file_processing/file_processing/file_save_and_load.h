@@ -40,6 +40,6 @@ std::vector<Friend*> str_to_vec_friends (std::string act);
 bool save_entryperso(EntryPerso entry);
 
 
-EntryPerso load_entryperso(std::string filename);
+EntryPerso* load_entryperso(std::string filename);
 
 #endif

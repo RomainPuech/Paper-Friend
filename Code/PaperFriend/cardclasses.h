@@ -51,7 +51,7 @@ private:
 
 class EntryCard : public Card{
 public:
-    EntryCard(int border_radius = 15, int width = 200, int height = 200, QString color = "white", Entry *entry = nullptr, bool readOnly = true);
+    EntryCard(int border_radius = 15, int width = 200, int height = 200, QString color = "white", Entry *entry = nullptr, bool readOnly = true, MainWindow *main_window = nullptr);
     ~EntryCard();
 
     void change();
@@ -60,6 +60,7 @@ public:
 
     bool isReadOnly();
     void setReadOnly(bool readOnly);
+    void set_main_window(MainWindow *mw);
     void update();
     void set_entryPerso_style(int top_menu_num_items = 3);
     void update_fr_act_select();
@@ -71,6 +72,7 @@ private slots:
 
 private:
     bool readOnly;
+    MainWindow *main_window;
     Entry *entry;
     EntryPerso *entry_perso;
     QHBoxLayout *top_menu;

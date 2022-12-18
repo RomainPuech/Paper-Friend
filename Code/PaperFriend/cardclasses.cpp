@@ -117,7 +117,7 @@ void generate_rgb(QString &red, QString &green, double m){
     }
 }
 
-EntryCard::EntryCard(int border_radius, int width, int height, QString color, Entry *entry, bool readOnly) : Card(border_radius, width, height, color), entry(entry), readOnly(readOnly){
+EntryCard::EntryCard(int border_radius, int width, int height, QString color, Entry *entry, bool readOnly, MainWindow *main_window) : Card(border_radius, width, height, color), entry(entry), readOnly(readOnly), main_window(main_window){
     display_layout = new QVBoxLayout();
     entry_perso = nullptr;
 
@@ -340,6 +340,7 @@ EntryCard::~EntryCard(){
     delete mood_slider_vb;
     delete fr_act_select;
     delete fr_act_select_vb;
+    delete main_window;
 }
 
 void EntryCard::handleModify(){
@@ -429,7 +430,8 @@ void EntryCard::update(){
         update_fr_act_select();
         update_fr_act();
     }
-
+    //update dynamic graph
+    main_window->update_graph();
     //update style
     if(fr_act_display->count() != 0){
         set_entryPerso_style(3);
@@ -536,4 +538,8 @@ bool EntryCard::isReadOnly(){
 
 void EntryCard::setReadOnly(bool readOnly){
     this->readOnly = readOnly;
+}
+
+void EntryCard::set_main_window(MainWindow* mw){
+    main_window = mw;
 }
