@@ -346,3 +346,9 @@ void MainWindow::update_graph(){
     display_graph(vector_entries, ui);
 }
 
+
+void MainWindow::on_people_button_clicked()
+{
+
+}
+

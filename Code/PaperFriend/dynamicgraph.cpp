@@ -101,11 +101,11 @@ DynamicGraph::DynamicGraph(std::vector<EntryPerso*>& entries)
     visible_red_points->setMarkerSize(7);
 
     ///
-
+    int n = entries.size()-1;//the x axis will be negative numbers: x days ago = -x.
+    if(n==-1){return;}
     QLineSeries *series= new QLineSeries();//series in which we add the points to display on the graph
     moodlevel current_mood_level = associated_mood_level(entries[0]->get_mood());
     set_color(series,current_mood_level);//initialize the right color for the first point
-    int n = entries.size()-1;//the x axis will be negative numbers: x days ago = -x.
     double y1;
     double x1 = - (entries[0]->get_qdate().daysTo(today));
 
@@ -172,6 +172,7 @@ std::vector<EntryPerso*> DynamicGraph::get_entries() const{return entries;}
 void DynamicGraph::display(QLayout *layout) const
 {
 
+    if(entries.size()==0){return;}
     QChart *mood_chart = new QChart();
     for(int i=0;i<listofseries.size();i++){//we add every curve to the graph: one curve per colored section on the graph
         mood_chart->addSeries(listofseries[i]);
