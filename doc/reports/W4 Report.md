@@ -11,5 +11,5 @@
 | Thomas Turkieh       |File processing    |||
 | Junyuan (Frank) Wang |File processing    |||
 | Octave Gaspard       |Data analysis      |- Organization of the data analysis team.<br>- Worked together with the subteam to decide the implementation in the app of the analysis we are doing. We also worked with Thomas to build the basis of the recurring recap we are going to put most of the analysis in.<br>- Found how to compute the weighted least squares coefficients for quadratic regression.<br>- Implemented functions to solve the necessary 3D linear equations system, added horner scheme for polynomial evaluation.<br>- Debugged and tested the new functions, added some error handling.<br>|- Finish writing the STL decomposition implementation.<br>- Comment, clarify, optimize my code.<br>|
-| Brook Nigatu         |Data analysis      |||
+| Brook Nigatu         |Data analysis      |- Implemented a weekly recap function that uses the analysis methods to generate a recap of the user's week in the form of an EntryRecap object. <br>|- Implement monthly and yearly recaps. <br> - Work with the front-end and the rest of the analysis team to decide further improvements on recaps (i.e formatting, additional functionalities etc).|
 | Artem Mamichev       |Data analysis      |||
