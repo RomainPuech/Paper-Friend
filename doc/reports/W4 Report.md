@@ -1,6 +1,6 @@
 | Name                 |Team               |      What I did             |  What I will do |
 |:----------------------:|:-----------------:|:-------------------------|:------------------|
-| Romain Puech         |Frontend (specific)|||
+| Romain Puech         |Frontend (specific)|-Fixed some bugs relative to the Graph<br>-Worked on connecting the different components together to have a functionning interface: (ex: connecting activities with entries, entries with graph etc) <br>-Various visual improvements to the graph: gap when no value for more than 3 consecutive days, points representing the values, scale adapts to the values<br>- Styled the chat to make messages appear like speech bubbles + other visual improvements of the chat||
 | Bogdana Kolic        |Frontend (specific)|||
 | Liam Loughman        |Frontend (specific)|||
 | Yubo Cai             |Frontend (specific)|||
