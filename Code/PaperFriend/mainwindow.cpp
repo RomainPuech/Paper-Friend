@@ -103,8 +103,16 @@ std::vector<Activity> MainWindow::get_activities(){
     return vector_activities;
 }
 
+Activity* MainWindow::get_activity_at_i(long long unsigned i){
+    return &vector_activities.at(i);
+}
+
 std::vector<Friend> MainWindow::get_friends(){
     return vector_friends;
+}
+
+Friend* MainWindow::get_friend_at_i(long long unsigned i){
+    return &vector_friends.at(i);
 }
 
 void MainWindow::update_activities(std::vector<Activity> activities){

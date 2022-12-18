@@ -62,6 +62,7 @@ void all_activities::on_save_activity_button_clicked()
     QApplication::processEvents();
     QString name_activity;
     int type_activity;
+    vector_activities.clear();
     for(int i=0;i<allCellPtr.size();++i){
         name_activity = allCellPtr[i]->get_activity_name();
         type_activity = allCellPtr[i]->get_activity_type();
