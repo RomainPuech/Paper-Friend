@@ -37,7 +37,9 @@ public:
     class TextEditor *textEditor;
     void closeEvent (QCloseEvent *event);
     static std::vector<Activity> get_activities();
+    static Activity* get_activity_at_i(long long unsigned i);
     static std::vector<Friend> get_friends();
+    static Friend* get_friend_at_i(long long unsigned i);
     static void update_activities(std::vector<Activity> activities);
     static void update_friends(std::vector<Friend> friends);
     void update_graph();

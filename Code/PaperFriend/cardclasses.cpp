@@ -117,15 +117,20 @@ void generate_rgb(QString &red, QString &green, double m){
     }
 }
 
+std::vector<QListWidgetItem*> EntryCard::fr_act_options;
+
 EntryCard::EntryCard(int border_radius, int width, int height, QString color, Entry *entry, bool readOnly, MainWindow *main_window) : Card(border_radius, width, height, color), entry(entry), readOnly(readOnly), main_window(main_window){
     display_layout = new QVBoxLayout();
     entry_perso = nullptr;
+    entry_recap = nullptr;
 
     //find the type of the entry
     if(static_cast<EntryPerso*>(entry) != nullptr){
         entry_perso = static_cast<EntryPerso*>(entry);
     }
-
+    if(static_cast<EntryRecap*>(entry) != nullptr){
+        entry_recap = static_cast<EntryRecap*>(entry);
+    }
     // display date
     date_display = new QLabel();
     date_display->setMaximumHeight(47);
@@ -141,10 +146,10 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
     edit_and_return = new QGroupBox(this);
     edit_text_w = new QStackedWidget();
     edit_text = new TextEditor();
-    if((entry->get_title() + entry->get_text()) != ""){
-        edit_text->set_title(QString::fromStdString(entry->get_title() + "\n"));
-        edit_text->append_text(QString::fromStdString(entry->get_text()));
+    if((entry->get_title()) != ""){
+        edit_text->set_title(QString::fromStdString(entry->get_title()));
     }
+    edit_text->append_text(QString::fromStdString(entry->get_text()));
 
     //buttons
     modify = new QPushButton("Modify this entry", text_title_w);
@@ -205,8 +210,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
 
     //friends and activities
     fr_act_display = new QListWidget(this);
-    fr_act_select = new QGroupBox(this);
-    fr_act_select_vb = new QVBoxLayout(fr_act_select);
+    fr_act_select = new QListWidget(this);
 
     //declare mood
     mood_display = new QLabel();
@@ -229,26 +233,22 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
         }
 
         //choose friends and activities
-        fr_act_select->setMinimumHeight(47);
-        fr_act_select->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-        fr_act_select_vb->setSpacing(5);
-        // to be changed when we implement all_activities and friends vector
+        fr_act_select->setMaximumHeight(47);
+        fr_act_select->setSpacing(5);
+
         for(long long unsigned fr = 0; fr < (MainWindow::get_friends()).size(); fr++){
-            QCheckBox *cb = new QCheckBox(QString::fromStdString((MainWindow::get_friends()[fr]).get_name()), fr_act_select);
-            fr_act_select_vb->addWidget(cb);
-            cb->setMinimumHeight(15);
-            cb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-            cb->setStyleSheet("border-style: none;");
+            QListWidgetItem *cb = new QListWidgetItem(QString::fromStdString((MainWindow::get_friends()[fr]).get_name()));
+            cb->setCheckState(Qt::Unchecked);
+            fr_act_options.push_back(cb);
+            fr_act_select->addItem(cb);
 
         }
         for(long long unsigned act = 0; act < (MainWindow::get_activities()).size(); act++){
-            QCheckBox *cb = new QCheckBox(QString::fromStdString((MainWindow::get_activities()[act]).get_name()), fr_act_select);
-            fr_act_select_vb->addWidget(cb);
-            cb->setMinimumHeight(15);
-            cb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-            cb->setStyleSheet("border-style: none;");
+            QListWidgetItem *cb = new QListWidgetItem(QString::fromStdString((MainWindow::get_activities()[act]).get_name()));
+            cb->setCheckState(Qt::Unchecked);
+            fr_act_options.push_back(cb);
+            fr_act_select->addItem(cb);
         }
-
 
         //display mood
         mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood())) + "%");
@@ -276,7 +276,6 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
         // top menu
         fr_act_display->setParent(this);
         fr_act_select->setParent(this);
-        fr_act_select->setLayout(fr_act_select_vb);
         top_menu->addWidget(fr_act_display);
         top_menu->addWidget(fr_act_select);
         mood_display->setParent(this);
@@ -339,7 +338,6 @@ EntryCard::~EntryCard(){
     delete mood_slider;
     delete mood_slider_vb;
     delete fr_act_select;
-    delete fr_act_select_vb;
     delete main_window;
 }
 
@@ -398,11 +396,15 @@ void EntryCard::change(){
         text_title_w->setVisible(false);
         edit_and_return->setVisible(true); // for editor
         if(entry_perso != nullptr){
+            update_fr_act_select();
             mood_display->setVisible(false);
             mood_slider_w->setVisible(true);
         }
     }
-    if(fr_act_display->count() != 0){
+    if(readOnly && fr_act_display->count() != 0){
+        set_entryPerso_style(3);
+    }
+    else if(!readOnly && (MainWindow::get_activities().size() + MainWindow::get_friends().size()) != 0){
         set_entryPerso_style(3);
     }
     else{
@@ -415,25 +417,24 @@ void EntryCard::update(){
     date_display->setText(generate_date_string(entry->get_qdate()));
     title->setText(QString::fromStdString(entry->get_title()));
     text_field->setText(QString::fromStdString(entry->get_text()));
-    if((entry->get_title() + entry->get_text()) != ""){
-    edit_text->set_title(QString::fromStdString(entry->get_title()));
+    if((entry->get_title()) != ""){
+        edit_text->set_title(QString::fromStdString(entry->get_title()));
+    }
     edit_text->append_text(QString::fromStdString(entry->get_text()));
-    }
-    else{
-        edit_text->set_title("");
-    }
     if(entry_perso != nullptr){
         this->entry_perso->set_mood(this->mood_slider->value());
         mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood())) + "%");
         mood_slider->setValue(int(this->entry_perso->get_mood()));
         //friends and activities
-        update_fr_act_select();
         update_fr_act();
     }
     //update dynamic graph
     main_window->update_graph();
     //update style
-    if(fr_act_display->count() != 0){
+    if(readOnly && fr_act_display->count() != 0){
+        set_entryPerso_style(3);
+    }
+    else if(!readOnly && (MainWindow::get_activities().size() + MainWindow::get_friends().size()) != 0){
         set_entryPerso_style(3);
     }
     else{
@@ -443,69 +444,80 @@ void EntryCard::update(){
 }
 
 void EntryCard::update_fr_act_select(){
-    for(int i = 0; i < (fr_act_select_vb->children()).length(); i++){
-       QLayoutItem* item = fr_act_select_vb->takeAt(0);
-       delete item;
-    }
     for(long long unsigned fr = 0; fr < (MainWindow::get_friends()).size(); fr++){
-        QCheckBox *cb = new QCheckBox(QString::fromStdString((MainWindow::get_friends()[fr]).get_name()), fr_act_select);
-        fr_act_select_vb->addWidget(cb);
-        cb->setMinimumHeight(15);
-        cb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-        cb->setStyleSheet("border-style: none;");
+        QListWidgetItem *cb = new QListWidgetItem(QString::fromStdString((MainWindow::get_friends().at(fr)).get_name()));
+        cb->setCheckState(Qt::Unchecked);
+        fr_act_options.push_back(cb);
+        fr_act_select->addItem(cb);
 
     }
     for(long long unsigned act = 0; act < (MainWindow::get_activities()).size(); act++){
-        QCheckBox *cb = new QCheckBox(QString::fromStdString((MainWindow::get_activities()[act]).get_name()), fr_act_select);
-        fr_act_select_vb->addWidget(cb);
-        cb->setMinimumHeight(15);
-        cb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-        cb->setStyleSheet("border-style: none;");
+        QListWidgetItem *cb = new QListWidgetItem(QString::fromStdString((MainWindow::get_activities().at(act)).get_name()));
+        cb->setCheckState(Qt::Unchecked);
+        fr_act_options.push_back(cb);
+        fr_act_select->addItem(cb);
     }
 }
 
 void EntryCard::update_fr_act(){
     std::vector<Activity*> activities;
     std::vector<Friend*> friends;
-    int num_friends = (MainWindow::get_friends()).size();
-    int num_activities = (MainWindow::get_activities()).size();
-    for(int i = 0; i < num_friends; i++){
-        if((static_cast<QCheckBox*>(fr_act_select_vb->children()[i]))->isChecked()){
-            friends.push_back(&(MainWindow::get_friends()).at(i));
+    unsigned long long num_friends = (MainWindow::get_friends()).size();
+    unsigned long long num_activities = (MainWindow::get_activities()).size();
+    qDebug()<< QString::number((MainWindow::get_activities()).size());
+
+    for(unsigned long long i = 0; i < num_activities; i++){
+        QListWidgetItem *option = fr_act_options.at(fr_act_options.size()-1);
+        fr_act_options.pop_back();
+        if(option->checkState() == Qt::Checked){
+            activities.push_back(MainWindow::get_activity_at_i(i));
         }
+        fr_act_select->removeItemWidget(option);
+        delete option;
     }
-    for(int i = 0; i < num_activities; i++){
-        if((static_cast<QCheckBox*>(fr_act_select_vb->children()[num_friends + i]))->isChecked()){
-            activities.push_back(&(MainWindow::get_activities()).at(i));
+
+    for(unsigned long long i = 0; i < num_friends; i++){
+        QListWidgetItem *option = fr_act_options.at(fr_act_options.size()-1);
+        fr_act_options.pop_back();
+        if(option->checkState() == Qt::Checked){
+            friends.push_back(MainWindow::get_friend_at_i(i));
         }
+        fr_act_select->removeItemWidget(option);
+        delete option;
     }
+
     entry_perso->set_activities(activities);
     entry_perso->set_friends(friends);
 
-    for(long long unsigned fr = 0; fr < (entry_perso->get_friends()).size(); fr++){
-        fr_act_display->addItem(QString::fromStdString((entry_perso->get_friends()[fr])->get_name()));
+    fr_act_display->clear();
+    for(unsigned long long fr = 0; fr < (entry_perso->get_friends()).size(); fr++){
+        fr_act_display->addItem(QString::fromStdString((entry_perso->get_friends().at(fr))->get_name()));
     }
-    for(long long unsigned act = 0; act < (entry_perso->get_activities()).size(); act++){
-        fr_act_display->addItem(QString::fromStdString((entry_perso->get_activities()[act])->get_name()));
+    for(unsigned long long act = 0; act < (entry_perso->get_activities()).size(); act++){
+        fr_act_display->addItem(QString::fromStdString((entry_perso->get_activities().at(act))->get_name()));
     }
 }
 
 void EntryCard::set_entryPerso_style(int top_menu_num_items){
     date_display->setMinimumWidth(this->get_width() / top_menu_num_items);
     fr_act_display->setMinimumWidth(this->get_width() / top_menu_num_items);
+    fr_act_select->setMinimumWidth(this->get_width() / top_menu_num_items);
     mood_display->setMinimumWidth(this->get_width() / top_menu_num_items);
     mood_slider->setMinimumWidth(this->get_width() / top_menu_num_items);
     if(top_menu_num_items == 3 and readOnly){
         fr_act_display->setVisible(true);
         fr_act_select->setVisible(false);
+        qDebug()<< "READONLY MODE";
     }
     else if(top_menu_num_items == 3){
         fr_act_display->setVisible(false);
         fr_act_select->setVisible(true);
+        qDebug()<< "CORRECT DISPLAY FOR MODIFYING";
     }
     else{
         fr_act_display->setVisible(false);
         fr_act_select->setVisible(false);
+        qDebug()<< "BOTH INVISIBLE";
     }
 
     this->setStyleSheet("background-color: " + get_background_color() + "; border: 1px solid black; border-radius: " + QString::number(get_border_radius()) + "px;");
