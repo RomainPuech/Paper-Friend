@@ -1,7 +1,7 @@
 | Name                 |Team               |      What I did             |  What I will do |
 |:----------------------:|:-----------------:|:-------------------------|:------------------|
 | Romain Puech         |Frontend (specific)|||
-| Bogdana Kolic        |Frontend (specific)|||
+| Bogdana Kolic        |Frontend (specific)|-Fixed some style related bugs<br>-Made it possible for the user to modify friends and activities related to their entry<br>||
 | Liam Loughman        |Frontend (specific)|||
 | Yubo Cai             |Frontend (specific)|||
 | Luigi Massacci       |Frontend (general) |||
