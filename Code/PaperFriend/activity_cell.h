@@ -20,7 +20,7 @@ public:
     QString getTextData();
     QString getCellName();
     QString get_activity_name();
-    QString get_activity_type();
+    int get_activity_type();
 
     void setTextData(QString cellText);
     void set_activity_cell_name(QString CellName);

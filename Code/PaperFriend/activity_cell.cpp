@@ -43,9 +43,9 @@ QString activity_cell::get_activity_name()
     return ui->activity_name->text();
 }
 
-QString activity_cell::get_activity_type()
+int activity_cell::get_activity_type()
 {
-    return ui->activity_type->currentText();
+    return ui->activity_type->currentIndex();
 }
 
 

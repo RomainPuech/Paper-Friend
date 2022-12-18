@@ -16,6 +16,7 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
+#include <qDebug>
 
 std::vector<Filter_param> filter_params;
 
@@ -155,7 +156,7 @@ void MainWindow::on_pushButton_clicked() {
 }
 
 void MainWindow::on_activitie_button_clicked() {
-    all_activities *my_activities = new all_activities();
+    all_activities *my_activities = new all_activities(vector_activities);
     my_activities->add_previous_cells();
     my_activities->setModal(true);
     my_activities->exec();
@@ -338,3 +339,8 @@ std::vector<EntryPerso*> MainWindow::test(int n) {
     }
     return entries;
 }
+
+void MainWindow::on_people_button_clicked()
+{
+}
+
