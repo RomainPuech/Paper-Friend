@@ -1,7 +1,7 @@
 | Name                 |Team               |      What I did             |  What I will do |
 |:----------------------:|:-----------------:|:-------------------------|:------------------|
 | Romain Puech         |Frontend (specific)|||
-| Bogdana Kolic        |Frontend (specific)|-Fixed some style related bugs<br>-Made it possible for the user to modify friends and activities related to their entry<br>||
+| Bogdana Kolic        |Frontend (specific)|-Fixed some style related bugs<br>-Made it possible for the user to [modify friends and activities](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/52) related to their entry<br>-Made [laoding existing entries and saving changes](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/89) into files work, and handled keeping all parts of the program up to date when changes have been made<br>||
 | Liam Loughman        |Frontend (specific)|||
 | Yubo Cai             |Frontend (specific)|||
 | Luigi Massacci       |Frontend (general) |||
