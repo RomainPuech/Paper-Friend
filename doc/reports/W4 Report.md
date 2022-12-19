@@ -5,7 +5,7 @@
 | Liam Loughman        |Frontend (specific)|Working on implementing a way of displaying habits with images. Came acoss few problems in the dislpay part.|Continue working on the implementation.|
 | Yubo Cai             |Frontend (specific)|||
 | Luigi Massacci       |Frontend (general) |||
-| Safaa Arbai          |Frontend (general) |||
+| Safaa Arbai          |Frontend (general) |-Modified the mascot and mascotchat classes to be able to display the mascot and the messages in the chatbox.|-Work on changing some properties in the messages and mascot display (like limit the width of the messages and only display the mascot once when there are a lot of messages at once.|
 | Ahmed Benchekroun    |Frontend (general) |-Saved the activities added in a text file such that every line is of type "activity_name , activity_type". <br> -Improved the the style of the user interface and associated the save button with file creation and saving. <br> -Documentation about QFile and Qlineedit and their different functionalities. |-Close activities window only when the save button is clicked so that we are sure that the activities file is created. <br> - Limit the length of an activity's name to 30 characters. <br> -Start working on the people class.|
 | Mihaela Gledacheva   |Frontend (general) |||
 | Thomas Turkieh       |File processing    |-Discussed with the project leader and the Data analysis team to clarify the next steps and idea to develop.<br>-Implemented the EntryRecap class in colaboration with the Data analysis team.<br>- Started to implement functions to save vectors of activities and friends for use in the main window.(nearly done)|-Finish the implementation of the discussed functions.<br>- Design a better file arborescence.|
