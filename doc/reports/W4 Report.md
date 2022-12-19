@@ -2,7 +2,7 @@
 |:----------------------:|:-----------------:|:-------------------------|:------------------|
 | Romain Puech         |Frontend (specific)|-Fixed some bugs relative to the Graph<br>-Worked on connecting the different components together to have a functionning interface: (ex: connecting activities with entries, entries with graph etc) <br>-Various visual improvements to the graph: gap when no value for more than 3 consecutive days, points representing the values, scale adapts to the values<br>- Styled the chat to make messages appear like speech bubbles + other visual improvements of the chat|-Restructure teams now that we have a functionning app: define new tasks, features etc<br>-Work with the analysis team|
 | Bogdana Kolic        |Frontend (specific)|-Fixed some style related bugs<br>-Made it possible for the user to [modify friends and activities](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/52) related to their entry<br>-Made [laoding existing entries and saving changes](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/89) into files work, and handled keeping all parts of the program up to date when changes have been made<br>||
-| Liam Loughman        |Frontend (specific)|||
+| Liam Loughman        |Frontend (specific)|Working on implementing a way of displaying habits with images. Came acoss few problems in the dislpay part.|Continue working on the implementation.|
 | Yubo Cai             |Frontend (specific)|||
 | Luigi Massacci       |Frontend (general) |||
 | Safaa Arbai          |Frontend (general) |||
