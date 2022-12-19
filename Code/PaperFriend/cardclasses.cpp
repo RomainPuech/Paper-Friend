@@ -120,131 +120,150 @@ void generate_rgb(QString &red, QString &green, double m){
 std::vector<QListWidgetItem*> EntryCard::fr_act_options;
 
 EntryCard::EntryCard(int border_radius, int width, int height, QString color, Entry *entry, bool readOnly, MainWindow *main_window) : Card(border_radius, width, height, color), entry(entry), readOnly(readOnly), main_window(main_window){
-    display_layout = new QVBoxLayout();
+    display_layout = new QVBoxLayout(); // to be changed - layout containing the card
     entry_perso = nullptr;
     entry_recap = nullptr;
-
-    //find the type of the entry
-    if(static_cast<EntryPerso*>(entry) != nullptr){
-        entry_perso = static_cast<EntryPerso*>(entry);
-    }
-    if(static_cast<EntryRecap*>(entry) != nullptr){
-        entry_recap = static_cast<EntryRecap*>(entry);
-    }
-    // display date
+    //entry_perso display
     date_display = new QLabel();
-    date_display->setMaximumHeight(47);
-    date_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    date_display->setText(generate_date_string(entry->get_qdate()));
-    date_display->setAlignment(Qt::AlignCenter);
-
-    //entry text and title
-    text_title_w = new QWidget(this);
-    text_title_vb = new QVBoxLayout(text_title_w);
-
-    //text-editor
-    edit_and_return = new QGroupBox(this);
-    edit_text_w = new QStackedWidget();
-    edit_text = new TextEditor();
-    if((entry->get_title()) != ""){
-        edit_text->set_title(QString::fromStdString(entry->get_title()));
-    }
-    edit_text->append_text(QString::fromStdString(entry->get_text()));
-
-    //buttons
-    modify = new QPushButton("Modify this entry", text_title_w);
-    back_to_display = new QPushButton("Exit editing mode", edit_and_return);
-
-    //modify
-    modify->setMinimumWidth(40);
-    connect(modify, &QPushButton::released, this, &EntryCard::handleModify);
-
-    //back_to_display
-    back_to_display->setMinimumWidth(40);
-    connect(back_to_display, &QPushButton::released, this, &EntryCard::handleBack);
-
-    //entry text and title
-
+    text_title_w = new QWidget();
+    edit_and_return = new QGroupBox();
     title = new QLabel(QString::fromStdString(entry->get_title()), text_title_w);
-    title->setMinimumHeight(40);
-    title->setMinimumWidth(this->get_width());
-    title->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    title->setAlignment(Qt::AlignLeft);
-    title->setContentsMargins(5, 10, 5, 0);
-
     text_field = new QTextEdit(QString::fromStdString(entry->get_text()), text_title_w);
-    text_field->setMinimumWidth(this->get_width());
-    text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    text_field->setAlignment(Qt::AlignLeft);
-    text_field->setReadOnly(true);
-    text_field->setContentsMargins(10, 0, 10, 5);
-
-    //handle layout
-    text_title_vb->addWidget(title);
-    text_title_vb->addWidget(text_field);
-    text_title_vb->addWidget(modify);
-    text_title_w->setLayout(text_title_vb);
-
-    //text-editor
-    edit_text_w->setMinimumWidth(this->get_width());
-    edit_text_w->setMinimumHeight(this->get_height());
-    edit_text_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    edit_text_w->setContentsMargins(10, 0, 10, 5);
-
-
-    //edit_text layout
-    edit_text_w->addWidget(edit_text);
-    edit_text_w->setCurrentWidget(edit_text);
-    edit_text_w->setParent(edit_and_return);
     edit_vb = new QVBoxLayout(edit_and_return);
-    edit_vb->addWidget(edit_text_w);
-    edit_vb->addWidget(back_to_display);
-    edit_and_return->setLayout(edit_vb);
-
-    //top menu
-    top_menu = new QHBoxLayout(this);
-    top_menu->setAlignment(Qt::AlignTop);
-    top_menu->setSpacing(0);
-    date_display->setParent(this);
-    top_menu->addWidget(date_display);
-
-    //friends and activities
-    fr_act_display = new QListWidget(this);
-    fr_act_select = new QListWidget(this);
-
-    //declare mood
+    top_menu = new QHBoxLayout();
+    fr_act_display = new QListWidget();
+    fr_act_select = new QListWidget();
     mood_display = new QLabel();
-    mood_slider_w = new QWidget(this);
+    mood_slider_w = new QWidget();
     mood_slider_instr = new QLabel(mood_slider_w);
     mood_slider = new QSlider(Qt::Horizontal, mood_slider_w);
     mood_slider_vb = new QVBoxLayout(mood_slider_w);
+    text_title_vb = new QVBoxLayout(text_title_w);
+    edit_text_w = new QStackedWidget();
+    edit_text = new TextEditor();
+    modify = new QPushButton("Modify this entry", text_title_w);
+    back_to_display = new QPushButton("Exit editing mode", edit_and_return);
+    //entry_recap display
+    recap_layout = new QVBoxLayout();
+    recap_title = new QLabel();
+    mood_msg = new QWidget();
+    avg_mood = new QLabel();
+    message = new QTextEdit();
+    mood_msg_hb = new QHBoxLayout();
+    best_title = new QLabel();
+    worst_title = new QLabel();
+    best_date = new QLabel();
+    worst_date = new QLabel();
+    best_mood = new QLabel();
+    worst_mood = new QLabel();
+    recap_days_hb = new QHBoxLayout();
+    best_day_vb = new QVBoxLayout();
+    worst_day_vb = new QVBoxLayout();
+
+    //find the type of the entry
+    switch(entry->entry_type()){
+        case 1:
+            entry_perso = static_cast<EntryPerso*>(entry); break;
+        case 2:
+            entry_recap = static_cast<EntryRecap*>(entry); break;
+    }
 
     //display specific for entryPerso
     if(entry_perso != nullptr){
 
+        //set structure
+        text_title_w->setParent(this);
+        edit_and_return->setParent(this);
+        //top_menu->setParent(this);
+        fr_act_display->setParent(this);
+        fr_act_select->setParent(this);
+        mood_slider_w->setParent(this);
+
+
+        // display date
+        date_display->setMaximumHeight(47);
+        date_display->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        date_display->setText(generate_date_string(entry->get_qdate()));
+        date_display->setAlignment(Qt::AlignCenter);
+
+        if((entry->get_title()) != ""){
+            edit_text->set_title(QString::fromStdString(entry->get_title()));
+        }
+        edit_text->append_text(QString::fromStdString(entry->get_text()));
+
+
+        //modify
+        modify->setMinimumWidth(40);
+        connect(modify, &QPushButton::released, this, &EntryCard::handleModify);
+
+        //back_to_display
+        back_to_display->setMinimumWidth(40);
+        connect(back_to_display, &QPushButton::released, this, &EntryCard::handleBack);
+
+        //entry text and title
+
+        title->setMinimumHeight(40);
+        title->setMinimumWidth(this->get_width());
+        title->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+        title->setAlignment(Qt::AlignLeft);
+        title->setContentsMargins(5, 10, 5, 0);
+
+        text_field->setMinimumWidth(this->get_width());
+        text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        text_field->setAlignment(Qt::AlignLeft);
+        text_field->setReadOnly(true);
+        text_field->setContentsMargins(10, 0, 10, 5);
+
+        //handle layout
+        text_title_vb->addWidget(title);
+        text_title_vb->addWidget(text_field);
+        text_title_vb->addWidget(modify);
+        text_title_w->setLayout(text_title_vb);
+
+        //text-editor
+        edit_text_w->setMinimumWidth(this->get_width());
+        edit_text_w->setMinimumHeight(this->get_height());
+        edit_text_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        edit_text_w->setContentsMargins(10, 0, 10, 5);
+
+        //edit_text layout
+        edit_text_w->addWidget(edit_text);
+        edit_text_w->setCurrentWidget(edit_text);
+        edit_text_w->setParent(edit_and_return);
+        edit_vb->addWidget(edit_text_w);
+        edit_vb->addWidget(back_to_display);
+        edit_and_return->setLayout(edit_vb);
+
+        //top menu
+        top_menu->setAlignment(Qt::AlignTop);
+        top_menu->setSpacing(0);
+        date_display->setParent(this);
+        top_menu->addWidget(date_display);
+
         // display activities and friends
         fr_act_display->setMaximumHeight(47);
-        fr_act_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        fr_act_display->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         for(long long unsigned fr = 0; fr < (entry_perso->get_friends()).size(); fr++){
-            fr_act_display->addItem(QString::fromStdString((entry_perso->get_friends()[fr])->get_name()));
+            fr_act_display->addItem(QString::fromStdString((entry_perso->get_friends().at(fr))->get_name()));
         }
         for(long long unsigned act = 0; act < (entry_perso->get_activities()).size(); act++){
-            fr_act_display->addItem(QString::fromStdString((entry_perso->get_activities()[act])->get_name()));
+            fr_act_display->addItem(QString::fromStdString((entry_perso->get_activities().at(act))->get_name()));
         }
 
         //choose friends and activities
         fr_act_select->setMaximumHeight(47);
         fr_act_select->setSpacing(5);
+        fr_act_select->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
         for(long long unsigned fr = 0; fr < (MainWindow::get_friends()).size(); fr++){
-            QListWidgetItem *cb = new QListWidgetItem(QString::fromStdString((MainWindow::get_friends()[fr]).get_name()));
+            QListWidgetItem *cb = new QListWidgetItem(QString::fromStdString((MainWindow::get_friends().at(fr)).get_name()));
             cb->setCheckState(Qt::Unchecked);
             fr_act_options.push_back(cb);
             fr_act_select->addItem(cb);
 
         }
         for(long long unsigned act = 0; act < (MainWindow::get_activities()).size(); act++){
-            QListWidgetItem *cb = new QListWidgetItem(QString::fromStdString((MainWindow::get_activities()[act]).get_name()));
+            QListWidgetItem *cb = new QListWidgetItem(QString::fromStdString((MainWindow::get_activities()).at(act).get_name()));
             cb->setCheckState(Qt::Unchecked);
             fr_act_options.push_back(cb);
             fr_act_select->addItem(cb);
@@ -253,7 +272,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
         //display mood
         mood_display->setText("Mood: " + QString::number(std::round(entry_perso->get_mood())) + "%");
         mood_display->setMaximumHeight(47);
-        mood_display->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        mood_display->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         mood_display->setAlignment(Qt::AlignCenter);
 
         //get mood
@@ -265,13 +284,20 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
         mood_slider_instr->setText("Slide the bar to enter your mood");
         mood_slider->setMinimumHeight(18);
         mood_slider_w->setMaximumHeight(47);
-        mood_slider_w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        mood_slider_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         mood_slider_vb->setSpacing(5);
         mood_slider_instr->setAlignment(Qt::AlignCenter);
         mood_slider_vb->addWidget(mood_slider_instr);
         mood_slider_vb->addWidget(mood_slider);
         mood_slider_w->setLayout(mood_slider_vb);
 
+        //size adjustments
+
+        date_display->setMinimumWidth(this->get_width() / 3);
+        fr_act_display->setMinimumWidth(this->get_width() / 3);
+        fr_act_select->setMinimumWidth(this->get_width() / 3);
+        mood_display->setMinimumWidth(this->get_width() / 3);
+        mood_slider->setMinimumWidth(this->get_width() / 3);
 
         // top menu
         fr_act_display->setParent(this);
@@ -290,33 +316,87 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
             mood_display->setVisible(false);
         }
 
-        if(fr_act_display->count() != 0){
-
+        if(readOnly && fr_act_display->count() != 0){
+            set_entryPerso_style(3);
+        }
+        else if(!readOnly && (MainWindow::get_activities().size() + MainWindow::get_friends().size()) != 0){
             set_entryPerso_style(3);
         }
         else{
             set_entryPerso_style(2);
         }
 
+        //add to the layout
+        vb_layout->addItem(top_menu);
+        vb_layout->addWidget(text_title_w);
+        vb_layout->addWidget(edit_and_return);
+        if(isReadOnly()){
+            text_title_w->setVisible(true); // for readOnly
+            edit_and_return->setVisible(false);
+        }
+        else{
+            edit_and_return->setVisible(true); // for editor
+            text_title_w->setVisible(false);
+        }
+        this->setLayout(vb_layout);
 
     }
-    //add to the layout
-    vb_layout->addItem(top_menu);
-    vb_layout->addWidget(text_title_w);
-    vb_layout->addWidget(edit_and_return);
-    if(isReadOnly()){
-        text_title_w->setVisible(true); // for readOnly
-        edit_and_return->setVisible(false);
+
+    else if(entry_recap != nullptr){
+        EntryPerso best = entry_recap->get_best_day();
+        EntryPerso worst = entry_recap->get_worst_day();
+        recap_title->setParent(this);
+        mood_msg_hb->setParent(this);
+
+        switch(entry_recap->get_type()){
+            case 0:
+                recap_title->setText("Weekly recap"); break;
+            case 1:
+                recap_title->setText("Monthly recap"); break;
+            case 2:
+                recap_title->setText("Annual recap"); break;
+        }
+        recap_title->setMaximumHeight(50);
+        recap_title->setMinimumWidth(this->get_width());
+        recap_title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+        recap_title->setStyleSheet("font-weight: bold; font: 24px; border-style: none; border-bottom: 1px solid black; border-radius: 0px;");
+
+        avg_mood->setText(QString::number(entry_recap->get_average_mood() * 100) + "% mood average");
+        avg_mood->setMinimumHeight(50);
+        avg_mood->setMinimumWidth(70);
+        avg_mood->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+        message->setText(QString::fromStdString(entry_recap->get_text()));
+        message->setReadOnly(true);
+        message->setMinimumHeight(50);
+        message->setMinimumWidth(this->get_width() - 70);
+        message->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+        mood_msg_hb->addWidget(avg_mood);
+        mood_msg_hb->addWidget(message);
+        //mood_msg->setLayout(mood_msg_hb);
+        recap_layout->addWidget(recap_title);
+        recap_title->setAlignment(Qt::AlignCenter);
+        recap_layout->addItem(mood_msg_hb);
+        this->setLayout(recap_layout);
+
+        /*best_title = new QLabel();
+        worst_title = new QLabel();
+        best_date = new QLabel();
+        worst_date = new QLabel();
+        best_mood = new QLabel();
+        worst_mood = new QLabel();
+        recap_days_hb = new QHBoxLayout();
+        best_day_vb = new QVBoxLayout();
+        worst_day_vb = new QVBoxLayout();*/
+
+
     }
-    else{
-        edit_and_return->setVisible(true); // for editor
-        text_title_w->setVisible(false);
-    }
-    this->setLayout(vb_layout);
+
 }
 
 EntryCard::~EntryCard(){
-    delete entry;
+    /*//delete entry;
     delete date_display;
     delete mood_display;
     delete fr_act_display;
@@ -325,20 +405,26 @@ EntryCard::~EntryCard(){
     delete text_field;
     delete text_title_vb;
     delete text_title_w;
-    delete entry_perso;
+    //delete entry_perso;
     delete edit_text;
     delete edit_text_w;
     delete edit_vb;
     delete edit_and_return;
     delete modify;
     delete back_to_display;
-    delete display_layout;
+    //delete display_layout;
     delete mood_slider_w;
     delete mood_slider_instr;
     delete mood_slider;
     delete mood_slider_vb;
     delete fr_act_select;
     delete main_window;
+    delete recap_title;
+    delete message;
+    delete avg_mood;
+    delete recap_days;
+    delete recap_layout;
+    delete recap_days_hb;*/
 }
 
 void EntryCard::handleModify(){
@@ -499,11 +585,6 @@ void EntryCard::update_fr_act(){
 }
 
 void EntryCard::set_entryPerso_style(int top_menu_num_items){
-    date_display->setMinimumWidth(this->get_width() / top_menu_num_items);
-    fr_act_display->setMinimumWidth(this->get_width() / top_menu_num_items);
-    fr_act_select->setMinimumWidth(this->get_width() / top_menu_num_items);
-    mood_display->setMinimumWidth(this->get_width() / top_menu_num_items);
-    mood_slider->setMinimumWidth(this->get_width() / top_menu_num_items);
     if(top_menu_num_items == 3 and readOnly){
         fr_act_display->setVisible(true);
         fr_act_select->setVisible(false);

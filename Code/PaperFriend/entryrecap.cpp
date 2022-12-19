@@ -22,12 +22,13 @@ EntryRecap::EntryRecap(EntryPerso best_day, EntryPerso worst_day, std::string te
     this->text = text;
 }
 
-
+int EntryRecap::entry_type() const{
+    return 2;
+}
 //EntryRecap::~EntryRecap(){ // useless as there's no destructor implmented for the EntryPerso class
 //    ~best_day();
 //    ~worst_day();
 //}
-
 
 EntryPerso EntryRecap::get_best_day(){
     return this->best_day;

@@ -101,6 +101,21 @@ private:
     QListWidget *fr_act_select;
     static std::vector<QListWidgetItem*> fr_act_options;
     //display of entry_recap
+    QLabel *recap_title;
+    QTextEdit *message;
+    QLabel *avg_mood;
+    QWidget *mood_msg;
+    QHBoxLayout *mood_msg_hb;
+    QLabel *best_title;
+    QLabel *worst_title;
+    QLabel *best_date;
+    QLabel *worst_date;
+    QLabel *best_mood;
+    QLabel *worst_mood;
+    QHBoxLayout *recap_days_hb;
+    QVBoxLayout *best_day_vb;
+    QVBoxLayout *worst_day_vb;
+    QVBoxLayout *recap_layout;
 };
 
 #endif // CARDCLASSES_H
