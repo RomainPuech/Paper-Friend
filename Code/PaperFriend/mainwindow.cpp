@@ -386,3 +386,13 @@ void MainWindow::on_people_button_clicked()
 
 }
 
+
+
+
+void MainWindow::on_Test_entries_clicked()
+{
+    vector_entries = sample_entries(100);
+    display_entries(vector_entries, ui);
+    display_graph(vector_entries, ui);
+}
+

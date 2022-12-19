@@ -57,6 +57,8 @@ private slots:
 
     void on_people_button_clicked();
 
+    void on_Test_entries_clicked();
+
 private:
     void toggle_visibility(QWidget *component);
     void display_entries(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
