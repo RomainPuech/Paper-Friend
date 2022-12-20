@@ -37,7 +37,12 @@ public:
     class TextEditor *textEditor;
     void closeEvent (QCloseEvent *event);
     static std::vector<Activity> get_activities();
+    static Activity* get_activity_at_i(long long unsigned i);
     static std::vector<Friend> get_friends();
+    static Friend* get_friend_at_i(long long unsigned i);
+    static void update_activities(std::vector<Activity> activities);
+    static void update_friends(std::vector<Friend> friends);
+    void update_graph();
 
 private slots:
     void on_pushButton_clicked();
@@ -48,6 +53,11 @@ private slots:
     void on_newEntryButton_clicked();
     void on_saveEntryButton_clicked();
     void on_clear_button_clicked();
+    void on_helpFilterBox_clicked();
+
+    void on_people_button_clicked();
+
+    void on_Test_entries_clicked();
 
 private:
     void toggle_visibility(QWidget *component);

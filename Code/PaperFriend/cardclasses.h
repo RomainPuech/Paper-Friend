@@ -2,6 +2,7 @@
 #define CARDCLASSES_H
 
 #include "entryclasses.h"
+#include "entryrecap.h"
 #include "texteditor.h"
 #include "file_processing/file_processing/file_save_and_load.h"
 
@@ -18,6 +19,7 @@
 #include <QGroupBox>
 #include <QSlider>
 #include <QCheckBox>
+#include <QScrollArea>
 
 class Card : public QFrame{
 public:
@@ -51,7 +53,7 @@ private:
 
 class EntryCard : public Card{
 public:
-    EntryCard(int border_radius = 15, int width = 200, int height = 200, QString color = "white", Entry *entry = nullptr, bool readOnly = true);
+    EntryCard(int border_radius = 15, int width = 200, int height = 200, QString color = "white", Entry *entry = nullptr, bool readOnly = true, MainWindow *main_window = nullptr);
     ~EntryCard();
 
     void change();
@@ -60,8 +62,11 @@ public:
 
     bool isReadOnly();
     void setReadOnly(bool readOnly);
+    void set_main_window(MainWindow *mw);
     void update();
     void set_entryPerso_style(int top_menu_num_items = 3);
+    void update_fr_act_select();
+    void update_fr_act();
 
 private slots:
   void handleModify();
@@ -69,8 +74,11 @@ private slots:
 
 private:
     bool readOnly;
+    MainWindow *main_window;
     Entry *entry;
     EntryPerso *entry_perso;
+    EntryRecap *entry_recap;
+    // display of entry_perso
     QHBoxLayout *top_menu;
     QLabel *date_display;
     QLabel *mood_display;
@@ -90,9 +98,24 @@ private:
     QLabel *mood_slider_instr; // label for the mood slider
     QSlider *mood_slider;
     QVBoxLayout *mood_slider_vb; // layout of mood_slider_w;
-    QGroupBox *fr_act_select;
-    std::vector <QCheckBox*> *fr_act_select_list;
-    QVBoxLayout *fr_act_select_vb;
+    QListWidget *fr_act_select;
+    static std::vector<QListWidgetItem*> fr_act_options;
+    //display of entry_recap
+    QLabel *recap_title;
+    QTextEdit *message;
+    QLabel *avg_mood;
+    QWidget *mood_msg;
+    QHBoxLayout *mood_msg_hb;
+    QLabel *best_title;
+    QLabel *worst_title;
+    QLabel *best_date;
+    QLabel *worst_date;
+    QLabel *best_mood;
+    QLabel *worst_mood;
+    QHBoxLayout *recap_days_hb;
+    QVBoxLayout *best_day_vb;
+    QVBoxLayout *worst_day_vb;
+    QVBoxLayout *recap_layout;
 };
 
 #endif // CARDCLASSES_H

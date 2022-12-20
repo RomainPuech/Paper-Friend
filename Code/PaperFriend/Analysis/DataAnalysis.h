@@ -2,6 +2,7 @@
 #define DATAANALYSIS_H
 
 #include "entryclasses.h"
+#include "entryrecap.h"
 #include <numeric>
 #include <vector>
 
@@ -71,6 +72,7 @@ public:
   LinearRegressionCoeffs compute_linear_regression_coeffs(const std::vector<double>& X, const std::vector<double>& Y) const;  // Fits Y against X
   LinearRegressionCoeffs compute_linear_regression_coeffs(const std::vector<EntryPerso>& entries, int var1_index, int var2_index) const;  // Fits var1 against var2 across entries
   LinearRegressionCoeffs general_trend(int n, int var_index) const;      // Fits the values of var over the last n days against the number of days since the first day being considered.
+  LinearRegressionCoeffs general_trend(const std::vector<EntryPerso>& entries, int var_index) const;
 
   double get_lastn_average(int n, int var_index) const;  // This will compute the average
                                             // of the specified variable over the last n entries.
@@ -85,9 +87,14 @@ public:
       return log[0].get_num_activities();
   }
 
-  std::vector<int> item_priority(int var_index); // Arranges all other variables w.r.t their influence on the specified variable
+  std::vector<int> item_priority(const std::vector<EntryPerso>& entries, int var_index); // Arranges all other variables w.r.t their influence on the specified variable
   std::string suggestion(int var_index);  // text that will be suggested to user daily
 
+  std::string generate_weekly_recap_text(const std::vector<EntryPerso>& entries);
+  EntryRecap weekly_recap();
+
+
+  auto stl_regression(std::vector<double> dataY, std::vector<double> dataX); // NOT IMPLEMENTED; STL regression results; exact output to determine at the end
 };
 
 

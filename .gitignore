@@ -64,3 +64,6 @@ compile_commands.json
 
 *_qmlcache.qrc
 Code/PaperFriend/.vscode
+Code/PaperFriend/file_processing/file_processing/entries.h
+Code/PaperFriend/file_processing/file_processing/entries.cpp
+Code/PaperFriend/file_processing/file_processing/Entries/*

@@ -7,6 +7,7 @@
 | Luigi Massacci       |Frontend (general) |||
 | Safaa Arbai          |Frontend (general) |||
 | Ahmed Benchekroun    |Frontend (general) |||
+| Mihaela Gledacheva   |Frontend (general) |||
 | Thomas Turkieh       |File processing    |||
 | Junyuan (Frank) Wang |File processing    |||
 | Octave Gaspard       |Data analysis      |||

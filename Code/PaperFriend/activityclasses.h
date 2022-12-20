@@ -3,12 +3,13 @@
 
 #include <iostream>
 #include <string>
-
+#include <QString>
 
 class Activity {
 public:
     Activity();
-    Activity(std::string name, double value);
+    Activity(std::string name, double value);//This one has to be removed
+    Activity(std::string name, int type, double value);
     ~Activity();
 
     std::string get_name() const;
@@ -24,7 +25,7 @@ protected:
     std::string name;
     double value;
     int type;
-    enum activity_types {Sport, Spiritual, Work, Study, Art};
+    enum activity_types {None,Sport, Spiritual, Work, Study, Art};
 };
 
 /*

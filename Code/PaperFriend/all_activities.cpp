@@ -1,11 +1,14 @@
 #include "all_activities.h"
 #include"activity_cell.h"
 #include "ui_all_activities.h"
+#include<QFile>
+#include"activityclasses.h"
 
 int all_activities::ActivitiesCellNumberTotal = 0;
 QVector<activity_cell *> all_activities::allCellPtr;
 
-all_activities::all_activities(QWidget *parent) :
+all_activities::all_activities(std::vector<Activity> &vector_activity,QWidget *parent) :
+    vector_activities(vector_activity),
     QDialog(parent),
     ui(new Ui::all_activities)
 {
@@ -51,3 +54,23 @@ void all_activities::closeCell(int ActivitiesCellNumber){
     ActivitiesCellNumberTotal--;
     allCellPtr.remove(ActivitiesCellNumber);
 }
+
+void all_activities::on_save_activity_button_clicked()
+{
+    QFile activities_file("./activities.txt");
+    activities_file.open(QIODevice::WriteOnly | QIODevice::Text); //Opens activities_file and allow to write in the text file.
+    QApplication::processEvents();
+    QString name_activity;
+    int type_activity;
+    vector_activities.clear();
+    for(int i=0;i<allCellPtr.size();++i){
+        name_activity = allCellPtr[i]->get_activity_name();
+        type_activity = allCellPtr[i]->get_activity_type();
+        qDebug()<< name_activity<<type_activity;
+        QTextStream out(&activities_file);
+        vector_activities.push_back(Activity(name_activity.toStdString(),type_activity,0));
+        out << name_activity << " , " << type_activity << "⧵n";
+    }
+}
+
+

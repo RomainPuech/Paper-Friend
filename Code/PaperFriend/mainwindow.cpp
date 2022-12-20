@@ -13,9 +13,10 @@
 #include "settings.h"
 #include "mascotchat.h"
 #include "loadHabits.h"
-
+#include <sstream>
 #include <iostream>
 #include <fstream>
+#include <qDebug>
 
 std::vector<Filter_param> filter_params;
 
@@ -37,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
     ///    std::vector<Friend>vector_friends;       All the friends we can choose from
 
 
+
     //create layout for central scrollable area
     QVBoxLayout *entries_layout = new QVBoxLayout();
     ui->EntriesScroll->widget()->setLayout(entries_layout);
@@ -44,21 +46,43 @@ MainWindow::MainWindow(QWidget *parent)
     // We use Friend function to embed the TextEditor into the MainWindow
     textEditor = new TextEditor();
     textEditor->mainUi = this;
-
-    vector_entries = sample_entries(10);
+    /*vector_entries = sample_entries(10);
     EntryPerso *e2 = new EntryPerso();
     e2->set_mood(30);
     e2->set_qdate(QDate::currentDate().addDays(-2));
 
     EntryPerso *e3 = new EntryPerso();
-    e3->set_mood(30);
+    e3->set_mood(80);
     e3->set_qdate(QDate::currentDate().addDays(-1));
 
-    vector_entries.push_back(e2);
-    vector_entries.push_back(e3);
 
+    vector_entries.push_back(e2);
+    vector_entries.push_back(e3);*/
+
+    // load previous entries
+    QDir dir(QDir::currentPath() + "/Entries");
+    for(const QString &filename : dir.entryList(QDir::Files)){
+        vector_entries.push_back(load_entryperso("Entries/" + filename.toStdString()));
+    }
     display_graph(vector_entries, ui);
     display_entries(vector_entries, ui);
+
+    //test for recap display
+    EntryRecap *recap = new EntryRecap();
+    EntryPerso *e = new EntryPerso();
+    e->set_mood(1+std::rand()%100);
+    std::vector<Friend*> fr;
+    fr.push_back(new Friend("fr", 1));
+    std::vector<Activity*> activity;
+    activity.push_back(new Activity("act", 1));
+    e->set_friends(fr);
+    e->set_activities(activity);
+    e->set_title("THIS IS A TITLE");
+    e->set_text("some text ...");
+    recap->set_best_day(*e);
+    recap->set_worst_day(*e);
+    EntryCard *entry_r = new EntryCard(15, 200, 200, "white", recap, false, this);
+    entry_r->display(ui->EntriesScroll->widget()->layout());
 
     //Chatbox
     MascotChat chat = MascotChat(ui->scrollArea);
@@ -82,6 +106,8 @@ MainWindow::MainWindow(QWidget *parent)
     for (int i = 0; i<current_habits.size(); i++) {
         ui->habits_label->setText(ui->habits_label->text() + "\n" +QString::fromStdString (current_habits[i]));
     }
+
+
 }
 
 
@@ -94,8 +120,24 @@ std::vector<Activity> MainWindow::get_activities(){
     return vector_activities;
 }
 
+Activity* MainWindow::get_activity_at_i(long long unsigned i){
+    return &vector_activities.at(i);
+}
+
 std::vector<Friend> MainWindow::get_friends(){
     return vector_friends;
+}
+
+Friend* MainWindow::get_friend_at_i(long long unsigned i){
+    return &vector_friends.at(i);
+}
+
+void MainWindow::update_activities(std::vector<Activity> activities){
+    vector_activities = activities;
+}
+
+void MainWindow::update_friends(std::vector<Friend> friends){
+    vector_friends = friends;
 }
 
 void MainWindow::closeEvent (QCloseEvent *event){
@@ -118,11 +160,23 @@ void MainWindow::toggle_visibility(QWidget *component){
 
 void MainWindow::display_entries(std::vector<EntryPerso*> entries, Ui::MainWindow *ui) {
     while(!ui->EntriesScroll->widget()->layout()->isEmpty()) {
-        ui->graph_frame->removeItem(ui->EntriesScroll->widget()->layout()->takeAt(0));
+        QLayoutItem *item = ui->EntriesScroll->widget()->layout()->takeAt(0);
+        ui->graph_frame->removeItem(item);
+        delete item->widget();
+        delete item;
+        qDebug()<< "removed";
     }
-    for (auto entry: entries) {
-        EntryCard *c = new EntryCard(20, 300, 300, "white", entry);
+    /*for (auto entry: entries) {
+        EntryCard *c = new EntryCard(20, 300, 300, "white", entry, true, this);
         c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
+        qDebug()<< "displayed";
+    }*/
+
+    // displaying in reversed order
+    for(auto entry = entries.rbegin(); entry != entries.rend(); ++entry){
+        EntryCard *c = new EntryCard(20, 300, 300, "white", *entry, true, this);
+        c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
+        qDebug()<< "displayed";
     }
 }
 
@@ -142,7 +196,7 @@ void MainWindow::on_pushButton_clicked() {
 }
 
 void MainWindow::on_activitie_button_clicked() {
-    all_activities *my_activities = new all_activities();
+    all_activities *my_activities = new all_activities(vector_activities);
     my_activities->add_previous_cells();
     my_activities->setModal(true);
     my_activities->exec();
@@ -181,7 +235,7 @@ void MainWindow::on_filterButton_clicked() {
     auto spinBox = findChild<QSpinBox*>("numberOfEntries");
     int n = spinBox->value();
 
-    vector_entries = sample_entries(100); // this line should be changed to aquire source of entries
+    //vector_entries = sample_entries(100); // this line should be changed to aquire source of entries
 
     QString type_filter_value = findChild<QComboBox*>("type_filter")->currentText();
     std::string type_filter_str = type_filter_value.toStdString();
@@ -197,7 +251,31 @@ void MainWindow::on_filterButton_clicked() {
     filt.opt = operator_filter_str;
     filt.value = value;
     filt.display_num = n;
-    filter_params.push_back(filt);
+
+    //handling duplicated filters
+    bool is_insert = true;
+    for (int i=0; i<filter_params.size(); i++) {
+        if (filter_params[i].keyword == filt.keyword && filter_params[i].opt == filt.opt && filter_params[i].value == filt.value) {
+            is_insert = false;
+            break;
+        }
+        if (filter_params[i].keyword == filt.keyword && filt.opt == "=") {
+            filter_params.erase(filter_params.begin() + i);
+            i--;
+        }
+        else if (filter_params[i].keyword == filt.keyword && filter_params[i].opt == "=") {
+            filter_params.erase(filter_params.begin() + i);
+            i--;
+        }
+        if (filter_params[i].keyword == filt.keyword && filter_params[i].opt == filt.opt) {
+            filter_params.erase(filter_params.begin() + i);
+            i--;
+        }
+    }
+
+    if(is_insert) {
+        filter_params.push_back(filt);
+    }
 
     //filter the entries
     std::vector<EntryPerso*> filtered_entries = filter(vector_entries, filter_params[0]);
@@ -209,44 +287,12 @@ void MainWindow::on_filterButton_clicked() {
     std::cout << "filtered" << std::endl;
     if (filtered_entries.size() == 0) {
         std::cout << "no entries" << std::endl;
-        filter_params.pop_back();
+        if(is_insert) {
+            filter_params.pop_back();
+        }
         // To implement a error dialog here. we have a filter_error.ui file. show the dialog
         QMessageBox::warning(this, "Error", "No entries found with the given filter");
         return;
-    }
-
-    // deal with the duplicated filters
-    for (int i=0; i<filter_params.size()-1; i++) {
-        for(int j=i+1; j<filter_params.size(); j++) {
-            if (filter_params[i].keyword == filter_params[j].keyword && filter_params[i].opt == filter_params[j].opt && filter_params[i].value == filter_params[j].value) {
-                filter_params.erase(filter_params.begin()+j);
-                j--;
-            }
-            if (filter_params[i].keyword == filter_params[j].keyword && filter_params[i].opt == filter_params[j].opt) {
-                if (filter_params[i].opt == "<") {
-                    if (filter_params[i].value < filter_params[j].value) {
-                        filter_params.erase(filter_params.begin()+j);
-                        j--;
-                    }
-                    else {
-                        filter_params.erase(filter_params.begin()+i);
-                        i--;
-                        break;
-                    }
-                }
-                else if (filter_params[i].opt == ">") {
-                    if (filter_params[i].value > filter_params[j].value) {
-                        filter_params.erase(filter_params.begin()+j);
-                        j--;
-                    }
-                    else {
-                        filter_params.erase(filter_params.begin()+i);
-                        i--;
-                        break;
-                    }
-                }
-            }
-        }
     }
 
     // update and display the filters
@@ -269,44 +315,49 @@ void MainWindow::on_filterButton_clicked() {
         entries_to_display.push_back(filtered_entries[i]);
     }
 
-    display_graph(entries_to_display, ui);
     display_entries(entries_to_display, ui);
-
+    display_graph(entries_to_display, ui);
 }
 
+void MainWindow::on_helpFilterBox_clicked() {
+    // implement a help dialog here. show the dialog.
+    QMessageBox::information(this, "Help", "This is a help dialog");
+}
 void MainWindow::on_clear_button_clicked() {
     filter_params.clear();
     findChild<QLabel*>("existing_filters")->setText("Filters: ");
-    vector_entries = sample_entries(10); // this line should be changed to aquire source of entries
-    display_graph(vector_entries, ui);
+    //vector_entries = sample_entries(10); // this line should be changed to aquire source of entries
     display_entries(vector_entries, ui);
+    display_graph(vector_entries, ui);
 }
 
 void MainWindow::on_newEntryButton_clicked() {
+    ui->stackedWidget->currentWidget()->setVisible(false);
     ui->stackedWidget->setCurrentIndex(1);
+    ui->stackedWidget->currentWidget()->setVisible(true);
     EntryPerso *e = new EntryPerso();
-    e->set_mood(0);
-    e->set_qdate(QDate::currentDate());
-    std::vector<Friend*> fr;
+    //e->set_mood(0);
+    //e->set_qdate(QDate::currentDate());
+    /*std::vector<Friend*> fr;
     fr.push_back(new Friend("fr", 1));
     std::vector<Activity*> activity;
     activity.push_back(new Activity("act", 1));
     e->set_friends(fr);
-    e->set_activities(activity);
-    e->set_title("");
-    e->set_text("");
-    vector_entries.insert(vector_entries.begin(), e);
-    card = new EntryCard(20, 300, 300, "white", e);
+    e->set_activities(activity);*/
+    //e->set_title("");
+    //e->set_text("");
+    vector_entries.push_back(e);
+    card = new EntryCard(20, 300, 300, "white", e, false, this);
     card->display(ui->newEntry);
-    card->change();
-    card->update();
 }
 
 void MainWindow::on_saveEntryButton_clicked() {
-    display_graph(vector_entries, ui);
     display_entries(vector_entries, ui);
+    display_graph(vector_entries, ui);
+    ui->stackedWidget->currentWidget()->setVisible(false);
     ui->stackedWidget->setCurrentIndex(0);
-    ui->newEntry->removeItem(ui->newEntry->takeAt(0));
+    ui->stackedWidget->currentWidget()->setVisible(true);
+    ui->newEntry->takeAt(0);
 }
 
 
@@ -330,3 +381,25 @@ std::vector<EntryPerso*> MainWindow::test(int n) {
     }
     return entries;
 }
+
+
+void MainWindow::update_graph(){
+    display_graph(vector_entries, ui);
+}
+
+
+void MainWindow::on_people_button_clicked()
+{
+
+}
+
+
+
+
+void MainWindow::on_Test_entries_clicked()
+{
+    vector_entries = sample_entries(100);
+    display_entries(vector_entries, ui);
+    display_graph(vector_entries, ui);
+}
+

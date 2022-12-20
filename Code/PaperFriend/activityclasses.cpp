@@ -2,12 +2,12 @@
 
 #include <iostream>
 #include <string>
+#include<QString>
 
 
 Activity::Activity() : name(""), value(0) {}
-
-Activity::Activity(std::string name, double value) : name(name), value(value) {}
-
+Activity::Activity(std::string name, double value) : name(name),value(value) {}//This one will be removed
+Activity::Activity(std::string name, int type, double value) : name(name), type(type),value(value) {}
 Activity::~Activity() {}
 
 std::string Activity::get_name() const {
