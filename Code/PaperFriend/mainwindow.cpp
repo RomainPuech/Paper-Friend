@@ -166,8 +166,15 @@ void MainWindow::display_entries(std::vector<EntryPerso*> entries, Ui::MainWindo
         delete item;
         qDebug()<< "removed";
     }
-    for (auto entry: entries) {
+    /*for (auto entry: entries) {
         EntryCard *c = new EntryCard(20, 300, 300, "white", entry, true, this);
+        c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
+        qDebug()<< "displayed";
+    }*/
+
+    // displaying in reversed order
+    for(auto entry = entries.rbegin(); entry != entries.rend(); ++entry){
+        EntryCard *c = new EntryCard(20, 300, 300, "white", *entry, true, this);
         c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
         qDebug()<< "displayed";
     }
