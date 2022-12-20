@@ -6,7 +6,7 @@
 
 
 
-bool save_entry(Entry entry){ // I create and save the entry file, title format MM.YY.JJ
+bool save_entry(Entry entry){ //  create and save the entry file, title format MM.YY.JJ
 
     nlohmann::json  j = {
         {"text", entry.get_text()},
@@ -115,6 +115,7 @@ std::string activities_vec_to_str (std::vector<Activity*> acts){//takes a vector
     }
     return res;
 }
+
 
 std::vector<Activity*> str_to_vec_activities (std::string act){//activity vec from a string
     std::vector <Activity*> res;
@@ -239,7 +240,98 @@ EntryPerso load_entryperso(std::string filename){//retrieve the data of a Json f
 
 
 
+bool save_activities (std::vector<Activity> acts){//save the std::vector of activities in a file to keep track of all possible types of activities
+    std::string res;
+    for(int i=0; i < acts.size(); i++){
+       res += activity_to_string(acts[i]);
+    }
+    nlohmann::json  j = {
+        {"activities", res},
+        };
+
+    std::string filename = "activities.json";
 
 
+    std::ofstream o("./" + filename);
 
 
+    if(!o.is_open()){
+        std::cout << "Error opening file" << std::endl;
+        return false;
+    }
+    o << j << std::endl;
+
+    o.close();
+    return true;
+}
+
+std::vector<Activity> load_activities (){//activity vec from a string
+    std::string filename = "activities.json";
+    std::ifstream i(filename);
+    nlohmann::json j;
+    i >> j;
+
+    std::string act = j["activities"];
+
+    std::vector <Activity> res;
+    std::string delimiter = "*$*";
+
+    size_t pos = 0;
+    std::string temp;
+    while ((pos = act.find(delimiter)) != std::string::npos) {
+        temp = act.substr(0, pos);
+        Activity activity = string_to_activity(temp);
+        res.push_back(activity);
+        act.erase(0, pos + delimiter.length());
+    }
+    return res;
+
+}
+
+bool save_friends (std::vector<Friend> acts){//save the std::vector of activities in a file to keep track of all possible types of activities
+    std::string res;
+    for(int i=0; i < acts.size(); i++){
+       res += friend_to_string(acts[i]);
+    }
+    nlohmann::json  j = {
+        {"friends", res},
+        };
+
+    std::string filename = "friends.json";
+
+
+    std::ofstream o("./" + filename);
+
+
+    if(!o.is_open()){
+        std::cout << "Error opening file" << std::endl;
+        return false;
+    }
+    o << j << std::endl;
+
+    o.close();
+    return true;
+}
+
+std::vector<Friend> load_friends (){//Friend vec from a string
+    std::string filename = "friends.json";
+    std::ifstream i(filename);
+    nlohmann::json j;
+    i >> j;
+
+    std::string act = j["friends"];
+
+    std::vector <Friend> res;
+    std::string delimiter = "*$*";
+
+    size_t pos = 0;
+    std::string temp;
+    while ((pos = act.find(delimiter)) != std::string::npos) {
+        temp = act.substr(0, pos);
+        Friend activity = string_to_frend(temp);
+        res.push_back(activity);
+        act.erase(0, pos + delimiter.length());
+    }
+    return res;
+
+}

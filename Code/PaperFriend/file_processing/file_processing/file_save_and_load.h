@@ -42,4 +42,12 @@ bool save_entryperso(EntryPerso entry);
 
 EntryPerso load_entryperso(std::string filename);
 
+
+
+bool save_activities (std::vector<Activity> act);
+bool save_friends (std::vector<Friend> fr);
+
+std::vector<Activity> load_activities();
+std::vector<Friend> load_friends();
+
 #endif
