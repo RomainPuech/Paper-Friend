@@ -13,15 +13,14 @@ public:
     MascotChat(QScrollArea *area);
     void operator<<(std::string txt);
     void operator<<(QString txt);
+    void add_mascot();
     //getters
     QString get_last_message() const;
     QScrollArea* get_scrollArea();
 
 private:
-    //void add_message(QString txt);
-    void add_message_mascot(QString txt);
-    //void add_message(std::string txt);
-    void add_message_mascot(std::string txt);
+    void add_message(QString txt);
+    void add_message(std::string txt);
     QScrollArea *scrollArea;
     Mascot *mascot;
 };

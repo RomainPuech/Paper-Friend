@@ -5,14 +5,11 @@
 #include<QLabel>
 #include <QVBoxLayout>
 #include <QPainterPath>
+#include <cstring>
 MascotChat::MascotChat(QScrollArea *area):scrollArea(area)
 {
-    /*
-    QLabel *label = new QLabel();
-    label->setText(txt);
-    messages.push_back(label);
-    */
     QVBoxLayout *chat_layout = new QVBoxLayout();
+    chat_layout->setSizeConstraint(QLayout::SetMinimumSize);
     scrollArea->widget()->setLayout(chat_layout);
 }
 
@@ -27,23 +24,14 @@ QScrollArea* MascotChat::get_scrollArea(){
 }
 //public methods
 void MascotChat::operator<<(std::string txt){
-    add_message_mascot(txt);
-    //add_message(txt);
+    add_message(txt);
 }
 void MascotChat::operator<<(QString txt){
-    add_message_mascot(txt);
-    //add_message(txt);
+    add_message(txt);
 }
 
 //private methods
-/*void MascotChat::add_message(QString txt){
-    QLabel *label = new QLabel();
-    label->setText(txt);
-    scrollArea->widget()->layout()->addWidget(label);
-}*/
-void MascotChat::add_message_mascot(QString txt){
-
-
+void MascotChat::add_mascot(){
     QLabel *image_label = new QLabel;
     image_label->setTextFormat(Qt::RichText);
     image_label->setText("<img src=:/pictures/rsc/excited-resized.png align=middle height=\"85\">");
@@ -55,24 +43,22 @@ void MascotChat::add_message_mascot(QString txt){
     image_label->setAutoFillBackground(true);
     image_label->setPalette(pali);
     */
+    scrollArea->widget()->layout()->addWidget(image_label);
 
+}
+void MascotChat::add_message(QString txt){
     Message *text_label = new Message();
     text_label->setTextFormat(Qt::RichText);
+    text_label->setWordWrap(true);
+    text_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
+    //text_label ->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     text_label->setText(txt);
 
     scrollArea->widget()->layout()->addWidget(text_label);
-    scrollArea->widget()->layout()->addWidget(image_label);
-
-
 }
 
-/*void MascotChat::add_message(std::string txt){
-    add_message_mascot(QString::fromStdString(txt));
+void MascotChat::add_message(std::string txt){
     add_message(QString::fromStdString(txt));
-}*/
-void MascotChat::add_message_mascot(std::string txt)
-{
-    add_message_mascot(QString::fromStdString(txt));
 }
 
 Message::Message()

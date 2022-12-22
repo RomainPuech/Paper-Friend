@@ -90,9 +90,12 @@ MainWindow::MainWindow(QWidget *parent)
     for(int i = 0; i<20 ; i++){
         chat<<QString::number(i);
     }
-    chat<<std::string("Hello! this is quite a long message  ahbybf zuxh eudh euhfxz xu_ehdx <br>**yezhx**<b>zfhfx</b> zy_h xze hyzehfhx yzeefbxy_zehxy_ze hyehxf uyzhe xfyzehxyzxe hyezh xyzehe hxfyzeh fzyehfx zyehexyzeh f yzehf zef ezyh yze  hfyzeh efzeh uz eh fuzeudh  we can try to add a lot of lines to see what happends...");
+    chat.add_mascot();
+    chat<<std::string("this message is long to check if the whole thing would fit into the text label and also to be easy to track because it makes more sense");
+    chat.add_mascot();
     QString lastm = chat.get_last_message();
     chat<<lastm;
+    chat.add_mascot();
 
     auto settings = findChild<QWidget*>("settings_frame");
     settings->hide(); //hide the settings menu on launch
