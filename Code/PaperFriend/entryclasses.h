@@ -31,6 +31,8 @@ public:
 
     int get_absolute_day() const; // Day in Julian calendar
 
+    virtual int entry_type() const;
+
 protected:
     std::string text;
     std::string title;
@@ -83,6 +85,7 @@ public:
     int get_num_activities(){
         return all_activities.size();
     }
+    virtual int entry_type() const;
 
 private:
     std::vector<Activity> all_activities;

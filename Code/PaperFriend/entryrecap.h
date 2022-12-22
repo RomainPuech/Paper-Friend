@@ -19,7 +19,7 @@ public:
     void set_average_mood(double average_mood);
     void set_type(int type);
     void set_text(std::string text);
-
+    virtual int entry_type() const;
 
 
 

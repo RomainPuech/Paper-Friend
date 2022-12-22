@@ -175,7 +175,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>175</width>
+             <width>164</width>
              <height>83</height>
             </rect>
            </property>
@@ -277,6 +277,25 @@
               </property>
               <property name="indent">
                <number>20</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="Test_entries">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>29</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Test</string>
               </property>
              </widget>
             </item>
@@ -514,8 +533,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>625</width>
-               <height>439</height>
+               <width>685</width>
+               <height>427</height>
               </rect>
              </property>
             </widget>

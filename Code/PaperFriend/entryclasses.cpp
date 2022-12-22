@@ -69,7 +69,13 @@ int Entry::get_absolute_day() const{
     return absolute_day;
 }
 
+int Entry::entry_type() const{
+    return 0;
+}
 
+int EntryPerso::entry_type() const{
+    return 1;
+}
 EntryPerso::EntryPerso() : Entry(), activities(NULL), friends(NULL), mood(0) {}
 
 EntryPerso::EntryPerso(std::string title, std::string text, std::vector<Activity*> p_activities, std::vector<Friend*> friends, double mood,

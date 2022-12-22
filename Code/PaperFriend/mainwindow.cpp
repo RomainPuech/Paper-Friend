@@ -67,6 +67,23 @@ MainWindow::MainWindow(QWidget *parent)
     display_graph(vector_entries, ui);
     display_entries(vector_entries, ui);
 
+    //test for recap display
+    EntryRecap *recap = new EntryRecap();
+    EntryPerso *e = new EntryPerso();
+    e->set_mood(1+std::rand()%100);
+    std::vector<Friend*> fr;
+    fr.push_back(new Friend("fr", 1));
+    std::vector<Activity*> activity;
+    activity.push_back(new Activity("act", 1));
+    e->set_friends(fr);
+    e->set_activities(activity);
+    e->set_title("THIS IS A TITLE");
+    e->set_text("some text ...");
+    recap->set_best_day(*e);
+    recap->set_worst_day(*e);
+    EntryCard *entry_r = new EntryCard(15, 200, 200, "white", recap, false, this);
+    entry_r->display(ui->EntriesScroll->widget()->layout());
+
     //Chatbox
     MascotChat chat = MascotChat(ui->scrollArea);
     //tests
@@ -143,11 +160,23 @@ void MainWindow::toggle_visibility(QWidget *component){
 
 void MainWindow::display_entries(std::vector<EntryPerso*> entries, Ui::MainWindow *ui) {
     while(!ui->EntriesScroll->widget()->layout()->isEmpty()) {
-        ui->graph_frame->removeItem(ui->EntriesScroll->widget()->layout()->takeAt(0));
+        QLayoutItem *item = ui->EntriesScroll->widget()->layout()->takeAt(0);
+        ui->graph_frame->removeItem(item);
+        delete item->widget();
+        delete item;
+        qDebug()<< "removed";
     }
-    for (auto entry: entries) {
+    /*for (auto entry: entries) {
         EntryCard *c = new EntryCard(20, 300, 300, "white", entry, true, this);
         c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
+        qDebug()<< "displayed";
+    }*/
+
+    // displaying in reversed order
+    for(auto entry = entries.rbegin(); entry != entries.rend(); ++entry){
+        EntryCard *c = new EntryCard(20, 300, 300, "white", *entry, true, this);
+        c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
+        qDebug()<< "displayed";
     }
 }
 
@@ -206,7 +235,7 @@ void MainWindow::on_filterButton_clicked() {
     auto spinBox = findChild<QSpinBox*>("numberOfEntries");
     int n = spinBox->value();
 
-    vector_entries = sample_entries(100); // this line should be changed to aquire source of entries
+    //vector_entries = sample_entries(100); // this line should be changed to aquire source of entries
 
     QString type_filter_value = findChild<QComboBox*>("type_filter")->currentText();
     std::string type_filter_str = type_filter_value.toStdString();
@@ -286,8 +315,8 @@ void MainWindow::on_filterButton_clicked() {
         entries_to_display.push_back(filtered_entries[i]);
     }
 
-    display_graph(entries_to_display, ui);
     display_entries(entries_to_display, ui);
+    display_graph(entries_to_display, ui);
 }
 
 void MainWindow::on_helpFilterBox_clicked() {
@@ -297,34 +326,38 @@ void MainWindow::on_helpFilterBox_clicked() {
 void MainWindow::on_clear_button_clicked() {
     filter_params.clear();
     findChild<QLabel*>("existing_filters")->setText("Filters: ");
-    vector_entries = sample_entries(10); // this line should be changed to aquire source of entries
-    display_graph(vector_entries, ui);
+    //vector_entries = sample_entries(10); // this line should be changed to aquire source of entries
     display_entries(vector_entries, ui);
+    display_graph(vector_entries, ui);
 }
 
 void MainWindow::on_newEntryButton_clicked() {
+    ui->stackedWidget->currentWidget()->setVisible(false);
     ui->stackedWidget->setCurrentIndex(1);
+    ui->stackedWidget->currentWidget()->setVisible(true);
     EntryPerso *e = new EntryPerso();
-    e->set_mood(0);
-    e->set_qdate(QDate::currentDate());
+    //e->set_mood(0);
+    //e->set_qdate(QDate::currentDate());
     /*std::vector<Friend*> fr;
     fr.push_back(new Friend("fr", 1));
     std::vector<Activity*> activity;
     activity.push_back(new Activity("act", 1));
     e->set_friends(fr);
     e->set_activities(activity);*/
-    e->set_title("");
-    e->set_text("");
-    vector_entries.insert(vector_entries.begin(), e);
+    //e->set_title("");
+    //e->set_text("");
+    vector_entries.push_back(e);
     card = new EntryCard(20, 300, 300, "white", e, false, this);
     card->display(ui->newEntry);
 }
 
 void MainWindow::on_saveEntryButton_clicked() {
-    display_graph(vector_entries, ui);
     display_entries(vector_entries, ui);
+    display_graph(vector_entries, ui);
+    ui->stackedWidget->currentWidget()->setVisible(false);
     ui->stackedWidget->setCurrentIndex(0);
-    ui->newEntry->removeItem(ui->newEntry->takeAt(0));
+    ui->stackedWidget->currentWidget()->setVisible(true);
+    ui->newEntry->takeAt(0);
 }
 
 
@@ -358,5 +391,15 @@ void MainWindow::update_graph(){
 void MainWindow::on_people_button_clicked()
 {
 
+}
+
+
+
+
+void MainWindow::on_Test_entries_clicked()
+{
+    vector_entries = sample_entries(100);
+    display_entries(vector_entries, ui);
+    display_graph(vector_entries, ui);
 }
 
