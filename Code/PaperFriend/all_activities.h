@@ -3,6 +3,9 @@
 
 #include <QDialog>
 #include<QVector>
+#include <QtCharts>
+#include <QChartView>
+#include<QLineSeries>
 #include<activity_cell.h>>
 #include"activityclasses.h"
 
@@ -20,6 +23,7 @@ public:
     static int ActivitiesCellNumberTotal; // The total number of the activities.
     static QVector<activity_cell *> allCellPtr; // This vector saves all the data of the activity cell.
     void add_previous_cells();
+    void closeEvent (QCloseEvent *event);
 
 private slots:
     void on_add_activity_button_clicked();

@@ -73,4 +73,17 @@ void all_activities::on_save_activity_button_clicked()
     }
 }
 
+void all_activities::closeEvent (QCloseEvent *event){
+    if(allCellPtr.size() != vector_activities.size()){
+        QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Have you saved your activities ?"),
+                                                                      QMessageBox::Yes | QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+        if (answr_btn != QMessageBox::Yes) {
+            event->ignore();
+        } else {
+            event->ignore();
+        }
+    }
+}
+
 
