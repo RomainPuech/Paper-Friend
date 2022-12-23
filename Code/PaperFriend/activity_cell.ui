@@ -23,13 +23,6 @@
       <widget class="QComboBox" name="activity_type"/>
      </item>
      <item>
-      <widget class="QPushButton" name="edit_activity_name_button">
-       <property name="text">
-        <string>Edit</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="delete_activity_button">
        <property name="text">
         <string>Delete</string>
