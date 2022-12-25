@@ -26,6 +26,7 @@ activity_cell::~activity_cell()
 
 void activity_cell::set_activity_cell_name(QString cellName){
     ui->activity_name->setText(cellName);
+    ui->activity_name->setMaxLength(30);
 }
 
 void activity_cell::on_delete_activity_button_clicked()
