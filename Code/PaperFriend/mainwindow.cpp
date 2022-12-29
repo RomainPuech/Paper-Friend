@@ -59,6 +59,11 @@ MainWindow::MainWindow(QWidget *parent)
     vector_entries.push_back(e2);
     vector_entries.push_back(e3);*/
 
+    // create a folder for the entries if it doesn't already exist
+    if (!QDir("Entries").exists()){
+        QDir().mkdir("Entries");
+    }
+
     // load previous entries
     QDir dir(QDir::currentPath() + "/Entries");
     for(const QString &filename : dir.entryList(QDir::Files)){
@@ -326,6 +331,7 @@ void MainWindow::on_helpFilterBox_clicked() {
     // implement a help dialog here. show the dialog.
     QMessageBox::information(this, "Help", "This is a help dialog");
 }
+
 void MainWindow::on_clear_button_clicked() {
     filter_params.clear();
     findChild<QLabel*>("existing_filters")->setText("Filters: ");
@@ -335,32 +341,10 @@ void MainWindow::on_clear_button_clicked() {
 }
 
 void MainWindow::on_newEntryButton_clicked() {
-    ui->stackedWidget->currentWidget()->setVisible(false);
-    ui->stackedWidget->setCurrentIndex(1);
-    ui->stackedWidget->currentWidget()->setVisible(true);
+    ui->EntriesScroll->verticalScrollBar()->setValue(0);
     EntryPerso *e = new EntryPerso();
-    //e->set_mood(0);
-    //e->set_qdate(QDate::currentDate());
-    /*std::vector<Friend*> fr;
-    fr.push_back(new Friend("fr", 1));
-    std::vector<Activity*> activity;
-    activity.push_back(new Activity("act", 1));
-    e->set_friends(fr);
-    e->set_activities(activity);*/
-    //e->set_title("");
-    //e->set_text("");
     vector_entries.push_back(e);
-    card = new EntryCard(20, 300, 300, "white", e, false, this);
-    card->display(ui->newEntry);
-}
-
-void MainWindow::on_saveEntryButton_clicked() {
     display_entries(vector_entries, ui);
-    display_graph(vector_entries, ui);
-    ui->stackedWidget->currentWidget()->setVisible(false);
-    ui->stackedWidget->setCurrentIndex(0);
-    ui->stackedWidget->currentWidget()->setVisible(true);
-    ui->newEntry->takeAt(0);
 }
 
 

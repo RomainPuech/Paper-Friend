@@ -175,8 +175,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>164</width>
-             <height>83</height>
+             <width>162</width>
+             <height>85</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -533,7 +533,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>685</width>
+               <width>677</width>
                <height>427</height>
               </rect>
              </property>
@@ -542,36 +542,7 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="page_2">
-         <widget class="QPushButton" name="saveEntryButton">
-          <property name="geometry">
-           <rect>
-            <x>30</x>
-            <y>470</y>
-            <width>491</width>
-            <height>29</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Save</string>
-          </property>
-         </widget>
-         <widget class="QWidget" name="verticalLayoutWidget">
-          <property name="geometry">
-           <rect>
-            <x>29</x>
-            <y>30</y>
-            <width>491</width>
-            <height>431</height>
-           </rect>
-          </property>
-          <layout class="QVBoxLayout" name="newEntry">
-           <property name="sizeConstraint">
-            <enum>QLayout::SetDefaultConstraint</enum>
-           </property>
-          </layout>
-         </widget>
-        </widget>
+        <widget class="QWidget" name="page_2"/>
        </widget>
       </item>
      </layout>

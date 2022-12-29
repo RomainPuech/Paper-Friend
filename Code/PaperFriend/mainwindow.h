@@ -51,7 +51,6 @@ private slots:
     void on_activitie_button_clicked();
     void on_filterButton_clicked();
     void on_newEntryButton_clicked();
-    void on_saveEntryButton_clicked();
     void on_clear_button_clicked();
     void on_helpFilterBox_clicked();
 
