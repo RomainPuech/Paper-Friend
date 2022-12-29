@@ -2,6 +2,7 @@
 #include"activity_cell.h"
 #include "ui_all_activities.h"
 #include<QFile>
+#include <QMessageBox>
 #include"activityclasses.h"
 
 int all_activities::ActivitiesCellNumberTotal = 0;
@@ -71,6 +72,11 @@ void all_activities::on_save_activity_button_clicked()
         vector_activities.push_back(Activity(name_activity.toStdString(),type_activity,0));
         out << name_activity << " , " << type_activity << "⧵n";
     }
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::information(this, "Save Confirmation", "All your activities are saved.",QMessageBox::Ok);
+    if (reply == QMessageBox::Ok){
+        this->close();
+        }
 }
 
 void all_activities::closeEvent (QCloseEvent *event){
@@ -82,6 +88,27 @@ void all_activities::closeEvent (QCloseEvent *event){
             event->ignore();
         } else {
             event->ignore();
+        }
+    }else{
+        for(int i=0; i<allCellPtr.size();++i){
+            QString name_activity_acp;
+            name_activity_acp = allCellPtr[i]->get_activity_name();
+            std::string name_activity_vec;
+            name_activity_vec = vector_activities[i].get_name();
+            int type_activity_acp;
+            type_activity_acp = allCellPtr[i]->get_activity_type();
+            int type_activity_vec;
+            type_activity_vec = vector_activities[i].get_type();
+            if(name_activity_acp.toStdString() != name_activity_vec || type_activity_acp != type_activity_vec ){
+                QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Have you saved your activities ?"),
+                                                                              QMessageBox::Yes | QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+                if (answr_btn != QMessageBox::Yes) {
+                    event->ignore();
+                } else {
+                    event->ignore();
+                }
+            }
         }
     }
 }
