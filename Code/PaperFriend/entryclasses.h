@@ -8,10 +8,10 @@
 #include "activityclasses.h"
 #include "friendclasses.h"
 
+
 class Entry {
 public:
-    Entry();
-    Entry(std::string text, std::string title);
+    Entry(std::string text = "", std::string title = "");
     ~Entry();
 
     std::string get_text() const;
@@ -34,8 +34,8 @@ public:
     virtual int entry_type() const;
 
 protected:
-    std::string text;
     std::string title;
+    std::string text;
     QDate qdate;
     std::string date;
     std::string weekday;
@@ -45,14 +45,16 @@ protected:
 
 class EntryPerso : public Entry {
 public:
-    EntryPerso();
 
-    EntryPerso(std::string text, std::string title, std::vector<Activity*> activities, std::vector<Friend*> friends, double mood,
-                                                                                           double sleep,
-                                                                                           double eating_healthy,
-                                                                                           double productivity,
-                                                                                           double communications,
-                                                                                           double screen_time);
+    EntryPerso(std::string text = "", std::string title = "",
+               std::vector<Activity*> activities = std::vector<Activity*>(),
+               std::vector<Friend*> friends = std::vector<Friend*>(),
+               double mood = 0,
+               double sleep = 0,
+               double eating_healthy = 0,
+               double productivity = 0,
+               double communications = 0,
+               double screen_time = 0);
     ~EntryPerso();
 
     std::vector<Activity*> get_activities() const;
@@ -98,6 +100,7 @@ private:
     double communications;
     double screen_time;
 };
+
 
 std::vector<EntryPerso*> sample_entries(int n,std::vector<Activity*> possible_activities = {new Activity()}, std::vector<Friend*> possible_friends = {new Friend()});//gives n randomly generated sample entries
 

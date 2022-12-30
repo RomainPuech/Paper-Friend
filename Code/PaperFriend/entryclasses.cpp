@@ -1,25 +1,17 @@
 #include "entryclasses.h"
 #include"friendclasses.h"
 #include"activityclasses.h"
+
 #include <random>
 #include <iostream>
 #include <string>
 #include <vector>
 
 
-
-Entry::Entry() {
-    this->title = "";
-    this->text = "";
+Entry::Entry(std::string text, std::string title) : title(title),
+                                                    text(text) {
     this->set_qdate(QDate::currentDate());
 }
-
-Entry::Entry(std::string text, std::string title){
-    this->title = title;
-    this->text = text;
-    this->set_qdate(QDate::currentDate());
-}
-
 Entry::~Entry() {}
 
 std::string Entry::get_text() const {
@@ -73,23 +65,22 @@ int Entry::entry_type() const{
     return 0;
 }
 
-int EntryPerso::entry_type() const{
-    return 1;
-}
-EntryPerso::EntryPerso() : Entry(), activities(NULL), friends(NULL), mood(0) {}
 
-EntryPerso::EntryPerso(std::string title, std::string text, std::vector<Activity*> p_activities, std::vector<Friend*> friends, double mood,
-                                                                                                   double sleep,
-                                                                                                   double eating_healthy,
-                                                                                                   double productivity,
-                                                                                                   double communications,
-                                                                                                   double screen_time) :
-    Entry(title, text), activities(p_activities), friends(friends), mood(mood),
-                                                                  sleep(sleep),
-                                                                  eating_healthy(eating_healthy),
-                                                                  productivity(productivity),
-                                                                  communications(communications),
-                                                                  screen_time(screen_time) {
+EntryPerso::EntryPerso(std::string title, std::string text,
+                       std::vector<Activity*> p_activities, std::vector<Friend*> friends,
+                       double mood,
+                       double sleep,
+                       double eating_healthy,
+                       double productivity,
+                       double communications,
+                       double screen_time) : Entry(title, text),
+                                             activities(p_activities), friends(friends),
+                                             mood(mood),
+                                             sleep(sleep),
+                                             eating_healthy(eating_healthy),
+                                             productivity(productivity),
+                                             communications(communications),
+                                             screen_time(screen_time) {
 
     all_activities.push_back(Activity("mood", mood));
     all_activities.push_back(Activity("sleep", sleep));
@@ -98,10 +89,8 @@ EntryPerso::EntryPerso(std::string title, std::string text, std::vector<Activity
     all_activities.push_back(Activity("communications", communications));
     all_activities.push_back(Activity("screen_time", screen_time));
 
-    for (auto& ptr : activities)
-        all_activities.push_back(*ptr);
+    for (auto& ptr : activities) all_activities.push_back(*ptr);
 }
-
 EntryPerso::~EntryPerso() {
     /* makes the build crash, btw this is unecessary as the destructors of vectors are called by themselves by the default destructor.
     activities.~vector();
@@ -132,7 +121,6 @@ std::vector<Friend*> EntryPerso::get_friends() const {
 void EntryPerso::set_friends(std::vector<Friend*> friends) {
     this->friends = friends;
 }
-
 
 double EntryPerso::get_mood() const {
     return mood;
@@ -182,6 +170,10 @@ void EntryPerso::set_screen_time(double screen_time) {
     this->screen_time = screen_time;
 }
 
+int EntryPerso::entry_type() const{
+    return 1;
+}
+
 
 std::vector<EntryPerso*> sample_entries(int n,std::vector<Activity*> possible_activities, std::vector<Friend*> possible_friends )
 {
@@ -192,13 +184,11 @@ std::vector<EntryPerso*> sample_entries(int n,std::vector<Activity*> possible_ac
         std::vector<Activity*> activities;
         std::vector<Friend*> friends;
 
-
         int activity_index = rand()%possible_activities.size();
         activities.push_back(possible_activities[activity_index]);
 
         int friend_index = rand()%possible_friends.size();
         friends.push_back(possible_friends[friend_index]);
-
 
         double mood = distribution(generator) ;
         mood = std::llround(mood*2) / 2.0;
@@ -215,4 +205,3 @@ std::vector<EntryPerso*> sample_entries(int n,std::vector<Activity*> possible_ac
     }
     return res;
 }
-

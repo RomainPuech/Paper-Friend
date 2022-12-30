@@ -4,9 +4,6 @@
 #include <string>
 #include<QString>
 
-
-Activity::Activity() : name(""), value(0) {}
-Activity::Activity(std::string name, double value) : name(name),value(value) {}//This one will be removed
 Activity::Activity(std::string name, int type, double value) : name(name), type(type),value(value) {}
 Activity::~Activity() {}
 
@@ -33,39 +30,3 @@ int Activity::get_type() const{
 void Activity::set_type(int type){
     this->type = type;
 }
-
-/*
-ActivitySport::ActivitySport() : Activity() {}
-
-ActivitySport::ActivitySport(std::string name, int duration) : Activity(name, duration) {}
-
-ActivitySport::~ActivitySport() {}
-
-
-ActivitySpiritual::ActivitySpiritual() : Activity() {}
-
-ActivitySpiritual::ActivitySpiritual(std::string name, int duration) : Activity(name, duration) {}
-
-ActivitySpiritual::~ActivitySpiritual() {}
-
-
-ActivityWork::ActivityWork() : Activity() {}
-
-ActivityWork::ActivityWork(std::string name, int duration) : Activity(name, duration) {}
-
-ActivityWork::~ActivityWork() {}
-
-
-ActivityStudy::ActivityStudy() : Activity() {}
-
-ActivityStudy::ActivityStudy(std::string name, int duration) : Activity(name, duration) {}
-
-ActivityStudy::~ActivityStudy() {}
-
-
-ActivityArt::ActivityArt() : Activity() {}
-
-ActivityArt::ActivityArt(std::string name, int duration) : Activity(name, duration) {}
-
-ActivityArt::~ActivityArt() {}
-*/
