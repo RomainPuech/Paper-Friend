@@ -67,8 +67,8 @@ private:
     static std::vector<EntryPerso*>vector_entries;
     static std::vector<Activity>vector_activities;
     static std::vector<Friend>vector_friends;
-    EntryPerso entry;
-    EntryCard *card;
+
+    EntryCard* today_card;
 
     std::vector<EntryPerso*> test(int n); //generate n random entries
 };
