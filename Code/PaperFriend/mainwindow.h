@@ -51,7 +51,6 @@ private slots:
     void on_activitie_button_clicked();
     void on_filterButton_clicked();
     void on_newEntryButton_clicked();
-    void on_saveEntryButton_clicked();
     void on_clear_button_clicked();
     void on_helpFilterBox_clicked();
 
@@ -68,8 +67,8 @@ private:
     static std::vector<EntryPerso*>vector_entries;
     static std::vector<Activity>vector_activities;
     static std::vector<Friend>vector_friends;
-    EntryPerso entry;
-    EntryCard *card;
+
+    EntryCard* today_card;
 
     std::vector<EntryPerso*> test(int n); //generate n random entries
 };

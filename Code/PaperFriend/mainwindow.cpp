@@ -59,11 +59,25 @@ MainWindow::MainWindow(QWidget *parent)
     vector_entries.push_back(e2);
     vector_entries.push_back(e3);*/
 
+    // create a folder for the entries if it doesn't already exist
+    if (!QDir("Entries").exists()){
+        QDir().mkdir("Entries");
+    }
+
     // load previous entries
     QDir dir(QDir::currentPath() + "/Entries");
     for(const QString &filename : dir.entryList(QDir::Files)){
         vector_entries.push_back(load_entryperso("Entries/" + filename.toStdString()));
     }
+
+    // save the card corresponding to the current day in case it has to be modified
+    if (!vector_entries.empty()) {
+        EntryPerso* newest_entry = vector_entries.back();
+        if (newest_entry->get_qdate() == QDate::currentDate()) {
+            today_card= new EntryCard(20, 300, 300, "white", newest_entry, true, this);
+        }
+    }
+
     display_graph(vector_entries, ui);
     display_entries(vector_entries, ui);
 
@@ -177,9 +191,13 @@ void MainWindow::display_entries(std::vector<EntryPerso*> entries, Ui::MainWindo
 
     // displaying in reversed order
     for(auto entry = entries.rbegin(); entry != entries.rend(); ++entry){
-        EntryCard *c = new EntryCard(20, 300, 300, "white", *entry, true, this);
-        c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
-        qDebug()<< "displayed";
+        if ((*entry)->get_qdate() == QDate::currentDate()) {
+            today_card->display(ui->EntriesScroll->widget()->layout());
+        } else {
+            EntryCard *c = new EntryCard(20, 300, 300, "white", *entry, true, this);
+            c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in the main_frame.
+            qDebug()<< "displayed";
+        }
     }
 }
 
@@ -326,6 +344,7 @@ void MainWindow::on_helpFilterBox_clicked() {
     // implement a help dialog here. show the dialog.
     QMessageBox::information(this, "Help", "This is a help dialog");
 }
+
 void MainWindow::on_clear_button_clicked() {
     filter_params.clear();
     findChild<QLabel*>("existing_filters")->setText("Filters: ");
@@ -335,32 +354,33 @@ void MainWindow::on_clear_button_clicked() {
 }
 
 void MainWindow::on_newEntryButton_clicked() {
-    ui->stackedWidget->currentWidget()->setVisible(false);
-    ui->stackedWidget->setCurrentIndex(1);
-    ui->stackedWidget->currentWidget()->setVisible(true);
-    EntryPerso *e = new EntryPerso();
-    //e->set_mood(0);
-    //e->set_qdate(QDate::currentDate());
-    /*std::vector<Friend*> fr;
-    fr.push_back(new Friend("fr", 1));
-    std::vector<Activity*> activity;
-    activity.push_back(new Activity("act", 1));
-    e->set_friends(fr);
-    e->set_activities(activity);*/
-    //e->set_title("");
-    //e->set_text("");
-    vector_entries.push_back(e);
-    card = new EntryCard(20, 300, 300, "white", e, false, this);
-    card->display(ui->newEntry);
-}
-
-void MainWindow::on_saveEntryButton_clicked() {
-    display_entries(vector_entries, ui);
-    display_graph(vector_entries, ui);
-    ui->stackedWidget->currentWidget()->setVisible(false);
-    ui->stackedWidget->setCurrentIndex(0);
-    ui->stackedWidget->currentWidget()->setVisible(true);
-    ui->newEntry->takeAt(0);
+    // more compact code for when the test entries are replaced with real entries
+    /*
+    if (!std::filesystem::exists("Entries/"+QDate::currentDate().toString("MM.dd.yyyy").toStdString()+".json")) {
+        EntryPerso *today_entry = new EntryPerso();
+        save_entryperso(*today_entry);
+        vector_entries.push_back(today_entry);
+        today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
+        display_entries(vector_entries, ui);
+    }
+    */
+    if (vector_entries.empty()) {
+        EntryPerso *today_entry = new EntryPerso();
+        save_entryperso(*today_entry);
+        vector_entries.push_back(today_entry);
+        today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
+        display_entries(vector_entries, ui);
+    } else {
+        if (vector_entries.back()->get_qdate() != QDate::currentDate()) {
+            EntryPerso *today_entry = new EntryPerso();
+            save_entryperso(*today_entry);
+            vector_entries.push_back(today_entry);
+            today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
+            display_entries(vector_entries, ui);
+        }
+    }
+    ui->EntriesScroll->verticalScrollBar()->setValue(0);
+    today_card->change();
 }
 
 

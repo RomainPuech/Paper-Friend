@@ -10,7 +10,7 @@ std::vector<Entry*> filter(
     bool (*filterFn)(const Entry&)) {
     
     std::vector<Entry*> filteredEntries;
-    for(int i=0;i<entries.size();i++){
+    for(std::string::size_type i=0;i<entries.size();i++){
         if (filterFn(entries[i])) {
             filteredEntries.push_back(&entries[i]);
         }
@@ -26,7 +26,7 @@ std::vector<EntryPerso*> filter(
     int value) {
     
     std::vector<EntryPerso*> filteredEntries;
-    for(int i=0;i<entries.size();i++){
+    for(std::string::size_type i=0;i<entries.size();i++){
         if (filterFn(entries[i], keyword , opt, value)) {
             filteredEntries.push_back(&entries[i]);
         }
@@ -42,7 +42,7 @@ std::vector<EntryPerso*> filter(
     int value) {
 
     std::vector<EntryPerso*> filteredEntries;
-    for(int i=0;i<entries.size();i++){
+    for(std::string::size_type i=0;i<entries.size();i++){
         if (filterFn(*(entries[i]), keyword , opt, value)) {
             filteredEntries.push_back(entries[i]);
         }
@@ -56,7 +56,7 @@ std::vector<EntryPerso*> filter(
     Filter_param param) {
 
     std::vector<EntryPerso*> filteredEntries;
-    for(int i=0;i<entries.size();i++){
+    for(std::string::size_type i=0;i<entries.size();i++){
         if (param.is_value_compare) {
             if (compare_value(*(entries[i]), param.keyword, param.opt, param.value)) {
                 filteredEntries.push_back(entries[i]);
@@ -126,6 +126,7 @@ bool compare_value(const EntryPerso& e, std::string keyword, std::string opt, in
             return e.get_screen_time() == value;
         }
     }
+    return false;
 }
 
 
