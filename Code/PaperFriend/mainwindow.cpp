@@ -42,10 +42,12 @@ MainWindow::MainWindow(QWidget *parent)
     //create layout for central scrollable area
     QVBoxLayout *entries_layout = new QVBoxLayout();
     ui->EntriesScroll->widget()->setLayout(entries_layout);
+    // get the width of the scrollable area
 
     // We use Friend function to embed the TextEditor into the MainWindow
     textEditor = new TextEditor();
     textEditor->mainUi = this;
+    // we want to set the textEditor with the same size as the place of embedding
     /*vector_entries = sample_entries(10);
     EntryPerso *e2 = new EntryPerso();
     e2->set_mood(30);
@@ -148,6 +150,7 @@ std::vector<Friend> MainWindow::get_friends(){
 Friend* MainWindow::get_friend_at_i(long long unsigned i){
     return &vector_friends.at(i);
 }
+
 
 void MainWindow::update_activities(std::vector<Activity> activities){
     vector_activities = activities;

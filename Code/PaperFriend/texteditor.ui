@@ -10,20 +10,21 @@
     <height>800</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1000</width>
+    <height>16777215</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>TextEditor</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>258</width>
-     <height>194</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="gridLayout"/>
-  </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="geometry">
     <rect>
@@ -32,6 +33,12 @@
      <width>1001</width>
      <height>44</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
    </property>
    <property name="windowTitle">
     <string>toolBar</string>
@@ -50,15 +57,38 @@
    <addaction name="action_Center"/>
    <addaction name="action_Just"/>
   </widget>
-  <widget class="Edit" name="textEdit">
+  <widget class="QScrollArea" name="scrollArea">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>40</y>
+     <y>50</y>
      <width>1001</width>
-     <height>651</height>
+     <height>331</height>
     </rect>
    </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>999</width>
+      <height>329</height>
+     </rect>
+    </property>
+    <widget class="QTextEdit" name="textEdit">
+     <property name="geometry">
+      <rect>
+       <x>-10</x>
+       <y>10</y>
+       <width>1011</width>
+       <height>351</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <action name="action_New">
    <property name="icon">
@@ -355,13 +385,6 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>Edit</class>
-   <extends>QTextEdit</extends>
-   <header location="global">edit.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="myresources.qrc"/>
  </resources>

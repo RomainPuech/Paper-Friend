@@ -50,6 +50,8 @@ public:
     QString get_text() const;
     void set_title(QString text);
     void append_text(QString text);
+    void set_max_width(int width);
+    void set_max_height(int height);
 
 private slots:
     void on_action_New_triggered();

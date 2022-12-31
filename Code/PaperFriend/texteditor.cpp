@@ -42,6 +42,18 @@ void TextEditor::set_title(QString text)
     ui->textEdit->setFontWeight(1);
 }
 
+// Set the maximum height of the text editor
+void TextEditor::set_max_height(int height)
+{
+    ui->textEdit->setMaximumHeight(height - 10);
+}
+
+// Set the maximum width of the text editor
+void TextEditor::set_max_width(int width)
+{
+    ui->textEdit->setMaximumWidth(width);
+}
+
 QString TextEditor::get_text() const
 {
     return ui->textEdit->toHtml();

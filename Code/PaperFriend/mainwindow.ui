@@ -175,8 +175,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>162</width>
-             <height>85</height>
+             <width>140</width>
+             <height>69</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -525,6 +525,12 @@
           </item>
           <item row="6" column="0">
            <widget class="QScrollArea" name="EntriesScroll">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="widgetResizable">
              <bool>true</bool>
             </property>
@@ -533,8 +539,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>677</width>
-               <height>427</height>
+               <width>697</width>
+               <height>415</height>
               </rect>
              </property>
             </widget>
