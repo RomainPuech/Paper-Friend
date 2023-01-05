@@ -42,6 +42,8 @@ struct Activity {
     int get_type() const;
     void set_type(int type);
 
+    bool equal(Activity other);
+
 protected:
     std::string name;
     int type;
