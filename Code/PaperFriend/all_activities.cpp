@@ -4,9 +4,9 @@
 #include<QFile>
 #include <QMessageBox>
 #include"activityclasses.h"
+#include "mainwindow.h"
 
-int all_activities::ActivitiesCellNumberTotal = 0;
-QVector<activity_cell *> all_activities::allCellPtr;
+
 
 all_activities::all_activities(std::vector<Activity> &vector_activity,QWidget *parent) :
     vector_activities(vector_activity),
@@ -14,7 +14,8 @@ all_activities::all_activities(std::vector<Activity> &vector_activity,QWidget *p
     ui(new Ui::all_activities)
 {
     ui->setupUi(this);
-    //ActivitiesCellNumberTotal=0;
+    int ActivitiesCellNumberTotal = 0;
+    this->add_previous_cells();
 }
 
 all_activities::~all_activities()
@@ -27,7 +28,7 @@ void all_activities::on_add_activity_button_clicked()
     addNewCell();
 }
 
-void all_activities::addNewCell(QString cellText, QString cellName)
+void all_activities::addNewCell(QString cellText, QString cellName, int type)
 {
     activity_cell *new_activity_cell = new activity_cell(this); // Create a new activity_cell.
     ui->activities_cell_layout->addWidget(new_activity_cell); // add a widget in the activities_cell_layout.
@@ -37,14 +38,24 @@ void all_activities::addNewCell(QString cellText, QString cellName)
     //new_activity_cell->setTextData(cellText); // this line set the text.
     new_activity_cell->set_activity_cell_name(cellName);
     allCellPtr.append(new_activity_cell); // here I append this new activity cell to the data vector.
+    /*QString name_activity = allCellPtr[ActivitiesCellNumberTotal]->get_activity_name();
+    int type_activity = allCellPtr[ActivitiesCellNumberTotal]->get_activity_type();
+    qDebug()<< name_activity<<type_activity;*/
+    new_activity_cell->set_activity_type(type);
+    vector_activities.push_back(Activity(cellName.toStdString(), type, 0));
     ActivitiesCellNumberTotal++; // the total number of activities is incremented by 1.
 }
 
 void all_activities::add_previous_cells(){
-    for(int i=0; i < allCellPtr.size(); i++){
+    /*for(int i=0; i < allCellPtr.size(); i++){
         allCellPtr.at(i)->setParent(this); // set the new window to be the parent
         ui->activities_cell_layout->addWidget(allCellPtr.at(i));
+    }*/
+    for(long long unsigned i = 0; i< vector_activities.size(); i++){
+        addNewCell("", QString::fromStdString(vector_activities.at(i).get_name()), vector_activities.at(i).get_type());
+        vector_activities.pop_back();
     }
+
 }
 
 void all_activities::closeCell(int ActivitiesCellNumber){
@@ -72,11 +83,13 @@ void all_activities::on_save_activity_button_clicked()
         vector_activities.push_back(Activity(name_activity.toStdString(),type_activity,0));
         out << name_activity << " , " << type_activity << "⧵n";
     }
+    save_activities(vector_activities);
     QMessageBox::StandardButton reply;
     reply = QMessageBox::information(this, "Save Confirmation", "All your activities are saved.",QMessageBox::Ok);
     if (reply == QMessageBox::Ok){
         this->close();
         }
+
 }
 
 void all_activities::closeEvent (QCloseEvent *event){
@@ -87,7 +100,7 @@ void all_activities::closeEvent (QCloseEvent *event){
         if (answr_btn != QMessageBox::Yes) {
             event->ignore();
         } else {
-            event->ignore();
+            this->close();
         }
     }else{
         for(int i=0; i<allCellPtr.size();++i){
@@ -106,7 +119,7 @@ void all_activities::closeEvent (QCloseEvent *event){
                 if (answr_btn != QMessageBox::Yes) {
                     event->ignore();
                 } else {
-                    event->ignore();
+                    this->close();
                 }
             }if(type_activity_acp == 0){
                 QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Please enter an activity type."),
@@ -127,8 +140,9 @@ void all_activities::closeEvent (QCloseEvent *event){
                     event->ignore();
                 }
             }
+            }
         }
     }
-}
+
 
 

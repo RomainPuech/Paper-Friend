@@ -24,6 +24,7 @@ public:
 
     void setTextData(QString cellText);
     void set_activity_cell_name(QString CellName);
+    void set_activity_type(int type);
 
 private:
     Ui::activity_cell *ui;

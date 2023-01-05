@@ -21,3 +21,6 @@ int Friend::get_duration() const {
 void Friend::set_duration(int duration) {
     this->duration=duration;
 }
+bool Friend::equal(Friend other){
+    return this->name == other.name;
+}

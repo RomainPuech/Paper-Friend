@@ -43,6 +43,7 @@ public:
     static void update_activities(std::vector<Activity> activities);
     static void update_friends(std::vector<Friend> friends);
     void update_graph();
+    void remove_non_existent_activities_and_friends(EntryPerso* entry);
 
 private slots:
     void on_pushButton_clicked();

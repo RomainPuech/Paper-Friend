@@ -591,6 +591,8 @@ void EntryCard::update() {
 }
 
 void EntryCard::update_fr_act_select() {
+  fr_act_select->clear();
+  fr_act_options.clear();
   for (long long unsigned fr = 0; fr < (MainWindow::get_friends()).size();
        fr++) {
     QListWidgetItem *cb = new QListWidgetItem(
@@ -644,7 +646,7 @@ void EntryCard::update_fr_act() {
     QListWidgetItem *option = fr_act_options.at(fr_act_options.size() - 1);
     fr_act_options.pop_back();
     if (option->checkState() == Qt::Checked) {
-      activities.push_back(MainWindow::get_activity_at_i(i));
+      activities.push_back(MainWindow::get_activity_at_i(num_activities - i - 1));
     }
     fr_act_select->removeItemWidget(option);
     delete option;
@@ -654,7 +656,7 @@ void EntryCard::update_fr_act() {
     QListWidgetItem *option = fr_act_options.at(fr_act_options.size() - 1);
     fr_act_options.pop_back();
     if (option->checkState() == Qt::Checked) {
-      friends.push_back(MainWindow::get_friend_at_i(i));
+      friends.push_back(MainWindow::get_friend_at_i(num_friends - i - 1));
     }
     fr_act_select->removeItemWidget(option);
     delete option;
@@ -667,13 +669,13 @@ void EntryCard::update_fr_act() {
   for (unsigned long long fr = 0; fr < (entry_perso->get_friends()).size();
        fr++) {
     fr_act_display->addItem(QString::fromStdString(
-        (entry_perso->get_friends().at(fr))->get_name()));
+        (entry_perso->get_friends().at((entry_perso->get_friends()).size() - 1 - fr))->get_name()));
   }
   for (unsigned long long act = 0; act < (entry_perso->get_activities()).size();
        act++) {
     QString name = QString::fromStdString(
-        (entry_perso->get_activities().at(act))->get_name());
-    switch ((entry_perso->get_activities().at(act))->get_type()) {
+        (entry_perso->get_activities().at((entry_perso->get_activities()).size() - 1 - act))->get_name());
+    switch ((entry_perso->get_activities().at((entry_perso->get_activities()).size() - 1 - act))->get_type()) {
     case 1: // sports
       name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
       break;

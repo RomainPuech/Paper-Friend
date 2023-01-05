@@ -33,6 +33,8 @@ struct Friend {
     int get_duration() const;
     void set_duration(int duration);
 
+    bool equal(Friend other);
+
 private:
     std::string name;
     int duration;
