@@ -123,6 +123,8 @@ MainWindow::MainWindow(QWidget *parent)
   int h = ui->settingsButton->height();
   ui->settingsButton->setIcon(QIcon(pix.scaled(w, h, Qt::KeepAspectRatio)));
 
+  update_graph_tabs();
+
   std::vector<std::string> current_habits = load_habits();
   for (int i = 0; i < current_habits.size(); i++) {
     ui->habits_label->setText(ui->habits_label->text() + "\n" +
@@ -170,6 +172,28 @@ void MainWindow::toggle_visibility(QWidget *component) {
   } else {
     component->show();
   }
+}
+
+void MainWindow::update_graph_tabs() {
+    ui->tabWidget->clear();
+    if (saved_mood()) {
+        ui->tabWidget->addTab(new QWidget(), "mood");
+    }
+    if (saved_sleep()) {
+        ui->tabWidget->addTab(new QWidget(), "sleep");
+    }
+    if (saved_eating_healthy()) {
+        ui->tabWidget->addTab(new QWidget(), "eating healthy");
+    }
+    if (saved_productivity()) {
+        ui->tabWidget->addTab(new QWidget(), "productivity");
+    }
+    if (saved_communications()) {
+        ui->tabWidget->addTab(new QWidget(), "communications");
+    }
+    if (saved_screen_time()) {
+        ui->tabWidget->addTab(new QWidget(), "screen time");
+    }
 }
 
 void MainWindow::display_entries(std::vector<EntryPerso *> entries,
@@ -246,6 +270,7 @@ void MainWindow::on_save_settings_clicked() {
   myfile << findChild<QCheckBox *>("communications")->isChecked() << "\n";
   myfile << findChild<QCheckBox *>("screen_time")->isChecked() << "\n";
   myfile.close();
+  update_graph_tabs();
   auto settings = findChild<QWidget *>("settings_frame");
   settings->hide();
   auto chat = findChild<QWidget *>("scrollArea");

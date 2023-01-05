@@ -175,8 +175,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>140</width>
-             <height>69</height>
+             <width>162</width>
+             <height>85</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -539,8 +539,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>697</width>
-               <height>415</height>
+               <width>677</width>
+               <height>427</height>
               </rect>
              </property>
             </widget>
@@ -554,10 +554,24 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_9" stretch="5,5">
+     <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,5,5">
       <property name="spacing">
        <number>2</number>
       </property>
+      <item>
+       <widget class="QTabWidget" name="tabWidget">
+        <widget class="QWidget" name="tab">
+         <attribute name="title">
+          <string>Tab 1</string>
+         </attribute>
+        </widget>
+        <widget class="QWidget" name="tab_2">
+         <attribute name="title">
+          <string>Tab 2</string>
+         </attribute>
+        </widget>
+       </widget>
+      </item>
       <item>
        <layout class="QHBoxLayout" name="graph_frame"/>
       </item>

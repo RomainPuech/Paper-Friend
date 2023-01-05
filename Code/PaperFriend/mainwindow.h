@@ -60,6 +60,7 @@ private slots:
 
 private:
     void toggle_visibility(QWidget *component);
+    void update_graph_tabs();
     void display_entries(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
     void display_graph(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
     Ui::MainWindow *ui;
