@@ -1,6 +1,7 @@
 #include "mascotchat.h"
 #include "mascot.h"
 #include "qpainter.h"
+#include "qpushbutton.h"
 #include <string>
 #include<QLabel>
 #include <QVBoxLayout>
@@ -59,6 +60,30 @@ void MascotChat::add_message(QString txt){
 
 void MascotChat::add_message(std::string txt){
     add_message(QString::fromStdString(txt));
+}
+void MascotChat::display(std::vector<QString> Qstr_vect){
+    if(Qstr_vect.size() == 0){return;}
+    else if(Qstr_vect.size() == 1){
+        add_message(Qstr_vect[0]);
+        add_mascot();}
+    else{for(int i=0; i < int(Qstr_vect.size()); i++){
+               add_message(Qstr_vect[i]);
+            }
+            add_mascot();
+        }
+}
+void MascotChat::prompt_msg(){
+    QHBoxLayout btn_layout = QHBoxLayout();
+    //btn_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum));
+    QPushButton yes = QPushButton("YES");
+    QPushButton no = QPushButton("NO");
+    //btn_layout.addWidget(yes);
+   // btn_layout.addWidget(no);
+   // layout.addLayout(btn_layout) //put the qvbox layout instead of the layout
+    std::string str = "Did you sleep well?";
+    add_message(str);
+
+
 }
 
 Message::Message()
