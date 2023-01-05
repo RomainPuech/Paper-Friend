@@ -37,7 +37,7 @@ void TextEditor::set_title(QString text)
     // We want to display the title in indipendent line writen in html and css
     ui->textEdit->setFontWeight(QFont::Bold);
     ui->textEdit->clear();
-    text = "<h1>" + text + "</h1>" + "<br>";
+    text = "<h1>" + text + "</h1>";
     ui->textEdit->insertHtml(text);
     ui->textEdit->setFontWeight(1);
 }
