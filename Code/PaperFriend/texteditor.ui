@@ -25,71 +25,56 @@
   <property name="windowTitle">
    <string>TextEditor</string>
   </property>
-  <widget class="QToolBar" name="toolBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1001</width>
-     <height>44</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <addaction name="action_Copy"/>
-   <addaction name="action_Cut"/>
-   <addaction name="action_Paste"/>
-   <addaction name="separator"/>
-   <addaction name="action_Bold"/>
-   <addaction name="action_Italic"/>
-   <addaction name="action_Underline"/>
-   <addaction name="action_Font"/>
-   <addaction name="separator"/>
-   <addaction name="action_Left"/>
-   <addaction name="action_Right"/>
-   <addaction name="action_Center"/>
-   <addaction name="action_Just"/>
-  </widget>
-  <widget class="QScrollArea" name="scrollArea">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>50</y>
-     <width>1001</width>
-     <height>331</height>
-    </rect>
-   </property>
-   <property name="widgetResizable">
-    <bool>true</bool>
-   </property>
-   <widget class="QWidget" name="scrollAreaWidgetContents">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>999</width>
-      <height>329</height>
-     </rect>
-    </property>
-    <widget class="QTextEdit" name="textEdit">
-     <property name="geometry">
-      <rect>
-       <x>-10</x>
-       <y>10</y>
-       <width>1011</width>
-       <height>351</height>
-      </rect>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QToolBar" name="toolBar">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
+     <property name="windowTitle">
+      <string>toolBar</string>
+     </property>
+     <addaction name="action_Copy"/>
+     <addaction name="action_Cut"/>
+     <addaction name="action_Paste"/>
+     <addaction name="separator"/>
+     <addaction name="action_Bold"/>
+     <addaction name="action_Italic"/>
+     <addaction name="action_Underline"/>
+     <addaction name="action_Font"/>
+     <addaction name="separator"/>
+     <addaction name="action_Left"/>
+     <addaction name="action_Right"/>
+     <addaction name="action_Center"/>
+     <addaction name="action_Just"/>
     </widget>
-   </widget>
-  </widget>
+   </item>
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>974</width>
+        <height>720</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QTextEdit" name="textEdit"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
   <action name="action_New">
    <property name="icon">
     <iconset resource="myresources.qrc">
