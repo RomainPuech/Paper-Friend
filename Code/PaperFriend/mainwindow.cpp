@@ -41,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent)
   ui->EntriesScroll->widget()->setLayout(entries_layout);
   // get the width of the scrollable area
 
+  connect(ui->type_filter, SIGNAL(currentTextChanged(const QString &)), this,
+          SLOT(MainWindow::on_type_filter_currentTextChanged(const QString &)));
   // We use Friend function to embed the TextEditor into the MainWindow
   textEditor = new TextEditor();
   textEditor->mainUi = this;
@@ -253,8 +255,7 @@ void MainWindow::on_save_settings_clicked() {
 }
 
 void MainWindow::on_filterButton_clicked() {
-  auto spinBox = findChild<QSpinBox *>("numberOfEntries");
-  int n = spinBox->value();
+
 
   // vector_entries = sample_entries(100); // this line should be changed to
   // aquire source of entries
@@ -268,6 +269,9 @@ void MainWindow::on_filterButton_clicked() {
   QString value_filter_value =
       findChild<QDoubleSpinBox *>("value_filter")->text();
   double value = value_filter_value.toDouble();
+  
+  int n = 200;
+  
 
   // construct a filter_param object
   struct Filter_param filt;
@@ -276,6 +280,8 @@ void MainWindow::on_filterButton_clicked() {
   filt.opt = operator_filter_str;
   filt.value = value;
   filt.display_num = n;
+
+  
 
   // handling duplicated filters
   bool is_insert = true;
@@ -305,10 +311,20 @@ void MainWindow::on_filterButton_clicked() {
     filter_params.push_back(filt);
   }
 
+  for(int i=0; i<filter_params.size(); i++){
+    if(filter_params[i].keyword == "last_n_entries"){
+      n = filter_params[i].value;
+      break;
+    }
+  }
+
+
   // filter the entries
-  std::vector<EntryPerso *> filtered_entries =
-      filter(vector_entries, filter_params[0]);
-  for (int i = 1; i < filter_params.size(); i++) {
+  std::vector<EntryPerso *> filtered_entries  = vector_entries;
+  for (int i = 0; i < filter_params.size(); i++) {
+    if (filter_params[i].keyword == "last_n_entries") {
+      continue;
+    }
     filtered_entries = filter(filtered_entries, filter_params[i]);
   }
 
@@ -337,6 +353,7 @@ void MainWindow::on_filterButton_clicked() {
         filter_params[i].keyword + " " + filter_params[i].opt + " " + s + ";  ";
   }
   findChild<QLabel *>("existing_filters")->setText(QString::fromStdString(f));
+
   if (filtered_entries.size() < n) {
     n = filtered_entries.size();
   }
@@ -363,6 +380,25 @@ void MainWindow::on_clear_button_clicked() {
   // aquire source of entries
   display_entries(vector_entries, ui);
   display_graph(vector_entries, ui);
+}
+
+// if type_filter is updated
+void MainWindow::on_type_filter_currentTextChanged(const QString &arg1) {
+  // update the operator_filter
+  std::string type_filter_str = arg1.toStdString();
+  
+  if (type_filter_str == "last_n_entries") {
+    //change the operator_filter to "="
+    findChild<QComboBox *>("operation_filter")->clear();
+    findChild<QComboBox *>("operation_filter")->addItem("=");
+    findChild<QComboBox *>("operation_filter")->setEnabled(false);
+  }else{
+    findChild<QComboBox *>("operation_filter")->clear();
+    findChild<QComboBox *>("operation_filter")->addItem("=");
+    findChild<QComboBox *>("operation_filter")->addItem(">");
+    findChild<QComboBox *>("operation_filter")->addItem("<");
+    findChild<QComboBox *>("operation_filter")->setEnabled(true);
+  }
 }
 
 void MainWindow::on_newEntryButton_clicked() {

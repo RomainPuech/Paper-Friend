@@ -175,8 +175,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>140</width>
-             <height>69</height>
+             <width>178</width>
+             <height>68</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -369,6 +369,11 @@
               </item>
               <item>
                <property name="text">
+                <string>last_n_entries</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
                 <string>sleep</string>
                </property>
               </item>
@@ -433,53 +438,11 @@
               <property name="toolTip">
                <string extracomment="The value you want to use">The value you want to use</string>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_2">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>show last</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="numberOfEntries">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string extracomment="How many entries should be shown">How many entries should be shown</string>
-              </property>
-              <property name="minimum">
+              <property name="decimals">
                <number>1</number>
               </property>
-              <property name="maximum">
-               <number>100</number>
-              </property>
               <property name="value">
-               <number>10</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_3">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>entries</string>
+               <double>50.000000000000000</double>
               </property>
              </widget>
             </item>
@@ -539,8 +502,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>697</width>
-               <height>415</height>
+               <width>530</width>
+               <height>450</height>
               </rect>
              </property>
             </widget>
