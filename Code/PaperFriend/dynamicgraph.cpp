@@ -198,7 +198,7 @@ void DynamicGraph::display(QLayout *layout) const
     mood_chart->axes(Qt::Horizontal).first()->setTitleFont(font);
     mood_chart->axes(Qt::Horizontal).first()->setTitleText(QString::fromStdString("Days ago"));
     QValueAxis* xaxis = static_cast<QValueAxis*>(mood_chart->axes(Qt::Horizontal).first()); //used to be able to call QValueAxis methods as we know that the axis is of type QValueAxis, which inherits from QAbstractAxis, returned by the function
-    xaxis->setLabelFormat("%0.0f");
+    xaxis->setLabelFormat("%0.1f");
     //qDebug()<<"here";
 
     //qDebug()<<"et pas here";

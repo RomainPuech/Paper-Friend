@@ -265,9 +265,9 @@ void MainWindow::on_filterButton_clicked() {
   QString operator_filter_value =
       findChild<QComboBox *>("operation_filter")->currentText();
   std::string operator_filter_str = operator_filter_value.toStdString();
-  QString value_filter_value =
-      findChild<QDoubleSpinBox *>("value_filter")->text();
-  double value = value_filter_value.toDouble();
+  //QString value_filter_value =
+      //findChild<QDoubleSpinBox *>("value_filter")->text();
+  double value = findChild<QDoubleSpinBox *>("value_filter")->value();
 
   // construct a filter_param object
   struct Filter_param filt;
@@ -331,6 +331,7 @@ void MainWindow::on_filterButton_clicked() {
   for (int i = 0; i < filter_params.size(); i++) {
     // value keeps 2 digits after the decimal point
     std::stringstream stream;
+    //qDebug()<<filter_params[i].value<<"HERE";
     stream << std::fixed << std::setprecision(1) << filter_params[i].value;
     std::string s = stream.str();
     f +=
