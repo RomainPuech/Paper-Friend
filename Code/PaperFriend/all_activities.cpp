@@ -108,6 +108,24 @@ void all_activities::closeEvent (QCloseEvent *event){
                 } else {
                     event->ignore();
                 }
+            }if(type_activity_acp == 0){
+                QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Please enter an activity type."),
+                                                                              QMessageBox::Yes | QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+                if (answr_btn != QMessageBox::Yes) {
+                    event->ignore();
+                } else {
+                    event->ignore();
+                }
+            }if(name_activity_acp.toStdString() == "Activity name"){
+                QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Please enter an activity name."),
+                                                                              QMessageBox::Yes | QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+                if (answr_btn != QMessageBox::Yes) {
+                    event->ignore();
+                } else {
+                    event->ignore();
+                }
             }
         }
     }

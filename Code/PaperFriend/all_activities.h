@@ -29,7 +29,7 @@ public:
 private slots:
   void on_add_activity_button_clicked();
 
-  void addNewCell(QString cellText = "", QString cellName = "Cell Name");
+  void addNewCell(QString cellText = "", QString cellName = "Activity name");
 
   void on_save_activity_button_clicked();
 
