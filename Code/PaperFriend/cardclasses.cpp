@@ -207,13 +207,13 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
         title->setMinimumWidth(this->get_width());
         title->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
         title->setAlignment(Qt::AlignLeft);
-        title->setContentsMargins(5, 10, 5, 0);
+        title->setContentsMargins(5, 5, 5, 0);
 
         text_field->setMinimumWidth(this->get_width());
         text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         text_field->setAlignment(Qt::AlignLeft);
         text_field->setReadOnly(true);
-        text_field->setContentsMargins(10, 0, 10, 5);
+        text_field->setContentsMargins(5, 0, 0, 5);
 
         //handle layout
         text_title_vb->addWidget(title);
@@ -222,15 +222,15 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color, En
         text_title_w->setLayout(text_title_vb);
 
         // Here we embed the text editor
-        edit_text_w->setMinimumWidth(this->get_width());
+//        edit_text_w->setMinimumWidth(this->get_width());
         edit_text_w->setMinimumHeight(this->get_height());
-        edit_text_w->setMaximumWidth((this->get_width())+530);
-        edit_text_w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        edit_text_w->setContentsMargins(10, 0, 10, 5);
+//        edit_text_w->setMaximumWidth((this->get_width())+530);
+//        edit_text_w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//        edit_text_w->setContentsMargins(10, 0, 10, 5);
         edit_text->setMinimumWidth(this->get_width());
-        edit_text->set_max_width((this->get_width())+510);
-        edit_text->set_max_height((this->get_height())-50);
-        edit_text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//        edit_text->set_max_width((this->get_width())+510);
+//        edit_text->set_max_height((this->get_height())-50);
+//        edit_text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         edit_text_w->addWidget(edit_text);
         edit_text_w->setCurrentWidget(edit_text);
 
