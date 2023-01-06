@@ -70,13 +70,16 @@ MainWindow::MainWindow(QWidget *parent)
   }
 
   //load previously entered activities
+  if (!std::filesystem::exists("activities.json")) {
+    save_activities(vector_activities);
+  }
   vector_activities = load_activities();
   qDebug()<<vector_activities.size();
   // load previous entries
   QDir dir(QDir::currentPath() + "/Entries");
   for (const QString &filename : dir.entryList(QDir::Files)) {
     vector_entries.push_back(
-        load_entryperso("Entries/" + filename.toStdString()));
+        load_entryperso(filename.toStdString()));
   }
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
 
