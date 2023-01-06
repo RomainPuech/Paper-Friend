@@ -14,6 +14,7 @@ public:
     void operator<<(std::string txt);
     void operator<<(QString txt);
     void add_mascot();
+    void display(std::vector<QString> Qstr_vect);
     //getters
     QString get_last_message() const;
     QScrollArea* get_scrollArea();
@@ -21,6 +22,7 @@ public:
 private:
     void add_message(QString txt);
     void add_message(std::string txt);
+    void prompt_msg();
     QScrollArea *scrollArea;
     Mascot *mascot;
 };

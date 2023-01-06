@@ -29,6 +29,10 @@ void activity_cell::set_activity_cell_name(QString cellName){
     ui->activity_name->setMaxLength(30);
 }
 
+void activity_cell::set_activity_type(int type){
+    ui->activity_type->setCurrentIndex(type);
+}
+
 void activity_cell::on_delete_activity_button_clicked()
 {
     QMessageBox::StandardButton reply;
