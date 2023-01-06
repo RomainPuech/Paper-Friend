@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent)
   QDir dir(QDir::currentPath() + "/Entries");
   for (const QString &filename : dir.entryList(QDir::Files)) {
     vector_entries.push_back(
-        load_entryperso("Entries/" + filename.toStdString()));
+        load_entryperso(filename.toStdString()));
   }
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
 
