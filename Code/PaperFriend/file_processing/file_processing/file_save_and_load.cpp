@@ -182,12 +182,12 @@ std::vector<Friend*> str_to_vec_friends (std::string act){//activity vec from a 
 
 
 
-bool save_entryperso(EntryPerso entry){ // I create and save the entry file, title format MM.YY.JJ
+
+bool save_entryperso(EntryPerso entry){ //  create and save the entry file, title format MM.YY.JJ
 
     std::string activities = activities_vec_to_str(entry.get_activities());
     std::string friends = friend_vec_to_str(entry.get_friends());
-    std::cout<<activities<<"\n";
-    std::cout<<friends<<"\n";
+
 
 
     nlohmann::json  j = {
@@ -205,8 +205,17 @@ bool save_entryperso(EntryPerso entry){ // I create and save the entry file, tit
 
         {"friends", friends}
     };
-    std::string filename = "Entries/" + entry.get_qdate().toString("MM.dd.yyyy").toStdString()+".json";
-    std::ofstream o(filename);
+    std::string filename =  entry.get_qdate().toString("MM.dd.yyyy").toStdString()+".json";
+
+    std::filesystem::path cwd = std::filesystem::current_path();
+
+    std::filesystem::create_directory("Entries");
+
+    cwd /= "Entries";
+
+    std::filesystem::path filePath = cwd / filename;
+
+    std::ofstream o( filePath);
 
 
     if(!o.is_open()){
@@ -223,10 +232,8 @@ bool save_entryperso(EntryPerso entry){ // I create and save the entry file, tit
 
 
 
-
-
 EntryPerso* load_entryperso(std::string filename){//retrieve the data of a Json file and return an initialized Entry object with this data
-    std::ifstream i(filename);
+    std::ifstream i("Entries/" + filename);
     nlohmann::json j;
     i >> j;
     EntryPerso* res = new EntryPerso(j["text"], j["title"], str_to_vec_activities(j["activities"]), str_to_vec_friends(j["friends"]), j["mood"], j["sleep"], j["eating_healthy"], j["productivity"],j["communications"], j["screen_time"] );
