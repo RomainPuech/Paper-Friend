@@ -68,6 +68,9 @@ MainWindow::MainWindow(QWidget *parent)
   }
 
   //load previously entered activities
+  if (!std::filesystem::exists("activities.json")) {
+    save_activities(vector_activities);
+  }
   vector_activities = load_activities();
   qDebug()<<vector_activities.size();
   // load previous entries
