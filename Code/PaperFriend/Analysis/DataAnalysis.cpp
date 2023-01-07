@@ -449,6 +449,10 @@ void DataAnalysis::monthly_anomalies_text(const std::vector<EntryPerso> &entries
     }
 }
 
+void DataAnalysis::yearly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect){
+
+}
+
 std::string DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &entries, int type){
     std::string res = "";
     std::vector<std::string> anomaly_texts;
