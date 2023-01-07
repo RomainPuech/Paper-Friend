@@ -28,6 +28,7 @@ public:
 
 
     std::string get_weekday() const; // 1 = Monday, 2 = Tuesday", ...
+    std::string get_month_name() const;
 
     int get_absolute_day() const; // Day in Julian calendar
 

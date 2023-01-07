@@ -417,11 +417,13 @@ void DataAnalysis::monthly_anomalies_text(const std::vector<EntryPerso> &entries
     for (int j = 0; j < 4; ++j){
         groups.push_back(get_lastn_days_data(7, references[j]));
     }
+    std::vector<int> anomalies;
+    double mean;
+    double standev;
 
     for (int i = 0; i < get_num_activities(); ++i){
-        std::vector<int> anomalies;
-        double mean = avg(entries, i);
-        double standev = stddev(entries, i);
+        mean = avg(entries, i);
+        standev = stddev(entries, i);
         for (int k = 0; k < 4; ++k){
             if (groups[k].size() == 0){
                 continue;
@@ -430,14 +432,13 @@ void DataAnalysis::monthly_anomalies_text(const std::vector<EntryPerso> &entries
                 anomalies.push_back(k);
             }
         }
-        for (int i = 0; i < get_num_activities(); ++i) {
 
-          if (anomalies.size() == 0) {
+        if (anomalies.size() == 0) {
             string_vect[i] += "This has been relatively stable over the weeks of the past month.";
 
-          } else if (anomalies.size() == 1) {
+        } else if (anomalies.size() == 1) {
             string_vect[i] += "The " + weeks[anomalies[0]] + " week of the past month was an outlier.";
-          } else {
+        } else {
             string_vect[i] += "The ";
             for (unsigned int m = 0; m < anomalies.size() - 2; ++m){
                 string_vect[i] += weeks[anomalies[m]] + ", ";
@@ -445,12 +446,49 @@ void DataAnalysis::monthly_anomalies_text(const std::vector<EntryPerso> &entries
             string_vect[i] += "and " + weeks[anomalies[anomalies.size() - 1]] + " weeks of the past month were outliers.";
           }
           string_vect[i] += "\n";
-        }
+        anomalies.clear();
+
     }
 }
 
 void DataAnalysis::yearly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect){
+    std::vector<std::vector<EntryPerso>> groups;
+    int references[]{-1, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330};
+    std::string weeks[]{"first", "second", "third", "fourth"};
+    for (int j = 0; j < 12; ++j){
+        groups.push_back(get_lastn_days_data(30, references[j]));
+    }
+    std::vector<int> anomalies;
+    double mean;
+    double standev;
+    for (int i = 0; i < get_num_activities(); ++i){
+        std::vector<int> anomalies;
+        mean = avg(entries, i);
+        standev = stddev(entries, i);
+        for (int k = 0; k < 12; ++k){
+            if (groups[k].size() == 0){
+                continue;
+            }
+            if (abs(mean - avg(groups[k], i)) >= 2 * standev){
+                anomalies.push_back(k);
+            }
+        }
 
+        if (anomalies.size() == 0) {
+            string_vect[i] += "This has been relatively stable over the months of the past year.";
+
+        } else if (anomalies.size() == 1) {
+            string_vect[i] += groups[anomalies[0]][groups[anomalies[0]].size() / 2].get_month_name() + " was an outlier in the past year.";
+        } else {
+            string_vect[i] += "The months of ";
+            for (unsigned int m = 0; m < anomalies.size() - 2; ++m){
+                string_vect[i] += groups[anomalies[0]][groups[anomalies[0]].size() / 2].get_month_name() + ", ";
+            }
+            string_vect[i] += "and " + weeks[anomalies[anomalies.size() - 1]] + " were outliers in the past year.";
+          }
+          string_vect[i] += "\n";
+        anomalies.clear();
+    }
 }
 
 std::string DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &entries, int type){

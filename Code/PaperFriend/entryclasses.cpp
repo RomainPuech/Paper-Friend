@@ -57,6 +57,10 @@ std::string Entry::get_weekday() const{
     return weekday;
 }
 
+std::string Entry::get_month_name() const{
+    return qdate.toString("MMMM").toStdString();
+}
+
 int Entry::get_absolute_day() const{
     return absolute_day;
 }
