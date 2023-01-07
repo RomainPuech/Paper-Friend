@@ -1,6 +1,6 @@
 | Name                 |Team               |      What I did             |  What I will do |
 |:----------------------:|:-----------------:|:-------------------------|:------------------|
-| Romain Puech         |Data analysis  |||
+| Romain Puech         |Data analysis/ link Frontend  |- Organisation of new tasks and teams for the final phase of the project<br>- Integration of weekly/monthly/yearly [recaps](https://github.com/orgs/CSE201-project/projects/4/views/2?pane=issue&itemId=16133849)<br>- Make the mascot [react](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/96) to the mood of the daily entry<br>- [Implemented welcome message](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/140) of the mascot depending on the time since the last use of the app.<br>- Replaced [color gradient](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/141) formula by a specific parabola for the color of the mood at the top right of an entry to match the color of the graph<br>-Fixed [bug in filters](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/126) due to number formating.<br>- Thoroughly [tested](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/131) the app to spot bugs, organise and clean code|- Clean code<br>- Integrate suggestions of the mascot.<br>- Generate testing data.<br>- Link analysis/frontend|
 | Bogdana Kolic        |Frontend/Fixes |||
 | Liam Loughman        |Frontend       |||
 | Yubo Cai             |Frontend/Fixes |||
