@@ -10,6 +10,7 @@
 class MascotChat
 {
 public:
+    MascotChat();
     MascotChat(QScrollArea *area);
     void operator<<(std::string txt);
     void operator<<(QString txt);
@@ -20,6 +21,7 @@ public:
     QScrollArea* get_scrollArea();
 
 private:
+    void set_scroll_area(QScrollArea *area);
     void add_message(QString txt);
     void add_message(std::string txt);
     void prompt_msg();

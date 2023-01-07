@@ -24,7 +24,6 @@ SOURCES += \
     entryrecap.cpp \
     file_processing/file_processing/file_save_and_load.cpp \
     friendclasses.cpp \
-    loadHabits.cpp \
     main.cpp \
     mainwindow.cpp\
     dynamicgraph.cpp \
@@ -53,7 +52,6 @@ HEADERS += \
     entryrecap.h \
     file_processing/file_processing/file_save_and_load.h \
     friendclasses.h \
-    loadHabits.h \
     mainwindow.h\
     dynamicgraph.h \
     mascot.h \

@@ -2,6 +2,7 @@
 #include "cipher/cipher.h"
 #include "qdir.h"
 #include <QFile>
+#include <QDebug>
 
 
 
@@ -340,4 +341,53 @@ std::vector<Friend> load_friends (){//Friend vec from a string
     }
     return res;
 
+}
+
+std::vector<std::string> load_habits() {
+    std::string habit;
+    std::vector<std::string> current_habits;
+    std::ifstream myfile;
+    myfile.open("habits.txt");
+    if ( myfile.is_open() ) {
+        while (myfile.good()) {
+            std::getline (myfile, habit);
+            std::cout << habit << '\n';
+            current_habits.push_back(habit);
+        }
+    }
+    else {
+        std::cout << "Couldn't open habits file\n";
+    }
+    return current_habits;
+}
+
+std::vector<QString> load_last_recaps_dates() {
+    std::string stringdate;
+    std::vector<QString> last_recaps_dates;
+    std::ifstream myfile;
+    myfile.open("last_recaps_dates.txt");
+    if ( myfile.is_open() ) {
+        while (myfile.good()) {
+            std::getline (myfile, stringdate);
+            if(stringdate==std::string("")){
+                qDebug()<<QString("no recap yet");
+            }
+            last_recaps_dates.push_back(QString::fromStdString(stringdate));
+        }
+    }
+    else {
+        std::cout << "Couldn't open recap file\n";
+    }
+    while(last_recaps_dates.size()<3){
+        last_recaps_dates.push_back(QString(""));
+    }
+    return last_recaps_dates;
+}
+
+void save_last_recaps_dates(std::vector<QString> last_recaps_dates){
+    std::ofstream myfile("last_recaps_dates.txt");
+    myfile << last_recaps_dates[0].toStdString()<<endl;
+    myfile << last_recaps_dates[1].toStdString()<<endl;
+    myfile << last_recaps_dates[2].toStdString()<<endl;
+    myfile.close();
 }
