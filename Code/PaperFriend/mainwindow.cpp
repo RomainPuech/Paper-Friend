@@ -70,10 +70,9 @@ MainWindow::MainWindow(QWidget *parent)
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
 
   //Load habits
-  std::vector<std::string> current_habits = load_habits();
+  std::vector<QStringList> current_habits = load_habits();
   for (int i = 0; i < current_habits.size(); i++) {
-    ui->habits_label->setText(ui->habits_label->text() + "\n" +
-                              QString::fromStdString(current_habits[i]));
+    ui->habits_label->setText(ui->habits_label->text() + "\n" + current_habits[i][0] + ", " + current_habits[i][1]);
   }
 
   displayed_entries = vector_entries;

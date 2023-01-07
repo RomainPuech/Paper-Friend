@@ -88,3 +88,7 @@ RESOURCES += \
     myresources.qrc
 
 RC_FILE += rsc/Editor.rc
+
+macx: {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+}
