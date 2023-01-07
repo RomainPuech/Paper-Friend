@@ -51,18 +51,6 @@ MainWindow::MainWindow(QWidget *parent)
   textEditor = new TextEditor();
   textEditor->mainUi = this;
   // we want to set the textEditor with the same size as the place of embedding
-  /*vector_entries = sample_entries(10);
-  EntryPerso *e2 = new EntryPerso();
-  e2->set_mood(30);
-  e2->set_qdate(QDate::currentDate().addDays(-2));
-
-  EntryPerso *e3 = new EntryPerso();
-  e3->set_mood(80);
-  e3->set_qdate(QDate::currentDate().addDays(-1));
-
-
-  vector_entries.push_back(e2);
-  vector_entries.push_back(e3);*/
 
   // create a folder for the entries if it doesn't already exist
   if (!QDir("Entries").exists()) {
@@ -83,20 +71,20 @@ MainWindow::MainWindow(QWidget *parent)
   }
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
 
-  // save the card corresponding to the current day in case it has to be
-  // modified
+  displayed_entries = vector_entries;
+
+  // save the card corresponding to the current day in case it has to be modified
   if (!vector_entries.empty()) {
     EntryPerso *newest_entry = vector_entries.back();
     if (newest_entry->get_qdate() == QDate::currentDate()) {
-      today_card =
-          new EntryCard(20, 300, 300, "white", newest_entry, true, this);
+      today_card = new EntryCard(20, 300, 300, "white", newest_entry, true, this);
     }
   }
 
-  display_graph(vector_entries, ui);
-  display_entries(vector_entries, ui);
+  display_entries();
 
   // test for recap display
+  /*
   EntryRecap *recap = new EntryRecap();
   EntryPerso *e = new EntryPerso();
   e->set_mood(1 + std::rand() % 100);
@@ -111,7 +99,8 @@ MainWindow::MainWindow(QWidget *parent)
   recap->set_best_day(*e);
   recap->set_worst_day(*e);
   EntryCard *entry_r = new EntryCard(15, 200, 200, "white", recap, false, this);
-  //entry_r->display(ui->EntriesScroll->widget()->layout());
+  entry_r->display(ui->EntriesScroll->widget()->layout());
+  */
 
   // Chatbox
   MascotChat chat = MascotChat(ui->scrollArea);
@@ -136,10 +125,10 @@ MainWindow::MainWindow(QWidget *parent)
   int h = ui->settingsButton->height();
   ui->settingsButton->setIcon(QIcon(pix.scaled(w, h, Qt::KeepAspectRatio)));
 
-  update_graph_tabs();
+  update_graphs();
 
   std::vector<std::string> current_habits = load_habits();
-  for (int i = 0; i < current_habits.size(); i++) {
+  for (std::string::size_type i = 0; i < current_habits.size(); i++) {
     ui->habits_label->setText(ui->habits_label->text() + "\n" +
                               QString::fromStdString(current_habits[i]));
   }
@@ -187,28 +176,28 @@ void MainWindow::toggle_visibility(QWidget *component) {
   }
 }
 
-
-void MainWindow::update_graph_tabs() {
+void MainWindow::update_graphs() {
     ui->tabWidget->clear();
     if (saved_mood()) {
-        ui->tabWidget->addTab(new QWidget(), "mood");
+        display_graph("mood");
     }
     if (saved_sleep()) {
-        ui->tabWidget->addTab(new QWidget(), "sleep");
+        display_graph("sleep");
     }
     if (saved_eating_healthy()) {
-        ui->tabWidget->addTab(new QWidget(), "eating healthy");
+        display_graph("eating healthy");
     }
     if (saved_productivity()) {
-        ui->tabWidget->addTab(new QWidget(), "productivity");
+        display_graph("productivity");
     }
     if (saved_communications()) {
-        ui->tabWidget->addTab(new QWidget(), "communications");
+        display_graph("communications");
     }
     if (saved_screen_time()) {
-        ui->tabWidget->addTab(new QWidget(), "screen time");
+        display_graph("screen time");
     }
 }
+
 void MainWindow::remove_non_existent_activities_and_friends(EntryPerso* entry){
     std::vector<Activity*> activities;
     std::vector<Friend*> friends;
@@ -232,13 +221,12 @@ void MainWindow::remove_non_existent_activities_and_friends(EntryPerso* entry){
     entry->set_friends(friends);
 }
 
-void MainWindow::display_entries(std::vector<EntryPerso *> entries,
-                                 Ui::MainWindow *ui) {
+void MainWindow::display_entries() {
 
 
   while (!ui->EntriesScroll->widget()->layout()->isEmpty()) {
     QLayoutItem *item = ui->EntriesScroll->widget()->layout()->takeAt(0);
-    ui->graph_frame->removeItem(item);
+    //ui->graph_frame->removeItem(item);
     delete item->widget();
     delete item;
     qDebug() << "removed";
@@ -250,7 +238,7 @@ void MainWindow::display_entries(std::vector<EntryPerso *> entries,
   }*/
 
   // displaying in reversed order
-  for (auto entry = entries.rbegin(); entry != entries.rend(); ++entry) {
+  for (auto entry = displayed_entries.rbegin(); entry != displayed_entries.rend(); ++entry) {
     //remove friends and activities that shouldn't be displayed
       remove_non_existent_activities_and_friends(*entry);
     if ((*entry)->get_qdate() == QDate::currentDate()) {
@@ -264,14 +252,13 @@ void MainWindow::display_entries(std::vector<EntryPerso *> entries,
   }
 }
 
-void MainWindow::display_graph(std::vector<EntryPerso *> entries,
-                               Ui::MainWindow *ui) {
-  while (!ui->graph_frame->isEmpty()) {
-    ui->graph_frame->removeItem(ui->graph_frame->takeAt(0));
-  }
-  DynamicGraph moodGraph = DynamicGraph(entries);
-  moodGraph.display(ui->graph_frame); // displays the graph
-  this->showMaximized();
+void MainWindow::display_graph(QString tracked_parameter) {
+    QWidget *tab = new QWidget();
+    QHBoxLayout *graph = new QHBoxLayout(tab);
+    ui->tabWidget->addTab(tab, tracked_parameter);
+    DynamicGraph dynamicGraph = DynamicGraph(displayed_entries, tracked_parameter);
+    dynamicGraph.display(graph);
+    this->showMaximized();
 }
 
 void MainWindow::on_pushButton_clicked() {
@@ -310,7 +297,7 @@ void MainWindow::on_save_settings_clicked() {
   myfile << findChild<QCheckBox *>("communications")->isChecked() << "\n";
   myfile << findChild<QCheckBox *>("screen_time")->isChecked() << "\n";
   myfile.close();
-  update_graph_tabs();
+  update_graphs();
   auto settings = findChild<QWidget *>("settings_frame");
   settings->hide();
   auto chat = findChild<QWidget *>("scrollArea");
@@ -427,8 +414,9 @@ void MainWindow::on_filterButton_clicked() {
     entries_to_display.push_back(filtered_entries[i]);
   }
 
-  display_entries(entries_to_display, ui);
-  display_graph(entries_to_display, ui);
+  displayed_entries = entries_to_display;
+  display_entries();
+  update_graphs();
 }
 
 void MainWindow::on_helpFilterBox_clicked() {
@@ -441,8 +429,9 @@ void MainWindow::on_clear_button_clicked() {
   findChild<QLabel *>("existing_filters")->setText("Filters: ");
   // vector_entries = sample_entries(10); // this line should be changed to
   // aquire source of entries
-  display_entries(vector_entries, ui);
-  display_graph(vector_entries, ui);
+  displayed_entries = vector_entries;
+  display_entries();
+  update_graphs();
 }
 
 // if type_filter is updated
@@ -471,56 +460,37 @@ void MainWindow::on_newEntryButton_clicked() {
   (!std::filesystem::exists("Entries/"+QDate::currentDate().toString("MM.dd.yyyy").toStdString()+".json"))
   { EntryPerso *today_entry = new EntryPerso(); save_entryperso(*today_entry);
       vector_entries.push_back(today_entry);
+      displayed_entries.push_back(today_entry);
       today_card = new EntryCard(20, 300, 300, "white", today_entry, true,
-  this); display_entries(vector_entries, ui);
+  this); display_entries();
   }
   */
   if (vector_entries.empty()) {
     EntryPerso *today_entry = new EntryPerso();
     save_entryperso(*today_entry);
     vector_entries.push_back(today_entry);
+    displayed_entries.push_back(today_entry);
     today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
-    display_entries(vector_entries, ui);
+    display_entries();
   } else {
     if (vector_entries.back()->get_qdate() != QDate::currentDate()) {
       EntryPerso *today_entry = new EntryPerso();
       save_entryperso(*today_entry);
       vector_entries.push_back(today_entry);
-      today_card =
-          new EntryCard(20, 300, 300, "white", today_entry, true, this);
-      display_entries(vector_entries, ui);
+      displayed_entries.push_back(today_entry);
+      today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
+      display_entries();
     }
   }
   ui->EntriesScroll->verticalScrollBar()->setValue(0);
   today_card->change();
 }
 
-// helps with debugging; to be replaced later
-std::vector<EntryPerso *> MainWindow::test(int n) {
-  std::vector<EntryPerso *> entries;
-  for (int i = n; i >= 1; i--) {
-    EntryPerso *e = new EntryPerso();
-    e->set_mood(1 + std::rand() % 100);
-    e->set_qdate(QDate(2022, 11, i));
-    std::vector<Friend *> fr;
-    fr.push_back(new Friend("fr", 1));
-    std::vector<Activity *> activity;
-    activity.push_back(new Activity("act", 1));
-    e->set_friends(fr);
-    e->set_activities(activity);
-    e->set_title("THIS IS A TITLE");
-    e->set_text("some text ...");
-    entries.push_back(e);
-  }
-  return entries;
-}
-
-void MainWindow::update_graph() { display_graph(vector_entries, ui); }
-
 void MainWindow::on_people_button_clicked() {}
 
 void MainWindow::on_Test_entries_clicked() {
   vector_entries = sample_entries(100);
-  display_entries(vector_entries, ui);
-  display_graph(vector_entries, ui);
+  displayed_entries = vector_entries;
+  display_entries();
+  update_graphs();
 }

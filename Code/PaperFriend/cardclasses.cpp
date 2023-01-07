@@ -578,7 +578,7 @@ void EntryCard::update() {
     update_fr_act();
   }
   // update dynamic graph
-  main_window->update_graph();
+  main_window->update_graphs();
   // update style
   if (readOnly && fr_act_display->count() != 0) {
     set_entryPerso_style(3);

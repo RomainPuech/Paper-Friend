@@ -194,11 +194,11 @@ std::vector<EntryPerso*> sample_entries(int n,std::vector<Activity*> possible_ac
         mood = std::llround(mood*2) / 2.0;
         if(mood>100){mood=100;}
         if(mood<0){mood=0;}
-        double sleep = 6+rand()%6;
-        double eating_healthy = rand()%2;
-        double productivity = rand()%21;
-        double communications = rand()%11;
-        double screen_time = (rand()%240)/10;
+        double sleep = rand()%101;
+        double eating_healthy = rand()%101;
+        double productivity = rand()%101;
+        double communications = rand()%101;
+        double screen_time = rand()%101;
         EntryPerso *entry = new EntryPerso("sample entry text","The title of the entry",activities,friends,mood,sleep,eating_healthy,productivity,communications,screen_time);
         entry->set_qdate((QDate::currentDate()).addDays(-i));
         res.push_back(entry);
