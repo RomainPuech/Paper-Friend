@@ -24,6 +24,10 @@ std::vector<EntryPerso *> MainWindow::vector_entries;
 std::vector<Activity> MainWindow::vector_activities;
 std::vector<Friend> MainWindow::vector_friends;
 
+bool sort_by_date(const EntryPerso *e1, const EntryPerso *e2){
+    return e1->get_qdate().daysTo(e2->get_qdate()) > 0;
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this); // display canvas created in drag-and-drop
@@ -41,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent)
   ui->EntriesScroll->widget()->setLayout(entries_layout);
   // get the width of the scrollable area
 
+  connect(ui->type_filter, SIGNAL(currentTextChanged(const QString &)), this,
+          SLOT(MainWindow::on_type_filter_currentTextChanged(const QString &)));
   // We use Friend function to embed the TextEditor into the MainWindow
   textEditor = new TextEditor();
   textEditor->mainUi = this;
@@ -63,12 +69,19 @@ MainWindow::MainWindow(QWidget *parent)
     QDir().mkdir("Entries");
   }
 
+  //load previously entered activities
+  if (!std::filesystem::exists("activities.json")) {
+    save_activities(vector_activities);
+  }
+  vector_activities = load_activities();
+  qDebug()<<vector_activities.size();
   // load previous entries
   QDir dir(QDir::currentPath() + "/Entries");
   for (const QString &filename : dir.entryList(QDir::Files)) {
     vector_entries.push_back(
-        load_entryperso("Entries/" + filename.toStdString()));
+        load_entryperso(filename.toStdString()));
   }
+  sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
 
   // save the card corresponding to the current day in case it has to be
   // modified
@@ -98,7 +111,7 @@ MainWindow::MainWindow(QWidget *parent)
   recap->set_best_day(*e);
   recap->set_worst_day(*e);
   EntryCard *entry_r = new EntryCard(15, 200, 200, "white", recap, false, this);
-  entry_r->display(ui->EntriesScroll->widget()->layout());
+  //entry_r->display(ui->EntriesScroll->widget()->layout());
 
   // Chatbox
   MascotChat chat = MascotChat(ui->scrollArea);
@@ -122,6 +135,8 @@ MainWindow::MainWindow(QWidget *parent)
   int w = ui->settingsButton->width();
   int h = ui->settingsButton->height();
   ui->settingsButton->setIcon(QIcon(pix.scaled(w, h, Qt::KeepAspectRatio)));
+
+  update_graph_tabs();
 
   std::vector<std::string> current_habits = load_habits();
   for (int i = 0; i < current_habits.size(); i++) {
@@ -172,8 +187,55 @@ void MainWindow::toggle_visibility(QWidget *component) {
   }
 }
 
+
+void MainWindow::update_graph_tabs() {
+    ui->tabWidget->clear();
+    if (saved_mood()) {
+        ui->tabWidget->addTab(new QWidget(), "mood");
+    }
+    if (saved_sleep()) {
+        ui->tabWidget->addTab(new QWidget(), "sleep");
+    }
+    if (saved_eating_healthy()) {
+        ui->tabWidget->addTab(new QWidget(), "eating healthy");
+    }
+    if (saved_productivity()) {
+        ui->tabWidget->addTab(new QWidget(), "productivity");
+    }
+    if (saved_communications()) {
+        ui->tabWidget->addTab(new QWidget(), "communications");
+    }
+    if (saved_screen_time()) {
+        ui->tabWidget->addTab(new QWidget(), "screen time");
+    }
+}
+void MainWindow::remove_non_existent_activities_and_friends(EntryPerso* entry){
+    std::vector<Activity*> activities;
+    std::vector<Friend*> friends;
+    for(long long unsigned act = 0; act < entry->get_activities().size(); act++){
+        for(long long unsigned i = 0; i < vector_activities.size(); i++){
+            if((entry->get_activities().at(act))->equal(vector_activities.at(i))){
+                activities.push_back(&vector_activities.at(i));
+                break;
+            }
+        }
+    }
+    for(long long unsigned fr = 0; fr < entry->get_friends().size(); fr++){
+        for(long long unsigned i = 0; i < vector_friends.size(); i++){
+            if((entry->get_friends().at(fr))->equal(vector_friends.at(i))){
+                friends.push_back(&vector_friends.at(i));
+                break;
+            }
+        }
+    }
+    entry->set_activities(activities);
+    entry->set_friends(friends);
+}
+
 void MainWindow::display_entries(std::vector<EntryPerso *> entries,
                                  Ui::MainWindow *ui) {
+
+
   while (!ui->EntriesScroll->widget()->layout()->isEmpty()) {
     QLayoutItem *item = ui->EntriesScroll->widget()->layout()->takeAt(0);
     ui->graph_frame->removeItem(item);
@@ -189,12 +251,14 @@ void MainWindow::display_entries(std::vector<EntryPerso *> entries,
 
   // displaying in reversed order
   for (auto entry = entries.rbegin(); entry != entries.rend(); ++entry) {
+    //remove friends and activities that shouldn't be displayed
+      remove_non_existent_activities_and_friends(*entry);
     if ((*entry)->get_qdate() == QDate::currentDate()) {
+      today_card = new EntryCard(20, 300, 300, "white", *entry, true, this);
       today_card->display(ui->EntriesScroll->widget()->layout());
     } else {
       EntryCard *c = new EntryCard(20, 300, 300, "white", *entry, true, this);
-      c->display(ui->EntriesScroll->widget()
-                     ->layout()); // displays the entry in the main_frame.
+      c->display(ui->EntriesScroll->widget()->layout()); // displays the entry in the main_frame.
       qDebug() << "displayed";
     }
   }
@@ -218,7 +282,7 @@ void MainWindow::on_pushButton_clicked() {
 
 void MainWindow::on_activitie_button_clicked() {
   all_activities *my_activities = new all_activities(vector_activities);
-  my_activities->add_previous_cells();
+  //my_activities->add_previous_cells();
   my_activities->setModal(true);
   my_activities->exec();
 }
@@ -246,6 +310,7 @@ void MainWindow::on_save_settings_clicked() {
   myfile << findChild<QCheckBox *>("communications")->isChecked() << "\n";
   myfile << findChild<QCheckBox *>("screen_time")->isChecked() << "\n";
   myfile.close();
+  update_graph_tabs();
   auto settings = findChild<QWidget *>("settings_frame");
   settings->hide();
   auto chat = findChild<QWidget *>("scrollArea");
@@ -253,8 +318,7 @@ void MainWindow::on_save_settings_clicked() {
 }
 
 void MainWindow::on_filterButton_clicked() {
-  auto spinBox = findChild<QSpinBox *>("numberOfEntries");
-  int n = spinBox->value();
+
 
   // vector_entries = sample_entries(100); // this line should be changed to
   // aquire source of entries
@@ -268,6 +332,8 @@ void MainWindow::on_filterButton_clicked() {
   //QString value_filter_value =
       //findChild<QDoubleSpinBox *>("value_filter")->text();
   double value = findChild<QDoubleSpinBox *>("value_filter")->value();
+  int n = 200;
+  
 
   // construct a filter_param object
   struct Filter_param filt;
@@ -276,6 +342,8 @@ void MainWindow::on_filterButton_clicked() {
   filt.opt = operator_filter_str;
   filt.value = value;
   filt.display_num = n;
+
+  
 
   // handling duplicated filters
   bool is_insert = true;
@@ -305,10 +373,20 @@ void MainWindow::on_filterButton_clicked() {
     filter_params.push_back(filt);
   }
 
+  for(int i=0; i<filter_params.size(); i++){
+    if(filter_params[i].keyword == "last_n_entries"){
+      n = filter_params[i].value;
+      break;
+    }
+  }
+
+
   // filter the entries
-  std::vector<EntryPerso *> filtered_entries =
-      filter(vector_entries, filter_params[0]);
-  for (int i = 1; i < filter_params.size(); i++) {
+  std::vector<EntryPerso *> filtered_entries  = vector_entries;
+  for (int i = 0; i < filter_params.size(); i++) {
+    if (filter_params[i].keyword == "last_n_entries") {
+      continue;
+    }
     filtered_entries = filter(filtered_entries, filter_params[i]);
   }
 
@@ -338,6 +416,7 @@ void MainWindow::on_filterButton_clicked() {
         filter_params[i].keyword + " " + filter_params[i].opt + " " + s + ";  ";
   }
   findChild<QLabel *>("existing_filters")->setText(QString::fromStdString(f));
+
   if (filtered_entries.size() < n) {
     n = filtered_entries.size();
   }
@@ -364,6 +443,25 @@ void MainWindow::on_clear_button_clicked() {
   // aquire source of entries
   display_entries(vector_entries, ui);
   display_graph(vector_entries, ui);
+}
+
+// if type_filter is updated
+void MainWindow::on_type_filter_currentTextChanged(const QString &arg1) {
+  // update the operator_filter
+  std::string type_filter_str = arg1.toStdString();
+  
+  if (type_filter_str == "last_n_entries") {
+    //change the operator_filter to "="
+    findChild<QComboBox *>("operation_filter")->clear();
+    findChild<QComboBox *>("operation_filter")->addItem("=");
+    findChild<QComboBox *>("operation_filter")->setEnabled(false);
+  }else{
+    findChild<QComboBox *>("operation_filter")->clear();
+    findChild<QComboBox *>("operation_filter")->addItem("=");
+    findChild<QComboBox *>("operation_filter")->addItem(">");
+    findChild<QComboBox *>("operation_filter")->addItem("<");
+    findChild<QComboBox *>("operation_filter")->setEnabled(true);
+  }
 }
 
 void MainWindow::on_newEntryButton_clicked() {

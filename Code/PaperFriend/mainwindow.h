@@ -43,6 +43,7 @@ public:
     static void update_activities(std::vector<Activity> activities);
     static void update_friends(std::vector<Friend> friends);
     void update_graph();
+    void remove_non_existent_activities_and_friends(EntryPerso* entry);
 
 private slots:
     void on_pushButton_clicked();
@@ -53,13 +54,16 @@ private slots:
     void on_newEntryButton_clicked();
     void on_clear_button_clicked();
     void on_helpFilterBox_clicked();
+    void on_type_filter_currentTextChanged(const QString &);
 
     void on_people_button_clicked();
 
     void on_Test_entries_clicked();
 
+
 private:
     void toggle_visibility(QWidget *component);
+    void update_graph_tabs();
     void display_entries(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
     void display_graph(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
     Ui::MainWindow *ui;

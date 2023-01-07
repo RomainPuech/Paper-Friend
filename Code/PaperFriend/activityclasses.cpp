@@ -30,3 +30,7 @@ int Activity::get_type() const{
 void Activity::set_type(int type){
     this->type = type;
 }
+
+bool Activity::equal(Activity other){
+    return this->name == other.name && this->type == other.type;
+}

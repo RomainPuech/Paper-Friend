@@ -32,7 +32,8 @@ SOURCES += \
     mascotchat.cpp \
     settings.cpp \
     texteditor.cpp \
-    edit.cpp
+    edit.cpp \
+    welcome_msg.cpp
 
 HEADERS += \
     activity_cell.h \
@@ -60,7 +61,8 @@ HEADERS += \
     mascotchat.h \
     settings.h \
     texteditor.h \
-    edit.h
+    edit.h \
+    welcome_msg.h
 
 FORMS += \
     activity_cell.ui \
