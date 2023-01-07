@@ -51,7 +51,7 @@ public:
   // needed to generate randomized entries for testing.
 
   std::vector<EntryPerso> get_lastn_days_data(
-      int n) const; // gets the entries within n days of the last entry.
+      int n, int reference = -1) const; // gets the entries within n days of the last entry.
 
   template <typename T> double avg(const std::vector<T> &data) const {
 
@@ -97,6 +97,7 @@ public:
   std::vector<EntryPerso>
   anomalies_detection(const std::vector<EntryPerso> &entries,
                       int var_index) const;
+  std::vector<int> anomalies_by_groups(const std::vector<EntryPerso> &entries, int num_days, int var_index);
 
   std::string var_to_str(int var_index) const {
     return log[0].get_var_name(var_index);
@@ -108,12 +109,22 @@ public:
   item_priority(const std::vector<EntryPerso> &entries,
                 int var_index); // Arranges all other variables w.r.t their
                                 // influence on the specified variable
-  std::string
-  suggestion(int var_index); // text that will be suggested to user daily
+  std::string suggestion(int var_index); // text that will be suggested to user daily
 
-  std::string
-  generate_weekly_recap_text(const std::vector<EntryPerso> &entries);
+  std::string generate_recap_text(const std::vector<EntryPerso> &entries, int type);
+
+  void weekly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect);
+  void monthly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect);
+  void yearly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect);
+
+
+  std::string generate_weekly_recap_text(const std::vector<EntryPerso> &entries);
+
   EntryRecap weekly_recap();
+  EntryRecap monthly_recap();
+  EntryRecap yearly_recap();
+
+  EntryRecap recap(int type);
 
   auto stl_regression(
       std::vector<double> dataY,
