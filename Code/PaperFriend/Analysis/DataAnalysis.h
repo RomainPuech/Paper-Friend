@@ -126,10 +126,9 @@ public:
 
   EntryRecap recap(int type);
 
-  auto stl_regression(
-      std::vector<double> dataY,
-      std::vector<double> dataX); // NOT IMPLEMENTED; STL regression results;
-                                  // exact output to determine at the end
+  // STL returns a vector containing the Trend and the Seasonality component {Trend, Seasonality}.
+  // seasonal_length is the length of the seasonality component; can be 7 to analyze a week, 30 for a month, ... dataX is in days, sorted, and the lower indexed day (dataX[0]) is the closest day to today
+  std::vector<std::vector<double>> stl_regression(std::vector<double> dataY, std::vector<double> dataX, int seasonal_length);
 };
 
 #endif // DATAANALYSIS_H
