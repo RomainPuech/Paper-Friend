@@ -581,7 +581,7 @@ void EntryCard::update() {
     update_fr_act();
   }
   // update dynamic graph
-  main_window->update_graph();
+  main_window->update_graphs();
   //react to the entry - Important to call it *before* generate_recap
   qDebug()<<QString("Reaction called");
   main_window->react_to_last_entry();
