@@ -7,12 +7,20 @@
 #include <QVBoxLayout>
 #include <QPainterPath>
 #include <cstring>
-MascotChat::MascotChat(QScrollArea *area):scrollArea(area)
-{
+
+void MascotChat:: set_scroll_area(QScrollArea *area){
     QVBoxLayout *chat_layout = new QVBoxLayout();
     chat_layout->setSizeConstraint(QLayout::SetMinimumSize);
     scrollArea->widget()->setLayout(chat_layout);
 }
+
+MascotChat::MascotChat(QScrollArea *area):scrollArea(area)
+{
+    set_scroll_area(area);
+}
+
+MascotChat::MascotChat():scrollArea()
+{}
 
 
 //getters
@@ -96,8 +104,6 @@ void Message::paintEvent(QPaintEvent *pe)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     QPoint xy = this->rect().bottomLeft();
-    qDebug()<<this->rect().topLeft();
-    qDebug()<<this->rect().bottomLeft();
 
     int x = xy.x();
     int y = xy.y()-10;

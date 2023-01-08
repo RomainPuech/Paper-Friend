@@ -21,6 +21,7 @@
 #include "all_habits.h"
 #include "entryclasses.h"
 #include "cardclasses.h"
+#include "mascotchat.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -44,6 +45,9 @@ public:
     static void update_friends(std::vector<Friend> friends);
     void update_graph();
     void remove_non_existent_activities_and_friends(EntryPerso* entry);
+    void generate_recap();
+    void react_to_last_entry();
+    void welcome();
 
 private slots:
     void on_pushButton_clicked();
@@ -60,10 +64,12 @@ private slots:
     void on_Test_entries_clicked();
 
 private:
+    MascotChat chat;
     void toggle_visibility(QWidget *component);
     void update_graph_tabs();
     void display_entries(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
     void display_graph(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
+
     Ui::MainWindow *ui;
     All_Habits *all_habits;
     static std::vector<EntryPerso*>vector_entries;
@@ -73,6 +79,7 @@ private:
     EntryCard* today_card;
 
     std::vector<EntryPerso*> test(int n); //generate n random entries
+    bool reacted_to_entry; //Has the mascot reacted yet to the user's daily entry?
 };
 
 #endif // MAINWINDOW_H

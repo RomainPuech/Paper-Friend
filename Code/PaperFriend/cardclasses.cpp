@@ -110,10 +110,13 @@ void generate_rgb(QString &red, QString &green, double m) {
    */
   if (m <= 0.5) {
     red = QString::number(255);
-    green = QString::number(255 * m / (1 - m));
-  } else {
-    green = QString::number(255);
-    red = QString::number(255 * (1 - m) / m);
+    green = QString::number(240 * m / (1 - m));
+  } else if (m <= 0.85){
+    green = QString::number(240);
+    red = QString::number(255 * (-67*pow((m-0.5),4)+1)); //This parabola gives the most suitable gradient of green and transitions smoothly with the values of green for a mood greater than 0.75
+  } else{
+      green = QString::number(240 - (240-128)*(m-0.85)*(10/3));//At this point we just make the green darker
+      red = QString::number(0);
   }
 }
 
@@ -579,6 +582,11 @@ void EntryCard::update() {
   }
   // update dynamic graph
   main_window->update_graph();
+  //react to the entry - Important to call it *before* generate_recap
+  qDebug()<<QString("Reaction called");
+  main_window->react_to_last_entry();
+  //check if a weekly/monthly/yearly recap has to be created
+  main_window->generate_recap();
   // update style
   if (readOnly && fr_act_display->count() != 0) {
     set_entryPerso_style(3);

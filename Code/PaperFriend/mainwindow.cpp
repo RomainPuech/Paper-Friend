@@ -5,7 +5,6 @@
 #include "entryfilter.h"
 #include "error_dlg.h"
 #include "file_processing/file_processing/file_save_and_load.h"
-#include "loadHabits.h"
 #include "mascot.h"
 #include "mascotchat.h"
 #include "settings.h"
@@ -18,50 +17,35 @@
 #include <iostream>
 #include <sstream>
 
+//// Declarations
 std::vector<Filter_param> filter_params;
+std::vector<EntryPerso *> MainWindow::vector_entries;//All the entries
+std::vector<Activity> MainWindow::vector_activities;//All the possible activities to choose from
+std::vector<Friend> MainWindow::vector_friends;//All the friends we can choose from
 
-std::vector<EntryPerso *> MainWindow::vector_entries;
-std::vector<Activity> MainWindow::vector_activities;
-std::vector<Friend> MainWindow::vector_friends;
-
+//// Helper functions
 bool sort_by_date(const EntryPerso *e1, const EntryPerso *e2){
     return e1->get_qdate().daysTo(e2->get_qdate()) > 0;
 }
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
-  ui->setupUi(this); // display canvas created in drag-and-drop
 
-  ////////////////////////////////////////////////////////////////
-  /// WHAT YOU CAN ASSUME WE HAVE:
-  /// VECTORS THAT ARE SHARED BY ALL COMPONENTS
-  ///    std::vector<EntryPerso*>vector_entries;  All the entries
-  ///    std::vector<Activity>vector_activities;  All the possible activities to
-  ///    choose from std::vector<Friend>vector_friends;       All the friends we
-  ///    can choose from
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent), ui(new Ui::MainWindow),reacted_to_entry(false) {
+
+  //////// Layout
+  ui->setupUi(this); // display canvas created in drag-and-drop
 
   // create layout for central scrollable area
   QVBoxLayout *entries_layout = new QVBoxLayout();
   ui->EntriesScroll->widget()->setLayout(entries_layout);
-  // get the width of the scrollable area
 
+  // get the width of the scrollable area
   // We use Friend function to embed the TextEditor into the MainWindow
   textEditor = new TextEditor();
   textEditor->mainUi = this;
   // we want to set the textEditor with the same size as the place of embedding
-  /*vector_entries = sample_entries(10);
-  EntryPerso *e2 = new EntryPerso();
-  e2->set_mood(30);
-  e2->set_qdate(QDate::currentDate().addDays(-2));
 
-  EntryPerso *e3 = new EntryPerso();
-  e3->set_mood(80);
-  e3->set_qdate(QDate::currentDate().addDays(-1));
-
-
-  vector_entries.push_back(e2);
-  vector_entries.push_back(e3);*/
-
+  /////// Loading of parameters and data
   // create a folder for the entries if it doesn't already exist
   if (!QDir("Entries").exists()) {
     QDir().mkdir("Entries");
@@ -73,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent)
   }
   vector_activities = load_activities();
   qDebug()<<vector_activities.size();
+
   // load previous entries
   QDir dir(QDir::currentPath() + "/Entries");
   for (const QString &filename : dir.entryList(QDir::Files)) {
@@ -80,6 +65,13 @@ MainWindow::MainWindow(QWidget *parent)
         load_entryperso(filename.toStdString()));
   }
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
+
+  //Load habits
+  std::vector<std::string> current_habits = load_habits();
+  for (int i = 0; i < current_habits.size(); i++) {
+    ui->habits_label->setText(ui->habits_label->text() + "\n" +
+                              QString::fromStdString(current_habits[i]));
+  }
 
   // save the card corresponding to the current day in case it has to be
   // modified
@@ -91,9 +83,14 @@ MainWindow::MainWindow(QWidget *parent)
     }
   }
 
+  //Load previous recaps dates
+  std::vector<QString> last_recaps_dates = load_last_recaps_dates();
+
+  //// frontend that needs data to be rendered
   display_graph(vector_entries, ui);
   display_entries(vector_entries, ui);
 
+  /*
   // test for recap display
   EntryRecap *recap = new EntryRecap();
   EntryPerso *e = new EntryPerso();
@@ -110,22 +107,15 @@ MainWindow::MainWindow(QWidget *parent)
   recap->set_worst_day(*e);
   EntryCard *entry_r = new EntryCard(15, 200, 200, "white", recap, false, this);
   //entry_r->display(ui->EntriesScroll->widget()->layout());
+ */
 
   // Chatbox
-  MascotChat chat = MascotChat(ui->scrollArea);
-  // tests
-  for (int i = 0; i < 20; i++) {
-    chat << QString::number(i);
-  }
-  chat.add_mascot();
-  chat << std::string(
-      "this message is long to check if the whole thing would fit into the "
-      "text label and also to be easy to track because it makes more sense");
-  chat.add_mascot();
-  QString lastm = chat.get_last_message();
-  chat << lastm;
+  chat = MascotChat(ui->scrollArea);
+  welcome();
   chat.add_mascot();
 
+
+  //Settings
   auto settings = findChild<QWidget *>("settings_frame");
   settings->hide(); // hide the settings menu on launch
   // setting the icon for the setting button
@@ -135,12 +125,6 @@ MainWindow::MainWindow(QWidget *parent)
   ui->settingsButton->setIcon(QIcon(pix.scaled(w, h, Qt::KeepAspectRatio)));
 
   update_graph_tabs();
-
-  std::vector<std::string> current_habits = load_habits();
-  for (int i = 0; i < current_habits.size(); i++) {
-    ui->habits_label->setText(ui->habits_label->text() + "\n" +
-                              QString::fromStdString(current_habits[i]));
-  }
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -481,6 +465,92 @@ std::vector<EntryPerso *> MainWindow::test(int n) {
 }
 
 void MainWindow::update_graph() { display_graph(vector_entries, ui); }
+
+void MainWindow::generate_recap() {
+    // first check if we need to generate a weekly/monthly/yearly recap
+    // last_recaps_dates is the vector containing the string of the dates of the last [0]weekly, [1]monthly and [2]yearly recap.
+    std::vector<QString> last_recaps_dates = load_last_recaps_dates();
+    //weekly
+    if(QDate::currentDate().dayOfWeek()==7)//If it's Sunday
+    {
+       QString date_last_recap = last_recaps_dates[0];
+        if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
+        {
+            chat<<QString("It's Sunday! Time for a weekly recap 😉");
+            chat.add_mascot();
+            last_recaps_dates[0] = QDate::currentDate().toString("yyyy.MM.dd");
+            save_last_recaps_dates(last_recaps_dates);
+        }
+
+
+    }
+    //monthly
+    if(QDate::currentDate().daysInMonth()==QDate::currentDate().day())//If it's the last day of the month
+    {
+        QString date_last_recap = last_recaps_dates[1];
+        if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
+        {
+        chat<<QString("Last day of the month means time for a montly recap!");
+        chat.add_mascot();
+        last_recaps_dates[1] = QDate::currentDate().toString("yyyy.MM.dd");
+        save_last_recaps_dates(last_recaps_dates);
+        }
+    }
+    //yearly
+    if(QDate::currentDate().month()==12 && QDate::currentDate().day()==31)//If it's December 31st
+    {
+        QString date_last_recap = last_recaps_dates[2];
+        if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
+        {
+        chat<<QString("Before celebrating the new year, let's look back to ")+QString::number(QDate::currentDate().year())+QString(" and ponder.");
+        chat.add_mascot();
+        last_recaps_dates[2] = QDate::currentDate().toString("yyyy.MM.dd");
+        save_last_recaps_dates(last_recaps_dates);
+        }
+    }
+}
+
+void MainWindow::react_to_last_entry(){
+    if(!reacted_to_entry){
+        EntryPerso* last_entry = vector_entries[vector_entries.size()-1];//called before generate recap so we are sure it is an EntryPerso
+        if(last_entry->get_mood()==0){
+            chat<<QString("Did you forget to put in your mood ?<br> If not, I'm very sorry for the day you had. It's good that you put your thoughts on paper.<br> Don't hesitate to seek the help of a relative or of a professional if you feel like you loose control. Don't worry, everything eventually gets better.");
+        }else if(last_entry->get_mood()<0.3){
+            chat<<QString("Oh, I'm sorry for the day you had. Don't forget that you are never alone and talking to a relative or a professional can help you going through hard times.");
+        }else if(last_entry->get_mood()<0.5){
+            chat<<QString("Seems like you spent a pretty tough day... I hope it'll be better tomorrow.");
+        }else if(last_entry->get_mood()>0.85){
+            chat<<QString("What a great day! Take the time to savor it.");
+        }else if(last_entry->get_mood()>0.95){
+            chat<<QString("Wow, you spent an amazing day! It hope it will stay anchored in your memory forever.");
+        }
+        chat.add_mascot();
+        reacted_to_entry = true;
+    }
+}
+
+void MainWindow::welcome(){
+    if(!vector_entries.empty()){
+        EntryPerso* last_entry = vector_entries[vector_entries.size()-1];
+        int daysago = (last_entry->get_qdate()).daysTo(QDate::currentDate());
+        if(daysago==0){
+            chat<<QString("Hello again!");
+        }else if(daysago==1){
+            chat<<QString("Hello!");
+        }else if(daysago>365){
+            chat<<QString("Oh, you! I though I would never see you again! How are you?");
+        }else if(daysago>14){
+        chat<<QString("It's been a while! Good to see you again.");
+        }else if(daysago>6){
+            chat<<QString("Welcome back! How has it been going?");
+        }else if(daysago>1){
+            chat<<QString("Hi! How did it go since last time?");
+        }
+    }else{
+        chat<<QString("Hello, it seems like it's your first time here! I'm Rooxie, your well-being assistant! You can create an entry in you diary by clicking the \"New entry\" button on the top of the screen.");
+    }
+    chat<<QString("Hello back");
+}
 
 void MainWindow::on_people_button_clicked() {}
 
