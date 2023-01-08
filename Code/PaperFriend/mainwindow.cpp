@@ -73,10 +73,38 @@ MainWindow::MainWindow(QWidget *parent)
 
   //Load habits
   std::vector<QStringList> current_habits = load_habits();
-  for (int i = 0; i < current_habits.size(); i++) {
-      if (i <= 23){
-        ui->habits_label->setText(ui->habits_label->text() + "\n" + current_habits[i][0] + ", " + current_habits[i][1]);
-      }
+  if (current_habits.size() == 1){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+  }
+  if (current_habits.size() == 2){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+  }
+  if (current_habits.size() == 3){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
+  }
+  if (current_habits.size() == 4){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
+      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
+  }
+  if (current_habits.size() == 5){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
+      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
+      ui->habits_label_5->setText(current_habits[4][0] + ", " + current_habits[4][1]);
+  }
+  if (current_habits.size() >= 6){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
+      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
+      ui->habits_label_5->setText(current_habits[4][0] + ", " + current_habits[4][1]);
+      ui->habits_label_6->setText(current_habits[5][0] + ", " + current_habits[5][1]);
   }
 
   displayed_entries = vector_entries;
