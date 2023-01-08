@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "all_activities.h"
+#include "all_people.h"
 #include "cardclasses.h"
 #include "dynamicgraph.h"
 #include "entryfilter.h"
@@ -10,6 +11,7 @@
 #include "settings.h"
 #include "texteditor.h"
 #include "ui_all_activities.h"
+#include "ui_all_habits.h"
 #include "ui_mainwindow.h"
 #include "ui_texteditor.h"
 #include <QDebug>
@@ -569,7 +571,6 @@ void MainWindow::welcome(){
     chat<<QString("Hello back");
 }
 
-void MainWindow::on_people_button_clicked() {}
 
 void MainWindow::on_Test_entries_clicked() {
   vector_entries = sample_entries(100);
@@ -577,3 +578,10 @@ void MainWindow::on_Test_entries_clicked() {
   display_entries();
   update_graphs();
 }
+
+void MainWindow::on_ppl_button_clicked(){
+    all_people *my_people = new all_people(vector_friends);
+    my_people->setModal(true);
+    my_people->exec();
+}
+

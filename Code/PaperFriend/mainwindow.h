@@ -60,10 +60,10 @@ private slots:
     void on_helpFilterBox_clicked();
     void on_type_filter_currentTextChanged(const QString &);
 
-    void on_people_button_clicked();
-
     void on_Test_entries_clicked();
 
+
+    void on_ppl_button_clicked();
 
 private:
     MascotChat chat;
