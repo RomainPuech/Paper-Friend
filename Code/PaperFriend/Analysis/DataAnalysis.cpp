@@ -135,16 +135,23 @@ double DataAnalysis::cor(const std::vector<double> &X,
   return cov(X, Y) / stddev(X) / stddev(Y);
 }
 
-std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n) const {
+std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n, int reference) const {
   /**
    * @param int n: number n of days.
-   * @return a list of all data within n days of the very last log.
+   * @return a list of all data within n days of the reference (if the reference is negative we count back from the date of last log).
    */
 
-  int current = log.back().get_absolute_day(); // represents the date of the
-                                               // last log in the data.
-  auto comp{[current](auto entry, int n) {
-    return entry.get_absolute_day() <= current - n;
+  int current; // represents the date from which we count backwards
+  if (reference < 0){
+      current   = log.back().get_absolute_day();
+  }
+
+  else{
+      current = reference;
+  }
+
+  auto comp{[current](auto &entry, int n) {
+    return entry.get_absolute_day() >= current - n && entry.get_absolute_day() <= current;
   }};
   auto cutoff = std::lower_bound(log.begin(), log.end(), n, comp);
 
@@ -276,6 +283,21 @@ DataAnalysis::anomalies_detection(const std::vector<EntryPerso> &entries,
   return res;
 }
 
+//std::vector<int> DataAnalysis::anomalies_by_groups(const std::vector<EntryPerso> &entries, int num_days, int var_index){
+   /**
+     * @param entries, the number of days per group, variable to be considered
+     * @return list of indices of groups whose average w.r.t the variable is an anomaly in the sense of the funciton above.
+    */
+ /*   double mean = avg(entries, var_index);
+    double standev = stddev(entries, var_index);
+    std::vector<int> res;
+
+
+
+
+    return res;
+}*/
+
 std::multimap<double, int> invert(std::map<int, double> &mymap) {
   /**
    * @param map
@@ -362,72 +384,179 @@ std::string DataAnalysis::suggestion(
   return str;
 }
 
-std::string DataAnalysis::generate_weekly_recap_text(
-    const std::vector<EntryPerso> &entries) {
-  std::string res = "";
+std::vector<int> lengths{7, 30, 365};
+std::vector<std::string> periods{"week", "month", "year"};
 
-  double slight_threshold = 0.5; // Some constants to guide judgement
-  double significant_threshold = 2;
-  double quality_threshold = 0.7;
+void DataAnalysis::weekly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect){
 
-  for (int i = 0; i < get_num_activities(); ++i) {
-
-    res += var_to_str(i) + "\n";
-
-    LinearRegressionCoeffs coeffs = general_trend(entries, i);
-
-    if (abs(coeffs.slope) < slight_threshold) {
-
-      if (coeffs.quality_coeff > quality_threshold) {
-        res += "This has been steady over the past week";
+    for (int i = 0; i < get_num_activities(); ++i) {
+      std::vector<EntryPerso> anomalies = anomalies_detection(entries, i);
+      if (anomalies.size() == 0) {
+        string_vect[i] += "No anomalies were detected over the week";
+      } else if (anomalies.size() == 1) {
+        string_vect[i] += "An anomaly was detected on ";
+        string_vect[i] += anomalies[0].get_weekday();
       } else {
-        res += "This has not shown any clear trend over the past week";
+        string_vect[i] += "Anomalies were detected on ";
+        for (unsigned int j = 0; j < anomalies.size() - 1; ++j) {
+          string_vect[i] += anomalies[j].get_weekday();
+          string_vect[i] += ", ";
+        }
+        string_vect[i] += "and ";
+        string_vect[i] += anomalies[anomalies.size() - 1].get_weekday() + ".";
       }
+      string_vect[i] += "\n";
+    }
+}
+
+void DataAnalysis::monthly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect){
+
+    std::vector<std::vector<EntryPerso>> groups;
+    int references[]{-1, 7, 14, 21};
+    std::string weeks[]{"first", "second", "third", "fourth"};
+    for (int j = 0; j < 4; ++j){
+        groups.push_back(get_lastn_days_data(7, references[j]));
     }
 
-    else if (abs(coeffs.slope) < significant_threshold) {
-      if (coeffs.slope < 0) {
-        res += "This has been slightly dipping over the past week";
-      } else {
-        res += "This has been slightly improving over the past week";
-      }
+    for (int i = 0; i < get_num_activities(); ++i){
+        std::vector<int> anomalies;
+        double mean = avg(entries, i);
+        double standev = stddev(entries, i);
+        for (int k = 0; k < 4; ++k){
+            if (groups[k].size() == 0){
+                continue;
+            }
+            if (abs(mean - avg(groups[k], i)) >= 2 * standev){
+                anomalies.push_back(k);
+            }
+        }
+        for (int i = 0; i < get_num_activities(); ++i) {
+
+          if (anomalies.size() == 0) {
+            string_vect[i] += "This has been relatively stable over the weeks of the past month.";
+
+          } else if (anomalies.size() == 1) {
+            string_vect[i] += "The " + weeks[anomalies[0]] + " week of the past month was an outlier.";
+          } else {
+            string_vect[i] += "The ";
+            for (unsigned int m = 0; m < anomalies.size() - 2; ++m){
+                string_vect[i] += weeks[anomalies[m]] + ", ";
+            }
+            string_vect[i] += "and " + weeks[anomalies[anomalies.size() - 1]] + " weeks of the past month were outliers.";
+          }
+          string_vect[i] += "\n";
+        }
+    }
+}
+
+void DataAnalysis::yearly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect){
+
+}
+
+std::string DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &entries, int type){
+    std::string res = "";
+    std::vector<std::string> anomaly_texts;
+    for (int i = 0; i < get_num_activities(); ++i){
+        anomaly_texts.push_back("");
+    }
+    switch(type){
+        case 0:
+            weekly_anomalies_text(entries, anomaly_texts);
+            break;
+        case 1:
+            monthly_anomalies_text(entries, anomaly_texts);
+            break;
+        case 2:
+            yearly_anomalies_text(entries, anomaly_texts);
+
     }
 
-    else {
-      if (coeffs.slope < 0) {
+    double slight_threshold = 0.5; // Some constants to guide judgement
+    double significant_threshold = 2;
+    double quality_threshold = 0.7;
 
-        res += "This has shown a significant downward trend over the past week";
+    for (int i = 0; i < get_num_activities(); ++i) {
 
-      } else {
-        res += "This has shown a significant upward trend over the past week";
+      res += var_to_str(i) + "\n";
+
+      LinearRegressionCoeffs coeffs = general_trend(entries, i);
+
+      if (abs(coeffs.slope) < slight_threshold) {
+
+        if (coeffs.quality_coeff > quality_threshold) {
+          res += "This has been steady over the past "+ periods[type];
+        } else {
+          res += "This has not shown any clear trend over the past "+ periods[type];
+        }
       }
-    }
-    res += "\n";
-    std::vector<int> influences = item_priority(entries, i);
-    res += "It seems like ";
-    res += var_to_str(influences[0]);
-    res += " ";
-    res += var_to_str(influences[1]);
-    res += " have the most effect.\n";
 
-    std::vector<EntryPerso> anomalies = anomalies_detection(entries, i);
-    if (anomalies.size() == 0) {
-      res += "No anomalies were detected over the week";
-    } else if (anomalies.size() == 1) {
-      res += "An anomaly was detected on ";
-      res += anomalies[0].get_weekday();
+      else if (abs(coeffs.slope) < significant_threshold) {
+        if (coeffs.slope < 0) {
+          res += "This has been slightly dipping over the past "+ periods[type];
+        } else {
+          res += "This has been slightly improving over the past "+ periods[type];
+        }
+      }
+
+      else {
+        if (coeffs.slope < 0) {
+
+          res += "This has shown a significant downward trend over the past "+ periods[type];
+
+        } else {
+          res += "This has shown a significant upward trend over the past "+ periods[type];
+        }
+      }
+      res += "\n";
+      std::vector<int> influences = item_priority(entries, i);
+      res += "It seems like ";
+      res += var_to_str(influences[0]);
+      res += " and ";
+      res += var_to_str(influences[1]);
+      res += " have the most effect.\n";
+      res += anomaly_texts[i];
+}
+     return res;
+}
+
+
+EntryRecap DataAnalysis::recap(int type){
+    /**
+     * @param  an integer representing the period to be considered. 0 = week, 1 = month, 2 = year.
+     *
+     * @returns an EntryRecap object containing info about the period specified by type.
+     */
+
+    std::vector<EntryPerso> period = get_lastn_days_data(lengths[type]);
+    auto comp{[](EntryPerso &entry1, EntryPerso &entry2) -> bool {
+      return entry1.get_var_value(0) < entry2.get_var_value(0);
+    }};
+
+    EntryPerso best_day = *(std::max_element(period.begin(), period.end(), comp));
+    EntryPerso worst_day =
+        *(std::min_element(period.begin(), period.end(), comp));
+
+    double avg_mood = avg(period, 0);
+
+    double good_threshold = 6;
+    double great_threshold = 8;
+
+    std::string detailed_analysis = generate_recap_text(period, type);
+
+    std::string text = "You have made " + std::to_string(period.size()) + " entries over the past " + periods[type] + ".\n";
+
+    if (avg_mood < good_threshold) {
+      text += "Looks like you've had a tough " + periods[type];
+    } else if (avg_mood < great_threshold) {
+      text += "Looks like you've had a good " + periods[type];
     } else {
-      res += "Anomalies were detected on ";
-      for (unsigned int j = 0; j < anomalies.size() - 1; ++j) {
-        res += anomalies[j].get_weekday();
-        res += ", ";
-      }
-      res += "and ";
-      res += anomalies[anomalies.size() - 1].get_weekday();
+      text += "Looks like you've had a great " + periods[type];
     }
-    res += "\n";
-  }
-  return "";
+    text += "\n";
+    text += "Here is a summary of your " + periods[type] + " across all areas\n";
+    text += detailed_analysis;
+
+    return EntryRecap(best_day, worst_day, text, avg_mood, type);
 }
 
 EntryRecap DataAnalysis::weekly_recap() {
@@ -436,35 +565,23 @@ EntryRecap DataAnalysis::weekly_recap() {
    *
    * @returns an EntryRecap object containing info about the week.
    */
-  std::vector<EntryPerso> period = get_lastn_days_data(7);
-  auto comp{[](EntryPerso &entry1, EntryPerso &entry2) -> bool {
-    return entry1.get_var_value(0) < entry2.get_var_value(0);
-  }};
-
-  EntryPerso best_day = *(std::max_element(period.begin(), period.end(), comp));
-  EntryPerso worst_day =
-      *(std::min_element(period.begin(), period.end(), comp));
-
-  double avg_mood = avg(period, 0);
-
-  double good_threshold = 6;
-  double great_threshold = 8;
-
-  std::string detailed_analysis = generate_weekly_recap_text(period);
-  std::string text = "";
-
-  if (avg_mood < good_threshold) {
-    text += "Looks like you've had a tough week";
-  } else if (avg_mood < great_threshold) {
-    text += "Looks like you've had a good week";
-  } else {
-    text += "Looks like you've had a great week";
-  }
-  text += "\n";
-  text += "Here is a short summary of your week across all areas\n";
-  text += detailed_analysis;
-
-  return EntryRecap(best_day, worst_day, text, avg_mood, 0);
+  return recap(0);
+}
+EntryRecap DataAnalysis::monthly_recap() {
+  /**
+   * @param
+   *
+   * @returns an EntryRecap object containing info about the month.
+   */
+  return recap(1);
+}
+EntryRecap DataAnalysis::yearly_recap() {
+  /**
+   * @param
+   *
+   * @returns an EntryRecap object containing info about the year.
+   */
+  return recap(2);
 }
 
 // STL decomposition implementation start

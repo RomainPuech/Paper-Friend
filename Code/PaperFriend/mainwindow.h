@@ -58,10 +58,12 @@ private slots:
     void on_newEntryButton_clicked();
     void on_clear_button_clicked();
     void on_helpFilterBox_clicked();
+    void on_type_filter_currentTextChanged(const QString &);
 
     void on_people_button_clicked();
 
     void on_Test_entries_clicked();
+
 
 private:
     MascotChat chat;
