@@ -285,13 +285,12 @@ void TextEditor::on_action_Center_triggered()
 
 void TextEditor::on_action_Justify_triggered()
 {
-    ui->textEdit->setAlignment(Qt::AlignJustify);
-    if (ui->textEdit->alignment() == Qt::AlignJustify)
-    {
-        ui->action_Left->setChecked(false);
-        ui->action_Right->setChecked(false);
-        ui->action_Center->setChecked(false);
-    }
+    QTextCursor cursor = ui->textEdit->textCursor();
+    QTextBlockFormat format = cursor.blockFormat();
+    format.setAlignment(Qt::AlignJustify);
+    cursor.mergeBlockFormat(format);
+    ui->textEdit->mergeCurrentCharFormat(format);
+
 }
 
 void TextEditor::textColor()
