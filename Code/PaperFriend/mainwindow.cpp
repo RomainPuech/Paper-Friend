@@ -72,7 +72,9 @@ MainWindow::MainWindow(QWidget *parent)
   //Load habits
   std::vector<QStringList> current_habits = load_habits();
   for (int i = 0; i < current_habits.size(); i++) {
-    ui->habits_label->setText(ui->habits_label->text() + "\n" + current_habits[i][0] + ", " + current_habits[i][1]);
+      if (i <= 23){
+        ui->habits_label->setText(ui->habits_label->text() + "\n" + current_habits[i][0] + ", " + current_habits[i][1]);
+      }
   }
 
   displayed_entries = vector_entries;
@@ -257,9 +259,9 @@ void MainWindow::display_graph(QString tracked_parameter) {
 }
 
 void MainWindow::on_pushButton_clicked() {
-  hide();
   all_habits = new All_Habits(this);
-  all_habits->showMaximized();
+  all_habits->setModal(true);
+  all_habits->exec();
 }
 
 void MainWindow::on_activitie_button_clicked() {
