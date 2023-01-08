@@ -50,7 +50,7 @@ bool save_friends (std::vector<Friend> fr);
 std::vector<Activity> load_activities();
 std::vector<Friend> load_friends();
 
-std::vector<std::string> load_habits();
+std::vector<QStringList> load_habits();
 
 std::vector<QString> load_last_recaps_dates();
 void save_last_recaps_dates(std::vector<QString> last_recaps_dates);

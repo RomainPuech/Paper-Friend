@@ -1,15 +1,15 @@
 | Name                 |Team               |      What I did             |  What I will do |
 |:----------------------:|:-----------------:|:-------------------------|:------------------|
-| Romain Puech         |Data analysis  |||
+| Romain Puech         |Data analysis/ link Frontend  |- Organisation of new tasks and teams for the final phase of the project<br>- Integration of weekly/monthly/yearly [recaps](https://github.com/orgs/CSE201-project/projects/4/views/2?pane=issue&itemId=16133849)<br>- Make the mascot [react](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/96) to the mood of the daily entry<br>- [Implemented welcome message](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/140) of the mascot depending on the time since the last use of the app.<br>- Replaced [color gradient](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/141) formula by a specific parabola for the color of the mood at the top right of an entry to match the color of the graph<br>-Fixed [bug in filters](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/126) due to number formating.<br>- Thoroughly [tested](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/131) the app to spot bugs, organise and clean code|- Clean code<br>- Integrate suggestions of the mascot.<br>- Generate testing data.<br>- Link analysis/frontend|
 | Bogdana Kolic        |Frontend/Fixes |||
 | Liam Loughman        |Frontend       |||
 | Yubo Cai             |Frontend/Fixes |||
 | Luigi Massacci       |Fixes          |||
 | Safaa Arbai          |Frontend/Fixes |||
 | Ahmed Benchekroun    |Frontend       |||
-| Mihaela Gledacheva   |Frontend       |||
-| Thomas Turkieh       |File processing|||
+| Mihaela Gledacheva   |Frontend       | - Added graphs for all tracked parameters (https://github.com/CSE201-project/PaperFriend-desktop-app/issues/122) | - Improve on the style (https://github.com/CSE201-project/PaperFriend-desktop-app/issues/123) |
+| Thomas Turkieh       |File processing|- Finished the functions to save/load the available activities/friends.<br> - I had an unfortunate issue : after pulling the main branch, the project was building infinitely, and it took me a few hours to find and understand the problem, which fortunately was not hard to fix in the end.<br>- Enjoyed this issue to come back on the file arborescence and modify it, now every file is organized in a corresponding folder.   |- Implement saving and loading functions for the Entry recap objects. Maybe also enhance them.  |
 | Junyuan (Frank) Wang |Frontend       |||
 | Octave Gaspard       |Data analysis  |- Organization of the data analysis team <br>- Setting up the integration of data analysis with other teams <br>- Rewrote old parts of the code to make them work better, like find_index_sorted. <br>- Fully finished the STL decomposition algorithm with the full inner loop and outer loop.<br>- Debugged all sub-functions and tested that STL gave correct-looking results, chose temporary constants according to [the research paper](https://www.scb.se/contentassets/ca21efb41fee47d293bbee5bf7be7fb3/stl-a-seasonal-trend-decomposition-procedure-based-on-loess.pdf). <br>|- Finish with the rest of the team the integration of the analysis in the app. <br>- Test and choose better constants for the application we do of STL. <br>- Replace or improve other analysis functions by using values given by STL. <br>- Optimize the code.<br>|
-| Brook Nigatu         |Data analysis  |||
+| Brook Nigatu         |Data analysis  |- Gave structure to weekly, monthly, and yearly recaps and wrote their first implementations, which focus on analysing metrics defined by us.|- Add to the recaps using analysis from existing functions.<br> - Discuss with the team about methods to analyse user-defined activities and use them to give more detailed recaps.|
 | Artem Mamichev       |Data analysis  |||    

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "all_activities.h"
+#include "all_people.h"
 #include "cardclasses.h"
 #include "dynamicgraph.h"
 #include "entryfilter.h"
@@ -10,6 +11,7 @@
 #include "settings.h"
 #include "texteditor.h"
 #include "ui_all_activities.h"
+#include "ui_all_habits.h"
 #include "ui_mainwindow.h"
 #include "ui_texteditor.h"
 #include <QDebug>
@@ -70,10 +72,39 @@ MainWindow::MainWindow(QWidget *parent)
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
 
   //Load habits
-  std::vector<std::string> current_habits = load_habits();
-  for (int i = 0; i < current_habits.size(); i++) {
-    ui->habits_label->setText(ui->habits_label->text() + "\n" +
-                              QString::fromStdString(current_habits[i]));
+  std::vector<QStringList> current_habits = load_habits();
+  if (current_habits.size() == 1){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+  }
+  if (current_habits.size() == 2){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+  }
+  if (current_habits.size() == 3){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
+  }
+  if (current_habits.size() == 4){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
+      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
+  }
+  if (current_habits.size() == 5){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
+      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
+      ui->habits_label_5->setText(current_habits[4][0] + ", " + current_habits[4][1]);
+  }
+  if (current_habits.size() >= 6){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
+      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
+      ui->habits_label_5->setText(current_habits[4][0] + ", " + current_habits[4][1]);
+      ui->habits_label_6->setText(current_habits[5][0] + ", " + current_habits[5][1]);
   }
 
   displayed_entries = vector_entries;
@@ -258,9 +289,9 @@ void MainWindow::display_graph(QString tracked_parameter) {
 }
 
 void MainWindow::on_pushButton_clicked() {
-  hide();
   all_habits = new All_Habits(this);
-  all_habits->showMaximized();
+  all_habits->setModal(true);
+  all_habits->exec();
 }
 
 void MainWindow::on_activitie_button_clicked() {
@@ -568,7 +599,6 @@ void MainWindow::welcome(){
     chat<<QString("Hello back");
 }
 
-void MainWindow::on_people_button_clicked() {}
 
 void MainWindow::on_Test_entries_clicked() {
   vector_entries = sample_entries(100);
@@ -576,3 +606,10 @@ void MainWindow::on_Test_entries_clicked() {
   display_entries();
   update_graphs();
 }
+
+void MainWindow::on_ppl_button_clicked(){
+    all_people *my_people = new all_people(vector_friends);
+    my_people->setModal(true);
+    my_people->exec();
+}
+
