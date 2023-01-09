@@ -339,9 +339,9 @@ DataAnalysis::item_priority(const std::vector<EntryPerso> &entries,
     }
     current = get_vect(entries, var_index);
     cor_with_var = cor(current, var_vect);
-    dev = abs(get_lastn_average(std::min(7, N), i) -
-              get_lastn_average(std::min(N, 30), i));
-    influence[i] = cor_with_var * dev;
+    //dev = abs(get_lastn_average(std::min(7, N), i) -
+    //          get_lastn_average(std::min(N, 30), i));
+    influence[i] = cor_with_var;
   }
 
   // Sort map (done with MULTIMAP)
