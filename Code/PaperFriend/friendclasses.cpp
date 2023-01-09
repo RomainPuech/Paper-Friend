@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-Friend::Friend(std::string name, int duration) : name(name), duration(duration) {}
+Friend::Friend(std::string name, int type, int duration) : name(name), type(type), duration(duration) {}
 Friend::~Friend() {}
 
 std::string Friend::get_name() const {
