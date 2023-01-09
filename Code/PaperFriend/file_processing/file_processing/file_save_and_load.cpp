@@ -4,6 +4,11 @@
 #include <QFile>
 #include <QDebug>
 
+#include <QApplication>
+#include <QLabel>
+#include <QFile>
+#include <QTextStream>
+
 
 
 
@@ -343,17 +348,21 @@ std::vector<Friend> load_friends (){//Friend vec from a string
 
 }
 
-std::vector<std::string> load_habits() {
+std::vector<QStringList> load_habits() {
     std::string habit;
-    std::vector<std::string> current_habits;
+    std::vector<QStringList> current_habits;
     std::ifstream myfile;
     myfile.open("habits.txt");
     if ( myfile.is_open() ) {
+
         while (myfile.good()) {
+            QString tmp1;
             std::getline (myfile, habit);
-            std::cout << habit << '\n';
-            current_habits.push_back(habit);
+            tmp1 = QString::fromUtf8(habit.c_str());
+            QStringList tmp2 = tmp1.split('|');
+            current_habits.push_back(tmp2);
         }
+        myfile.close();
     }
     else {
         std::cout << "Couldn't open habits file\n";

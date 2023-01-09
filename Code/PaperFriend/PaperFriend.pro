@@ -14,6 +14,7 @@ SOURCES += \
     activityclasses.cpp \
     all_activities.cpp \
     all_habits.cpp \
+    all_people.cpp \
     cardclasses.cpp \
     Analysis/DataAnalysis.cpp \
     cipher/Qt-AES-1.2/qaesencryption.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     activityclasses.h \
     all_activities.h \
     all_habits.h \
+    all_people.h \
     cardclasses.h \
     Analysis/DataAnalysis.h \
     cipher/Qt-AES-1.2/aesni/aesni-enc-cbc.h \
@@ -68,6 +70,7 @@ FORMS += \
     activity_cell.ui \
     all_activities.ui \
     all_habits.ui \
+    all_people.ui \
     mainwindow.ui \
     texteditor.ui \
 
@@ -90,3 +93,7 @@ RESOURCES += \
     myresources.qrc
 
 RC_FILE += rsc/Editor.rc
+
+macx: {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+}

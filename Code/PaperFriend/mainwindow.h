@@ -43,7 +43,7 @@ public:
     static Friend* get_friend_at_i(long long unsigned i);
     static void update_activities(std::vector<Activity> activities);
     static void update_friends(std::vector<Friend> friends);
-    void update_graph();
+    void update_graphs();
     void remove_non_existent_activities_and_friends(EntryPerso* entry);
     void generate_recap();
     void react_to_last_entry();
@@ -60,27 +60,25 @@ private slots:
     void on_helpFilterBox_clicked();
     void on_type_filter_currentTextChanged(const QString &);
 
-    void on_people_button_clicked();
-
     void on_Test_entries_clicked();
 
+
+    void on_ppl_button_clicked();
 
 private:
     MascotChat chat;
     void toggle_visibility(QWidget *component);
-    void update_graph_tabs();
-    void display_entries(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
-    void display_graph(std::vector<EntryPerso*> entries, Ui::MainWindow *ui);
-
+    void display_entries();
+    void display_graph(QString tracked_parameter);
     Ui::MainWindow *ui;
     All_Habits *all_habits;
     static std::vector<EntryPerso*>vector_entries;
     static std::vector<Activity>vector_activities;
     static std::vector<Friend>vector_friends;
 
+    std::vector<EntryPerso*> displayed_entries;
     EntryCard* today_card;
 
-    std::vector<EntryPerso*> test(int n); //generate n random entries
     bool reacted_to_entry; //Has the mascot reacted yet to the user's daily entry?
 };
 

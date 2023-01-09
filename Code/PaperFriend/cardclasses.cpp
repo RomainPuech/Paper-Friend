@@ -302,6 +302,13 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
       QListWidgetItem *cb = new QListWidgetItem(QString::fromStdString(
           (MainWindow::get_friends().at(fr)).get_name()));
       cb->setCheckState(Qt::Unchecked);
+      for(long long unsigned i = 0; i < entry_perso->get_friends().size(); i++){
+          if(entry_perso->get_friends().at(i)->equal((MainWindow::get_friends().at(fr)))){
+              cb->setCheckState(Qt::Checked);
+              break;
+          }
+      }
+
       fr_act_options.push_back(cb);
       fr_act_select->addItem(cb);
     }
@@ -335,6 +342,12 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
 
       QListWidgetItem *cb = new QListWidgetItem(name);
       cb->setCheckState(Qt::Unchecked);
+      for(long long unsigned i = 0; i < entry_perso->get_activities().size(); i++){
+          if(entry_perso->get_activities().at(i)->equal((MainWindow::get_activities().at(act)))){
+              cb->setCheckState(Qt::Checked);
+              break;
+          }
+      }
       fr_act_options.push_back(cb);
       fr_act_select->addItem(cb);
     }
@@ -581,7 +594,7 @@ void EntryCard::update() {
     update_fr_act();
   }
   // update dynamic graph
-  main_window->update_graph();
+  main_window->update_graphs();
   //react to the entry - Important to call it *before* generate_recap
   qDebug()<<QString("Reaction called");
   main_window->react_to_last_entry();
@@ -606,6 +619,12 @@ void EntryCard::update_fr_act_select() {
     QListWidgetItem *cb = new QListWidgetItem(
         QString::fromStdString((MainWindow::get_friends().at(fr)).get_name()));
     cb->setCheckState(Qt::Unchecked);
+    for(long long unsigned i = 0; i < entry_perso->get_friends().size(); i++){
+        if(entry_perso->get_friends().at(i)->equal((MainWindow::get_friends().at(fr)))){
+            cb->setCheckState(Qt::Checked);
+            break;
+        }
+    }
     fr_act_options.push_back(cb);
     fr_act_select->addItem(cb);
   }
@@ -638,6 +657,12 @@ void EntryCard::update_fr_act_select() {
 
     QListWidgetItem *cb = new QListWidgetItem(name);
     cb->setCheckState(Qt::Unchecked);
+    for(long long unsigned i = 0; i < entry_perso->get_activities().size(); i++){
+        if(entry_perso->get_activities().at(i)->equal((MainWindow::get_activities().at(act)))){
+            cb->setCheckState(Qt::Checked);
+            break;
+        }
+    }
     fr_act_options.push_back(cb);
     fr_act_select->addItem(cb);
   }
