@@ -14,6 +14,7 @@
 #include "ui_all_habits.h"
 #include "ui_mainwindow.h"
 #include "ui_texteditor.h"
+#include "add_habit.h""
 #include <QDebug>
 #include <fstream>
 #include <iostream>
@@ -503,6 +504,12 @@ void MainWindow::on_newEntryButton_clicked() {
   }
   ui->EntriesScroll->verticalScrollBar()->setValue(0);
   today_card->change();
+}
+
+void MainWindow::on_add_habit_button_clicked(){
+    Add_Habit *add_habit = new Add_Habit();
+    add_habit->setModal(true);
+    add_habit->exec();
 }
 
 void MainWindow::generate_recap() {

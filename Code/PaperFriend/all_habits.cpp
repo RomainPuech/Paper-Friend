@@ -21,8 +21,3 @@ All_Habits::~All_Habits()
 {
     delete ui;
 }
-void All_Habits::closeEvent (QCloseEvent *event){
-    event -> accept();
-    QWidget *parent = this->parentWidget();
-    parent->showMaximized();
-}

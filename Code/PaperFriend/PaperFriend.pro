@@ -12,6 +12,7 @@ CONFIG += c++17
 SOURCES += \
     activity_cell.cpp \
     activityclasses.cpp \
+    add_habit.cpp \
     all_activities.cpp \
     all_habits.cpp \
     all_people.cpp \
@@ -40,6 +41,7 @@ SOURCES += \
 HEADERS += \
     activity_cell.h \
     activityclasses.h \
+    add_habit.h \
     all_activities.h \
     all_habits.h \
     all_people.h \
@@ -70,6 +72,7 @@ HEADERS += \
 
 FORMS += \
     activity_cell.ui \
+    add_habit.ui \
     all_activities.ui \
     all_habits.ui \
     all_people.ui \
