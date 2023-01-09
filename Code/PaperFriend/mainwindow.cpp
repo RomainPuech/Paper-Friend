@@ -338,7 +338,7 @@ void MainWindow::on_filterButton_clicked() {
   //QString value_filter_value =
       //findChild<QDoubleSpinBox *>("value_filter")->text();
   double value = findChild<QDoubleSpinBox *>("value_filter")->value();
-  int n = 200;
+  int n = 20;
   
 
   // construct a filter_param object
@@ -350,7 +350,6 @@ void MainWindow::on_filterButton_clicked() {
   filt.display_num = n;
 
   
-
   // handling duplicated filters
   bool is_insert = true;
   for (int i = 0; i < filter_params.size(); i++) {
