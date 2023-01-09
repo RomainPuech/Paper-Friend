@@ -285,11 +285,7 @@ void TextEditor::on_action_Center_triggered()
 
 void TextEditor::on_action_Justify_triggered()
 {
-    QTextCursor cursor = ui->textEdit->textCursor();
-    QTextBlockFormat format = cursor.blockFormat();
-    format.setAlignment(Qt::AlignJustify);
-    cursor.mergeBlockFormat(format);
-    ui->textEdit->mergeCurrentCharFormat(format);
+
 
 }
 
