@@ -151,6 +151,36 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
   edit_text = new TextEditor();
   modify = new QPushButton("Modify this entry", text_title_w);
   back_to_display = new QPushButton("Exit editing mode", edit_and_return);
+
+  sleep_slider_w = new QWidget();
+  sleep_slider_instr = new QLabel(sleep_slider_w);
+  sleep_slider = new QSlider(Qt::Horizontal, sleep_slider_w);
+  sleep_slider_vb = new QVBoxLayout(sleep_slider_w);
+
+  // eating healthy
+  eating_slider_w = new QWidget();
+  eating_slider_instr = new QLabel(eating_slider_w);
+  eating_slider = new QSlider(Qt::Horizontal, eating_slider_w);
+  eating_slider_vb = new QVBoxLayout(eating_slider_w);
+  // productivity
+  productivity_slider_w = new QWidget();
+  productivity_slider_instr = new QLabel(productivity_slider_w);
+  productivity_slider = new QSlider(Qt::Horizontal, productivity_slider_w);
+  productivity_slider_vb = new QVBoxLayout(productivity_slider_w);
+  //communications
+  communications_slider_w = new QWidget();
+  communications_slider_instr = new QLabel(communications_slider_w);
+  communications_slider = new QSlider(Qt::Horizontal, communications_slider_w);
+  communications_slider_vb = new QVBoxLayout(communications_slider_w);
+  //screen time
+  screen_slider_w = new QWidget();
+  screen_slider_instr = new QLabel(screen_slider_w);
+  screen_slider = new QSlider(Qt::Horizontal, screen_slider_w);
+  screen_slider_vb = new QVBoxLayout(screen_slider_w);
+
+
+
+  
   // entry_recap display
   recap_layout = new QVBoxLayout();
   recap_title = new QLabel();
@@ -188,6 +218,13 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     fr_act_display->setParent(this);
     fr_act_select->setParent(this);
     mood_slider_w->setParent(this);
+    sleep_slider_w->setParent(this);
+    eating_slider_w->setParent(this);
+    productivity_slider_w->setParent(this);
+    communications_slider_w->setParent(this);
+    screen_slider_w->setParent(this);
+
+
 
     // display date
     date_display->setMaximumHeight(47);
@@ -245,6 +282,12 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     // edit_text layout
     edit_text_w->setParent(edit_and_return);
     edit_vb->addWidget(edit_text_w);
+    edit_vb->addWidget(sleep_slider_w);
+    edit_vb->addWidget(eating_slider_w);
+    edit_vb->addWidget(mood_slider_w);
+    edit_vb->addWidget(productivity_slider_w);
+    edit_vb->addWidget(communications_slider_w);
+    edit_vb->addWidget(screen_slider_w);
     edit_vb->addWidget(back_to_display);
     edit_and_return->setLayout(edit_vb);
 
@@ -374,6 +417,88 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     mood_slider_vb->addWidget(mood_slider_instr);
     mood_slider_vb->addWidget(mood_slider);
     mood_slider_w->setLayout(mood_slider_vb);
+
+    // get sleep
+    sleep_slider->setMinimum(0);
+    sleep_slider->setMaximum(100);
+    sleep_slider->setValue(int(this->entry_perso->get_sleep()));
+    sleep_slider->setTickInterval(50);
+    sleep_slider->setTickPosition(QSlider::TicksBelow);
+    sleep_slider_instr->setText("Slide the bar to enter your sleep");
+    sleep_slider->setMinimumHeight(18);
+    sleep_slider_w->setMaximumHeight(47);
+    sleep_slider_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    sleep_slider_vb->setSpacing(5);
+    sleep_slider_instr->setAlignment(Qt::AlignCenter);
+    sleep_slider_vb->addWidget(sleep_slider_instr);
+    sleep_slider_vb->addWidget(sleep_slider);
+    sleep_slider_w->setLayout(sleep_slider_vb);
+
+    // get eating
+    eating_slider->setMinimum(0);
+    eating_slider->setMaximum(100);
+    eating_slider->setValue(int(this->entry_perso->get_eating_healthy()));
+    eating_slider->setTickInterval(50);
+    eating_slider->setTickPosition(QSlider::TicksBelow);
+    eating_slider_instr->setText("Slide the bar to enter your eating healthy");
+    eating_slider->setMinimumHeight(18);
+    eating_slider_w->setMaximumHeight(47);
+    eating_slider_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    eating_slider_vb->setSpacing(5);
+    eating_slider_instr->setAlignment(Qt::AlignCenter);
+    eating_slider_vb->addWidget(eating_slider_instr);
+    eating_slider_vb->addWidget(eating_slider);
+    eating_slider_w->setLayout(eating_slider_vb);
+
+    // get productivity
+    productivity_slider->setMinimum(0);
+    productivity_slider->setMaximum(100);
+    productivity_slider->setValue(int(this->entry_perso->get_productivity()));
+    productivity_slider->setTickInterval(50);
+    productivity_slider->setTickPosition(QSlider::TicksBelow);
+    productivity_slider_instr->setText("Slide the bar to enter your productivity");
+    productivity_slider->setMinimumHeight(18);
+    productivity_slider_w->setMaximumHeight(47);
+    productivity_slider_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    productivity_slider_vb->setSpacing(5);
+    productivity_slider_instr->setAlignment(Qt::AlignCenter);
+    productivity_slider_vb->addWidget(productivity_slider_instr);
+    productivity_slider_vb->addWidget(productivity_slider);
+    productivity_slider_w->setLayout(productivity_slider_vb);
+
+    // get communication
+    communications_slider->setMinimum(0);
+    communications_slider->setMaximum(100);
+    communications_slider->setValue(int(this->entry_perso->get_communications()));
+    communications_slider->setTickInterval(50);
+    communications_slider->setTickPosition(QSlider::TicksBelow);
+    communications_slider_instr->setText("Slide the bar to enter your communication");
+    communications_slider->setMinimumHeight(18);
+    communications_slider_w->setMaximumHeight(47);
+    communications_slider_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    communications_slider_vb->setSpacing(5);
+    communications_slider_instr->setAlignment(Qt::AlignCenter);
+    communications_slider_vb->addWidget(communications_slider_instr);
+    communications_slider_vb->addWidget(communications_slider);
+    communications_slider_w->setLayout(communications_slider_vb);
+
+    // get screen
+    screen_slider->setMinimum(0);
+    screen_slider->setMaximum(100);
+    screen_slider->setValue(int(this->entry_perso->get_screen_time()));
+    screen_slider->setTickInterval(50);
+    screen_slider->setTickPosition(QSlider::TicksBelow);
+    screen_slider_instr->setText("Slide the bar to enter your screen time");
+    screen_slider->setMinimumHeight(18);
+    screen_slider_w->setMaximumHeight(47);
+    screen_slider_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    screen_slider_vb->setSpacing(5);
+    screen_slider_instr->setAlignment(Qt::AlignCenter);
+    screen_slider_vb->addWidget(screen_slider_instr);
+    screen_slider_vb->addWidget(screen_slider);
+    screen_slider_w->setLayout(screen_slider_vb);
+
+
 
     // size adjustments
 
@@ -587,9 +712,17 @@ void EntryCard::update() {
   edit_text->append_text(QString::fromStdString(entry->get_text()));
   if (entry_perso != nullptr) {
     this->entry_perso->set_mood(this->mood_slider->value());
+    this->entry_perso->set_sleep(this->sleep_slider->value());
+    this->entry_perso->set_eating_healthy(
+        this->eating_slider->value());
+    this->entry_perso->set_productivity(this->productivity_slider->value());
+    this->entry_perso->set_communications(this->communications_slider->value());
+    //screen
+    this->entry_perso->set_screen_time(this->screen_slider->value());
     mood_display->setText(
         "Mood: " + QString::number(std::round(entry_perso->get_mood())) + "%");
     mood_slider->setValue(int(this->entry_perso->get_mood()));
+    sleep_slider->setValue(int(this->entry_perso->get_sleep()));
     // friends and activities
     update_fr_act();
   }
@@ -804,6 +937,102 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
       "QSlider::handle:horizontal:hover {background: dark-grey; border: 1px "
       "solid black; border-radius: 5px;}");
   mood_slider_instr->setStyleSheet("font-weight: bold; border-style: none;");
+  sleep_slider_w->setStyleSheet(
+      "border-style: none; border-bottom: 1px solid black; border-radius: 0px; "
+      "border-top-right-radius: " +
+      QString::number(get_border_radius()) + "px;");
+  sleep_slider->setStyleSheet(
+      "QSlider{border-style: none;} QSlider::groove:horizontal{border-style: "
+      "none; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 "
+      "rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); "
+      "height: 10px; border-radius: "
+      "5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px "
+      "solid grey;height: 10px;border-radius: 5px;} "
+      "QSlider::add-page:horizontal {background: white; border: 1px solid "
+      "grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal "
+      "{background: grey; border: 1px solid dark-grey; width: 16px;margin-top: "
+      "-3px;margin-bottom: -3px;border-radius: 5px;} "
+      "QSlider::handle:horizontal:hover {background: dark-grey; border: 1px "
+      "solid black; border-radius: 5px;}");
+  sleep_slider_instr->setStyleSheet("font-weight: bold; border-style: none;");
+  eating_slider_w->setStyleSheet(
+      "border-style: none; border-bottom: 1px solid black; border-radius: 0px; "
+      "border-top-right-radius: " +
+      QString::number(get_border_radius()) + "px;");
+  eating_slider->setStyleSheet(
+      "QSlider{border-style: none;} QSlider::groove:horizontal{border-style: "
+      "none; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 "
+      "rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); "
+      "height: 10px; border-radius: "
+      "5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px "
+      "solid grey;height: 10px;border-radius: 5px;} "
+      "QSlider::add-page:horizontal {background: white; border: 1px solid "
+      "grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal "
+      "{background: grey; border: 1px solid dark-grey; width: 16px;margin-top: "
+      "-3px;margin-bottom: -3px;border-radius: 5px;} "
+      "QSlider::handle:horizontal:hover {background: dark-grey; border: 1px "
+      "solid black; border-radius: 5px;}");
+  eating_slider_instr->setStyleSheet("font-weight: bold; border-style: none;");
+  productivity_slider_w->setStyleSheet(
+      "border-style: none; border-bottom: 1px solid black; border-radius: 0px; "
+      "border-top-right-radius: " +
+      QString::number(get_border_radius()) + "px;");
+  productivity_slider->setStyleSheet(
+      "QSlider{border-style: none;} QSlider::groove:horizontal{border-style: "
+      "none; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 "
+      "rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); "
+      "height: 10px; border-radius: "
+      "5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px "
+      "solid grey;height: 10px;border-radius: 5px;} "
+      "QSlider::add-page:horizontal {background: white; border: 1px solid "
+      "grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal "
+      "{background: grey; border: 1px solid dark-grey; width: 16px;margin-top: "
+      "-3px;margin-bottom: -3px;border-radius: 5px;} "
+      "QSlider::handle:horizontal:hover {background: dark-grey; border: 1px "
+      "solid black; border-radius: 5px;}");
+  productivity_slider_instr->setStyleSheet("font-weight: bold; border-style: "
+                                          "none;");
+  communications_slider_w->setStyleSheet(
+      "border-style: none; border-bottom: 1px solid black; border-radius: 0px; "
+      "border-top-right-radius: " +
+      QString::number(get_border_radius()) + "px;");
+  communications_slider->setStyleSheet(
+      "QSlider{border-style: none;} QSlider::groove:horizontal{border-style: "
+      "none; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 "
+      "rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); "
+      "height: 10px; border-radius: "
+      "5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px "
+      "solid grey;height: 10px;border-radius: 5px;} "
+      "QSlider::add-page:horizontal {background: white; border: 1px solid "
+      "grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal "
+      "{background: grey; border: 1px solid dark-grey; width: 16px;margin-top: "
+      "-3px;margin-bottom: -3px;border-radius: 5px;} "
+      "QSlider::handle:horizontal:hover {background: dark-grey; border: 1px "
+      "solid black; border-radius: 5px;}");
+  communications_slider_instr->setStyleSheet("font-weight: bold; border-style: "
+                                            "none;");
+  screen_slider_w->setStyleSheet(
+      "border-style: none; border-bottom: 1px solid black; border-radius: 0px; "
+      "border-top-right-radius: " +
+      QString::number(get_border_radius()) + "px;");
+  screen_slider->setStyleSheet(
+      "QSlider{border-style: none;} QSlider::groove:horizontal{border-style: "
+      "none; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 "
+      "rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); "
+      "height: 10px; border-radius: "
+      "5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px "
+      "solid grey;height: 10px;border-radius: 5px;} "
+      "QSlider::add-page:horizontal {background: white; border: 1px solid "
+      "grey;height: 10px;border-radius: 5px;} QSlider::handle:horizontal "
+      "{background: grey; border: 1px solid dark-grey; width: 16px;margin-top: "
+      "-3px;margin-bottom: -3px;border-radius: 5px;} "
+      "QSlider::handle:horizontal:hover {background: dark-grey; border: 1px "
+      "solid black; border-radius: 5px;}");
+  screen_slider_instr->setStyleSheet("font-weight: bold; border-style: "
+                                     "none;");
+
+
+  
 }
 
 void EntryCard::display(QLayout *layout) {

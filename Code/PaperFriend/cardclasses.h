@@ -100,6 +100,32 @@ private:
     QVBoxLayout *mood_slider_vb; // layout of mood_slider_w;
     QListWidget *fr_act_select;
     static std::vector<QListWidgetItem*> fr_act_options;
+
+    QWidget *sleep_slider_w; 
+    QLabel *sleep_slider_instr; 
+    QSlider *sleep_slider;
+    QVBoxLayout *sleep_slider_vb; 
+    QWidget *eating_slider_w; 
+    QLabel *eating_slider_instr;
+    QSlider *eating_slider;
+    QVBoxLayout *eating_slider_vb;
+    //productivity_slider_w
+    QWidget *productivity_slider_w;
+    QLabel *productivity_slider_instr;
+    QSlider *productivity_slider;
+    QVBoxLayout *productivity_slider_vb;
+    //communications_slider_w
+    QWidget *communications_slider_w;
+    QLabel *communications_slider_instr;
+    QSlider *communications_slider;
+    QVBoxLayout *communications_slider_vb;
+    //screen time
+    QWidget *screen_slider_w;
+    QLabel *screen_slider_instr;
+    QSlider *screen_slider;
+    QVBoxLayout *screen_slider_vb;
+
+
     //display of entry_recap
     QLabel *recap_title;
     QTextEdit *message;
