@@ -65,6 +65,7 @@ public:
     void set_main_window(MainWindow *mw);
     void update();
     void set_entryPerso_style(int top_menu_num_items = 3);
+    void set_entryRecap_style();
     void update_fr_act_select();
     void update_fr_act();
 
@@ -102,20 +103,15 @@ private:
     static std::vector<QListWidgetItem*> fr_act_options;
     //display of entry_recap
     QLabel *recap_title;
-    QTextEdit *message;
-    QLabel *avg_mood;
-    QWidget *mood_msg;
-    QHBoxLayout *mood_msg_hb;
-    QLabel *best_title;
-    QLabel *worst_title;
+    QTextEdit *recap_text;
+    QHBoxLayout *best_day_hb;
+    QHBoxLayout *worst_day_hb;
+    QLabel *best_day;
+    QLabel *worst_day;
     QLabel *best_date;
     QLabel *worst_date;
     QLabel *best_mood;
     QLabel *worst_mood;
-    QHBoxLayout *recap_days_hb;
-    QVBoxLayout *best_day_vb;
-    QVBoxLayout *worst_day_vb;
-    QVBoxLayout *recap_layout;
 };
 
 #endif // CARDCLASSES_H

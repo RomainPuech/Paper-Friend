@@ -152,21 +152,16 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
   modify = new QPushButton("Modify this entry", text_title_w);
   back_to_display = new QPushButton("Exit editing mode", edit_and_return);
   // entry_recap display
-  recap_layout = new QVBoxLayout();
   recap_title = new QLabel();
-  mood_msg = new QWidget();
-  avg_mood = new QLabel();
-  message = new QTextEdit();
-  mood_msg_hb = new QHBoxLayout();
-  best_title = new QLabel();
-  worst_title = new QLabel();
+  recap_text = new QTextEdit();
+  best_day_hb = new QHBoxLayout();
+  worst_day_hb = new QHBoxLayout();
+  best_day = new QLabel();
+  worst_day = new QLabel();
   best_date = new QLabel();
   worst_date = new QLabel();
   best_mood = new QLabel();
   worst_mood = new QLabel();
-  recap_days_hb = new QHBoxLayout();
-  best_day_vb = new QVBoxLayout();
-  worst_day_vb = new QVBoxLayout();
 
   // find the type of the entry
   switch (entry->entry_type()) {
@@ -424,10 +419,10 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
   }
 
   else if (entry_recap != nullptr) {
+    this->setContentsMargins(0, 0, 0, 0);
     EntryPerso best = entry_recap->get_best_day();
     EntryPerso worst = entry_recap->get_worst_day();
-    recap_title->setParent(this);
-    mood_msg_hb->setParent(this);
+    //recap_layout->setParent(this);
 
     switch (entry_recap->get_type()) {
     case 0:
@@ -440,42 +435,77 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
       recap_title->setText("Annual recap");
       break;
     }
-    recap_title->setMaximumHeight(50);
-    recap_title->setMinimumWidth(this->get_width());
-    recap_title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-    recap_title->setStyleSheet(
-        "font-weight: bold; font: 24px; border-style: none; border-bottom: 1px "
-        "solid black; border-radius: 0px;");
 
-    avg_mood->setText(QString::number(entry_recap->get_average_mood() * 100) +
-                      "% mood average");
-    avg_mood->setMinimumHeight(50);
-    avg_mood->setMinimumWidth(70);
-    avg_mood->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    // display date
+    date_display->setMaximumHeight(47);
+    date_display->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    date_display->setText(generate_date_string(entry->get_qdate()));
+    date_display->setAlignment(Qt::AlignCenter);
 
-    message->setText(QString::fromStdString(entry_recap->get_text()));
-    message->setReadOnly(true);
-    message->setMinimumHeight(50);
-    message->setMinimumWidth(this->get_width() - 70);
-    message->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    mood_msg_hb->addWidget(avg_mood);
-    mood_msg_hb->addWidget(message);
-    // mood_msg->setLayout(mood_msg_hb);
-    recap_layout->addWidget(recap_title);
+    // recap title
+    recap_title->setParent(this);
+    recap_title->setMaximumHeight(47);
+    recap_title->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     recap_title->setAlignment(Qt::AlignCenter);
-    recap_layout->addItem(mood_msg_hb);
-    this->setLayout(recap_layout);
 
-    /*best_title = new QLabel();
-    worst_title = new QLabel();
-    best_date = new QLabel();
-    worst_date = new QLabel();
-    best_mood = new QLabel();
-    worst_mood = new QLabel();
-    recap_days_hb = new QHBoxLayout();
-    best_day_vb = new QVBoxLayout();
-    worst_day_vb = new QVBoxLayout();*/
+    // display mood
+    mood_display->setText(
+        "Mood: " + QString::number(std::round(entry_recap->get_average_mood())) + "%");
+    mood_display->setMaximumHeight(47);
+    mood_display->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    mood_display->setAlignment(Qt::AlignCenter);
+
+    //recap_text
+    recap_text->setParent(this);
+    recap_text->setText(QString::fromStdString(entry_recap->get_text()));
+    recap_text->setReadOnly(true);
+
+    //best day
+    best_day->setParent(this);
+    best_day->setText("Best Day:");
+    best_date->setParent(this);
+    best_date->setText(generate_date_string(entry_recap->get_best_day().get_qdate()));
+    best_date->setAlignment(Qt::AlignCenter);
+    best_mood->setParent(this);
+    best_mood->setText("Highest mood: " + QString::number(std::round(entry_recap->get_best_day().get_mood())) + "%");
+    best_day_hb->addWidget(best_day);
+    best_day_hb->addWidget(best_date);
+    best_day_hb->addWidget(best_mood);
+
+    //worst day
+    worst_day->setParent(this);
+    worst_day->setText("Worst Day:");
+    worst_date->setParent(this);
+    worst_date->setText(generate_date_string(entry_recap->get_worst_day().get_qdate()));
+    worst_date->setAlignment(Qt::AlignCenter);
+    worst_mood->setParent(this);
+    worst_mood->setText("Lowest mood: " + QString::number(std::round(entry_recap->get_worst_day().get_mood())) + "%");
+    worst_day_hb->addWidget(worst_day);
+    worst_day_hb->addWidget(worst_date);
+    worst_day_hb->addWidget(worst_mood);
+
+    //size adjustments
+    date_display->setMinimumWidth(this->get_width() / 3);
+    recap_title->setMinimumWidth(this->get_width() / 3);
+    mood_display->setMinimumWidth(this->get_width() / 3);
+
+    // top menu
+    top_menu->setAlignment(Qt::AlignTop);
+    top_menu->setSpacing(0);
+    date_display->setParent(this);
+    mood_display->setParent(this);
+    top_menu->addWidget(date_display);
+    top_menu->addWidget(recap_title);
+    top_menu->addWidget(mood_display);
+
+    // add to the layout
+    vb_layout->addItem(top_menu);
+    vb_layout->addWidget(recap_text);
+    vb_layout->addItem(best_day_hb);
+    vb_layout->addItem(worst_day_hb);
+    this->setLayout(vb_layout);
+    this->set_entryRecap_style();
   }
 }
 
@@ -805,6 +835,53 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
       "solid black; border-radius: 5px;}");
   mood_slider_instr->setStyleSheet("font-weight: bold; border-style: none;");
 }
+
+void EntryCard::set_entryRecap_style(){
+    this->setStyleSheet("background-color: " + get_background_color() +
+                        "; border: 1px solid black; border-radius: " +
+                        QString::number(get_border_radius()) + "px;");
+    date_display->setStyleSheet(
+        "font-weight: bold;border-style: none; border-radius: 0px; "
+        "border-top-left-radius: " +
+        QString::number(this->get_border_radius()) +
+        "px; border-bottom: 1px solid black; border-left: 1px solid black; border-top: 1px solid black;");
+
+    recap_title->setStyleSheet(
+                "font-weight: bold; font-size: 15px; border-style: none; border-radius: 0px; "
+                "border-bottom: 1px solid black; border-left: 1px solid black;"
+                "color: white; background-color: black;");
+
+    QString red, green;
+    generate_rgb(red, green, entry_recap->get_average_mood() / 100);
+    mood_display->setStyleSheet(
+        "font-weight: bold; color: rgb(" + red + ", " + green +
+        ", 0); border-style: none; border-bottom: 1px solid black; "
+        "border-radius: 0px; border-top-right-radius:" +
+        QString::number(this->get_border_radius()) + "px; border-top: 1px solid black; border-right: 1px solid black;");
+
+    recap_text->setStyleSheet("border-top-style: none; border-radius: 0px;");
+
+    best_day->setStyleSheet("font-weight: bold; border-radius: 0px; border-top-style: none; border-right-style: none; color: white; background-color: black;"
+                            "border-bottom: 1px solid white;");
+    best_date->setStyleSheet("font-weight: bold; border-radius: 0px; border-right-style: none; border-top-style: none;");
+    generate_rgb(red, green, entry_recap->get_best_day().get_mood() / 100);
+    best_mood->setStyleSheet(
+        "font-weight: bold; color: rgb(" + red + ", " + green +
+        ", 0); "
+        "border-radius: 0px; border-top-style: none;");
+
+    worst_day->setStyleSheet("font-weight: bold; border-top-left-radius: 0px; border-top-right-radius: 0px; "
+                             "border-bottom-right-radius: 0px; border-style: none; color: white; background-color: black;"
+                             "border-left: 1px solid black; border-bottom: 1px solid black;");
+    worst_date->setStyleSheet("font-weight:bold; border-style: none; border-left: 1px solid black; border-radius: 0px; border-bottom: 1px solid black;");
+    generate_rgb(red, green, entry_recap->get_worst_day().get_mood() / 100);
+    worst_mood->setStyleSheet(
+        "font-weight: bold; color: rgb(" + red + ", " + green +
+        ", 0); border-top-style: none;"
+        "border-radius: 0px; border-bottom-right-radius: " + QString::number(get_border_radius()) + "px;");
+
+  }
+
 
 void EntryCard::display(QLayout *layout) {
   layout->addWidget(this);
