@@ -29,6 +29,7 @@ SOURCES += \
     dynamicgraph.cpp \
     mascot.cpp \
     mascotchat.cpp \
+    mypushbutton.cpp \
     settings.cpp \
     texteditor.cpp \
     edit.cpp \
@@ -57,6 +58,7 @@ HEADERS += \
     mascot.h \
     mascotchat.h \
     mascotchat.h \
+    mypushbutton.h \
     settings.h \
     texteditor.h \
     edit.h \

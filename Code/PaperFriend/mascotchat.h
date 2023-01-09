@@ -1,5 +1,6 @@
 #ifndef MASCOTCHAT_H
 #define MASCOTCHAT_H
+#include "qboxlayout.h"
 #include <QWidget>
 #include <QScrollArea>
 #include <QLabel>
@@ -26,6 +27,7 @@ private:
     void add_message(std::string txt);
     void prompt_msg();
     QScrollArea *scrollArea;
+    QVBoxLayout *chat_layout;
     Mascot *mascot;
 };
 

@@ -9,7 +9,7 @@
 #include <cstring>
 
 void MascotChat:: set_scroll_area(QScrollArea *area){
-    QVBoxLayout *chat_layout = new QVBoxLayout();
+    chat_layout = new QVBoxLayout();
     chat_layout->setSizeConstraint(QLayout::SetMinimumSize);
     scrollArea->widget()->setLayout(chat_layout);
 }
@@ -81,15 +81,23 @@ void MascotChat::display(std::vector<QString> Qstr_vect){
         }
 }
 void MascotChat::prompt_msg(){
-    QHBoxLayout btn_layout = QHBoxLayout();
+    QHBoxLayout* btn_layout = new QHBoxLayout();
     //btn_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum));
-    QPushButton yes = QPushButton("YES");
-    QPushButton no = QPushButton("NO");
-    //btn_layout.addWidget(yes);
-   // btn_layout.addWidget(no);
+    QPushButton* yes = new QPushButton("YES");//i have to make them into mypushbutton to override the clicked event
+    QPushButton* no = new QPushButton("NO");
+    btn_layout->addWidget(yes);
+    btn_layout->addWidget(no);
    // layout.addLayout(btn_layout) //put the qvbox layout instead of the layout
-    std::string str = "Did you sleep well?";
-    add_message(str);
+    std::vector<std::string> question_vect = {"Did you sleep well?", "Did you eat well?", "Did you practice any sports?"};
+    int i = 0;
+    while(i<= int(question_vect.size())){
+        add_message(question_vect[i]);
+        add_mascot();
+        chat_layout -> addLayout(btn_layout);
+        //add an if condition on whether yes or no is clicked to add next question and
+        //store what button was clicked to send it the analysis team
+    }
+
 
 
 }
