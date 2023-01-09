@@ -124,15 +124,7 @@ MainWindow::MainWindow(QWidget *parent)
   //// frontend that needs data to be rendered
   display_entries();
 
-  // test for recap display
-  // to be removed
-  EntryRecap *recap = new EntryRecap();
-  recap->set_best_day(*vector_entries.at(0));
-  recap->set_worst_day(*vector_entries.at(1));
-  recap->set_average_mood(28);
-  recap->set_text("Recap Text");
-  EntryCard *entry_r = new EntryCard(15, 200, 200, "white", recap, true, this);
-  entry_r->display(ui->EntriesScroll->widget()->layout());
+
 
 
   // Chatbox
