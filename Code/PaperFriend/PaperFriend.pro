@@ -31,6 +31,7 @@ SOURCES += \
     mascot.cpp \
     mascotchat.cpp \
     mypushbutton.cpp \
+    people_cell.cpp \
     settings.cpp \
     texteditor.cpp \
     edit.cpp \
@@ -61,6 +62,7 @@ HEADERS += \
     mascotchat.h \
     mascotchat.h \
     mypushbutton.h \
+    people_cell.h \
     settings.h \
     texteditor.h \
     edit.h \
@@ -72,6 +74,7 @@ FORMS += \
     all_habits.ui \
     all_people.ui \
     mainwindow.ui \
+    people_cell.ui \
     texteditor.ui \
 
 TRANSLATIONS += \

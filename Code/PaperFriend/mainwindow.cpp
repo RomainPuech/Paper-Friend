@@ -124,23 +124,15 @@ MainWindow::MainWindow(QWidget *parent)
   display_entries();
 
   // test for recap display
-  /*
+  // to be removed
   EntryRecap *recap = new EntryRecap();
-  EntryPerso *e = new EntryPerso();
-  e->set_mood(1 + std::rand() % 100);
-  std::vector<Friend *> fr;
-  fr.push_back(new Friend("fr", 1));
-  std::vector<Activity *> activity;
-  activity.push_back(new Activity("act", 1));
-  e->set_friends(fr);
-  e->set_activities(activity);
-  e->set_title("THIS IS A TITLE");
-  e->set_text("some text ...");
-  recap->set_best_day(*e);
-  recap->set_worst_day(*e);
-  EntryCard *entry_r = new EntryCard(15, 200, 200, "white", recap, false, this);
+  recap->set_best_day(*vector_entries.at(0));
+  recap->set_worst_day(*vector_entries.at(1));
+  recap->set_average_mood(28);
+  recap->set_text("Recap Text");
+  EntryCard *entry_r = new EntryCard(15, 200, 200, "white", recap, true, this);
   entry_r->display(ui->EntriesScroll->widget()->layout());
-  */
+
 
   // Chatbox
   chat = MascotChat(ui->scrollArea);
