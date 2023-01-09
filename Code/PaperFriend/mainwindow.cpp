@@ -332,7 +332,8 @@ void MainWindow::on_save_settings_clicked() {
 }
 
 void MainWindow::on_filterButton_clicked() {
-
+  std::cout << "sleep";
+  std::cout << vector_entries[0]->get_sleep() << std::endl;
 
   // vector_entries = sample_entries(100); // this line should be changed to
   // aquire source of entries

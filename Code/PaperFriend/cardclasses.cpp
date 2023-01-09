@@ -218,12 +218,6 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     fr_act_display->setParent(this);
     fr_act_select->setParent(this);
     mood_slider_w->setParent(this);
-    sleep_slider_w->setParent(this);
-    eating_slider_w->setParent(this);
-    productivity_slider_w->setParent(this);
-    communications_slider_w->setParent(this);
-    screen_slider_w->setParent(this);
-
 
 
     // display date
@@ -282,11 +276,17 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     // edit_text layout
     edit_text_w->setParent(edit_and_return);
     edit_vb->addWidget(edit_text_w);
-    edit_vb->addWidget(sleep_slider_w);
-    edit_vb->addWidget(eating_slider_w);
-    edit_vb->addWidget(mood_slider_w);
-    edit_vb->addWidget(productivity_slider_w);
-    edit_vb->addWidget(communications_slider_w);
+
+    QVBoxLayout *sliders_left = new QVBoxLayout();
+    QVBoxLayout *sliders_right = new QVBoxLayout();
+    QHBoxLayout *sliders = new QHBoxLayout();
+    sliders_left->addWidget(sleep_slider_w);
+    sliders_left->addWidget(eating_slider_w);
+    sliders_right->addWidget(productivity_slider_w);
+    sliders_right->addWidget(communications_slider_w);
+    sliders->addLayout(sliders_left);
+    sliders->addLayout(sliders_right);
+    edit_vb->addLayout(sliders);
     edit_vb->addWidget(screen_slider_w);
     edit_vb->addWidget(back_to_display);
     edit_and_return->setLayout(edit_vb);
@@ -723,6 +723,11 @@ void EntryCard::update() {
         "Mood: " + QString::number(std::round(entry_perso->get_mood())) + "%");
     mood_slider->setValue(int(this->entry_perso->get_mood()));
     sleep_slider->setValue(int(this->entry_perso->get_sleep()));
+    eating_slider->setValue(int(this->entry_perso->get_eating_healthy()));
+    productivity_slider->setValue(int(this->entry_perso->get_productivity()));
+    communications_slider->setValue(int(this->entry_perso->get_communications()));
+    screen_slider->setValue(int(this->entry_perso->get_screen_time()));
+
     // friends and activities
     update_fr_act();
   }
