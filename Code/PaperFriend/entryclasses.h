@@ -60,6 +60,7 @@ public:
 
     std::vector<Activity*> get_activities() const;
     void set_activities(std::vector<Activity*> activities);
+    void add_activity(Activity* activity);
 
     std::vector<Friend*> get_friends() const;
     void set_friends(std::vector<Friend*> friends);
@@ -101,7 +102,6 @@ private:
     double communications;
     double screen_time;
 };
-
 
 std::vector<EntryPerso*> sample_entries(int n,std::vector<Activity*> possible_activities = {new Activity()}, std::vector<Friend*> possible_friends = {new Friend()});//gives n randomly generated sample entries
 

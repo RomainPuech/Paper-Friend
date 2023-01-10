@@ -44,6 +44,8 @@ struct Activity {
 
     bool equal(Activity other);
 
+    bool operator ==(Activity &other);//used when trying to find an activity in a vector
+
 protected:
     std::string name;
     int type;

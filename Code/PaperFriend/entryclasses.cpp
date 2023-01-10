@@ -117,6 +117,9 @@ std::vector<Activity*> EntryPerso::get_activities() const {
 void EntryPerso::set_activities(std::vector<Activity*> activities) {
     this->activities = activities;
 }
+void EntryPerso::add_activity(Activity* activity) {
+    activities.push_back(activity);
+}
 
 std::vector<Friend*> EntryPerso::get_friends() const {
     return friends;

@@ -14,8 +14,9 @@
 #include "ui_all_habits.h"
 #include "ui_mainwindow.h"
 #include "ui_texteditor.h"
-#include "add_habit.h""
+#include "add_habit.h"
 #include <QDebug>
+#include <QString>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -68,9 +69,10 @@ MainWindow::MainWindow(QWidget *parent)
   QDir dir(QDir::currentPath() + "/Entries");
   for (const QString &filename : dir.entryList(QDir::Files)) {
     vector_entries.push_back(
-        load_entryperso(filename.toStdString()));
+        load_entryperso(filename.toStdString(),vector_activities));
   }
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
+  qDebug()<<QString::fromStdString((vector_entries[0]->get_activities())[0]->get_name());
 
   //Load habits
   std::vector<QStringList> current_habits = load_habits();
@@ -280,7 +282,7 @@ void MainWindow::on_pushButton_clicked() {
 }
 
 void MainWindow::on_activitie_button_clicked() {
-  all_activities *my_activities = new all_activities(vector_activities);
+  all_activities *my_activities = new all_activities(this,vector_activities);
   //my_activities->add_previous_cells();
   my_activities->setModal(true);
   my_activities->exec();
@@ -479,6 +481,13 @@ void MainWindow::on_newEntryButton_clicked() {
   */
   if (vector_entries.empty()) {
     EntryPerso *today_entry = new EntryPerso();
+    //ADD ACTIVITIES BY DEF TO 0
+    qDebug()<<QString("Start to add activities by default to 0");
+    for(Activity const& activity : vector_activities){
+        qDebug()<<QString::fromStdString(activity.get_name());
+        Activity *to_add = new Activity(activity.get_name(),activity.get_type(),0);
+        today_entry->add_activity(to_add);
+    }
     save_entryperso(*today_entry);
     vector_entries.push_back(today_entry);
     displayed_entries.push_back(today_entry);
@@ -587,7 +596,6 @@ void MainWindow::welcome(){
     }else{
         chat<<QString("Hello, it seems like it's your first time here! I'm Rooxie, your well-being assistant! You can create an entry in you diary by clicking the \"New entry\" button on the top of the screen.");
     }
-    chat<<QString("Hello back");
 }
 
 
@@ -602,5 +610,33 @@ void MainWindow::on_ppl_button_clicked(){
     all_people *my_people = new all_people(vector_friends);
     my_people->setModal(true);
     my_people->exec();
+}
+
+void MainWindow::add_new_activities_to_old_enties(){
+    qDebug()<<QString("called");
+
+    for(EntryPerso *entry : vector_entries){//to modify if we change the type of vector_entries
+        if(entry->entry_type()==1){//useful when we change the type of vector_entries
+            //we now know it's an entry perso so we can cast it
+            //qDebug()<<QString("cast");
+            //EntryPerso *entry = static_cast<EntryPerso*>(entry); //would be the way, but makes the program crash at the line indicated in the following comment
+            for(Activity const&activity : vector_activities){
+                Activity *to_add = new Activity();
+                to_add->set_name(activity.get_name());
+                to_add->set_type(activity.get_type());
+                std::vector<Activity*> entry_activities = entry->get_activities();//crashes here if static cast used
+                if(std::find(entry_activities.begin(), entry_activities.end(), to_add) == entry_activities.end()) {
+                    //does not contain activity
+                    Activity *to_add = new Activity();
+                    to_add->set_name(activity.get_name());
+                    to_add->set_type(activity.get_type());
+                    to_add->set_value(0.0);
+                    entry->add_activity(to_add);
+                }
+            }
+        }
+    }
+
+
 }
 

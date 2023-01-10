@@ -25,7 +25,7 @@ Activity string_to_activity(std::string act);
 std::string activities_vec_to_str (std::vector<Activity*> acts);
 
 
-std::vector<Activity*> str_to_vec_activities (std::string act);
+std::vector<Activity*> str_to_vec_activities (std::vector<Activity*> possible_activities,std::string act);
 
 std::string friend_to_string(Friend act);
 
@@ -40,7 +40,7 @@ std::vector<Friend*> str_to_vec_friends (std::string act);
 bool save_entryperso(EntryPerso entry);
 
 
-EntryPerso* load_entryperso(std::string filename);
+EntryPerso* load_entryperso(std::string filename,std::vector<Activity> possible_activities);
 
 
 

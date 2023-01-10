@@ -34,3 +34,7 @@ void Activity::set_type(int type){
 bool Activity::equal(Activity other){
     return this->name == other.name && this->type == other.type;
 }
+
+bool Activity::operator ==(Activity &other){
+    return (name == other.get_name()) && (type == other.get_type());
+}
