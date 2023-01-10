@@ -507,12 +507,6 @@ void MainWindow::on_newEntryButton_clicked() {
   today_card->change();
 }
 
-void MainWindow::on_add_habit_button_clicked(){
-    Add_Habit *add_habit = new Add_Habit();
-    add_habit->setModal(true);
-    add_habit->exec();
-}
-
 void MainWindow::generate_recap() {
     // first check if we need to generate a weekly/monthly/yearly recap
     // last_recaps_dates is the vector containing the string of the dates of the last [0]weekly, [1]monthly and [2]yearly recap.

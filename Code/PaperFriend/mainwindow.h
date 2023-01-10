@@ -63,8 +63,6 @@ private slots:
 
     void on_Test_entries_clicked();
 
-    void on_add_habit_button_clicked();
-
     void on_ppl_button_clicked();
 
 private:
