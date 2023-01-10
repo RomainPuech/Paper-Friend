@@ -212,17 +212,8 @@ void MainWindow::update_graphs() {
     }
 }
 
-void MainWindow::remove_non_existent_activities_and_friends(EntryPerso* entry){
-    std::vector<Activity*> activities;
+void MainWindow::remove_non_existent_friends(EntryPerso* entry){
     std::vector<Friend*> friends;
-    for(long long unsigned act = 0; act < entry->get_activities().size(); act++){
-        for(long long unsigned i = 0; i < vector_activities.size(); i++){
-            if((entry->get_activities().at(act))->equal(vector_activities.at(i))){
-                activities.push_back(&vector_activities.at(i));
-                break;
-            }
-        }
-    }
     for(long long unsigned fr = 0; fr < entry->get_friends().size(); fr++){
         for(long long unsigned i = 0; i < vector_friends.size(); i++){
             if((entry->get_friends().at(fr))->equal(vector_friends.at(i))){
@@ -231,10 +222,8 @@ void MainWindow::remove_non_existent_activities_and_friends(EntryPerso* entry){
             }
         }
     }
-    entry->set_activities(activities);
     entry->set_friends(friends);
 }
-
 void MainWindow::display_entries() {
 
 
@@ -254,7 +243,7 @@ void MainWindow::display_entries() {
   // displaying in reversed order
   for (auto entry = displayed_entries.rbegin(); entry != displayed_entries.rend(); ++entry) {
     //remove friends and activities that shouldn't be displayed
-      remove_non_existent_activities_and_friends(*entry);
+      remove_non_existent_friends(*entry);
     if ((*entry)->get_qdate() == QDate::currentDate()) {
       today_card = new EntryCard(20, 300, 300, "white", *entry, true, this);
       today_card->display(ui->EntriesScroll->widget()->layout());

@@ -44,7 +44,7 @@ public:
     static void update_activities(std::vector<Activity> activities);
     static void update_friends(std::vector<Friend> friends);
     void update_graphs();
-    void remove_non_existent_activities_and_friends(EntryPerso* entry);
+    void remove_non_existent_friends(EntryPerso* entry);
     void generate_recap();
     void react_to_last_entry();
     void welcome();
