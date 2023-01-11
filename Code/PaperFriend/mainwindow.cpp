@@ -623,3 +623,4 @@ void MainWindow::add_new_activities_to_old_enties(){
 
 }
 
+

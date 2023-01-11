@@ -125,7 +125,8 @@ void all_activities::closeEvent (QCloseEvent *event){
                 if (answr_btn != QMessageBox::Yes) {
                     event->ignore();
                 } else {
-                    this->close();
+                    //this->close();
+                    event->ignore();
                 }
             }if(type_activity_acp == 0){
                 QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Please enter an activity type."),
