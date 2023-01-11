@@ -797,8 +797,8 @@ void EntryCard::update_fr_act_select() {
   for (long long unsigned act = 0; act < entry_perso->get_activities().size();
        act++) {
     QString name = QString::fromStdString(
-        (MainWindow::get_activities().at(act)).get_name());
-    switch ((MainWindow::get_activities().at(act)).get_type()) {
+        (entry_perso->get_activities().at(act))->get_name());
+    switch (entry_perso->get_activities().at(act)->get_type()) {
     case 1: // sports
       name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
       break;
@@ -873,7 +873,7 @@ void EntryCard::update_fr_act() {
     fr_act_display->addItem(QString::fromStdString(
         (entry_perso->get_friends().at((entry_perso->get_friends()).size() - 1 - fr))->get_name()));
   }
-  for (unsigned long long act = 0; act < (entry_perso->get_activities()).size();
+  for (unsigned long long act = 0; act < num_activities;
        act++) {
       if(entry_perso->get_activities().at(num_activities - act - 1)->get_value() != 0){
         QString name = QString::fromStdString(
