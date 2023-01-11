@@ -849,7 +849,7 @@ void EntryCard::update_fr_act() {
     else{
         activity->set_value(0);
     }
-    activities.push_back(activity);
+    activities.insert(activities.begin(), activity);
     fr_act_select->removeItemWidget(option);
     delete option;
   }
@@ -875,10 +875,10 @@ void EntryCard::update_fr_act() {
   }
   for (unsigned long long act = 0; act < num_activities;
        act++) {
-      if(entry_perso->get_activities().at(num_activities - act - 1)->get_value() != 0){
+      if(entry_perso->get_activities().at(act)->get_value() != 0){
         QString name = QString::fromStdString(
-            (entry_perso->get_activities()).at(num_activities - 1 - act)->get_name());
-        switch ((entry_perso->get_activities().at(num_activities - 1 - act))->get_type()) {
+            (entry_perso->get_activities()).at(act)->get_name());
+        switch ((entry_perso->get_activities().at(act))->get_type()) {
         case 1: // sports
           name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
           break;
