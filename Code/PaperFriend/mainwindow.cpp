@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent)
         load_entryperso(filename.toStdString(),vector_activities));
   }
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
-  qDebug()<<QString::fromStdString((vector_entries[0]->get_activities())[0]->get_name());
+  //qDebug()<<QString::fromStdString((vector_entries[0]->get_activities())[0]->get_name());
 
   //Load habits
   std::vector<QStringList> current_habits = load_habits();
