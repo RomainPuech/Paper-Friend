@@ -38,14 +38,12 @@ private:
    std::vector<EntryPerso> log; // Data to be analysed
 
 
-    /*DataAnalysis(std::vector<Entry> logEntry){
-        std::vector<EntryPerso> log; // Data to be analysed
-        for (int i=0; i<logEntry.size(); ++i){
-            if (logEntry[i].entry_type() == 1){
-                log.push_back(logEntry[i]);
-            }
-        }
-    }*/
+    std::vector<std::vector<double>> STL_X;
+    std::vector<std::vector<double>> STL_Trends;
+    std::vector<std::vector<double>> STL_Seasonalities;
+    std::vector<std::vector<double>> STL_Remainders;
+
+    DataAnalysis();
 
   // double get_var(const EntryPerso& entry, int var_index) const; // gets the
   // value of the
@@ -61,8 +59,7 @@ private:
   // This method will probably not be used that much but here just in case it is
   // needed to generate randomized entries for testing.
 
-  std::vector<EntryPerso> get_lastn_days_data(
-      int n, int reference = -1) const; // gets the entries within n days of the last entry.
+  std::vector<EntryPerso> get_lastn_days_data(int n, int reference = -1) const; // gets the entries within n days of the last entry.
 
   template <typename T> double avg(const std::vector<T> &data) const {
 
@@ -109,6 +106,8 @@ private:
   anomalies_detection(const std::vector<EntryPerso> &entries,
                       int var_index) const;
   std::vector<int> anomalies_by_groups(const std::vector<EntryPerso> &entries, int num_days, int var_index);
+
+  std::vector<double> cyclic_week(int metric_index);
 
   std::string var_to_str(int var_index) const {
     return log[0].get_var_name(var_index);
