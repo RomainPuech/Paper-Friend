@@ -66,6 +66,8 @@ void all_activities::closeCell(int ActivitiesCellNumber){
     }
     ActivitiesCellNumberTotal--;
     allCellPtr.remove(ActivitiesCellNumber);
+    vector_activities.erase(vector_activities.begin() + ActivitiesCellNumber);
+    MainWindow::remove_activities_from_old_entries(ActivitiesCellNumber);
 }
 
 void all_activities::on_save_activity_button_clicked()

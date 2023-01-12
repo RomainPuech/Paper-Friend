@@ -49,6 +49,7 @@ public:
     void react_to_last_entry();
     void welcome();
     void add_new_activities_to_old_enties();
+    static void remove_activities_from_old_entries(int position);
 
 private slots:
     void on_pushButton_clicked();

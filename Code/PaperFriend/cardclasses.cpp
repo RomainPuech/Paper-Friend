@@ -299,8 +299,10 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     fr_act_display->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     for (long long unsigned fr = 0; fr < (entry_perso->get_friends()).size();
          fr++) {
+      if(entry_perso->get_friends().at(fr)->get_duration() != 0){
       fr_act_display->addItem(QString::fromStdString(
           (entry_perso->get_friends().at(fr))->get_name()));
+      }
     }
     for (long long unsigned act = 0;
          act < (entry_perso->get_activities()).size(); act++) {
@@ -339,18 +341,13 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     fr_act_select->setSpacing(5);
     fr_act_select->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    for (long long unsigned fr = 0; fr < (MainWindow::get_friends()).size();
+    for (long long unsigned fr = 0; fr < (entry_perso->get_friends()).size();
          fr++) {
       QListWidgetItem *cb = new QListWidgetItem(QString::fromStdString(
-          (MainWindow::get_friends().at(fr)).get_name()));
+          (entry_perso->get_friends().at(fr))->get_name()));
       cb->setCheckState(Qt::Unchecked);
-      for (long long unsigned i = 0; i < entry_perso->get_friends().size();
-           i++) {
-        if (entry_perso->get_friends().at(i)->equal(
-                (MainWindow::get_friends().at(fr)))) {
+      if (entry_perso->get_friends().at(fr)->get_duration() != 0) {
           cb->setCheckState(Qt::Checked);
-          break;
-        }
       }
 
       fr_act_options.push_back(cb);
@@ -784,8 +781,7 @@ void EntryCard::update() {
   // update style
   if (readOnly && fr_act_display->count() != 0) {
     set_entryPerso_style(3);
-  } else if (!readOnly && (MainWindow::get_activities().size() +
-                           MainWindow::get_friends().size()) != 0) {
+  } else if (!readOnly && !fr_act_options.empty()) {
     set_entryPerso_style(3);
   } else {
     set_entryPerso_style(2);
@@ -796,17 +792,13 @@ void EntryCard::update_fr_act_select() {
   // update checklist before switching into modify mode
   fr_act_select->clear();
   fr_act_options.clear();
-  for (long long unsigned fr = 0; fr < (MainWindow::get_friends()).size();
+  for (long long unsigned fr = 0; fr < (entry_perso->get_friends()).size();
        fr++) {
     QListWidgetItem *cb = new QListWidgetItem(
-        QString::fromStdString((MainWindow::get_friends().at(fr)).get_name()));
+        QString::fromStdString((entry_perso->get_friends().at(fr))->get_name()));
     cb->setCheckState(Qt::Unchecked);
-    for (long long unsigned i = 0; i < entry_perso->get_friends().size(); i++) {
-      if (entry_perso->get_friends().at(i)->equal(
-              (MainWindow::get_friends().at(fr)))) {
+    if (entry_perso->get_friends().at(fr)->get_duration() != 0) {
         cb->setCheckState(Qt::Checked);
-        break;
-      }
     }
     fr_act_options.push_back(cb);
     fr_act_select->addItem(cb);
@@ -852,7 +844,7 @@ void EntryCard::update_fr_act() {
   // update the display and values before going back to readOnly mode
   std::vector<Activity *> activities;
   std::vector<Friend *> friends;
-  unsigned long long num_friends = (MainWindow::get_friends()).size();
+  unsigned long long num_friends = (entry_perso->get_friends()).size();
   unsigned long long num_activities = (entry_perso->get_activities()).size();
   // qDebug() << QString::number((MainWindow::get_activities()).size());
 
