@@ -594,7 +594,7 @@ EntryRecap DataAnalysis::recap(int type){
     text += "Here is a summary of your " + periods[type] + " across all areas\n";
     text += detailed_analysis;
 
-    return EntryRecap(best_day, worst_day, text, avg_mood, type);
+    return EntryRecap(best_day.get_date(), worst_day.get_date(), text, avg_mood, type);
 }
 
 EntryRecap DataAnalysis::weekly_recap() {
