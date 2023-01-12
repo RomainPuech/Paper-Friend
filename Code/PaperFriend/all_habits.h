@@ -15,6 +15,9 @@ public:
     explicit All_Habits(QWidget *parent = nullptr);
     ~All_Habits();
 
+private slots:
+    void on_add_habit_button_clicked();
+
 private:
     Ui::All_Habits *ui;
 };

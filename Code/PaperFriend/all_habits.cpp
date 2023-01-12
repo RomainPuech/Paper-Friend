@@ -21,3 +21,9 @@ All_Habits::~All_Habits()
 {
     delete ui;
 }
+
+void All_Habits::on_add_habit_button_clicked()
+{
+
+}
+
