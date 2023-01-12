@@ -130,6 +130,9 @@ bool compare_value(const EntryPerso& e, std::string keyword, std::string opt, in
 }
 
 
+
+
+
 std::vector<EntryPerso> random_entryperso(int num){
     std::vector<EntryPerso> entries;
     for(int i=0;i<num;i++){

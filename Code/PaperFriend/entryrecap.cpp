@@ -6,6 +6,7 @@ EntryRecap::EntryRecap(): Entry(){
     this->best_day = EntryPerso();
     this->worst_day = EntryPerso();
     this->type= 0;
+    this->text = "";
     this->average_mood = 0;
 
 
@@ -16,6 +17,7 @@ EntryRecap::EntryRecap( EntryPerso best_day, EntryPerso worst_day, std::string t
     this->best_day = best_day;
     this->worst_day = worst_day;
     this->type= type;
+    this->text = text;
     this->average_mood = average_mood;
 
 }

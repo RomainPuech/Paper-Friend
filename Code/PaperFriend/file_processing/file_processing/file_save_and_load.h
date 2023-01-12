@@ -47,7 +47,7 @@ bool save_friends (std::vector<Friend> fr);
 
 bool save_entryrecap (EntryRecap entry);
 
-EntryRecap* load_entryrecap (std::string filename);
+EntryRecap* load_entryrecap (std::string filename, std::vector<Activity> possible_activities);
 
 std::vector<Activity> load_activities();
 

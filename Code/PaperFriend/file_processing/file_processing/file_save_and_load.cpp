@@ -422,3 +422,60 @@ void save_last_recaps_dates(std::vector<QString> last_recaps_dates){
     myfile << last_recaps_dates[2].toStdString()<<endl;
     myfile.close();
 }
+
+
+
+
+bool save_entryrecap(EntryRecap entry){ //  create and save the entry file, title format MM.YY.JJ
+
+
+
+
+
+    nlohmann::json  j = {
+        {"text", entry.get_text()},
+        {"date", entry.get_date()},
+
+        {"best_day_date", entry.get_best_day().get_qdate().toString("MM.dd.yyyy").toStdString()+".json"},
+        {"worst_day_date", entry.get_worst_day().get_qdate().toString("MM.dd.yyyy").toStdString()+".json"},
+        {"type", entry.get_type()},
+        {"average_mood", entry.get_average_mood()},
+
+    };
+    std::string filename =  entry.get_qdate().toString("MM.dd.yyyy").toStdString()+"."+std::to_string(entry.get_type())+".json";
+
+    std::filesystem::path cwd = std::filesystem::current_path();
+
+    std::filesystem::create_directory("Recap_entries");
+
+    cwd /= "Recap_entries";
+
+
+
+    std::filesystem::path filePath = cwd / filename;
+
+    std::ofstream o( filePath);
+
+
+    if(!o.is_open()){
+        std::cout << "Error opening file" << std::endl;
+        return false;
+    }
+    o << j << std::endl;
+    o.close();
+    return true;
+}
+
+
+
+EntryRecap* load_entryrecap(std::string filename, std::vector<Activity> possible_activities){//retrieve the data of a Json file and return a pointer to an initialized EntryRecap object with this data
+    std::ifstream i("Recap_entries/" + filename);
+    nlohmann::json j;
+    i >> j;
+    EntryPerso best_day = *(load_entryperso(j["best_day_date"], possible_activities));
+    EntryPerso worst_day = *(load_entryperso(j["worst_day_date"], possible_activities));
+    EntryRecap* res = new EntryRecap(best_day,worst_day, j["text"],j["average_mood"], j["type"]);
+    res->set_date(j["date"]);
+    return res;
+}
+
