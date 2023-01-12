@@ -52,7 +52,9 @@ protected:
     double value;
 };
 
+
 bool operator==(Activity& a, Activity& b);
+
 
 
 #endif // ACTIVITYCLASSES_H

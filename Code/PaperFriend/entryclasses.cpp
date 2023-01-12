@@ -70,6 +70,10 @@ EntryPerso::EntryPerso(std::string title, std::string text,
 
   for (auto &ptr : activities)
     all_activities.push_back(*ptr);
+
+  for (auto &ptr : friends){
+      all_activities.push_back(Activity("Seeing " + ptr->get_name(), ptr->get_duration()));
+  }
 }
 EntryPerso::~EntryPerso() {
   for (auto el : activities)

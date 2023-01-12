@@ -16,6 +16,7 @@ all_activities::all_activities(MainWindow *mainwindow,std::vector<Activity> &vec
 {
     ui->setupUi(this);
     int ActivitiesCellNumberTotal = 0;
+    are_equal = false;
     this->add_previous_cells();
 }
 
@@ -31,6 +32,7 @@ void all_activities::on_add_activity_button_clicked()
 
 void all_activities::addNewCell(QString cellText, QString cellName, int type)
 {
+    //are_equal=false;
     activity_cell *new_activity_cell = new activity_cell(this); // Create a new activity_cell.
     ui->activities_cell_layout->addWidget(new_activity_cell); // add a widget in the activities_cell_layout.
     connect(new_activity_cell, SIGNAL(closeThisCell(int)),this,SLOT(closeCell(int)));
@@ -45,6 +47,11 @@ void all_activities::addNewCell(QString cellText, QString cellName, int type)
     new_activity_cell->set_activity_type(type);
     vector_activities.push_back(Activity(cellName.toStdString(), type, 0));
     ActivitiesCellNumberTotal++; // the total number of activities is incremented by 1.
+    for(int i=1; i<allCellPtr.size();++i){
+        if(allCellPtr[i-1]->get_activity_name() == allCellPtr[i]->get_activity_name()){
+            are_equal = true;
+        }
+    }
 }
 
 void all_activities::add_previous_cells(){
@@ -66,6 +73,8 @@ void all_activities::closeCell(int ActivitiesCellNumber){
     }
     ActivitiesCellNumberTotal--;
     allCellPtr.remove(ActivitiesCellNumber);
+    vector_activities.erase(vector_activities.begin() + ActivitiesCellNumber);
+    MainWindow::remove_activities_from_old_entries(ActivitiesCellNumber);
 }
 
 void all_activities::on_save_activity_button_clicked()
@@ -90,23 +99,6 @@ void all_activities::on_save_activity_button_clicked()
     if (reply == QMessageBox::Ok){
         this->close();
         }
-    /*bool are_equal = false;
-    for(int i=1; i<allCellPtr.size();++i){
-        if(allCellPtr[i-1]->get_activity_name() == allCellPtr[i]->get_activity_name()){
-            are_equal = true;
-        }
-    }
-    if(are_equal == true){
-        QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Some activities have the same name. Please change one of them."),
-                                                                      QMessageBox::Yes | QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-
-        if (answr_btn != QMessageBox::Yes) {
-            event->ignore();
-        } else {
-            event->ignore();
-        }
-    }*/
-
     // we add the activity with value 0 to all existing entryPerso.
     //In terms of complexity it is not the best option but given that the number of entries will reasonably be less than 1000 it is going to be immediate in practice and saves us a lot of time in terms of coding
     mainwindowptr->add_new_activities_to_old_enties();
@@ -163,9 +155,25 @@ void all_activities::closeEvent (QCloseEvent *event){
                     event->ignore();
                 }
             }
-            }
+        }for(int i=0; i<allCellPtr.size(); ++i){
+            for(int j=0; j<allCellPtr.size(); ++j){
+                if(i!=j && allCellPtr[j]->get_activity_name() == allCellPtr[i]->get_activity_name()){
+                    are_equal = true;
+                }else{
+                    are_equal = false;
+                }
+            }if(are_equal == true){
+                QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Some activities have the same name. It is not allowed."),
+                                                                              QMessageBox::Yes | QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+                if (answr_btn != QMessageBox::Yes) {
+                    event->ignore();
+                } else {
+                    event->ignore();
+                }
+            }are_equal=false;
         }
     }
-
+}
 
 
