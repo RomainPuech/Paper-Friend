@@ -135,7 +135,7 @@ MainWindow::MainWindow(QWidget *parent)
   // Chatbox
   chat = MascotChat(ui->scrollArea);
   welcome();
-  chat.add_mascot();
+  chat.add_mascot(90);
 
 
   //Settings
@@ -517,7 +517,7 @@ void MainWindow::generate_recap() {
         if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
         {
             chat<<QString("It's Sunday! Time for a weekly recap 😉");
-            chat.add_mascot();
+            chat.add_mascot(89);
             last_recaps_dates[0] = QDate::currentDate().toString("yyyy.MM.dd");
             DataAnalysis analysis = DataAnalysis(vector_entries);
             EntryRecap recap = analysis.weekly_recap();
@@ -537,7 +537,7 @@ void MainWindow::generate_recap() {
         if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
         {
         chat<<QString("Last day of the month means time for a montly recap!");
-        chat.add_mascot();
+        chat.add_mascot(65);
         last_recaps_dates[1] = QDate::currentDate().toString("yyyy.MM.dd");
         DataAnalysis analysis = DataAnalysis(vector_entries);
         EntryRecap recap = analysis.monthly_recap();
@@ -555,7 +555,7 @@ void MainWindow::generate_recap() {
         if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
         {
         chat<<QString("Before celebrating the new year, let's look back to ")+QString::number(QDate::currentDate().year())+QString(" and ponder.");
-        chat.add_mascot();
+        chat.add_mascot(66);
         last_recaps_dates[2] = QDate::currentDate().toString("yyyy.MM.dd");
         DataAnalysis analysis = DataAnalysis(vector_entries);
         EntryRecap recap = analysis.yearly_recap();
@@ -586,7 +586,7 @@ void MainWindow::react_to_last_entry(){
         }else{
             chat<<QString("Wow, you spent an amazing day! It hope it will stay anchored in your memory forever.");
         }
-        chat.add_mascot();
+        chat.add_mascot(last_entry->get_mood());
         reacted_to_entry = true;
     }
 }
