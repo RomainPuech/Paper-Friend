@@ -308,11 +308,11 @@ void MainWindow::on_save_settings_clicked() {
 }
 
 void MainWindow::on_filterButton_clicked() {
-  std::cout << "sleep";
-  std::cout << vector_entries[0]->get_sleep() << std::endl;
-
-  // vector_entries = sample_entries(100); // this line should be changed to
-  // aquire source of entries
+  if (vector_entries.size()==0) {
+    //error dialogue box
+    QMessageBox::warning(this, "Error", "No entries to filter. Please add an entry first.");
+    return;
+  }
 
   QString type_filter_value =
       findChild<QComboBox *>("type_filter")->currentText();
