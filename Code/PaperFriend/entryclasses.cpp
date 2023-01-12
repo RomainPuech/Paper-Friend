@@ -1,6 +1,7 @@
 #include "entryclasses.h"
 #include "activityclasses.h"
 #include "friendclasses.h"
+#include "mainwindow.h"
 
 #include <iostream>
 #include <random>
@@ -142,21 +143,22 @@ void EntryPerso::set_screen_time(double screen_time) {
 int EntryPerso::entry_type() const { return 1; }
 
 std::vector<EntryPerso *>
-sample_entries(int n, std::vector<Activity *> possible_activities,
-               std::vector<Friend *> possible_friends) {
+sample_entries(int n) {
   std::default_random_engine generator;
   std::normal_distribution<double> distribution(65, 25);
   std::vector<EntryPerso *> res = std::vector<EntryPerso *>();
+  std::vector<Activity> activities_main = MainWindow::get_activities();
+  std::vector<Activity *> activities;
+  std::vector<Friend*> friends;
   for (int i = n; i > 5; --i) {
-    std::vector<Activity *> activities;
-    std::vector<Friend *> friends;
-
-    int activity_index = rand() % possible_activities.size();
-    activities.push_back(possible_activities[activity_index]);
-
-    int friend_index = rand() % possible_friends.size();
-    friends.push_back(possible_friends[friend_index]);
-
+      activities.clear();
+      for(Activity activity: activities_main){
+          Activity *to_add = new Activity();
+          to_add->set_name(activity.get_name());
+          to_add->set_type(activity.get_type());
+          to_add->set_value(rand() % 2);
+          activities.push_back(to_add);
+      }
     double mood = distribution(generator);
     mood = std::llround(mood * 2) / 2.0;
     if (mood > 100) {

@@ -22,6 +22,7 @@
 #include "entryclasses.h"
 #include "cardclasses.h"
 #include "mascotchat.h"
+#include "entryrecap.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -76,6 +77,7 @@ private:
     static std::vector<EntryPerso*>vector_entries;
     static std::vector<Activity>vector_activities;
     static std::vector<Friend>vector_friends;
+    static std::vector<EntryRecap*>vector_recaps;
 
     std::vector<EntryPerso*> displayed_entries;
     EntryCard* today_card;
