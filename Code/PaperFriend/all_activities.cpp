@@ -90,6 +90,22 @@ void all_activities::on_save_activity_button_clicked()
     if (reply == QMessageBox::Ok){
         this->close();
         }
+    /*bool are_equal = false;
+    for(int i=1; i<allCellPtr.size();++i){
+        if(allCellPtr[i-1]->get_activity_name() == allCellPtr[i]->get_activity_name()){
+            are_equal = true;
+        }
+    }
+    if(are_equal == true){
+        QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Some activities have the same name. Please change one of them."),
+                                                                      QMessageBox::Yes | QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+        if (answr_btn != QMessageBox::Yes) {
+            event->ignore();
+        } else {
+            event->ignore();
+        }
+    }*/
 
     // we add the activity with value 0 to all existing entryPerso.
     //In terms of complexity it is not the best option but given that the number of entries will reasonably be less than 1000 it is going to be immediate in practice and saves us a lot of time in terms of coding
