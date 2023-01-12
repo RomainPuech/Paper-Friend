@@ -44,7 +44,7 @@ struct Activity {
 
     bool equal(Activity other);
 
-    bool operator==(Activity const&other)const;//used when trying to find an activity in a vector
+    bool operator==(Activity other)const;//used when trying to find an activity in a vector
 
 protected:
     std::string name;
@@ -52,7 +52,7 @@ protected:
     double value;
 };
 
-bool operator==(const Activity& a, const Activity& b);
+bool operator==(Activity& a, Activity& b);
 
 
 #endif // ACTIVITYCLASSES_H

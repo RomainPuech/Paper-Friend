@@ -2,24 +2,22 @@
 #include "entryclasses.h"
 
 
-EntryRecap::EntryRecap(){
-    EntryPerso temp =EntryPerso();
-    this->best_day = temp;
-    this->worst_day = temp;
+EntryRecap::EntryRecap(): Entry(){
+    this->best_day = EntryPerso();
+    this->worst_day = EntryPerso();
     this->type= 0;
     this->average_mood = 0;
-    this->text = "";
 
 
 
 };
 
-EntryRecap::EntryRecap(EntryPerso best_day, EntryPerso worst_day, std::string text,double average_mood, int type){
+EntryRecap::EntryRecap( EntryPerso best_day, EntryPerso worst_day, std::string text,double average_mood, int type): Entry(text,""){
     this->best_day = best_day;
     this->worst_day = worst_day;
     this->type= type;
     this->average_mood = average_mood;
-    this->text = text;
+
 }
 
 int EntryRecap::entry_type() const{
@@ -48,6 +46,7 @@ std::string EntryRecap::get_text(){
     return this->text;
 }
 
+
 void EntryRecap::set_best_day(EntryPerso best_day){
     this->best_day = best_day;
 }
@@ -66,5 +65,4 @@ void EntryRecap::set_type(int type){
 void EntryRecap::set_text(std::string text){
     this->text = text;
 }
-
 

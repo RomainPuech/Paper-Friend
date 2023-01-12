@@ -625,7 +625,14 @@ void MainWindow::add_new_activities_to_old_enties(){
         }
     }
 
-
 }
+void MainWindow::remove_activities_from_old_entries(int position){
+    /* remove an activity after it has been deleted */
+    for(EntryPerso *entry : vector_entries){
+            std::vector<Activity*> activities_removed = entry->get_activities();
+            activities_removed.erase(activities_removed.begin() + position);
+            entry->set_activities(activities_removed);
+        }
+    }
 
 
