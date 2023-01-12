@@ -33,10 +33,10 @@ struct LinearRegressionCoeffs {
 
 class DataAnalysis {
 
-public:
+private:
 
-    std::vector<EntryPerso> log; // Data to be analysed
-    DataAnalysis(std::vector<EntryPerso*> vector_entries);
+   std::vector<EntryPerso> log; // Data to be analysed
+
 
     /*DataAnalysis(std::vector<Entry> logEntry){
         std::vector<EntryPerso> log; // Data to be analysed
@@ -120,7 +120,6 @@ public:
   item_priority(const std::vector<EntryPerso> &entries,
                 int var_index); // Arranges all other variables w.r.t their
                                 // influence on the specified variable
-  std::string suggestion(int var_index); // text that will be suggested to user daily
 
   std::string generate_recap_text(const std::vector<EntryPerso> &entries, int type);
 
@@ -130,16 +129,20 @@ public:
 
 
   std::string generate_weekly_recap_text(const std::vector<EntryPerso> &entries);
-
-  EntryRecap weekly_recap();
-  EntryRecap monthly_recap();
-  EntryRecap yearly_recap();
-
   EntryRecap recap(int type);
 
   // STL returns a vector containing the Trend and the Seasonality component {Trend, Seasonality}.
   // seasonal_length is the length of the seasonality component; can be 7 to analyze a week, 30 for a month, ... dataX is in days, sorted, and the lower indexed day (dataX[0]) is the closest day to today
   std::vector<std::vector<double>> stl_regression(std::vector<double> dataY, std::vector<double> dataX, int seasonal_length);
+
+public:
+  DataAnalysis(std::vector<EntryPerso*> vector_entries);
+  EntryRecap weekly_recap();
+  EntryRecap monthly_recap();
+  EntryRecap yearly_recap();
+  std::string suggestion(int var_index); // text that will be suggested to user daily
+
+
 };
 
 #endif // DATAANALYSIS_H

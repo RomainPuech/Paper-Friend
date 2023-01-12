@@ -479,7 +479,12 @@ std::vector<int> lengths{7, 30, 365};
 std::vector<std::string> periods{"week", "month", "year"};
 
 void DataAnalysis::weekly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect){
-
+    /**
+     * @param entries, vector of strings
+     *
+     *fills up the vector with text of the anomalies detection done over the entries (which will represent a week's worth of data)
+     *
+     */
     for (int i = 0; i < get_num_activities(); ++i) {
       std::vector<EntryPerso> anomalies = anomalies_detection(entries, i);
       if (anomalies.size() == 0) {
@@ -501,7 +506,12 @@ void DataAnalysis::weekly_anomalies_text(const std::vector<EntryPerso> &entries,
 }
 
 void DataAnalysis::monthly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect){
-
+    /**
+     * @param entries, vector of strings
+     *
+     *fills up the vector with text of the anomalies detection done over the entries (which will represent a month's worth of data.
+     *
+     */
     std::vector<std::vector<EntryPerso>> groups;
     int references[]{-1, 7, 14, 21};
     std::string weeks[]{"first", "second", "third", "fourth"};
@@ -543,6 +553,12 @@ void DataAnalysis::monthly_anomalies_text(const std::vector<EntryPerso> &entries
 }
 
 void DataAnalysis::yearly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect){
+    /**
+     * @param entries, vector of strings
+     *
+     *fills up the vector with text of the anomalies detection done over the entries (which will represent a year's worth of data.
+     *
+     */
     std::vector<std::vector<EntryPerso>> groups;
     int references[]{-1, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330};
     std::string weeks[]{"first", "second", "third", "fourth"};
@@ -583,6 +599,12 @@ void DataAnalysis::yearly_anomalies_text(const std::vector<EntryPerso> &entries,
 }
 
 std::string DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &entries, int type){
+    /**
+     * @param entries, type of period (0 : weekly, 1 : monthly,
+     *2 : yearly).
+     *
+     *@returns string of the detailed analysis done over the entries over the period described by the type
+     */
     std::string res = "";
     std::vector<std::string> anomaly_texts;
     for (int i = 0; i < get_num_activities(); ++i){
@@ -667,8 +689,8 @@ EntryRecap DataAnalysis::recap(int type){
 
     double avg_mood = avg(period, 0);
 
-    double good_threshold = 6;
-    double great_threshold = 8;
+    double good_threshold = 60;
+    double great_threshold = 80;
 
     std::string detailed_analysis = generate_recap_text(period, type);
 
