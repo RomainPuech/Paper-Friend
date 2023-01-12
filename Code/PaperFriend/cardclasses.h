@@ -68,6 +68,7 @@ public:
     void set_entryRecap_style();
     void update_fr_act_select();
     void update_fr_act();
+    void remove_non_existent_act();
 
 private slots:
   void handleModify();

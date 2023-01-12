@@ -692,6 +692,7 @@ void EntryCard::handleBack() {
     }
     break;
   case QMessageBox::Discard:
+    this->remove_non_existent_act();
     this->change();
     break;
     alert.close();
@@ -814,6 +815,43 @@ void EntryCard::update_fr_act_select() {
   }
 }
 
+void EntryCard::remove_non_existent_act(){
+    // when activities are deleted, the display shoud be adjusted accordingly
+    // + auxiliary function when switching from modify to readOnly
+    fr_act_display->clear();
+    unsigned long long num_activities = entry_perso->get_activities().size();
+    for (unsigned long long act = 0; act < num_activities; act++) {
+      if (entry_perso->get_activities().at(act)->get_value() != 0) {
+        QString name = QString::fromStdString(
+            (entry_perso->get_activities()).at(act)->get_name());
+        switch ((entry_perso->get_activities().at(act))->get_type()) {
+        case 1: // sports
+          name +=
+              QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+          break;
+        case 2: // spiritual
+          name += QString::fromUtf8("\xE2\x9B\xAA");
+          break;
+        case 3: // work
+          name += QString::fromUtf8(
+              "\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
+          break;
+        case 4: // study
+          name += QString::fromUtf8(
+              "\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
+          break;
+        case 5: // art
+          name += QString::fromUtf8(
+              "\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
+          break;
+        default:
+          break;
+        }
+        fr_act_display->addItem(name);
+      }
+    }
+}
+
 void EntryCard::update_fr_act() {
   // update the display and values before going back to readOnly mode
   unsigned long long num_activities = (entry_perso->get_activities()).size();
@@ -830,38 +868,9 @@ void EntryCard::update_fr_act() {
 
   fr_act_select->clear();
   fr_act_options.clear();
-  fr_act_display->clear();
 
-  for (unsigned long long act = 0; act < num_activities; act++) {
-    if (entry_perso->get_activities().at(act)->get_value() != 0) {
-      QString name = QString::fromStdString(
-          (entry_perso->get_activities()).at(act)->get_name());
-      switch ((entry_perso->get_activities().at(act))->get_type()) {
-      case 1: // sports
-        name +=
-            QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
-        break;
-      case 2: // spiritual
-        name += QString::fromUtf8("\xE2\x9B\xAA");
-        break;
-      case 3: // work
-        name += QString::fromUtf8(
-            "\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
-        break;
-      case 4: // study
-        name += QString::fromUtf8(
-            "\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
-        break;
-      case 5: // art
-        name += QString::fromUtf8(
-            "\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
-        break;
-      default:
-        break;
-      }
-      fr_act_display->addItem(name);
-    }
-  }
+  this->remove_non_existent_act();
+
 }
 
 void EntryCard::set_entryPerso_style(int top_menu_num_items) {
