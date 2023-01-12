@@ -376,7 +376,7 @@ std::vector<QStringList> load_habits() {
     std::ifstream myfile;
     myfile.open("habits.txt");
     if ( myfile.is_open() ) {
-
+        std::cout<<"Reading habits file"<<std::endl;
         while (myfile.good()) {
             QString tmp1;
             std::getline (myfile, habit);
@@ -385,9 +385,10 @@ std::vector<QStringList> load_habits() {
             current_habits.push_back(tmp2);
         }
         myfile.close();
+        std::cout<<"Finished reading habits file"<<std::endl;
     }
     else {
-        std::cout << "Couldn't open habits file\n";
+        std::cout << "Couldn't open habits file"<<std::endl;
     }
     return current_habits;
 }

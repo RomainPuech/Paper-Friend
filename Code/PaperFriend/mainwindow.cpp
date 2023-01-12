@@ -14,7 +14,6 @@
 #include "ui_all_habits.h"
 #include "ui_mainwindow.h"
 #include "ui_texteditor.h"
-#include "add_habit.h"
 #include <QDebug>
 #include <QString>
 #include <fstream>
@@ -77,32 +76,33 @@ MainWindow::MainWindow(QWidget *parent)
 
   //Load habits
   std::vector<QStringList> current_habits = load_habits();
-  if (current_habits.size() == 1){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-  }
+  std::cout<<current_habits.size()<<std::endl;
   if (current_habits.size() == 2){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
   }
   if (current_habits.size() == 3){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
       ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
   }
   if (current_habits.size() == 4){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
       ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
       ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
-      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
   }
   if (current_habits.size() == 5){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
       ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
       ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
       ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
+  }
+  if (current_habits.size() == 6){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
+      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
       ui->habits_label_5->setText(current_habits[4][0] + ", " + current_habits[4][1]);
   }
-  if (current_habits.size() >= 6){
+  if (current_habits.size() >= 7){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
       ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
       ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);

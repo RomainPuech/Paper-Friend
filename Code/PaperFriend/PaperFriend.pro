@@ -68,6 +68,7 @@ HEADERS += \
 
 FORMS += \
     activity_cell.ui \
+    add_habit_cell.ui \
     all_activities.ui \
     all_habits.ui \
     all_people.ui \
