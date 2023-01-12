@@ -600,7 +600,7 @@ void MainWindow::on_ppl_button_clicked(){
 }
 
 void MainWindow::add_new_activities_to_old_enties(){
-    qDebug()<<QString("called");
+    qDebug()<<QString("add_new_activities_to_old_enties called");
 
     for(EntryPerso *entry : vector_entries){//to modify if we change the type of vector_entries
         if(entry->entry_type()==1){//useful when we change the type of vector_entries
@@ -612,7 +612,8 @@ void MainWindow::add_new_activities_to_old_enties(){
                 to_add->set_name(activity.get_name());
                 to_add->set_type(activity.get_type());
                 std::vector<Activity*> entry_activities = entry->get_activities();//crashes here if static cast used
-                if(std::find(entry_activities.begin(), entry_activities.end(), to_add) == entry_activities.end()) {
+                if(std::find_if(entry_activities.begin(), entry_activities.end(),[to_add](Activity *a)->bool{ return *a == *to_add; }) == entry_activities.end()) {
+                    qDebug()<<QString("Does not contain")<<QString::fromStdString(activity.get_name())<<QString::number(activity.get_type());
                     //does not contain activity
                     Activity *to_add = new Activity();
                     to_add->set_name(activity.get_name());
