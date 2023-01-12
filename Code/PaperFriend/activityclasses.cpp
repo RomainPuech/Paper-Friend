@@ -42,7 +42,9 @@ bool Activity::operator==(Activity other)const{
 }
 
 
+
 bool operator==(Activity& a, Activity& b)
+
 {
     qDebug()<<QString("outside == for act called,")<<QString::fromStdString(a.get_name());
     return (a.get_name() == b.get_name());
