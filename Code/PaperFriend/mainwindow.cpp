@@ -181,6 +181,10 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   if (answr_btn != QMessageBox::Yes) {
     event->ignore();
   } else {
+    for(auto entry: vector_entries){
+        save_entryperso(*entry);
+        //add saving of entry_recaps
+    }
     event->accept();
   }
 }
