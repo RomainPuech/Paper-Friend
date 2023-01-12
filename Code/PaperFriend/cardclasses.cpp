@@ -140,7 +140,9 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
   date_display = new QLabel();
   text_title_w = new QWidget();
   edit_and_return = new QGroupBox();
-  title = new QLabel(QString::fromStdString(entry->get_title()), text_title_w);
+  title_container = new QWidget();
+  title_layout = new QHBoxLayout();
+  title = new QLabel(QString::fromStdString(entry->get_title()), title_container);
   text_field =
       new QTextEdit(QString::fromStdString(entry->get_text()), text_title_w);
   edit_vb = new QVBoxLayout(edit_and_return);
@@ -224,9 +226,14 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     date_display->setAlignment(Qt::AlignCenter);
 
     if ((entry->get_title()) != "") {
-      edit_text->set_title(QString::fromStdString(entry->get_title()));
+      // use the edit_text line edit to edit the title
+      edit_text->append_title(QString::fromStdString(entry->get_title()));
     }
-    edit_text->append_text(QString::fromStdString(entry->get_text()));
+
+    if ((entry->get_text()) != "") {
+      // use the edit_text line edit to edit the text
+      edit_text->append_text(QString::fromStdString(entry->get_text()));
+    }
 
     // modify
     modify->setMinimumWidth(40);
@@ -238,12 +245,18 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
             &EntryCard::handleBack);
 
     // entry text and title
-
+    // Set the title on the top of the window
     title->setMinimumHeight(40);
     title->setMinimumWidth(this->get_width());
     title->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    title->setAlignment(Qt::AlignLeft);
-    title->setContentsMargins(5, 5, 5, 0);
+    title->setContentsMargins(5, 5, 5, 5);
+    // title->setAlignment(Qt::AlignCenter);
+    
+    title_layout->addWidget(title);
+    title_container->setLayout(title_layout);
+    title_container->setContentsMargins(10, 10, 10, 10);
+    title_container->setGeometry(0, 0, this->get_width(), 20);
+    title_container->setStyleSheet("background-color: rgb(220, 220, 220); border-radius: 5px;");
 
     text_field->setMinimumWidth(this->get_width());
     text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -252,7 +265,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     text_field->setContentsMargins(10, 0, 0, 5);
 
     // handle layout
-    text_title_vb->addWidget(title);
+    text_title_vb->addWidget(title_container);
     text_title_vb->addWidget(text_field);
     text_title_vb->addWidget(modify);
     text_title_w->setLayout(text_title_vb);

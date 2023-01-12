@@ -24,8 +24,8 @@ TextEditor::TextEditor(QWidget *parent) : QWidget(parent),
     strUndo.push(ui->textEdit->toHtml()); // Here the strUndo is a stack
     connect(ui->textEdit, SIGNAL(textChanged(QString)), this, SLOT(on_textEdit_textChanged));
     // Set Background color
-    ui -> lineEdit -> setStyleSheet("background-color: rgb(230,230,250);");
-    ui -> line -> setStyleSheet("background-color: rgb(0,0,0);");
+    ui -> lineEdit -> setStyleSheet("background-color: rgb(220, 220, 220); border-radius: 5px;");
+    ui -> line -> setStyleSheet("background-color: rgb(0,0,0); border-radius: 50%; width: 90%;");
     ui -> lineEdit -> setPlaceholderText("Edit Entry Title");
     ui->textEdit->setPlaceholderText("Edit Entry Text");
 }
@@ -45,7 +45,7 @@ void TextEditor::set_title(QString text)
     // Get the current plain text of the textEdit widget
     QString htmlText = "<h1 style='text-align:center;'>" + titleText + "</h1>";
     ui->lineEdit->clear();
-    ui->textEdit->setHtml(htmlText);
+    ui->textEdit->setHtml("");
 }
 
 
@@ -61,9 +61,19 @@ void TextEditor::set_max_width(int width)
     ui->textEdit->setMaximumWidth(width);
 }
 
+QString TextEditor::get_title() const
+{
+    return ui->lineEdit->text();
+}
+
 QString TextEditor::get_text() const
 {
     return ui->textEdit->toHtml();
+}
+
+void TextEditor::append_title(QString text)
+{
+    ui->lineEdit->setText(text);
 }
 
 void TextEditor::append_text(QString text)
