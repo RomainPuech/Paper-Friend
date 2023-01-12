@@ -34,7 +34,17 @@ struct LinearRegressionCoeffs {
 class DataAnalysis {
 
 public:
-  std::vector<EntryPerso> log; // Data to be analysed
+
+    std::vector<EntryPerso> log; // Data to be analysed
+
+    /*DataAnalysis(std::vector<Entry> logEntry){
+        std::vector<EntryPerso> log; // Data to be analysed
+        for (int i=0; i<logEntry.size(); ++i){
+            if (logEntry[i].entry_type() == 1){
+                log.push_back(logEntry[i]);
+            }
+        }
+    }*/
 
   // double get_var(const EntryPerso& entry, int var_index) const; // gets the
   // value of the

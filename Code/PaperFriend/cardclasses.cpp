@@ -111,12 +111,18 @@ void generate_rgb(QString &red, QString &green, double m) {
   if (m <= 0.5) {
     red = QString::number(255);
     green = QString::number(240 * m / (1 - m));
-  } else if (m <= 0.85){
+  } else if (m <= 0.85) {
     green = QString::number(240);
-    red = QString::number(255 * (-67*pow((m-0.5),4)+1)); //This parabola gives the most suitable gradient of green and transitions smoothly with the values of green for a mood greater than 0.75
-  } else{
-      green = QString::number(240 - (240-128)*(m-0.85)*(10/3));//At this point we just make the green darker
-      red = QString::number(0);
+    red = QString::number(
+        255 * (-67 * pow((m - 0.5), 4) +
+               1)); // This parabola gives the most suitable gradient of green
+                    // and transitions smoothly with the values of green for a
+                    // mood greater than 0.75
+  } else {
+    green = QString::number(
+        240 - (240 - 128) * (m - 0.85) *
+                  (10 / 3)); // At this point we just make the green darker
+    red = QString::number(0);
   }
 }
 
@@ -167,20 +173,17 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
   productivity_slider_instr = new QLabel(productivity_slider_w);
   productivity_slider = new QSlider(Qt::Horizontal, productivity_slider_w);
   productivity_slider_vb = new QVBoxLayout(productivity_slider_w);
-  //communications
+  // communications
   communications_slider_w = new QWidget();
   communications_slider_instr = new QLabel(communications_slider_w);
   communications_slider = new QSlider(Qt::Horizontal, communications_slider_w);
   communications_slider_vb = new QVBoxLayout(communications_slider_w);
-  //screen time
+  // screen time
   screen_slider_w = new QWidget();
   screen_slider_instr = new QLabel(screen_slider_w);
   screen_slider = new QSlider(Qt::Horizontal, screen_slider_w);
   screen_slider_vb = new QVBoxLayout(screen_slider_w);
 
-
-
-  
   // entry_recap display
   recap_title = new QLabel();
   recap_text = new QTextEdit();
@@ -213,7 +216,6 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     fr_act_display->setParent(this);
     fr_act_select->setParent(this);
     mood_slider_w->setParent(this);
-
 
     // display date
     date_display->setMaximumHeight(47);
@@ -302,34 +304,34 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     }
     for (long long unsigned act = 0;
          act < (entry_perso->get_activities()).size(); act++) {
-        if(entry_perso->get_activities().at(act)->get_value() != 0){
-                 QString name = QString::fromStdString(
-                     (entry_perso->get_activities().at(act))->get_name());
-                 switch ((entry_perso->get_activities().at(act))->get_type()) {
-                 case 1: // sports
-                   name +=
-                       QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
-                   break;
-                 case 2: // spiritual
-                   name += QString::fromUtf8("\xE2\x9B\xAA");
-                   break;
-                 case 3: // work
-                   name += QString::fromUtf8(
-                       "\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
-                   break;
-                 case 4: // study
-                   name += QString::fromUtf8(
-                       "\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
-                   break;
-                 case 5: // art
-                   name += QString::fromUtf8(
-                       "\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
-                   break;
-                 default:
-                   break;
-                 }
-                 fr_act_display->addItem(name);
-              }
+      if (entry_perso->get_activities().at(act)->get_value() != 0) {
+        QString name = QString::fromStdString(
+            (entry_perso->get_activities().at(act))->get_name());
+        switch ((entry_perso->get_activities().at(act))->get_type()) {
+        case 1: // sports
+          name +=
+              QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+          break;
+        case 2: // spiritual
+          name += QString::fromUtf8("\xE2\x9B\xAA");
+          break;
+        case 3: // work
+          name += QString::fromUtf8(
+              "\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
+          break;
+        case 4: // study
+          name += QString::fromUtf8(
+              "\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
+          break;
+        case 5: // art
+          name += QString::fromUtf8(
+              "\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
+          break;
+        default:
+          break;
+        }
+        fr_act_display->addItem(name);
+      }
     }
 
     // choose friends and activities
@@ -342,11 +344,13 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
       QListWidgetItem *cb = new QListWidgetItem(QString::fromStdString(
           (MainWindow::get_friends().at(fr)).get_name()));
       cb->setCheckState(Qt::Unchecked);
-      for(long long unsigned i = 0; i < entry_perso->get_friends().size(); i++){
-          if(entry_perso->get_friends().at(i)->equal((MainWindow::get_friends().at(fr)))){
-              cb->setCheckState(Qt::Checked);
-              break;
-          }
+      for (long long unsigned i = 0; i < entry_perso->get_friends().size();
+           i++) {
+        if (entry_perso->get_friends().at(i)->equal(
+                (MainWindow::get_friends().at(fr)))) {
+          cb->setCheckState(Qt::Checked);
+          break;
+        }
       }
 
       fr_act_options.push_back(cb);
@@ -382,9 +386,9 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
 
       QListWidgetItem *cb = new QListWidgetItem(name);
       cb->setCheckState(Qt::Unchecked);
-      if(entry_perso->get_activities().at(act)->get_value() != 0){
-              cb->setCheckState(Qt::Checked);
-          }
+      if (entry_perso->get_activities().at(act)->get_value() != 0) {
+        cb->setCheckState(Qt::Checked);
+      }
       fr_act_options.push_back(cb);
       fr_act_select->addItem(cb);
     }
@@ -418,7 +422,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     sleep_slider->setValue(int(this->entry_perso->get_sleep()));
     sleep_slider->setTickInterval(50);
     sleep_slider->setTickPosition(QSlider::TicksBelow);
-    sleep_slider_instr->setText("Slide the bar to enter your sleep");
+    sleep_slider_instr->setText("Slide the bar to enter how well you slept");
     sleep_slider->setMinimumHeight(18);
     sleep_slider_w->setMaximumHeight(47);
     sleep_slider_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -434,7 +438,8 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     eating_slider->setValue(int(this->entry_perso->get_eating_healthy()));
     eating_slider->setTickInterval(50);
     eating_slider->setTickPosition(QSlider::TicksBelow);
-    eating_slider_instr->setText("Slide the bar to enter your eating healthy");
+    eating_slider_instr->setText(
+        "Slide the bar to enter how healthily you ate");
     eating_slider->setMinimumHeight(18);
     eating_slider_w->setMaximumHeight(47);
     eating_slider_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -450,10 +455,12 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     productivity_slider->setValue(int(this->entry_perso->get_productivity()));
     productivity_slider->setTickInterval(50);
     productivity_slider->setTickPosition(QSlider::TicksBelow);
-    productivity_slider_instr->setText("Slide the bar to enter your productivity");
+    productivity_slider_instr->setText(
+        "Slide the bar to enter how productive you were");
     productivity_slider->setMinimumHeight(18);
     productivity_slider_w->setMaximumHeight(47);
-    productivity_slider_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    productivity_slider_w->setSizePolicy(QSizePolicy::Minimum,
+                                         QSizePolicy::Minimum);
     productivity_slider_vb->setSpacing(5);
     productivity_slider_instr->setAlignment(Qt::AlignCenter);
     productivity_slider_vb->addWidget(productivity_slider_instr);
@@ -463,13 +470,16 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     // get communication
     communications_slider->setMinimum(0);
     communications_slider->setMaximum(100);
-    communications_slider->setValue(int(this->entry_perso->get_communications()));
+    communications_slider->setValue(
+        int(this->entry_perso->get_communications()));
     communications_slider->setTickInterval(50);
     communications_slider->setTickPosition(QSlider::TicksBelow);
-    communications_slider_instr->setText("Slide the bar to enter your communication");
+    communications_slider_instr->setText(
+        "Slide the bar to enter how social you were");
     communications_slider->setMinimumHeight(18);
     communications_slider_w->setMaximumHeight(47);
-    communications_slider_w->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    communications_slider_w->setSizePolicy(QSizePolicy::Minimum,
+                                           QSizePolicy::Minimum);
     communications_slider_vb->setSpacing(5);
     communications_slider_instr->setAlignment(Qt::AlignCenter);
     communications_slider_vb->addWidget(communications_slider_instr);
@@ -491,8 +501,6 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     screen_slider_vb->addWidget(screen_slider_instr);
     screen_slider_vb->addWidget(screen_slider);
     screen_slider_w->setLayout(screen_slider_vb);
-
-
 
     // size adjustments
 
@@ -545,7 +553,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     this->setContentsMargins(0, 0, 0, 0);
     EntryPerso best = entry_recap->get_best_day();
     EntryPerso worst = entry_recap->get_worst_day();
-    //recap_layout->setParent(this);
+    // recap_layout->setParent(this);
 
     switch (entry_recap->get_type()) {
     case 0:
@@ -565,7 +573,6 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     date_display->setText(generate_date_string(entry->get_qdate()));
     date_display->setAlignment(Qt::AlignCenter);
 
-
     // recap title
     recap_title->setParent(this);
     recap_title->setMaximumHeight(47);
@@ -574,41 +581,50 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
 
     // display mood
     mood_display->setText(
-        "Mood: " + QString::number(std::round(entry_recap->get_average_mood())) + "%");
+        "Mood: " +
+        QString::number(std::round(entry_recap->get_average_mood())) + "%");
     mood_display->setMaximumHeight(47);
     mood_display->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     mood_display->setAlignment(Qt::AlignCenter);
 
-    //recap_text
+    // recap_text
     recap_text->setParent(this);
     recap_text->setText(QString::fromStdString(entry_recap->get_text()));
     recap_text->setReadOnly(true);
 
-    //best day
+    // best day
     best_day->setParent(this);
     best_day->setText("Best Day:");
     best_date->setParent(this);
-    best_date->setText(generate_date_string(entry_recap->get_best_day().get_qdate()));
+    best_date->setText(
+        generate_date_string(entry_recap->get_best_day().get_qdate()));
     best_date->setAlignment(Qt::AlignCenter);
     best_mood->setParent(this);
-    best_mood->setText("Highest mood: " + QString::number(std::round(entry_recap->get_best_day().get_mood())) + "%");
+    best_mood->setText(
+        "Highest mood: " +
+        QString::number(std::round(entry_recap->get_best_day().get_mood())) +
+        "%");
     best_day_hb->addWidget(best_day);
     best_day_hb->addWidget(best_date);
     best_day_hb->addWidget(best_mood);
 
-    //worst day
+    // worst day
     worst_day->setParent(this);
     worst_day->setText("Worst Day:");
     worst_date->setParent(this);
-    worst_date->setText(generate_date_string(entry_recap->get_worst_day().get_qdate()));
+    worst_date->setText(
+        generate_date_string(entry_recap->get_worst_day().get_qdate()));
     worst_date->setAlignment(Qt::AlignCenter);
     worst_mood->setParent(this);
-    worst_mood->setText("Lowest mood: " + QString::number(std::round(entry_recap->get_worst_day().get_mood())) + "%");
+    worst_mood->setText(
+        "Lowest mood: " +
+        QString::number(std::round(entry_recap->get_worst_day().get_mood())) +
+        "%");
     worst_day_hb->addWidget(worst_day);
     worst_day_hb->addWidget(worst_date);
     worst_day_hb->addWidget(worst_mood);
 
-    //size adjustments
+    // size adjustments
     date_display->setMinimumWidth(this->get_width() / 3);
     recap_title->setMinimumWidth(this->get_width() / 3);
     mood_display->setMinimumWidth(this->get_width() / 3);
@@ -740,11 +756,10 @@ void EntryCard::update() {
   if (entry_perso != nullptr) {
     this->entry_perso->set_mood(this->mood_slider->value());
     this->entry_perso->set_sleep(this->sleep_slider->value());
-    this->entry_perso->set_eating_healthy(
-        this->eating_slider->value());
+    this->entry_perso->set_eating_healthy(this->eating_slider->value());
     this->entry_perso->set_productivity(this->productivity_slider->value());
     this->entry_perso->set_communications(this->communications_slider->value());
-    //screen
+    // screen
     this->entry_perso->set_screen_time(this->screen_slider->value());
     mood_display->setText(
         "Mood: " + QString::number(std::round(entry_perso->get_mood())) + "%");
@@ -752,7 +767,8 @@ void EntryCard::update() {
     sleep_slider->setValue(int(this->entry_perso->get_sleep()));
     eating_slider->setValue(int(this->entry_perso->get_eating_healthy()));
     productivity_slider->setValue(int(this->entry_perso->get_productivity()));
-    communications_slider->setValue(int(this->entry_perso->get_communications()));
+    communications_slider->setValue(
+        int(this->entry_perso->get_communications()));
     screen_slider->setValue(int(this->entry_perso->get_screen_time()));
 
     // friends and activities
@@ -760,10 +776,10 @@ void EntryCard::update() {
   }
   // update dynamic graph
   main_window->update_graphs();
-  //react to the entry - Important to call it *before* generate_recap
-  qDebug()<<QString("Reaction called");
+  // react to the entry - Important to call it *before* generate_recap
+  qDebug() << QString("Reaction called");
   main_window->react_to_last_entry();
-  //check if a weekly/monthly/yearly recap has to be created
+  // check if a weekly/monthly/yearly recap has to be created
   main_window->generate_recap();
   // update style
   if (readOnly && fr_act_display->count() != 0) {
@@ -785,11 +801,12 @@ void EntryCard::update_fr_act_select() {
     QListWidgetItem *cb = new QListWidgetItem(
         QString::fromStdString((MainWindow::get_friends().at(fr)).get_name()));
     cb->setCheckState(Qt::Unchecked);
-    for(long long unsigned i = 0; i < entry_perso->get_friends().size(); i++){
-        if(entry_perso->get_friends().at(i)->equal((MainWindow::get_friends().at(fr)))){
-            cb->setCheckState(Qt::Checked);
-            break;
-        }
+    for (long long unsigned i = 0; i < entry_perso->get_friends().size(); i++) {
+      if (entry_perso->get_friends().at(i)->equal(
+              (MainWindow::get_friends().at(fr)))) {
+        cb->setCheckState(Qt::Checked);
+        break;
+      }
     }
     fr_act_options.push_back(cb);
     fr_act_select->addItem(cb);
@@ -823,31 +840,31 @@ void EntryCard::update_fr_act_select() {
 
     QListWidgetItem *cb = new QListWidgetItem(name);
     cb->setCheckState(Qt::Unchecked);
-    if(entry_perso->get_activities().at(act)->get_value() != 0){
-            cb->setCheckState(Qt::Checked);
-        }
+    if (entry_perso->get_activities().at(act)->get_value() != 0) {
+      cb->setCheckState(Qt::Checked);
+    }
     fr_act_options.push_back(cb);
     fr_act_select->addItem(cb);
   }
 }
 
 void EntryCard::update_fr_act() {
-  //update the display and values before going back to readOnly mode
+  // update the display and values before going back to readOnly mode
   std::vector<Activity *> activities;
   std::vector<Friend *> friends;
   unsigned long long num_friends = (MainWindow::get_friends()).size();
   unsigned long long num_activities = (entry_perso->get_activities()).size();
-  //qDebug() << QString::number((MainWindow::get_activities()).size());
+  // qDebug() << QString::number((MainWindow::get_activities()).size());
 
   for (unsigned long long i = 0; i < num_activities; i++) {
     QListWidgetItem *option = fr_act_options.at(fr_act_options.size() - 1);
     fr_act_options.pop_back();
-    Activity *activity = entry_perso->get_activities().at(num_activities - i - 1);
+    Activity *activity =
+        entry_perso->get_activities().at(num_activities - i - 1);
     if (option->checkState() == Qt::Checked) {
       activity->set_value(1);
-    }
-    else{
-        activity->set_value(0);
+    } else {
+      activity->set_value(0);
     }
     activities.insert(activities.begin(), activity);
     fr_act_select->removeItemWidget(option);
@@ -871,36 +888,38 @@ void EntryCard::update_fr_act() {
   for (unsigned long long fr = 0; fr < (entry_perso->get_friends()).size();
        fr++) {
     fr_act_display->addItem(QString::fromStdString(
-        (entry_perso->get_friends().at((entry_perso->get_friends()).size() - 1 - fr))->get_name()));
+        (entry_perso->get_friends().at((entry_perso->get_friends()).size() - 1 -
+                                       fr))
+            ->get_name()));
   }
-  for (unsigned long long act = 0; act < num_activities;
-       act++) {
-      if(entry_perso->get_activities().at(act)->get_value() != 0){
-        QString name = QString::fromStdString(
-            (entry_perso->get_activities()).at(act)->get_name());
-        switch ((entry_perso->get_activities().at(act))->get_type()) {
-        case 1: // sports
-          name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
-          break;
-        case 2: // spiritual
-          name += QString::fromUtf8("\xE2\x9B\xAA");
-          break;
-        case 3: // work
-          name +=
-              QString::fromUtf8("\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
-          break;
-        case 4: // study
-          name +=
-              QString::fromUtf8("\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
-          break;
-        case 5: // art
-          name +=
-              QString::fromUtf8("\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
-          break;
-        default:
-          break;
-        }
-        fr_act_display->addItem(name);
+  for (unsigned long long act = 0; act < num_activities; act++) {
+    if (entry_perso->get_activities().at(act)->get_value() != 0) {
+      QString name = QString::fromStdString(
+          (entry_perso->get_activities()).at(act)->get_name());
+      switch ((entry_perso->get_activities().at(act))->get_type()) {
+      case 1: // sports
+        name +=
+            QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+        break;
+      case 2: // spiritual
+        name += QString::fromUtf8("\xE2\x9B\xAA");
+        break;
+      case 3: // work
+        name += QString::fromUtf8(
+            "\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
+        break;
+      case 4: // study
+        name += QString::fromUtf8(
+            "\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
+        break;
+      case 5: // art
+        name += QString::fromUtf8(
+            "\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
+        break;
+      default:
+        break;
+      }
+      fr_act_display->addItem(name);
     }
   }
 }
@@ -1029,7 +1048,7 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
       "QSlider::handle:horizontal:hover {background: dark-grey; border: 1px "
       "solid black; border-radius: 5px;}");
   productivity_slider_instr->setStyleSheet("font-weight: bold; border-style: "
-                                          "none;");
+                                           "none;");
   communications_slider_w->setStyleSheet(
       "border-style: none; border-bottom: 1px solid black; border-radius: 0px; "
       "border-top-right-radius: " +
@@ -1048,7 +1067,7 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
       "QSlider::handle:horizontal:hover {background: dark-grey; border: 1px "
       "solid black; border-radius: 5px;}");
   communications_slider_instr->setStyleSheet("font-weight: bold; border-style: "
-                                            "none;");
+                                             "none;");
   screen_slider_w->setStyleSheet(
       "border-style: none; border-bottom: 1px solid black; border-radius: 0px; "
       "border-top-right-radius: " +
@@ -1068,57 +1087,64 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
       "solid black; border-radius: 5px;}");
   screen_slider_instr->setStyleSheet("font-weight: bold; border-style: "
                                      "none;");
-
-
-  
 }
 
-void EntryCard::set_entryRecap_style(){
-    this->setStyleSheet("background-color: " + get_background_color() +
-                        "; border: 1px solid black; border-radius: " +
-                        QString::number(get_border_radius()) + "px;");
-    date_display->setStyleSheet(
-        "font-weight: bold;border-style: none; border-radius: 0px; "
-        "border-top-left-radius: " +
-        QString::number(this->get_border_radius()) +
-        "px; border-bottom: 1px solid black; border-left: 1px solid black; border-top: 1px solid black;");
+void EntryCard::set_entryRecap_style() {
+  this->setStyleSheet("background-color: " + get_background_color() +
+                      "; border: 1px solid black; border-radius: " +
+                      QString::number(get_border_radius()) + "px;");
+  date_display->setStyleSheet(
+      "font-weight: bold;border-style: none; border-radius: 0px; "
+      "border-top-left-radius: " +
+      QString::number(this->get_border_radius()) +
+      "px; border-bottom: 1px solid black; border-left: 1px solid black; "
+      "border-top: 1px solid black;");
 
-    recap_title->setStyleSheet(
-                "font-weight: bold; font-size: 15px; border-style: none; border-radius: 0px; "
-                "border-bottom: 1px solid black; border-left: 1px solid black;"
-                "color: white; background-color: black;");
+  recap_title->setStyleSheet(
+      "font-weight: bold; font-size: 15px; border-style: none; border-radius: "
+      "0px; "
+      "border-bottom: 1px solid black; border-left: 1px solid black;"
+      "color: white; background-color: black;");
 
-    QString red, green;
-    generate_rgb(red, green, entry_recap->get_average_mood() / 100);
-    mood_display->setStyleSheet(
-        "font-weight: bold; color: rgb(" + red + ", " + green +
-        ", 0); border-style: none; border-bottom: 1px solid black; "
-        "border-radius: 0px; border-top-right-radius:" +
-        QString::number(this->get_border_radius()) + "px; border-top: 1px solid black; border-right: 1px solid black;");
+  QString red, green;
+  generate_rgb(red, green, entry_recap->get_average_mood() / 100);
+  mood_display->setStyleSheet(
+      "font-weight: bold; color: rgb(" + red + ", " + green +
+      ", 0); border-style: none; border-bottom: 1px solid black; "
+      "border-radius: 0px; border-top-right-radius:" +
+      QString::number(this->get_border_radius()) +
+      "px; border-top: 1px solid black; border-right: 1px solid black;");
 
-    recap_text->setStyleSheet("border-top-style: none; border-radius: 0px;");
+  recap_text->setStyleSheet("border-top-style: none; border-radius: 0px;");
 
-    best_day->setStyleSheet("font-weight: bold; border-radius: 0px; border-top-style: none; border-right-style: none; color: white; background-color: black;"
-                            "border-bottom: 1px solid white;");
-    best_date->setStyleSheet("font-weight: bold; border-radius: 0px; border-right-style: none; border-top-style: none;");
-    generate_rgb(red, green, entry_recap->get_best_day().get_mood() / 100);
-    best_mood->setStyleSheet(
-        "font-weight: bold; color: rgb(" + red + ", " + green +
-        ", 0); "
-        "border-radius: 0px; border-top-style: none;");
+  best_day->setStyleSheet(
+      "font-weight: bold; border-radius: 0px; border-top-style: none; "
+      "border-right-style: none; color: white; background-color: black;"
+      "border-bottom: 1px solid white;");
+  best_date->setStyleSheet("font-weight: bold; border-radius: 0px; "
+                           "border-right-style: none; border-top-style: none;");
+  generate_rgb(red, green, entry_recap->get_best_day().get_mood() / 100);
+  best_mood->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " +
+                           green +
+                           ", 0); "
+                           "border-radius: 0px; border-top-style: none;");
 
-    worst_day->setStyleSheet("font-weight: bold; border-top-left-radius: 0px; border-top-right-radius: 0px; "
-                             "border-bottom-right-radius: 0px; border-style: none; color: white; background-color: black;"
-                             "border-left: 1px solid black; border-bottom: 1px solid black;");
-    worst_date->setStyleSheet("font-weight:bold; border-style: none; border-left: 1px solid black; border-radius: 0px; border-bottom: 1px solid black;");
-    generate_rgb(red, green, entry_recap->get_worst_day().get_mood() / 100);
-    worst_mood->setStyleSheet(
-        "font-weight: bold; color: rgb(" + red + ", " + green +
-        ", 0); border-top-style: none;"
-        "border-radius: 0px; border-bottom-right-radius: " + QString::number(get_border_radius()) + "px;");
-
-  }
-
+  worst_day->setStyleSheet(
+      "font-weight: bold; border-top-left-radius: 0px; "
+      "border-top-right-radius: 0px; "
+      "border-bottom-right-radius: 0px; border-style: none; color: white; "
+      "background-color: black;"
+      "border-left: 1px solid black; border-bottom: 1px solid black;");
+  worst_date->setStyleSheet(
+      "font-weight:bold; border-style: none; border-left: 1px solid black; "
+      "border-radius: 0px; border-bottom: 1px solid black;");
+  generate_rgb(red, green, entry_recap->get_worst_day().get_mood() / 100);
+  worst_mood->setStyleSheet("font-weight: bold; color: rgb(" + red + ", " +
+                            green +
+                            ", 0); border-top-style: none;"
+                            "border-radius: 0px; border-bottom-right-radius: " +
+                            QString::number(get_border_radius()) + "px;");
+}
 
 void EntryCard::display(QLayout *layout) {
   layout->addWidget(this);

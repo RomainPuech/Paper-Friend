@@ -19,7 +19,6 @@ SOURCES += \
     Analysis/DataAnalysis.cpp \
     cipher/Qt-AES-1.2/qaesencryption.cpp \
     cipher/cipher.cpp \
-    Analysis/moodanalysis.cpp \
     entryclasses.cpp \
     entryfilter.cpp \
     entryrecap.cpp \
@@ -50,7 +49,6 @@ HEADERS += \
     cipher/Qt-AES-1.2/aesni/aesni-key-exp.h \
     cipher/Qt-AES-1.2/qaesencryption.h \
     cipher/cipher.h \
-    Analysis/moodanalysis.h \
     entryclasses.h \
     entryfilter.h \
     entryrecap.h \
