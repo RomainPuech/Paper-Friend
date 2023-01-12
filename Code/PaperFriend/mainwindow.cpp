@@ -545,13 +545,17 @@ void MainWindow::react_to_last_entry(){
         EntryPerso* last_entry = vector_entries[vector_entries.size()-1];//called before generate recap so we are sure it is an EntryPerso
         if(last_entry->get_mood()==0){
             chat<<QString("Did you forget to put in your mood ?<br> If not, I'm very sorry for the day you had. It's good that you put your thoughts on paper.<br> Don't hesitate to seek the help of a relative or of a professional if you feel like you loose control. Don't worry, everything eventually gets better.");
-        }else if(last_entry->get_mood()<0.3){
+        }else if(last_entry->get_mood()<30){
             chat<<QString("Oh, I'm sorry for the day you had. Don't forget that you are never alone and talking to a relative or a professional can help you going through hard times.");
-        }else if(last_entry->get_mood()<0.5){
+        }else if(last_entry->get_mood()<50){
             chat<<QString("Seems like you spent a pretty tough day... I hope it'll be better tomorrow.");
-        }else if(last_entry->get_mood()>0.85){
+        }else if(last_entry->get_mood()<75){//between 50 and 75
+            chat<<QString("Looks like a fine day. What could you improve to make it better?");
+        }else if(last_entry->get_mood()<85){
+            chat<<QString("Someone had a happy day ;)");
+        }else if(last_entry->get_mood()<95){//between 85 and 90
             chat<<QString("What a great day! Take the time to savor it.");
-        }else if(last_entry->get_mood()>0.95){
+        }else{
             chat<<QString("Wow, you spent an amazing day! It hope it will stay anchored in your memory forever.");
         }
         chat.add_mascot();
