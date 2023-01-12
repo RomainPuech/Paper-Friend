@@ -2,8 +2,9 @@
 
 #include <iostream>
 #include <string>
+#include<QString>
 
-Friend::Friend(std::string name, int duration) : name(name), duration(duration) {}
+Friend::Friend(std::string name, int type, int duration) : name(name), type(type), duration(duration) {}
 Friend::~Friend() {}
 
 std::string Friend::get_name() const {
@@ -23,7 +24,7 @@ void Friend::set_duration(int duration) {
 }
 
 int Friend::get_type() const{
-    return true;
+    return type;
 }
 
 void Friend::set_type(int type){
@@ -31,5 +32,5 @@ void Friend::set_type(int type){
 }
 
 bool Friend::equal(Friend other){
-    return this->name == other.name;
+    return this->name == other.name && this->type == other.type;
 }

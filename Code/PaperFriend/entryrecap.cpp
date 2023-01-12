@@ -3,8 +3,8 @@
 
 
 EntryRecap::EntryRecap(): Entry(){
-    this->best_day = "";
-    this->worst_day = "";
+    this->best_day = EntryPerso();
+    this->worst_day = EntryPerso();
     this->type= 0;
     this->average_mood = 0;
 
@@ -12,7 +12,7 @@ EntryRecap::EntryRecap(): Entry(){
 
 };
 
-EntryRecap::EntryRecap( std::string best_day, std::string worst_day, std::string text,double average_mood, int type): Entry(text,""){
+EntryRecap::EntryRecap( EntryPerso best_day, EntryPerso worst_day, std::string text,double average_mood, int type): Entry(text,""){
     this->best_day = best_day;
     this->worst_day = worst_day;
     this->type= type;
@@ -28,10 +28,10 @@ int EntryRecap::entry_type() const{
 //    ~worst_day();
 //}
 
-std::string EntryRecap::get_best_day(){
+EntryPerso EntryRecap::get_best_day(){
     return this->best_day;
 }
-std::string EntryRecap::get_worst_day(){
+EntryPerso EntryRecap::get_worst_day(){
     return this->worst_day;
 }
 
@@ -47,11 +47,11 @@ std::string EntryRecap::get_text(){
 }
 
 
-void EntryRecap::set_best_day(std::string best_day){
+void EntryRecap::set_best_day(EntryPerso best_day){
     this->best_day = best_day;
 }
 
-void EntryRecap::set_worst_day(std::string worst_day){
+void EntryRecap::set_worst_day(EntryPerso worst_day){
     this->worst_day = worst_day;
 }
 

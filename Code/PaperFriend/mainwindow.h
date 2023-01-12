@@ -44,10 +44,11 @@ public:
     static void update_activities(std::vector<Activity> activities);
     static void update_friends(std::vector<Friend> friends);
     void update_graphs();
-    void remove_non_existent_activities_and_friends(EntryPerso* entry);
+    void remove_non_existent_friends(EntryPerso* entry);
     void generate_recap();
     void react_to_last_entry();
     void welcome();
+    void add_new_activities_to_old_enties();
 
 private slots:
     void on_pushButton_clicked();
@@ -61,7 +62,6 @@ private slots:
     void on_type_filter_currentTextChanged(const QString &);
 
     void on_Test_entries_clicked();
-
 
     void on_ppl_button_clicked();
 

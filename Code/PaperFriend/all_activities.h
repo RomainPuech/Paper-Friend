@@ -8,6 +8,7 @@
 #include <QVector>
 #include <QtCharts>
 #include <activity_cell.h>
+#include"mainwindow.h"
 
 namespace Ui {
 class all_activities;
@@ -17,7 +18,7 @@ class all_activities : public QDialog {
   Q_OBJECT
 
 public:
-  explicit all_activities(std::vector<Activity> &vector_activities,
+  explicit all_activities(MainWindow *mainwindow,std::vector<Activity> &vector_activities,
                           QWidget *parent = nullptr);
   ~all_activities();
   int ActivitiesCellNumberTotal; // The total number of the activities.
@@ -38,6 +39,7 @@ public slots:
   void closeCell(int);
 
 private:
+  MainWindow *mainwindowptr;
   std::vector<Activity> &vector_activities;
   Ui::all_activities *ui;
 };

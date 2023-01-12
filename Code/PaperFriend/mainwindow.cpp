@@ -14,7 +14,9 @@
 #include "ui_all_habits.h"
 #include "ui_mainwindow.h"
 #include "ui_texteditor.h"
+#include "add_habit.h"
 #include <QDebug>
+#include <QString>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -67,9 +69,10 @@ MainWindow::MainWindow(QWidget *parent)
   QDir dir(QDir::currentPath() + "/Entries");
   for (const QString &filename : dir.entryList(QDir::Files)) {
     vector_entries.push_back(
-        load_entryperso(filename.toStdString()));
+        load_entryperso(filename.toStdString(),vector_activities));
   }
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
+  //qDebug()<<QString::fromStdString((vector_entries[0]->get_activities())[0]->get_name());
 
   //Load habits
   std::vector<QStringList> current_habits = load_habits();
@@ -123,24 +126,8 @@ MainWindow::MainWindow(QWidget *parent)
   //// frontend that needs data to be rendered
   display_entries();
 
-  // test for recap display
-  /*
-  EntryRecap *recap = new EntryRecap();
-  EntryPerso *e = new EntryPerso();
-  e->set_mood(1 + std::rand() % 100);
-  std::vector<Friend *> fr;
-  fr.push_back(new Friend("fr", 1));
-  std::vector<Activity *> activity;
-  activity.push_back(new Activity("act", 1));
-  e->set_friends(fr);
-  e->set_activities(activity);
-  e->set_title("THIS IS A TITLE");
-  e->set_text("some text ...");
-  recap->set_best_day(*e);
-  recap->set_worst_day(*e);
-  EntryCard *entry_r = new EntryCard(15, 200, 200, "white", recap, false, this);
-  entry_r->display(ui->EntriesScroll->widget()->layout());
-  */
+
+
 
   // Chatbox
   chat = MascotChat(ui->scrollArea);
@@ -225,17 +212,8 @@ void MainWindow::update_graphs() {
     }
 }
 
-void MainWindow::remove_non_existent_activities_and_friends(EntryPerso* entry){
-    std::vector<Activity*> activities;
+void MainWindow::remove_non_existent_friends(EntryPerso* entry){
     std::vector<Friend*> friends;
-    for(long long unsigned act = 0; act < entry->get_activities().size(); act++){
-        for(long long unsigned i = 0; i < vector_activities.size(); i++){
-            if((entry->get_activities().at(act))->equal(vector_activities.at(i))){
-                activities.push_back(&vector_activities.at(i));
-                break;
-            }
-        }
-    }
     for(long long unsigned fr = 0; fr < entry->get_friends().size(); fr++){
         for(long long unsigned i = 0; i < vector_friends.size(); i++){
             if((entry->get_friends().at(fr))->equal(vector_friends.at(i))){
@@ -244,10 +222,8 @@ void MainWindow::remove_non_existent_activities_and_friends(EntryPerso* entry){
             }
         }
     }
-    entry->set_activities(activities);
     entry->set_friends(friends);
 }
-
 void MainWindow::display_entries() {
 
 
@@ -267,7 +243,7 @@ void MainWindow::display_entries() {
   // displaying in reversed order
   for (auto entry = displayed_entries.rbegin(); entry != displayed_entries.rend(); ++entry) {
     //remove friends and activities that shouldn't be displayed
-      remove_non_existent_activities_and_friends(*entry);
+      remove_non_existent_friends(*entry);
     if ((*entry)->get_qdate() == QDate::currentDate()) {
       today_card = new EntryCard(20, 300, 300, "white", *entry, true, this);
       today_card->display(ui->EntriesScroll->widget()->layout());
@@ -295,7 +271,7 @@ void MainWindow::on_pushButton_clicked() {
 }
 
 void MainWindow::on_activitie_button_clicked() {
-  all_activities *my_activities = new all_activities(vector_activities);
+  all_activities *my_activities = new all_activities(this,vector_activities);
   //my_activities->add_previous_cells();
   my_activities->setModal(true);
   my_activities->exec();
@@ -332,10 +308,11 @@ void MainWindow::on_save_settings_clicked() {
 }
 
 void MainWindow::on_filterButton_clicked() {
-
-
-  // vector_entries = sample_entries(100); // this line should be changed to
-  // aquire source of entries
+  if (vector_entries.size()==0) {
+    //error dialogue box
+    QMessageBox::warning(this, "Error", "No entries to filter. Please add an entry first.");
+    return;
+  }
 
   QString type_filter_value =
       findChild<QComboBox *>("type_filter")->currentText();
@@ -493,6 +470,13 @@ void MainWindow::on_newEntryButton_clicked() {
   */
   if (vector_entries.empty()) {
     EntryPerso *today_entry = new EntryPerso();
+    //ADD ACTIVITIES BY DEF TO 0
+    qDebug()<<QString("Start to add activities by default to 0");
+    for(Activity const& activity : vector_activities){
+        qDebug()<<QString::fromStdString(activity.get_name());
+        Activity *to_add = new Activity(activity.get_name(),activity.get_type(),0);
+        today_entry->add_activity(to_add);
+    }
     save_entryperso(*today_entry);
     vector_entries.push_back(today_entry);
     displayed_entries.push_back(today_entry);
@@ -561,13 +545,17 @@ void MainWindow::react_to_last_entry(){
         EntryPerso* last_entry = vector_entries[vector_entries.size()-1];//called before generate recap so we are sure it is an EntryPerso
         if(last_entry->get_mood()==0){
             chat<<QString("Did you forget to put in your mood ?<br> If not, I'm very sorry for the day you had. It's good that you put your thoughts on paper.<br> Don't hesitate to seek the help of a relative or of a professional if you feel like you loose control. Don't worry, everything eventually gets better.");
-        }else if(last_entry->get_mood()<0.3){
+        }else if(last_entry->get_mood()<30){
             chat<<QString("Oh, I'm sorry for the day you had. Don't forget that you are never alone and talking to a relative or a professional can help you going through hard times.");
-        }else if(last_entry->get_mood()<0.5){
+        }else if(last_entry->get_mood()<50){
             chat<<QString("Seems like you spent a pretty tough day... I hope it'll be better tomorrow.");
-        }else if(last_entry->get_mood()>0.85){
+        }else if(last_entry->get_mood()<75){//between 50 and 75
+            chat<<QString("Looks like a fine day. What could you improve to make it better?");
+        }else if(last_entry->get_mood()<85){
+            chat<<QString("Someone had a happy day ;)");
+        }else if(last_entry->get_mood()<95){//between 85 and 90
             chat<<QString("What a great day! Take the time to savor it.");
-        }else if(last_entry->get_mood()>0.95){
+        }else{
             chat<<QString("Wow, you spent an amazing day! It hope it will stay anchored in your memory forever.");
         }
         chat.add_mascot();
@@ -595,7 +583,6 @@ void MainWindow::welcome(){
     }else{
         chat<<QString("Hello, it seems like it's your first time here! I'm Rooxie, your well-being assistant! You can create an entry in you diary by clicking the \"New entry\" button on the top of the screen.");
     }
-    chat<<QString("Hello back");
 }
 
 
@@ -611,4 +598,34 @@ void MainWindow::on_ppl_button_clicked(){
     my_people->setModal(true);
     my_people->exec();
 }
+
+void MainWindow::add_new_activities_to_old_enties(){
+    qDebug()<<QString("add_new_activities_to_old_enties called");
+
+    for(EntryPerso *entry : vector_entries){//to modify if we change the type of vector_entries
+        if(entry->entry_type()==1){//useful when we change the type of vector_entries
+            //we now know it's an entry perso so we can cast it
+            //qDebug()<<QString("cast");
+            //EntryPerso *entry = static_cast<EntryPerso*>(entry); //would be the way, but makes the program crash at the line indicated in the following comment
+            for(Activity const&activity : vector_activities){
+                Activity *to_add = new Activity();
+                to_add->set_name(activity.get_name());
+                to_add->set_type(activity.get_type());
+                std::vector<Activity*> entry_activities = entry->get_activities();//crashes here if static cast used
+                if(std::find_if(entry_activities.begin(), entry_activities.end(),[to_add](Activity *a)->bool{ return *a == *to_add; }) == entry_activities.end()) {
+                    qDebug()<<QString("Does not contain")<<QString::fromStdString(activity.get_name())<<QString::number(activity.get_type());
+                    //does not contain activity
+                    Activity *to_add = new Activity();
+                    to_add->set_name(activity.get_name());
+                    to_add->set_type(activity.get_type());
+                    to_add->set_value(0.0);
+                    entry->add_activity(to_add);
+                }
+            }
+        }
+    }
+
+
+}
+
 

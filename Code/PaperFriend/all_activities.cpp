@@ -8,7 +8,8 @@
 
 
 
-all_activities::all_activities(std::vector<Activity> &vector_activity,QWidget *parent) :
+all_activities::all_activities(MainWindow *mainwindow,std::vector<Activity> &vector_activity,QWidget *parent) :
+    mainwindowptr(mainwindow),
     vector_activities(vector_activity),
     QDialog(parent),
     ui(new Ui::all_activities)
@@ -90,6 +91,11 @@ void all_activities::on_save_activity_button_clicked()
         this->close();
         }
 
+    // we add the activity with value 0 to all existing entryPerso.
+    //In terms of complexity it is not the best option but given that the number of entries will reasonably be less than 1000 it is going to be immediate in practice and saves us a lot of time in terms of coding
+    mainwindowptr->add_new_activities_to_old_enties();
+
+
 }
 
 void all_activities::closeEvent (QCloseEvent *event){
@@ -119,7 +125,8 @@ void all_activities::closeEvent (QCloseEvent *event){
                 if (answr_btn != QMessageBox::Yes) {
                     event->ignore();
                 } else {
-                    this->close();
+                    //this->close();
+                    event->ignore();
                 }
             }if(type_activity_acp == 0){
                 QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Please enter an activity type."),

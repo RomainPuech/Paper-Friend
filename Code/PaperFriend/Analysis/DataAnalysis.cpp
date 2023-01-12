@@ -1,4 +1,5 @@
 #include "DataAnalysis.h"
+
 #include <algorithm>
 #include <cmath> //prefer the c- version rather than the .h
 #include <map>
@@ -250,8 +251,9 @@ DataAnalysis::get_vect(const std::vector<EntryPerso> &entries,
 double DataAnalysis::get_lastn_average(int n, int var_index) const {
   /**
    * @param int n: number of n last entries we take into account
+   *        int var_index: variable index starting from 0: MOOD
    * @return double average of the values of the variable represented by
-   * var_index for last n entries
+   *        var_index for last n entries
    */
   std::vector<double> val_list{};
 
@@ -261,9 +263,8 @@ double DataAnalysis::get_lastn_average(int n, int var_index) const {
   return avg<double>(val_list);
 }
 
-std::vector<EntryPerso>
-DataAnalysis::anomalies_detection(const std::vector<EntryPerso> &entries,
-                                  int var_index) const {
+std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<EntryPerso> &entries,
+                                                                           int var_index) const {
   /**
    * @param vector of EntryPersos, var_index.
    * @return vector of entries at which anomalie in the variable was detected
@@ -337,9 +338,9 @@ DataAnalysis::item_priority(const std::vector<EntryPerso> &entries,
     }
     current = get_vect(entries, var_index);
     cor_with_var = cor(current, var_vect);
-    dev = abs(get_lastn_average(std::min(7, N), i) -
-              get_lastn_average(std::min(N, 30), i));
-    influence[i] = cor_with_var * dev;
+    //dev = abs(get_lastn_average(std::min(7, N), i) -
+    //          get_lastn_average(std::min(N, 30), i));
+    influence[i] = cor_with_var;
   }
 
   // Sort map (done with MULTIMAP)
@@ -356,30 +357,89 @@ DataAnalysis::item_priority(const std::vector<EntryPerso> &entries,
   return vec;
 }
 
+
+void reverseStr(std::string& str)
+{
+    int n = str.length();
+
+    // Swap character starting from two
+    // corners
+    for (int i = 0; i < n / 2; i++)
+        std::swap(str[i], str[n - i - 1]);
+}
+
+std::string int_to_str(int a){
+    std::string str = "";
+    while (a != 0){
+        char temp_str = static_cast<char>(48 + a % 10);
+        str += temp_str;
+        a /= 10;
+    }
+    reverseStr(str);
+
+    return str;
+}
+
+
 std::string DataAnalysis::suggestion(
-    int var_index) { // some more exciting gameplay can be implementen later
+    int var_index=0) { // some more exciting gameplay can be implementen later
   /**
-   * @param index of the variable concerned
+   * @param index of the variable concerned (mood by default)
    *
    * @returns string "general review + suggestion" concerning the variable.
    */
   std::string str{};
-  if (log.end()->get_mood() >= get_lastn_average(7, var_index)) {
+  //alerting depression
+  if (anomalies_detection(log, var_index).end()->get_absolute_day() == log.end()->get_absolute_day()){
+      str += "We've detected an anomalie in your " + log[0].get_var_name(var_index) + ". It ";
+      if (get_lastn_average(7, 0) < log.end()->get_mood())
+      {
+          str += "has affected your mood in a good way. \n";
+          str += "Keep it up! :)\n";
+      }
+      else
+      {
+          if (get_lastn_average(7, 0) > 2 * log.end()->get_mood())
+              str += "made your mood much worse. \n";
+          else
+              str += "made your mood much worse. \n";
+          str +=  "Consider to normalize " + log[0].get_var_name(var_index) + " \n";
+      }
+   }
+
+  // comparing to previous results:
+  if (log.end()->get_var_value(var_index) >= get_lastn_average(7, var_index)) {  // compares to last 7 days
     str += "Your " + log[0].get_var_name(var_index) +
            " today is better than averadge! \n";
     str += "Your progress in" +
            var_to_str(*(item_priority(log, var_index).begin())) + " and " +
            var_to_str(*(item_priority(log, var_index).begin() + 1)) +
            "improves your " + log[0].get_var_name(var_index) +
-           " the most, keep it up!"; // suggest top two items which affected the
-                                     // mood the most
+           " the most, keep it up! \n"; // suggest top two items which affected the
+                                        // variable (mood by default) the most
   } else {
     str += "Your " + log[0].get_var_name(var_index) +
            " today is less than averadge:( \n";
     str += "Try to wrok on your " +
            var_to_str(*(item_priority(log, var_index).begin())) + " and " +
-           var_to_str(*(item_priority(log, var_index).begin() + 1)) + "!";
+           var_to_str(*(item_priority(log, var_index).begin() + 1)) + "! \n";
   }
+
+  // haven’t seen anyone in days:
+  bool seen_nobody = true;
+  int i = 0;  // days without friends in a row
+
+  while (seen_nobody){
+      if ((log.end() - i)->get_friends().size() != 0)
+          seen_nobody = false;
+      i++;
+  }
+  i--;
+
+  if (i != 0){
+      str += "You haven't seen your friends for the last " + int_to_str(i) + " days. Want to meet up?:)";
+  }
+
 
   return str;
 }
@@ -594,7 +654,7 @@ EntryRecap DataAnalysis::recap(int type){
     text += "Here is a summary of your " + periods[type] + " across all areas\n";
     text += detailed_analysis;
 
-    return EntryRecap(best_day.get_date(), worst_day.get_date(), text, avg_mood, type);
+    return EntryRecap(best_day, worst_day, text, avg_mood, type);
 }
 
 EntryRecap DataAnalysis::weekly_recap() {

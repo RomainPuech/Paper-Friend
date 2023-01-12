@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <QString>
 
 /*
 class Friend {
@@ -24,7 +25,7 @@ private:
 
 struct Friend {
 
-    Friend(std::string name = "", int duration = 0);
+    Friend(std::string name = "",int type = 0, int duration = 0);
     ~Friend();
 
     std::string get_name() const;

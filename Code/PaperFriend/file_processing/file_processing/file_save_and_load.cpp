@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QFile>
 #include <QTextStream>
-
+#include <set>
 
 
 
@@ -117,24 +117,43 @@ Activity string_to_activity(std::string act){//function that takes a 'string res
 std::string activities_vec_to_str (std::vector<Activity*> acts){//takes a vector of pointers to activities and return a string resuming all the vector (to be saved)
     std::string res;
     for(int i=0; i < acts.size(); i++){
-       res += activity_to_string(*acts[i]);
+       if((*acts[i]).get_value()!=0){
+           res += activity_to_string(*acts[i]);
+       }
+
     }
     return res;
 }
 
 
-std::vector<Activity*> str_to_vec_activities (std::string act){//activity vec from a string
+std::vector<Activity*> str_to_vec_activities (std::vector<Activity>possible_activities,std::string act){//activity vec from a string
     std::vector <Activity*> res;
     std::string delimiter = "*$*";
-
     size_t pos = 0;
     std::string temp;
+    std::set<std::string> activities_done;
     while ((pos = act.find(delimiter)) != std::string::npos) {
         temp = act.substr(0, pos);
-        Activity* activity = new Activity(string_to_activity(temp));
-        res.push_back(activity);
+        Activity to_add = string_to_activity(temp);
+        activities_done.insert(to_add.get_name());
         act.erase(0, pos + delimiter.length());
     }
+    for(Activity const& activity : possible_activities){
+        if(activities_done.find(activity.get_name()) != activities_done.end()){
+            qDebug()<<QString("this act was seleected:")<<QString::fromStdString(activity.get_name());
+            Activity* to_add = new Activity(activity);
+            to_add->set_value(1);
+            res.push_back(to_add);
+        }else{
+            Activity* to_add = new Activity();
+            to_add->set_name(activity.get_name());
+            to_add->set_type(activity.get_type());
+            to_add->set_value(0.0);
+            res.push_back(to_add);
+        }
+
+    }
+
     return res;
 
 }
@@ -238,11 +257,14 @@ bool save_entryperso(EntryPerso entry){ //  create and save the entry file, titl
 
 
 
-EntryPerso* load_entryperso(std::string filename){//retrieve the data of a Json file and return an initialized Entry object with this data
+EntryPerso* load_entryperso(std::string filename,std::vector<Activity> possible_activities){//retrieve the data of a Json file and return an initialized Entry object with this data
     std::ifstream i("Entries/" + filename);
     nlohmann::json j;
     i >> j;
-    EntryPerso* res = new EntryPerso(j["text"], j["title"], str_to_vec_activities(j["activities"]), str_to_vec_friends(j["friends"]), j["mood"], j["sleep"], j["eating_healthy"], j["productivity"],j["communications"], j["screen_time"] );
+    EntryPerso* res = new EntryPerso(j["text"], j["title"], str_to_vec_activities(possible_activities,j["activities"]), str_to_vec_friends(j["friends"]), j["mood"], j["sleep"], j["eating_healthy"], j["productivity"],j["communications"], j["screen_time"] );
+    for(Activity *act : res->get_activities()){
+        qDebug()<<QString::fromStdString(act->get_name())<<QString::number(act->get_value())<<QString("Turbo debug");
+    }
     res->set_date(j["date"]);
     return res;
 }
