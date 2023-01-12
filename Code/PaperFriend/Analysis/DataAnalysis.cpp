@@ -383,6 +383,8 @@ std::vector<double> DataAnalysis::cyclic_week(int metric_index){
         seasonality.push_back(avg(subSeries[sub]));
     }
 
+    return seasonality;
+
 }
 
 std::multimap<double, int> invert(std::map<int, double> &mymap) {
