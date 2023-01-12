@@ -36,13 +36,13 @@ bool Activity::equal(Activity other){
     return this->name == other.name && this->type == other.type;
 }
 
-bool Activity::operator==(Activity const&other)const{
+bool Activity::operator==(Activity other)const{
     qDebug()<<QString("== for act called,")<<QString::fromStdString(other.get_name());
     return (name == other.get_name());
 }
 
 
-bool operator==(const Activity& a, const Activity& b)
+bool operator==(Activity& a, Activity& b)
 {
     qDebug()<<QString("outside == for act called,")<<QString::fromStdString(a.get_name());
     return (a.get_name() == b.get_name());
