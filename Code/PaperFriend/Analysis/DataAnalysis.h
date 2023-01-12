@@ -36,6 +36,7 @@ class DataAnalysis {
 public:
 
     std::vector<EntryPerso> log; // Data to be analysed
+    DataAnalysis(std::vector<EntryPerso*> vector_entries);
 
     /*DataAnalysis(std::vector<Entry> logEntry){
         std::vector<EntryPerso> log; // Data to be analysed

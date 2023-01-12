@@ -1,4 +1,5 @@
 #include "DataAnalysis.h"
+#include <entryclasses.h>
 
 #include <algorithm>
 #include <cmath> //prefer the c- version rather than the .h
@@ -12,6 +13,12 @@
 
 // Never manually iterate trough an STL container with iterators. Either use
 // the normal syntax or use range based for loops like the one below
+
+DataAnalysis::DataAnalysis(std::vector<EntryPerso*> vector_entries){
+    for(EntryPerso *entry : vector_entries){
+        log.push_back(*entry);
+    }
+}
 
 double DataAnalysis::avg(const std::vector<EntryPerso> &entries,
                          int var_index) const {
