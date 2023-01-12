@@ -509,6 +509,9 @@ void MainWindow::generate_recap() {
             chat<<QString("It's Sunday! Time for a weekly recap 😉");
             chat.add_mascot();
             last_recaps_dates[0] = QDate::currentDate().toString("yyyy.MM.dd");
+            DataAnalysis analysis = DataAnalysis(vector_entries);
+            EntryRecap recap = analysis.weekly_recap();
+
             save_last_recaps_dates(last_recaps_dates);
         }
 
@@ -523,6 +526,9 @@ void MainWindow::generate_recap() {
         chat<<QString("Last day of the month means time for a montly recap!");
         chat.add_mascot();
         last_recaps_dates[1] = QDate::currentDate().toString("yyyy.MM.dd");
+        DataAnalysis analysis = DataAnalysis(vector_entries);
+        EntryRecap recap = analysis.monthly_recap();
+
         save_last_recaps_dates(last_recaps_dates);
         }
     }
@@ -535,6 +541,9 @@ void MainWindow::generate_recap() {
         chat<<QString("Before celebrating the new year, let's look back to ")+QString::number(QDate::currentDate().year())+QString(" and ponder.");
         chat.add_mascot();
         last_recaps_dates[2] = QDate::currentDate().toString("yyyy.MM.dd");
+        DataAnalysis analysis = DataAnalysis(vector_entries);
+        EntryRecap recap = analysis.yearly_recap();
+
         save_last_recaps_dates(last_recaps_dates);
         }
     }
