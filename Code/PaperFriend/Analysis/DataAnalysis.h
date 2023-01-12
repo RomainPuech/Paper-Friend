@@ -111,10 +111,17 @@ private:
   std::vector<int> anomalies_by_groups(const std::vector<EntryPerso> &entries, int num_days, int var_index);
 
   std::string var_to_str(int var_index) const {
+    if (log.size() == 0){
+        return "";
+    }
     return log[0].get_var_name(var_index);
   }
 
-  int get_num_activities() { return log[0].get_num_activities(); }
+  int get_num_activities() {
+      if (log.size() == 0){
+          return 0;
+      }
+      return log[0].get_num_activities(); }
 
   std::vector<int>
   item_priority(const std::vector<EntryPerso> &entries,
