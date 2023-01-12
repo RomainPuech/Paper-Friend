@@ -54,7 +54,14 @@ LinearRegressionCoeffs DataAnalysis::compute_linear_regression_coeffs(
    * @return LinearRegressionCoeffs object corresponding to fitting Y against X.
    */
 
-  double slope = cov(X, Y) / pow(stddev(X), 2);
+  double slope;
+  double variance_x = pow(stddev(X), 2);
+  if (variance_x == 0){
+      slope = 99;
+  }
+  else{
+      slope = cov(X, Y) / pow(stddev(X), 2);
+  }
   double intercept = avg(Y) - slope * avg(X);
   double quality_coeff = pow(cor(X, Y), 2);
 
@@ -69,10 +76,11 @@ LinearRegressionCoeffs DataAnalysis::compute_linear_regression_coeffs(
    * @return LinearRegressionCoeffs object corresponding to fitting the second
    * variable against the first. across the values of each in entries.
    */
-  return compute_linear_regression_coeffs(get_vect(entries, var1_index),
-                                          get_vect(entries, var2_index));
+  std::vector<double> X = get_vect(entries, var1_index);
+  std::vector<double> Y = get_vect(entries, var2_index);
+  return compute_linear_regression_coeffs(X, Y);
 }
-
+LinearRegressionCoeffs empty(99, 0, 0);
 LinearRegressionCoeffs DataAnalysis::general_trend(int n, int var_index) const {
   /**
    * @param int n : represents number of days to consider.
@@ -83,7 +91,11 @@ LinearRegressionCoeffs DataAnalysis::general_trend(int n, int var_index) const {
    * functions used to calculate the desired coefficients are defined on vectors
    * of doubles.
    */
+
   std::vector<EntryPerso> entries = get_lastn_days_data(n);
+  if (entries.size() == 0){
+      return empty;
+  }
   std::vector<double> values = get_vect(entries, var_index);
   std::vector<double> no_of_days;
 
@@ -97,6 +109,9 @@ LinearRegressionCoeffs
 DataAnalysis::general_trend(const std::vector<EntryPerso> &entries,
                             int var_index) const {
   // Just the above function without the need to get the entries.
+  if (entries.size() == 0){
+      return empty;
+  }
   std::vector<double> values = get_vect(entries, var_index);
   std::vector<double> no_of_days;
 
@@ -112,6 +127,9 @@ double DataAnalysis::stddev(const std::vector<double> &data) const {
    * @return standart deviation.
 
    */
+  if (data.size() == 0){
+      return 0;
+  }
   double residue_sum = 0.0;
 
   double mean = avg<double>(data);
@@ -139,8 +157,12 @@ double DataAnalysis::cor(const std::vector<double> &X,
    * @param vectors double X, Y.
    * @return Cor(X, Y).
    */
-
-  return cov(X, Y) / stddev(X) / stddev(Y);
+  double stdx = stddev(X);
+  double stdy = stddev(Y);
+  if (stdx == 0 || stdy == 0){
+      return 0;
+  }
+  return cov(X, Y) / stdx / stdy;
 }
 
 std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n, int reference) const {
@@ -148,10 +170,12 @@ std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n, int reference) 
    * @param int n: number n of days.
    * @return a list of all data within n days of the reference (if the reference is negative we count back from the date of last log).
    */
-
+  if (log.size() == 0){
+      return std::vector<EntryPerso>();
+  }
   int current; // represents the date from which we count backwards
   if (reference < 0){
-      current   = log.back().get_absolute_day();
+      current = log.back().get_absolute_day();
   }
 
   else{
@@ -169,7 +193,6 @@ std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n, int reference) 
 
 // double DataAnalysis::get_var(const EntryPerso& entry, int var_index) const {
 /**
- * @param EntryPerso entry : entry of interest.
  *        Variables var_name : represents the variable to get.
  * @return the value of the variable in the entry.
  */
@@ -177,6 +200,7 @@ std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n, int reference) 
 switch (var_name) {
 
     case MOOD:
+ * @param EntryPerso entry : entry of interest.
         return entry.get_mood();
         break;
 
@@ -331,11 +355,11 @@ DataAnalysis::item_priority(const std::vector<EntryPerso> &entries,
    * having the most effect on the given variable.
    */
 
-  int N = entries.size();
+
   std::vector<double> var_vect = get_vect(entries, var_index);
   std::vector<double> current;
 
-  double dev;
+
   double cor_with_var;
   std::map<int, double> influence;
 
@@ -658,6 +682,7 @@ EntryRecap DataAnalysis::recap(int type){
       text += "Looks like you've had a great " + periods[type];
     }
     text += "\n";
+    text += "Your best and worst days, as indicated by your mood, were on " + best_day.get_date() + " and " + worst_day.get_date() + " respectively.\n";
     text += "Here is a summary of your " + periods[type] + " across all areas\n";
     text += detailed_analysis;
 
