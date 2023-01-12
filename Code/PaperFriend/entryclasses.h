@@ -12,7 +12,7 @@
 class Entry {
 public:
     Entry(std::string text = "", std::string title = "");
-    ~Entry();
+    //~Entry();
 
     std::string get_text() const;
     void set_text(std::string text);
