@@ -44,7 +44,6 @@ void TextEditor::set_title(QString text)
     this->setWindowTitle(titleText);
     // Get the current plain text of the textEdit widget
     QString htmlText = "<h1 style='text-align:center;'>" + titleText + "</h1>";
-    ui->lineEdit->clear();
     ui->textEdit->setHtml("");
 }
 
