@@ -49,6 +49,7 @@ public:
     void createPdf();
     QString get_text() const;
     QString get_title() const;
+    QString htmlText;
     void set_title(QString text);
     void on_textEdit();
     void append_text(QString text);

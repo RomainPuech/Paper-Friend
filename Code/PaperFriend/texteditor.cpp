@@ -63,6 +63,7 @@ void TextEditor::set_max_width(int width)
 
 QString TextEditor::get_title() const
 {
+    // Return the pure text of the title
     return ui->lineEdit->text();
 }
 
