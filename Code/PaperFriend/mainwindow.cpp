@@ -14,16 +14,17 @@
 #include "ui_all_habits.h"
 #include "ui_mainwindow.h"
 #include "ui_texteditor.h"
-#include "add_habit.h"
 #include <QDebug>
 #include <QString>
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <unordered_map>
 
 //// Declarations
 std::vector<Filter_param> filter_params;
-std::vector<EntryPerso *> MainWindow::vector_entries;//All the entries
+std::vector<EntryPerso *> MainWindow::vector_entries;//All the personal entries
+std::vector<EntryRecap *> MainWindow::vector_recaps; // All the recap entries
 std::vector<Activity> MainWindow::vector_activities;//All the possible activities to choose from
 std::vector<Friend> MainWindow::vector_friends;//All the friends we can choose from
 
@@ -76,32 +77,33 @@ MainWindow::MainWindow(QWidget *parent)
 
   //Load habits
   std::vector<QStringList> current_habits = load_habits();
-  if (current_habits.size() == 1){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-  }
+  std::cout<<current_habits.size()<<std::endl;
   if (current_habits.size() == 2){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
   }
   if (current_habits.size() == 3){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
       ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
   }
   if (current_habits.size() == 4){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
       ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
       ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
-      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
   }
   if (current_habits.size() == 5){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
       ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
       ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
       ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
+  }
+  if (current_habits.size() == 6){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
+      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
       ui->habits_label_5->setText(current_habits[4][0] + ", " + current_habits[4][1]);
   }
-  if (current_habits.size() >= 6){
+  if (current_habits.size() >= 7){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
       ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
       ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
@@ -123,6 +125,8 @@ MainWindow::MainWindow(QWidget *parent)
   //Load previous recaps dates
   std::vector<QString> last_recaps_dates = load_last_recaps_dates();
 
+  //load previous recaps
+
   //// frontend that needs data to be rendered
   display_entries();
 
@@ -132,7 +136,7 @@ MainWindow::MainWindow(QWidget *parent)
   // Chatbox
   chat = MascotChat(ui->scrollArea);
   welcome();
-  chat.add_mascot();
+  chat.add_mascot(90);
 
 
   //Settings
@@ -148,19 +152,18 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() {
+    delete ui;
+    for(auto const& [key, graphptr] : dynamic_graphs){
+        delete graphptr;
+    }
+}
 
 std::vector<Activity> MainWindow::get_activities() { return vector_activities; }
 
-Activity *MainWindow::get_activity_at_i(long long unsigned i) {
-  return &vector_activities.at(i);
-}
 
 std::vector<Friend> MainWindow::get_friends() { return vector_friends; }
 
-Friend *MainWindow::get_friend_at_i(long long unsigned i) {
-  return &vector_friends.at(i);
-}
 
 void MainWindow::update_activities(std::vector<Activity> activities) {
   vector_activities = activities;
@@ -178,6 +181,10 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   if (answr_btn != QMessageBox::Yes) {
     event->ignore();
   } else {
+    for(auto entry: vector_entries){
+        save_entryperso(*entry);
+        //add saving of entry_recaps
+    }
     event->accept();
   }
 }
@@ -212,18 +219,6 @@ void MainWindow::update_graphs() {
     }
 }
 
-void MainWindow::remove_non_existent_friends(EntryPerso* entry){
-    std::vector<Friend*> friends;
-    for(long long unsigned fr = 0; fr < entry->get_friends().size(); fr++){
-        for(long long unsigned i = 0; i < vector_friends.size(); i++){
-            if((entry->get_friends().at(fr))->equal(vector_friends.at(i))){
-                friends.push_back(&vector_friends.at(i));
-                break;
-            }
-        }
-    }
-    entry->set_friends(friends);
-}
 void MainWindow::display_entries() {
 
 
@@ -239,12 +234,17 @@ void MainWindow::display_entries() {
       c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in
   the main_frame. qDebug()<< "displayed";
   }*/
-
+   std::vector<EntryRecap*>::iterator rec = vector_recaps.begin();
   // displaying in reversed order
   for (auto entry = displayed_entries.rbegin(); entry != displayed_entries.rend(); ++entry) {
-    //remove friends and activities that shouldn't be displayed
-      remove_non_existent_friends(*entry);
-    if ((*entry)->get_qdate() == QDate::currentDate()) {
+    if(rec < vector_recaps.end() && (*rec)-> get_qdate().daysTo((*entry)->get_qdate()) > 0){
+        EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
+        c->display(ui->EntriesScroll->widget()->layout()); // displays the entry in the main_frame.
+        qDebug() << "displayed recap";
+        rec ++;
+        entry--;
+    }
+    else if ((*entry)->get_qdate() == QDate::currentDate()) {
       today_card = new EntryCard(20, 300, 300, "white", *entry, true, this);
       today_card->display(ui->EntriesScroll->widget()->layout());
     } else {
@@ -259,8 +259,13 @@ void MainWindow::display_graph(QString tracked_parameter) {
     QWidget *tab = new QWidget();
     QHBoxLayout *graph = new QHBoxLayout(tab);
     ui->tabWidget->addTab(tab, tracked_parameter);
-    DynamicGraph dynamicGraph = DynamicGraph(displayed_entries, tracked_parameter);
-    dynamicGraph.display(graph);
+    qDebug()<<QString("I call it!");
+    if(dynamic_graphs.find(tracked_parameter)!=dynamic_graphs.end()){
+        delete dynamic_graphs[tracked_parameter];
+    }
+    DynamicGraph* graphptr = new DynamicGraph(displayed_entries, tracked_parameter);
+    dynamic_graphs[tracked_parameter] = graphptr;
+    graphptr->display(graph);
     this->showMaximized();
 }
 
@@ -520,8 +525,14 @@ void MainWindow::generate_recap() {
         if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
         {
             chat<<QString("It's Sunday! Time for a weekly recap 😉");
-            chat.add_mascot();
+            chat.add_mascot(89);
             last_recaps_dates[0] = QDate::currentDate().toString("yyyy.MM.dd");
+            DataAnalysis analysis = DataAnalysis(vector_entries);
+            EntryRecap recap = analysis.weekly_recap();
+            vector_recaps.push_back(&recap);
+            EntryCard *recap_card = new EntryCard(20, 300, 300, "white", &recap, true, this);
+            recap_card->display(ui->EntriesScroll->widget()->layout()); // displays the entry in the main_frame.
+            qDebug() << "displayed";
             save_last_recaps_dates(last_recaps_dates);
         }
 
@@ -534,8 +545,14 @@ void MainWindow::generate_recap() {
         if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
         {
         chat<<QString("Last day of the month means time for a montly recap!");
-        chat.add_mascot();
+        chat.add_mascot(65);
         last_recaps_dates[1] = QDate::currentDate().toString("yyyy.MM.dd");
+        DataAnalysis analysis = DataAnalysis(vector_entries);
+        EntryRecap recap = analysis.monthly_recap();
+        vector_recaps.push_back(&recap);
+        EntryCard *recap_card = new EntryCard(20, 300, 300, "white", &recap, true, this);
+        recap_card->display(ui->EntriesScroll->widget()->layout()); // displays the entry in the main_frame.
+        qDebug() << "displayed";
         save_last_recaps_dates(last_recaps_dates);
         }
     }
@@ -546,8 +563,14 @@ void MainWindow::generate_recap() {
         if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
         {
         chat<<QString("Before celebrating the new year, let's look back to ")+QString::number(QDate::currentDate().year())+QString(" and ponder.");
-        chat.add_mascot();
+        chat.add_mascot(66);
         last_recaps_dates[2] = QDate::currentDate().toString("yyyy.MM.dd");
+        DataAnalysis analysis = DataAnalysis(vector_entries);
+        EntryRecap recap = analysis.yearly_recap();
+        vector_recaps.push_back(&recap);
+        EntryCard *recap_card = new EntryCard(20, 300, 300, "white", &recap, true, this);
+        recap_card->display(ui->EntriesScroll->widget()->layout()); // displays the entry in the main_frame.
+        qDebug() << "displayed";
         save_last_recaps_dates(last_recaps_dates);
         }
     }
@@ -558,16 +581,20 @@ void MainWindow::react_to_last_entry(){
         EntryPerso* last_entry = vector_entries[vector_entries.size()-1];//called before generate recap so we are sure it is an EntryPerso
         if(last_entry->get_mood()==0){
             chat<<QString("Did you forget to put in your mood ?<br> If not, I'm very sorry for the day you had. It's good that you put your thoughts on paper.<br> Don't hesitate to seek the help of a relative or of a professional if you feel like you loose control. Don't worry, everything eventually gets better.");
-        }else if(last_entry->get_mood()<0.3){
+        }else if(last_entry->get_mood()<30){
             chat<<QString("Oh, I'm sorry for the day you had. Don't forget that you are never alone and talking to a relative or a professional can help you going through hard times.");
-        }else if(last_entry->get_mood()<0.5){
+        }else if(last_entry->get_mood()<50){
             chat<<QString("Seems like you spent a pretty tough day... I hope it'll be better tomorrow.");
-        }else if(last_entry->get_mood()>0.85){
+        }else if(last_entry->get_mood()<75){//between 50 and 75
+            chat<<QString("Looks like a fine day. What could you improve to make it better?");
+        }else if(last_entry->get_mood()<85){
+            chat<<QString("Someone had a happy day ;)");
+        }else if(last_entry->get_mood()<95){//between 85 and 90
             chat<<QString("What a great day! Take the time to savor it.");
-        }else if(last_entry->get_mood()>0.95){
+        }else{
             chat<<QString("Wow, you spent an amazing day! It hope it will stay anchored in your memory forever.");
         }
-        chat.add_mascot();
+        chat.add_mascot(last_entry->get_mood());
         reacted_to_entry = true;
     }
 }
@@ -596,7 +623,7 @@ void MainWindow::welcome(){
 
 
 void MainWindow::on_Test_entries_clicked() {
-  vector_entries = sample_entries(100);
+  vector_entries = sample_entries(20);
   displayed_entries = vector_entries;
   display_entries();
   update_graphs();
@@ -609,7 +636,7 @@ void MainWindow::on_ppl_button_clicked(){
 }
 
 void MainWindow::add_new_activities_to_old_enties(){
-    qDebug()<<QString("called");
+    qDebug()<<QString("add_new_activities_to_old_enties called");
 
     for(EntryPerso *entry : vector_entries){//to modify if we change the type of vector_entries
         if(entry->entry_type()==1){//useful when we change the type of vector_entries
@@ -621,7 +648,8 @@ void MainWindow::add_new_activities_to_old_enties(){
                 to_add->set_name(activity.get_name());
                 to_add->set_type(activity.get_type());
                 std::vector<Activity*> entry_activities = entry->get_activities();//crashes here if static cast used
-                if(std::find(entry_activities.begin(), entry_activities.end(), to_add) == entry_activities.end()) {
+                if(std::find_if(entry_activities.begin(), entry_activities.end(),[to_add](Activity *a)->bool{ return *a == *to_add; }) == entry_activities.end()) {
+                    qDebug()<<QString("Does not contain")<<QString::fromStdString(activity.get_name())<<QString::number(activity.get_type());
                     //does not contain activity
                     Activity *to_add = new Activity();
                     to_add->set_name(activity.get_name());
@@ -633,7 +661,14 @@ void MainWindow::add_new_activities_to_old_enties(){
         }
     }
 
-
 }
+void MainWindow::remove_activities_from_old_entries(int position){
+    /* remove an activity after it has been deleted */
+    for(EntryPerso *entry : vector_entries){
+            std::vector<Activity*> activities_removed = entry->get_activities();
+            activities_removed.erase(activities_removed.begin() + position);
+            entry->set_activities(activities_removed);
+        }
+    }
 
 

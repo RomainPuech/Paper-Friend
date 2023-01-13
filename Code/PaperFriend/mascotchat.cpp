@@ -1,7 +1,7 @@
 #include "mascotchat.h"
 #include "mascot.h"
 #include "qpainter.h"
-#include "qpushbutton.h"
+#include "qradiobutton.h"
 #include <string>
 #include<QLabel>
 #include <QVBoxLayout>
@@ -40,10 +40,13 @@ void MascotChat::operator<<(QString txt){
 }
 
 //private methods
-void MascotChat::add_mascot(){
+void MascotChat::add_mascot(int num){
     QLabel *image_label = new QLabel;
+    Mascot *mascot = new Mascot();
+    QString text_to_set = mascot -> get_emotion(num);
     image_label->setTextFormat(Qt::RichText);
-    image_label->setText("<img src=:/pictures/rsc/excited-resized.png align=middle height=\"85\">");
+    //image_label->setText("<img src=:/pictures/rsc/excited-resized.png align=middle height=\"85\">");
+    image_label->setText(text_to_set);
     image_label->setFixedWidth(85);
     // setting a background color helps for debugging by showing the actual size of the label
     /*
@@ -69,38 +72,36 @@ void MascotChat::add_message(QString txt){
 void MascotChat::add_message(std::string txt){
     add_message(QString::fromStdString(txt));
 }
-void MascotChat::display(std::vector<QString> Qstr_vect){
+void MascotChat::display(std::vector<QString> Qstr_vect, int num){
     if(Qstr_vect.size() == 0){return;}
     else if(Qstr_vect.size() == 1){
         add_message(Qstr_vect[0]);
-        add_mascot();}
+        add_mascot(num);}
     else{for(int i=0; i < int(Qstr_vect.size()); i++){
                add_message(Qstr_vect[i]);
             }
-            add_mascot();
+            add_mascot(num);
         }
 }
-void MascotChat::prompt_msg(){
+void MascotChat::prompt_msg(std::string question, int answer, int num){
     QHBoxLayout* btn_layout = new QHBoxLayout();
-    //btn_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum));
-    QPushButton* yes = new QPushButton("YES");//i have to make them into mypushbutton to override the clicked event
-    QPushButton* no = new QPushButton("NO");
+    QRadioButton* yes = new QRadioButton("YES");//i have to make them into mypushbutton to override the clicked event
+    yes -> setCheckable(0);
+    QRadioButton* no = new QRadioButton("NO");
+    no -> setCheckable(0);
     btn_layout->addWidget(yes);
     btn_layout->addWidget(no);
-   // layout.addLayout(btn_layout) //put the qvbox layout instead of the layout
-    std::vector<std::string> question_vect = {"Did you sleep well?", "Did you eat well?", "Did you practice any sports?"};
-    int i = 0;
-    while(i<= int(question_vect.size())){
-        add_message(question_vect[i]);
-        add_mascot();
-        chat_layout -> addLayout(btn_layout);
-        //add an if condition on whether yes or no is clicked to add next question and
-        //store what button was clicked to send it the analysis team
+    add_message(question);
+    add_mascot(num);
+    chat_layout -> addLayout(btn_layout);
+    if (yes -> isChecked()){
+        answer = 1;
+    }
+    else if (no -> isChecked()){
+        answer = 0;
+    }
     }
 
-
-
-}
 
 Message::Message()
 {

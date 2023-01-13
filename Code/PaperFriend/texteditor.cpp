@@ -23,7 +23,11 @@ TextEditor::TextEditor(QWidget *parent) : QWidget(parent),
     curFile = tr("Untitled.txt");         // initialize the current file name as "untitled.txt"
     strUndo.push(ui->textEdit->toHtml()); // Here the strUndo is a stack
     connect(ui->textEdit, SIGNAL(textChanged(QString)), this, SLOT(on_textEdit_textChanged));
-    ui->textEdit->setPlaceholderText("Edit Title\nEdit Entry Text");
+    // Set Background color
+    ui -> lineEdit -> setStyleSheet("background-color: rgb(220, 220, 220); border-radius: 5px;");
+    ui -> line -> setStyleSheet("background-color: rgb(0,0,0); border-radius: 50%; width: 90%;");
+    ui -> lineEdit -> setPlaceholderText("Edit Entry Title");
+    ui->textEdit->setPlaceholderText("Edit Entry Text");
 }
 
 TextEditor::~TextEditor()
@@ -35,12 +39,14 @@ void TextEditor::set_title(QString text)
 {
     // set the title of the text editor
     // We want to display the title in indipendent line writen in html and css
-    ui->textEdit->setFontWeight(QFont::Bold);
-    ui->textEdit->clear();
-    text = "<h1>" + text + "</h1>";
-    ui->textEdit->insertHtml(text);
-    ui->textEdit->setFontWeight(1);
+    // We want to make the text in lineEdit become the title
+    QString titleText = ui->lineEdit->text();
+    this->setWindowTitle(titleText);
+    // Get the current plain text of the textEdit widget
+    QString htmlText = "<h1 style='text-align:center;'>" + titleText + "</h1>";
+    ui->textEdit->setHtml("");
 }
+
 
 // Set the maximum height of the text editor
 void TextEditor::set_max_height(int height)
@@ -54,9 +60,20 @@ void TextEditor::set_max_width(int width)
     ui->textEdit->setMaximumWidth(width);
 }
 
+QString TextEditor::get_title() const
+{
+    // Return the pure text of the title
+    return ui->lineEdit->text();
+}
+
 QString TextEditor::get_text() const
 {
     return ui->textEdit->toHtml();
+}
+
+void TextEditor::append_title(QString text)
+{
+    ui->lineEdit->setText(text);
 }
 
 void TextEditor::append_text(QString text)

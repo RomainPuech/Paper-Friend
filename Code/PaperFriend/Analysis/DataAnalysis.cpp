@@ -1,5 +1,5 @@
 #include "DataAnalysis.h"
-#include "moodanalysis.h"
+#include <entryclasses.h>
 
 #include <algorithm>
 #include <cmath> //prefer the c- version rather than the .h
@@ -13,6 +13,7 @@
 
 // Never manually iterate trough an STL container with iterators. Either use
 // the normal syntax or use range based for loops like the one below
+
 
 double DataAnalysis::avg(const std::vector<EntryPerso> &entries,
                          int var_index) const {
@@ -48,7 +49,14 @@ LinearRegressionCoeffs DataAnalysis::compute_linear_regression_coeffs(
    * @return LinearRegressionCoeffs object corresponding to fitting Y against X.
    */
 
-  double slope = cov(X, Y) / pow(stddev(X), 2);
+  double slope;
+  double variance_x = pow(stddev(X), 2);
+  if (variance_x == 0){
+      slope = 99;
+  }
+  else{
+      slope = cov(X, Y) / pow(stddev(X), 2);
+  }
   double intercept = avg(Y) - slope * avg(X);
   double quality_coeff = pow(cor(X, Y), 2);
 
@@ -63,11 +71,13 @@ LinearRegressionCoeffs DataAnalysis::compute_linear_regression_coeffs(
    * @return LinearRegressionCoeffs object corresponding to fitting the second
    * variable against the first. across the values of each in entries.
    */
-  return compute_linear_regression_coeffs(get_vect(entries, var1_index),
-                                          get_vect(entries, var2_index));
+  std::vector<double> X = get_vect(entries, var1_index);
+  std::vector<double> Y = get_vect(entries, var2_index);
+  return compute_linear_regression_coeffs(X, Y);
 }
 
-LinearRegressionCoeffs DataAnalysis::general_trend(int n, int var_index) const {
+
+/*LinearRegressionCoeffs DataAnalysis::general_trend(int n, int var_index) const {
   /**
    * @param int n : represents number of days to consider.
    *        int var_index: variable to consider.
@@ -76,8 +86,12 @@ LinearRegressionCoeffs DataAnalysis::general_trend(int n, int var_index) const {
    * entry in the log. The function uses doubles to store ints because the
    * functions used to calculate the desired coefficients are defined on vectors
    * of doubles.
-   */
+   *
+
   std::vector<EntryPerso> entries = get_lastn_days_data(n);
+  if (entries.size() == 0){
+      return empty;
+  }
   std::vector<double> values = get_vect(entries, var_index);
   std::vector<double> no_of_days;
 
@@ -85,19 +99,41 @@ LinearRegressionCoeffs DataAnalysis::general_trend(int n, int var_index) const {
   for (auto &entry : entries)
     no_of_days.push_back(entry.get_absolute_day() - first_day);
   return compute_linear_regression_coeffs(no_of_days, values);
-}
+}*/
 
-LinearRegressionCoeffs
-DataAnalysis::general_trend(const std::vector<EntryPerso> &entries,
-                            int var_index) const {
+LinearRegressionCoeffs empty(99, 0, 0);
+
+LinearRegressionCoeffs DataAnalysis::general_trend(const std::vector<EntryPerso> &entries, int var_index) const {
   // Just the above function without the need to get the entries.
-  std::vector<double> values = get_vect(entries, var_index);
-  std::vector<double> no_of_days;
+  if (entries.size() == 0){
+      return empty;
+  }
 
-  double first_day = entries.front().get_absolute_day();
-  for (auto &entry : entries)
-    no_of_days.push_back(entry.get_absolute_day() - first_day);
-  return compute_linear_regression_coeffs(no_of_days, values);
+  if (var_index>=6){
+      std::vector<double> values = get_vect(entries, var_index);
+      std::vector<double> no_of_days;
+
+      double first_day = entries.front().get_absolute_day();
+      for (auto &entry : entries)
+        no_of_days.push_back(entry.get_absolute_day() - first_day);
+      return compute_linear_regression_coeffs(no_of_days, values);
+  }
+  else{
+      std::vector<double> Yvalues;
+      std::vector<double> Xvalues;
+
+      for (int i=0; i<entries.size(); ++i){     //TODO : Optimize this by considering entries sorted chronologically
+          Xvalues.push_back(entries[i].get_absolute_day());
+          for (int j=0; j<STL_X[var_index].size(); ++i){
+              if (STL_X[var_index][j] == entries[i].get_absolute_day()){
+                  Yvalues.push_back(STL_Trends[var_index][j]);
+              }
+          }
+      }
+
+
+      return compute_linear_regression_coeffs(Xvalues, Yvalues);
+  }
 }
 
 double DataAnalysis::stddev(const std::vector<double> &data) const {
@@ -106,6 +142,9 @@ double DataAnalysis::stddev(const std::vector<double> &data) const {
    * @return standart deviation.
 
    */
+  if (data.size() == 0){
+      return 0;
+  }
   double residue_sum = 0.0;
 
   double mean = avg<double>(data);
@@ -133,8 +172,12 @@ double DataAnalysis::cor(const std::vector<double> &X,
    * @param vectors double X, Y.
    * @return Cor(X, Y).
    */
-
-  return cov(X, Y) / stddev(X) / stddev(Y);
+  double stdx = stddev(X);
+  double stdy = stddev(Y);
+  if (stdx == 0 || stdy == 0){
+      return 0;
+  }
+  return cov(X, Y) / stdx / stdy;
 }
 
 std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n, int reference) const {
@@ -142,10 +185,12 @@ std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n, int reference) 
    * @param int n: number n of days.
    * @return a list of all data within n days of the reference (if the reference is negative we count back from the date of last log).
    */
-
+  if (log.size() == 0){
+      return std::vector<EntryPerso>();
+  }
   int current; // represents the date from which we count backwards
   if (reference < 0){
-      current   = log.back().get_absolute_day();
+      current = log.back().get_absolute_day();
   }
 
   else{
@@ -163,7 +208,6 @@ std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n, int reference) 
 
 // double DataAnalysis::get_var(const EntryPerso& entry, int var_index) const {
 /**
- * @param EntryPerso entry : entry of interest.
  *        Variables var_name : represents the variable to get.
  * @return the value of the variable in the entry.
  */
@@ -171,6 +215,7 @@ std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n, int reference) 
 switch (var_name) {
 
     case MOOD:
+ * @param EntryPerso entry : entry of interest.
         return entry.get_mood();
         break;
 
@@ -274,15 +319,38 @@ std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<Entr
 
   std::vector<EntryPerso> res;
 
-  double mean = avg(entries, var_index);
-  double st_dev = stddev(entries, var_index);
+  if (var_index >= 6){
+      int furthest_day = 0;
+      for (int i=0; i<entries.size();++i){
+          if (entries[i].get_absolute_day()-QDate::currentDate().toJulianDay() > furthest_day){
+              furthest_day = entries[i].get_absolute_day()-QDate::currentDate().toJulianDay();
+          }
+      }
+      std::vector<EntryPerso> daysAnalyze = get_lastn_days_data(furthest_day*2);
+      double mean = avg(daysAnalyze, var_index);
+      double st_dev = stddev(daysAnalyze, var_index);
 
-  for (auto &entry : entries) {
-    if (entry.get_var_value(var_index) - mean >= 2 * st_dev) {
-      res.push_back(entry);
-    }
+      for (auto &entry : entries) {
+        if (entry.get_var_value(var_index) - mean >= 2 * st_dev) {
+          res.push_back(entry);
+        }
+      }
+      return res;
   }
-  return res;
+  else{
+      std::vector<double> remain = STL_Remainders[var_index];
+      double mean = avg<double>(remain);
+      double st_dev = stddev(remain);
+      for (int i=0; i<entries.size(); ++i){     //TODO : Optimize this by considering entries sorted chronologically
+          for (int j=0; j<STL_X[var_index].size(); ++i){
+              if (STL_X[var_index][j] == entries[i].get_absolute_day()){
+                  if (STL_Remainders[var_index][j] - mean > 2*st_dev){
+                      res.push_back(entries[i]);
+                  }
+              }
+          }
+      }
+  }
 }
 
 //std::vector<int> DataAnalysis::anomalies_by_groups(const std::vector<EntryPerso> &entries, int num_days, int var_index){
@@ -299,6 +367,25 @@ std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<Entr
 
     return res;
 }*/
+
+std::vector<double> DataAnalysis::cyclic_week(int metric_index){
+    /*
+     * Input is an int between 0 and 6
+     * Output is a 7-len vector containing the average seasonality over [mondays, ..., sundays]
+     *
+     * */
+    std::vector<std::vector<double>> subSeries = {{}, {}, {}, {}, {}, {}, {}};
+    for (int i=0; i<STL_X[metric_index].size(); ++i){
+        subSeries[QDate::fromJulianDay(STL_X[metric_index][i]).dayOfWeek() - 1].push_back(STL_Seasonalities[metric_index][i]);
+    }
+    std::vector<double> seasonality;
+    for (int sub=0; sub<7; ++sub){
+        seasonality.push_back(avg(subSeries[sub]));
+    }
+
+    return seasonality;
+
+}
 
 std::multimap<double, int> invert(std::map<int, double> &mymap) {
   /**
@@ -325,11 +412,11 @@ DataAnalysis::item_priority(const std::vector<EntryPerso> &entries,
    * having the most effect on the given variable.
    */
 
-  int N = entries.size();
+
   std::vector<double> var_vect = get_vect(entries, var_index);
   std::vector<double> current;
 
-  double dev;
+
   double cor_with_var;
   std::map<int, double> influence;
 
@@ -382,8 +469,7 @@ std::string int_to_str(int a){
 }
 
 
-std::string DataAnalysis::suggestion(
-    int var_index=0) { // some more exciting gameplay can be implementen later
+std::string DataAnalysis::suggestion(int var_index=0) { // some more exciting gameplay can be implementen later
   /**
    * @param index of the variable concerned (mood by default)
    *
@@ -395,15 +481,15 @@ std::string DataAnalysis::suggestion(
       str += "We've detected an anomalie in your " + log[0].get_var_name(var_index) + ". It ";
       if (get_lastn_average(7, 0) < log.end()->get_mood())
       {
-          str += "has affected your mood in a good way. \n";
+          str += "has affected your " + log[0].get_var_name(var_index) + " in a good way. \n";
           str += "Keep it up! :)\n";
       }
       else
       {
           if (get_lastn_average(7, 0) > 2 * log.end()->get_mood())
-              str += "made your mood much worse. \n";
+              str += "made your " + log[0].get_var_name(var_index) + " much worse. \n";
           else
-              str += "made your mood much worse. \n";
+              str += "made your " + log[0].get_var_name(var_index) + " much worse. \n";
           str +=  "Consider to normalize " + log[0].get_var_name(var_index) + " \n";
       }
    }
@@ -411,7 +497,7 @@ std::string DataAnalysis::suggestion(
   // comparing to previous results:
   if (log.end()->get_var_value(var_index) >= get_lastn_average(7, var_index)) {  // compares to last 7 days
     str += "Your " + log[0].get_var_name(var_index) +
-           " today is better than averadge! \n";
+           " today is better than average! \n";
     str += "Your progress in" +
            var_to_str(*(item_priority(log, var_index).begin())) + " and " +
            var_to_str(*(item_priority(log, var_index).begin() + 1)) +
@@ -420,8 +506,8 @@ std::string DataAnalysis::suggestion(
                                         // variable (mood by default) the most
   } else {
     str += "Your " + log[0].get_var_name(var_index) +
-           " today is less than averadge:( \n";
-    str += "Try to wrok on your " +
+           " today is less than average:( \n";
+    str += "Try to work on your " +
            var_to_str(*(item_priority(log, var_index).begin())) + " and " +
            var_to_str(*(item_priority(log, var_index).begin() + 1)) + "! \n";
   }
@@ -430,14 +516,14 @@ std::string DataAnalysis::suggestion(
   bool seen_nobody = true;
   int i = 0;  // days without friends in a row
 
-  while (seen_nobody){
+  while (seen_nobody && i < 1000000){
       if ((log.end() - i)->get_friends().size() != 0)
           seen_nobody = false;
       i++;
   }
   i--;
 
-  if (i != 0){
+  if (i != 0 && i<1000000){
       str += "You haven't seen your friends for the last " + int_to_str(i) + " days. Want to meet up?:)";
   }
 
@@ -449,7 +535,12 @@ std::vector<int> lengths{7, 30, 365};
 std::vector<std::string> periods{"week", "month", "year"};
 
 void DataAnalysis::weekly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect){
-
+    /**
+     * @param entries, vector of strings
+     *
+     *fills up the vector with text of the anomalies detection done over the entries (which will represent a week's worth of data)
+     *
+     */
     for (int i = 0; i < get_num_activities(); ++i) {
       std::vector<EntryPerso> anomalies = anomalies_detection(entries, i);
       if (anomalies.size() == 0) {
@@ -471,7 +562,12 @@ void DataAnalysis::weekly_anomalies_text(const std::vector<EntryPerso> &entries,
 }
 
 void DataAnalysis::monthly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect){
-
+    /**
+     * @param entries, vector of strings
+     *
+     *fills up the vector with text of the anomalies detection done over the entries (which will represent a month's worth of data.
+     *
+     */
     std::vector<std::vector<EntryPerso>> groups;
     int references[]{-1, 7, 14, 21};
     std::string weeks[]{"first", "second", "third", "fourth"};
@@ -513,6 +609,12 @@ void DataAnalysis::monthly_anomalies_text(const std::vector<EntryPerso> &entries
 }
 
 void DataAnalysis::yearly_anomalies_text(const std::vector<EntryPerso> &entries, std::vector<std::string> &string_vect){
+    /**
+     * @param entries, vector of strings
+     *
+     *fills up the vector with text of the anomalies detection done over the entries (which will represent a year's worth of data.
+     *
+     */
     std::vector<std::vector<EntryPerso>> groups;
     int references[]{-1, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330};
     std::string weeks[]{"first", "second", "third", "fourth"};
@@ -553,6 +655,12 @@ void DataAnalysis::yearly_anomalies_text(const std::vector<EntryPerso> &entries,
 }
 
 std::string DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &entries, int type){
+    /**
+     * @param entries, type of period (0 : weekly, 1 : monthly,
+     *2 : yearly).
+     *
+     *@returns string of the detailed analysis done over the entries over the period described by the type
+     */
     std::string res = "";
     std::vector<std::string> anomaly_texts;
     for (int i = 0; i < get_num_activities(); ++i){
@@ -637,8 +745,8 @@ EntryRecap DataAnalysis::recap(int type){
 
     double avg_mood = avg(period, 0);
 
-    double good_threshold = 6;
-    double great_threshold = 8;
+    double good_threshold = 60;
+    double great_threshold = 80;
 
     std::string detailed_analysis = generate_recap_text(period, type);
 
@@ -652,6 +760,7 @@ EntryRecap DataAnalysis::recap(int type){
       text += "Looks like you've had a great " + periods[type];
     }
     text += "\n";
+    text += "Your best and worst days, as indicated by your mood, were on " + best_day.get_date() + " and " + worst_day.get_date() + " respectively.\n";
     text += "Here is a summary of your " + periods[type] + " across all areas\n";
     text += detailed_analysis;
 
@@ -846,7 +955,7 @@ double bisquare_weight_function(double u){
     return std::pow(1 - std::pow(u, 2), 2);
 }
 
-std::vector<std::vector<double>> DataAnalysis::stl_regression(std::vector<double> dataX, std::vector<double> dataY, int seasonal_length){ // Definitely need to change this and the hpp file
+std::vector<std::vector<double>> DataAnalysis::stl_regression(std::vector<double> dataX, std::vector<double> dataY, int seasonal_length = 7){ // Definitely need to change this and the hpp file
     /**
      *@param seasonal_length : how much observations in a seasonal component cycle (most likely 7/1 otherwise 30/1)
      *
@@ -854,9 +963,8 @@ std::vector<std::vector<double>> DataAnalysis::stl_regression(std::vector<double
      *
      *
      */
-    // TODO : make the choice of constants for mood/other stuff if needed
     // TODO : optimize time spent for cycle subseries
-    // 0 is today
+    // 0 is today, 1 is yesterday
 
     if (dataX.size() == 0){
         qDebug() << "stl_regression unsuccessful call : invalid length of data, not multiple of seasonal_length\n";
@@ -1025,12 +1133,42 @@ std::vector<std::vector<double>> DataAnalysis::stl_regression(std::vector<double
     qDebug() << Seasonality;
     qDebug() << N;*/
 
-    std::vector<std::vector<double>> answer = {{}, {}};
+    std::vector<std::vector<double>> answer = {{}, {}, {}};
     for (int i=0; i<N; i++){
         answer[0].push_back(Trend[i]);
         answer[1].push_back(Seasonality[i]);
+    }
+    for (int i=0; i<Remainder.size(); i++){
+        answer[2].push_back(Remainder[i]);
     }
     return answer;
 }
 
 // STL decomposition implementation end
+
+
+DataAnalysis::DataAnalysis(std::vector<EntryPerso*> vector_entries){
+
+    for(EntryPerso *entry : vector_entries){
+        log.push_back(*entry);
+    }
+
+
+
+    std::vector<EntryPerso> last_3y = get_lastn_days_data(1095);
+    std::vector<std::vector<double>> stl_reg;
+    for (int metric; metric<6; ++metric){
+        std::vector<double> Xdata;
+        std::vector<double> Ydata;
+        for (int i=0; i<last_3y.size(); --i){
+            Xdata.push_back(last_3y[i].get_absolute_day());
+            Ydata.push_back(last_3y[i].get_var_value(metric));
+        }
+        stl_reg = stl_regression(Xdata, Ydata);
+        STL_X.push_back(Xdata);
+        STL_Trends.push_back(stl_reg[0]);
+        STL_Seasonalities.push_back(stl_reg[1]);
+        STL_Remainders.push_back(stl_reg[2]);
+    }
+}
+

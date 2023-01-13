@@ -2,8 +2,21 @@
 #define DYNAMICGRAPH_H
 
 #include <QWidget>
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include <QtCharts>
+#include <QChartView>
+#include<QLineSeries>
+// Represents 1 set of bars in a bar chart
+#include <QtCharts/QBarSet>
+
+// Displays the color used to represent each
+// QBarSet
+#include <QtCharts/QLegend>
+// Adds categories to the charts axes
+#include <QtCharts/QBarCategoryAxis>
+// Used to create a line chart
+#include <QtCharts/QLineSeries>
+// Used to change names on axis
+#include <QtCharts/QCategoryAxis>
 #include "entryclasses.h"
 #include <vector>
 
@@ -11,7 +24,8 @@ class DynamicGraph
 {
 public:
     DynamicGraph(std::vector<EntryPerso*> &entries, QString tracked_parameter);
-    void display(QLayout *parent_frame) const;
+    ~DynamicGraph();
+    void display(QLayout *parent_frame);
     //getters and setters
     std::vector<EntryPerso*> get_entries() const;
 
@@ -27,6 +41,8 @@ private:
         medium,
         good
     };
+    QChart *parameter_chart;
+    QChartView *parameter_view;
 
     //methods
     parameterlevel associated_parameter_level(double parameter) const;

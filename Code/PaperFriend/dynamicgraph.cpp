@@ -1,11 +1,3 @@
-/*
-
-  To implement: if there is a too large gap in the dates, leave an empty space in the graph
-  x axis in absolute value
-
-*/
-
-
 #include "dynamicgraph.h"
 #include <QApplication>
 #include <QtCharts>
@@ -18,7 +10,9 @@
 // Used to change names on axis
 #include <QtCharts/QCategoryAxis>
 #include "entryclasses.h"
-#include <QtDebug>
+#include <qDebug>
+#include <QString>
+
 
 //////////////////
 //private methods useful for display
@@ -96,7 +90,7 @@ double DynamicGraph::parameter_value(EntryPerso *entry, QString tracked_paramete
 /////////////////////
 //Constructor
 DynamicGraph::DynamicGraph(std::vector<EntryPerso*>& entries, QString tracked_parameter)
-    :listofseries(std::vector<QLineSeries*>()),entries(entries)
+    :listofseries(std::vector<QLineSeries*>()),entries(entries),parameter_chart(nullptr),parameter_view(nullptr)//need to initialize to nullptr otherwise can crash in destructor when delete the ptr.
 {   
     QDate today = QDate::currentDate();
 
@@ -135,7 +129,7 @@ DynamicGraph::DynamicGraph(std::vector<EntryPerso*>& entries, QString tracked_pa
         if(abs(x1-x2) > 3){
             //qDebug() << x1 << x2;
             listofseries.push_back(series);
-            series = new QLineSeries();
+            series = new QLineSeries();//all pointers series will be deleted by looping through listofseries in the destructor
 
         }
         else if(level!=current_parameter_level){//the parameter level changed, we need to change the line's color, so create a new series (a series can only have one single color)
@@ -146,7 +140,7 @@ DynamicGraph::DynamicGraph(std::vector<EntryPerso*>& entries, QString tracked_pa
                 get_dummy_point(dummypoint1[1],y2,dummypoint1[0],x2,dummypoint2);
                 *series<<QPointF(dummypoint1[0],dummypoint1[1]);
                 listofseries.push_back(series);
-                series = new QLineSeries();// we create anew curve with a different color
+                series = new QLineSeries();// we create a new curve with a different color
                 set_color(series,medium);
                 *series<<QPointF(dummypoint1[0],dummypoint1[1]);// the new series needs to start with the last point of the previous one to make them appear connected on the graph
                 *series<<QPointF(dummypoint2[0],dummypoint2[1]);
@@ -178,18 +172,32 @@ DynamicGraph::DynamicGraph(std::vector<EntryPerso*>& entries, QString tracked_pa
     }
     listofseries.push_back(series);
 }
+////////////////////////
+//destructor
+DynamicGraph::~DynamicGraph(){
+    qDebug()<<QString("I'm being called...");
+    delete visible_green_points;
+    delete visible_orange_points;
+    delete visible_red_points;
 
+    for(QLineSeries* to_delete : listofseries){
+        delete to_delete;
+    }
+
+    delete parameter_chart;
+    delete parameter_view;
+}
 ////////////////////////
 //setters and getters
 std::vector<EntryPerso*> DynamicGraph::get_entries() const{return entries;}
 
 ////////////////////////
 //display the graph
-void DynamicGraph::display(QLayout *layout) const
+void DynamicGraph::display(QLayout *layout)
 {
 
     if(entries.size()==0){return;}
-    QChart *parameter_chart = new QChart();
+    parameter_chart = new QChart();
     for(int i=0;i<listofseries.size();i++){//we add every curve to the graph: one curve per colored section on the graph
         parameter_chart->addSeries(listofseries[i]);
     }
@@ -232,7 +240,7 @@ void DynamicGraph::display(QLayout *layout) const
     parameter_chart->setTitleFont(titlefont);
     parameter_chart->setTitle("My mood");
     */
-    QChartView *parameter_view = new QChartView(parameter_chart);
+    parameter_view = new QChartView(parameter_chart);
     parameter_view->setRenderHint(QPainter::Antialiasing);
     layout->addWidget(parameter_view);//displays the graph on the screen in the indicated layout
 

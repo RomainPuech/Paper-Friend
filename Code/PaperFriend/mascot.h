@@ -9,14 +9,10 @@ class Mascot
 {
 public:
     Mascot();
-    QString get_mascot();
+    QString get_emotion(int num);//returns path string of a specific mascot image based on the num that should range from 0 to 100
 private:
-    QString img_path; //it will store the path string of the image to be displayed
     std::vector<QString> imagepath_strings_vect; // vector of all the mascot images' paths
                                              //as strings
-    QString mascot ; //default image path string
-    void image_to_display(DataAnalysis* data_analysis); // takes the message from the analysis function,
-               //sets img_path to be the path string of the image to be displayed
 };
 
 #endif // MASCOT_H

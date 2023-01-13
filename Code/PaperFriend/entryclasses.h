@@ -12,7 +12,7 @@
 class Entry {
 public:
     Entry(std::string text = "", std::string title = "");
-    ~Entry();
+    //~Entry();
 
     std::string get_text() const;
     void set_text(std::string text);
@@ -103,6 +103,6 @@ private:
     double screen_time;
 };
 
-std::vector<EntryPerso*> sample_entries(int n,std::vector<Activity*> possible_activities = {new Activity()}, std::vector<Friend*> possible_friends = {new Friend()});//gives n randomly generated sample entries
+std::vector<EntryPerso*> sample_entries(int n);//gives n randomly generated sample entries
 
 #endif // ENTRYCLASSES_H
