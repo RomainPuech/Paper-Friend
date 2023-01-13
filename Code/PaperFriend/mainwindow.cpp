@@ -14,7 +14,6 @@
 #include "ui_all_habits.h"
 #include "ui_mainwindow.h"
 #include "ui_texteditor.h"
-#include "add_habit.h"
 #include <QDebug>
 #include <QString>
 #include <fstream>
@@ -78,32 +77,33 @@ MainWindow::MainWindow(QWidget *parent)
 
   //Load habits
   std::vector<QStringList> current_habits = load_habits();
-  if (current_habits.size() == 1){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-  }
+  std::cout<<current_habits.size()<<std::endl;
   if (current_habits.size() == 2){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
   }
   if (current_habits.size() == 3){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
       ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
   }
   if (current_habits.size() == 4){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
       ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
       ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
-      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
   }
   if (current_habits.size() == 5){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
       ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
       ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
       ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
+  }
+  if (current_habits.size() == 6){
+      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
+      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
+      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
+      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
       ui->habits_label_5->setText(current_habits[4][0] + ", " + current_habits[4][1]);
   }
-  if (current_habits.size() >= 6){
+  if (current_habits.size() >= 7){
       ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
       ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
       ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
@@ -161,15 +161,9 @@ MainWindow::~MainWindow() {
 
 std::vector<Activity> MainWindow::get_activities() { return vector_activities; }
 
-Activity *MainWindow::get_activity_at_i(long long unsigned i) {
-  return &vector_activities.at(i);
-}
 
 std::vector<Friend> MainWindow::get_friends() { return vector_friends; }
 
-Friend *MainWindow::get_friend_at_i(long long unsigned i) {
-  return &vector_friends.at(i);
-}
 
 void MainWindow::update_activities(std::vector<Activity> activities) {
   vector_activities = activities;
@@ -225,18 +219,6 @@ void MainWindow::update_graphs() {
     }
 }
 
-void MainWindow::remove_non_existent_friends(EntryPerso* entry){
-    std::vector<Friend*> friends;
-    for(long long unsigned fr = 0; fr < entry->get_friends().size(); fr++){
-        for(long long unsigned i = 0; i < vector_friends.size(); i++){
-            if((entry->get_friends().at(fr))->equal(vector_friends.at(i))){
-                friends.push_back(&vector_friends.at(i));
-                break;
-            }
-        }
-    }
-    entry->set_friends(friends);
-}
 void MainWindow::display_entries() {
 
 
@@ -255,8 +237,6 @@ void MainWindow::display_entries() {
    std::vector<EntryRecap*>::iterator rec = vector_recaps.begin();
   // displaying in reversed order
   for (auto entry = displayed_entries.rbegin(); entry != displayed_entries.rend(); ++entry) {
-    //remove friends and activities that shouldn't be displayed
-      remove_non_existent_friends(*entry);
     if(rec < vector_recaps.end() && (*rec)-> get_qdate().daysTo((*entry)->get_qdate()) > 0){
         EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
         c->display(ui->EntriesScroll->widget()->layout()); // displays the entry in the main_frame.

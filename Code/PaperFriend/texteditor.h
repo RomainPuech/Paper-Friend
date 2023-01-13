@@ -48,8 +48,12 @@ public:
     QString pasteBoard;
     void createPdf();
     QString get_text() const;
+    QString get_title() const;
+    QString htmlText;
     void set_title(QString text);
+    void on_textEdit();
     void append_text(QString text);
+    void append_title(QString text);
     void set_max_width(int width);
     void set_max_height(int height);
 
