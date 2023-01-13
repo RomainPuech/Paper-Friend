@@ -76,8 +76,9 @@ void TextEditor::append_title(QString text)
     ui->lineEdit->setText(text);
 }
 
-void TextEditor::append_text(QString text)
+void TextEditor::set_text(QString text)
 {
+    ui->textEdit->clear();
     ui->textEdit->insertHtml(text);
 }
 

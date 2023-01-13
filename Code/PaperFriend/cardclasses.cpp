@@ -233,7 +233,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
 
     if ((entry->get_text()) != "") {
       // use the edit_text line edit to edit the text
-      edit_text->append_text(QString::fromStdString(entry->get_text()));
+      edit_text->set_text(QString::fromStdString(entry->get_text()));
     }
 
     // modify
@@ -854,7 +854,7 @@ void EntryCard::update() {
   if ((entry->get_title()) != "") {
     edit_text->set_title(QString::fromStdString(entry->get_title()));
   }
-  edit_text->append_text(QString::fromStdString(entry->get_text()));
+  edit_text->set_text(QString::fromStdString(entry->get_text()));
   if (entry_perso != nullptr) {
     if(saved_mood()){
     this->entry_perso->set_mood(this->mood_slider->value());
