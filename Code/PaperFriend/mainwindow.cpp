@@ -155,15 +155,9 @@ MainWindow::~MainWindow() { delete ui; }
 
 std::vector<Activity> MainWindow::get_activities() { return vector_activities; }
 
-Activity *MainWindow::get_activity_at_i(long long unsigned i) {
-  return &vector_activities.at(i);
-}
 
 std::vector<Friend> MainWindow::get_friends() { return vector_friends; }
 
-Friend *MainWindow::get_friend_at_i(long long unsigned i) {
-  return &vector_friends.at(i);
-}
 
 void MainWindow::update_activities(std::vector<Activity> activities) {
   vector_activities = activities;
@@ -219,18 +213,6 @@ void MainWindow::update_graphs() {
     }
 }
 
-void MainWindow::remove_non_existent_friends(EntryPerso* entry){
-    std::vector<Friend*> friends;
-    for(long long unsigned fr = 0; fr < entry->get_friends().size(); fr++){
-        for(long long unsigned i = 0; i < vector_friends.size(); i++){
-            if((entry->get_friends().at(fr))->equal(vector_friends.at(i))){
-                friends.push_back(&vector_friends.at(i));
-                break;
-            }
-        }
-    }
-    entry->set_friends(friends);
-}
 void MainWindow::display_entries() {
 
 
@@ -249,8 +231,6 @@ void MainWindow::display_entries() {
    std::vector<EntryRecap*>::iterator rec = vector_recaps.begin();
   // displaying in reversed order
   for (auto entry = displayed_entries.rbegin(); entry != displayed_entries.rend(); ++entry) {
-    //remove friends and activities that shouldn't be displayed
-      remove_non_existent_friends(*entry);
     if(rec < vector_recaps.end() && (*rec)-> get_qdate().daysTo((*entry)->get_qdate()) > 0){
         EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
         c->display(ui->EntriesScroll->widget()->layout()); // displays the entry in the main_frame.

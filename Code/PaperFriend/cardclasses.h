@@ -20,6 +20,7 @@
 #include <QSlider>
 #include <QCheckBox>
 #include <QScrollArea>
+#include <QComboBox>
 
 class Card : public QFrame{
 public:
@@ -128,7 +129,7 @@ private:
     QVBoxLayout *sliders_left;
     QVBoxLayout *sliders_right;
     QHBoxLayout *sliders;
-
+    QComboBox *habits_display;
 
     //display of entry_recap
     QLabel *recap_title;
