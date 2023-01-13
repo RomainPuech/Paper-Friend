@@ -27,6 +27,7 @@ std::vector<EntryPerso *> MainWindow::vector_entries;//All the personal entries
 std::vector<EntryRecap *> MainWindow::vector_recaps; // All the recap entries
 std::vector<Activity> MainWindow::vector_activities;//All the possible activities to choose from
 std::vector<Friend> MainWindow::vector_friends;//All the friends we can choose from
+std::vector<EntryCard*> MainWindow::displayed_cards;
 
 //// Helper functions
 bool sort_by_date(const EntryPerso *e1, const EntryPerso *e2){
@@ -229,6 +230,7 @@ void MainWindow::display_entries() {
     delete item;
     qDebug() << "removed";
   }
+  displayed_cards.clear();
   /*for (auto entry: entries) {
       EntryCard *c = new EntryCard(20, 300, 300, "white", entry, true, this);
       c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in
@@ -247,9 +249,11 @@ void MainWindow::display_entries() {
     else if ((*entry)->get_qdate() == QDate::currentDate()) {
       today_card = new EntryCard(20, 300, 300, "white", *entry, true, this);
       today_card->display(ui->EntriesScroll->widget()->layout());
+      displayed_cards.push_back(today_card);
     } else {
       EntryCard *c = new EntryCard(20, 300, 300, "white", *entry, true, this);
       c->display(ui->EntriesScroll->widget()->layout()); // displays the entry in the main_frame.
+      displayed_cards.push_back(c);
       qDebug() << "displayed";
     }
   }
@@ -305,6 +309,7 @@ void MainWindow::on_save_settings_clicked() {
   myfile << findChild<QCheckBox *>("communications")->isChecked() << "\n";
   myfile << findChild<QCheckBox *>("screen_time")->isChecked() << "\n";
   myfile.close();
+  MainWindow::settings_refresh();
   update_graphs();
   auto settings = findChild<QWidget *>("settings_frame");
   settings->hide();
@@ -674,5 +679,9 @@ void MainWindow::remove_activities_from_old_entries(int position){
             entry->set_activities(activities_removed);
         }
     }
-
+void MainWindow::settings_refresh(){
+    for(EntryCard *c : displayed_cards){
+        c->update_settings();
+    }
+}
 

@@ -30,6 +30,7 @@ public:
     static std::vector<Friend> get_friends();
     static void update_activities(std::vector<Activity> activities);
     static void update_friends(std::vector<Friend> friends);
+    static void settings_refresh(); // update display according to the settings
     void update_graphs();
     void generate_recap();
     void react_to_last_entry();
@@ -67,6 +68,7 @@ private:
 
 
     std::vector<EntryPerso*> displayed_entries;
+    static std::vector<EntryCard*> displayed_cards; // entry perso cards that are currently on display
     EntryCard* today_card;
 
     bool reacted_to_entry; //Has the mascot reacted yet to the user's daily entry?
