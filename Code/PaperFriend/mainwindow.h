@@ -3,26 +3,14 @@
 
 #include <QMainWindow>
 #include <QApplication>
-#include <QtCharts>
-#include <QChartView>
-#include<QLineSeries>
-// Represents 1 set of bars in a bar chart
-#include <QtCharts/QBarSet>
-
-// Displays the color used to represent each
-// QBarSet
-#include <QtCharts/QLegend>
-// Adds categories to the charts axes
-#include <QtCharts/QBarCategoryAxis>
-// Used to create a line chart
-#include <QtCharts/QLineSeries>
-// Used to change names on axis
-#include <QtCharts/QCategoryAxis>
+#include "dynamicgraph.h"
 #include "all_habits.h"
 #include "entryclasses.h"
 #include "cardclasses.h"
 #include "mascotchat.h"
 #include "entryrecap.h"
+#include <unordered_map>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -69,6 +57,7 @@ private slots:
 
 private:
     MascotChat chat;
+    std::map<QString, DynamicGraph*> dynamic_graphs;
     void toggle_visibility(QWidget *component);
     void display_entries();
     void display_graph(QString tracked_parameter);
@@ -79,10 +68,12 @@ private:
     static std::vector<Friend>vector_friends;
     static std::vector<EntryRecap*>vector_recaps;
 
+
     std::vector<EntryPerso*> displayed_entries;
     EntryCard* today_card;
 
     bool reacted_to_entry; //Has the mascot reacted yet to the user's daily entry?
+
 };
 
 #endif // MAINWINDOW_H

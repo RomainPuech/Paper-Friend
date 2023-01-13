@@ -20,6 +20,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <unordered_map>
 
 //// Declarations
 std::vector<Filter_param> filter_params;
@@ -151,7 +152,12 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() {
+    delete ui;
+    for(auto const& [key, graphptr] : dynamic_graphs){
+        delete graphptr;
+    }
+}
 
 std::vector<Activity> MainWindow::get_activities() { return vector_activities; }
 
@@ -273,8 +279,13 @@ void MainWindow::display_graph(QString tracked_parameter) {
     QWidget *tab = new QWidget();
     QHBoxLayout *graph = new QHBoxLayout(tab);
     ui->tabWidget->addTab(tab, tracked_parameter);
-    DynamicGraph dynamicGraph = DynamicGraph(displayed_entries, tracked_parameter);
-    dynamicGraph.display(graph);
+    qDebug()<<QString("I call it!");
+    if(dynamic_graphs.find(tracked_parameter)!=dynamic_graphs.end()){
+        delete dynamic_graphs[tracked_parameter];
+    }
+    DynamicGraph* graphptr = new DynamicGraph(displayed_entries, tracked_parameter);
+    dynamic_graphs[tracked_parameter] = graphptr;
+    graphptr->display(graph);
     this->showMaximized();
 }
 
