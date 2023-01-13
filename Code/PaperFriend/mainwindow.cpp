@@ -314,9 +314,22 @@ void MainWindow::on_filterButton_clicked() {
     return;
   }
 
+  std::unordered_map<std::string, std::string> map_filter{
+    {"mood", "mood"},
+    {"sleep wellness", "sleep"},
+    {"eating healthy", "eating_healthy"},
+    {"productivity", "productivity"},
+    {"communications", "communications"},
+    {"screen time", "screen_time"},
+    {"show last n entries", "last_n_entries"}
+  };
+
+
   QString type_filter_value =
       findChild<QComboBox *>("type_filter")->currentText();
   std::string type_filter_str = type_filter_value.toStdString();
+  type_filter_str = map_filter[type_filter_str];
+  std::cout << type_filter_str << std::endl;
   QString operator_filter_value =
       findChild<QComboBox *>("operation_filter")->currentText();
   std::string operator_filter_str = operator_filter_value.toStdString();
@@ -442,7 +455,7 @@ void MainWindow::on_type_filter_currentTextChanged(const QString &arg1) {
   // update the operator_filter
   std::string type_filter_str = arg1.toStdString();
   
-  if (type_filter_str == "last_n_entries") {
+  if (type_filter_str == "show last n entries") {
     //change the operator_filter to "="
     findChild<QComboBox *>("operation_filter")->clear();
     findChild<QComboBox *>("operation_filter")->addItem("=");

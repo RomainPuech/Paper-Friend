@@ -982,7 +982,7 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
   sleep_slider->setStyleSheet(
       "QSlider{border-style: none;} QSlider::groove:horizontal{border-style: "
       "none; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 "
-      "rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); "
+      "rgb(200,200, 200), stop: 0.5 rgb(100, 100, 100), stop: 1 rgb(0, 0, 0));"
       "height: 10px; border-radius: "
       "5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px "
       "solid grey;height: 10px;border-radius: 5px;} "
@@ -1000,7 +1000,7 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
   eating_slider->setStyleSheet(
       "QSlider{border-style: none;} QSlider::groove:horizontal{border-style: "
       "none; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 "
-      "rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); "
+      "rgb(200,200, 200), stop: 0.5 rgb(100, 100, 100), stop: 1 rgb(0, 0, 0)); "
       "height: 10px; border-radius: "
       "5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px "
       "solid grey;height: 10px;border-radius: 5px;} "
@@ -1018,7 +1018,7 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
   productivity_slider->setStyleSheet(
       "QSlider{border-style: none;} QSlider::groove:horizontal{border-style: "
       "none; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 "
-      "rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); "
+      "rgb(200,200, 200), stop: 0.5 rgb(100, 100, 100), stop: 1 rgb(0, 0, 0));"
       "height: 10px; border-radius: "
       "5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px "
       "solid grey;height: 10px;border-radius: 5px;} "
@@ -1037,7 +1037,7 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
   communications_slider->setStyleSheet(
       "QSlider{border-style: none;} QSlider::groove:horizontal{border-style: "
       "none; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 "
-      "rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); "
+      "rgb(200,200, 200), stop: 0.5 rgb(100, 100, 100), stop: 1 rgb(0, 0, 0));"
       "height: 10px; border-radius: "
       "5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px "
       "solid grey;height: 10px;border-radius: 5px;} "
@@ -1056,7 +1056,7 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
   screen_slider->setStyleSheet(
       "QSlider{border-style: none;} QSlider::groove:horizontal{border-style: "
       "none; background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 "
-      "rgb(255, 0, 0), stop: 0.5 rgb(255, 255, 0), stop: 1 rgb(0, 255, 0)); "
+      "rgb(200,200, 200), stop: 0.5 rgb(100, 100, 100), stop: 1 rgb(0, 0, 0));"
       "height: 10px; border-radius: "
       "5px;}QSlider::sub-page:horizontal{background: transparent;border: 1px "
       "solid grey;height: 10px;border-radius: 5px;} "

@@ -175,8 +175,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>172</width>
-             <height>72</height>
+             <width>177</width>
+             <height>83</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -356,17 +356,17 @@
               </item>
               <item>
                <property name="text">
-                <string>last_n_entries</string>
+                <string>show last n entries</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>sleep</string>
+                <string>sleep wellness</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>eating_healthy</string>
+                <string>eating healthy</string>
                </property>
               </item>
               <item>
@@ -381,7 +381,7 @@
               </item>
               <item>
                <property name="text">
-                <string>screen_time</string>
+                <string>screen time</string>
                </property>
               </item>
              </widget>
@@ -489,8 +489,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>528</width>
-               <height>415</height>
+               <width>523</width>
+               <height>428</height>
               </rect>
              </property>
             </widget>
