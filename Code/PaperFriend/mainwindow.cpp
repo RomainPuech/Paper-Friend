@@ -375,6 +375,10 @@ void MainWindow::on_filterButton_clicked() {
       filter_params.erase(filter_params.begin() + i);
       i--;
     }
+    if (filter_params[i].keyword == filt.keyword && filter_params[i].value == filt.value) {
+      filter_params.erase(filter_params.begin() + i);
+      i--;
+    }
   }
 
   if (is_insert) {
