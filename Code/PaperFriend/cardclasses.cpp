@@ -322,6 +322,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
           break;
         case 2: // spiritual
           name += QString::fromUtf8("\xE2\x9B\xAA");
+          name += "🧘🕌";
           break;
         case 3: // work
           name += QString::fromUtf8(
@@ -359,7 +360,9 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
         break;
       case 2: // spiritual
         name += QString::fromUtf8("\xE2\x9B\xAA");
-        break;
+        name += "🧘🕌";
+          break;
+
       case 3: // work
         name += QString::fromUtf8(
             "\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
@@ -832,6 +835,7 @@ void EntryCard::update_fr_act_select() {
       break;
     case 2: // spiritual
       name += QString::fromUtf8("\xE2\x9B\xAA");
+      name += "🧘🕌";
       break;
     case 3: // work
       name +=
@@ -875,6 +879,7 @@ void EntryCard::remove_non_existent_act(){
           break;
         case 2: // spiritual
           name += QString::fromUtf8("\xE2\x9B\xAA");
+          name += "🧘🕌";
           break;
         case 3: // work
           name += QString::fromUtf8(
