@@ -226,7 +226,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
 
     if ((entry->get_title()) != "") {
       // use the edit_text line edit to edit the title
-      edit_text->append_title(QString::fromStdString(entry->get_title()));
+      edit_text->set_title(QString::fromStdString(entry->get_title()));
     }
 
     if ((entry->get_text()) != "") {
@@ -720,7 +720,8 @@ void EntryCard::handleBack() {
   alert.setDefaultButton(QMessageBox::Save);
   int choice = alert.exec();
   std::string retrieve_text = (edit_text->get_text()).toStdString();
-  std::string new_title = retrieve_text.substr(0, retrieve_text.find("\n"));
+  //std::string new_title = retrieve_text.substr(0, retrieve_text.find("\n"));
+  std::string new_title = (edit_text->get_title()).toStdString();
   std::string new_text = retrieve_text.substr(retrieve_text.find("\n") + 1);
   bool saved;
   switch (choice) {
