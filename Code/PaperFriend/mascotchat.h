@@ -17,6 +17,7 @@ public:
     void operator<<(QString txt);
     void add_mascot(int num);
     void display(std::vector<QString> Qstr_vect, int num);
+    void prompt_msg(std::string question, int answer, int num);
     //getters
     QString get_last_message() const;
     QScrollArea* get_scrollArea();
@@ -25,7 +26,6 @@ private:
     void set_scroll_area(QScrollArea *area);
     void add_message(QString txt);
     void add_message(std::string txt);
-    void prompt_msg(std::string question, int answer, int num);
     QScrollArea *scrollArea;
     QVBoxLayout *chat_layout;
     Mascot *mascot;

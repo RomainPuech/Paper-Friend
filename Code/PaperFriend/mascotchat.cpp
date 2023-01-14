@@ -84,16 +84,16 @@ void MascotChat::display(std::vector<QString> Qstr_vect, int num){
         }
 }
 void MascotChat::prompt_msg(std::string question, int answer, int num){
-    QHBoxLayout* btn_layout = new QHBoxLayout();
-    QRadioButton* yes = new QRadioButton("YES");//i have to make them into mypushbutton to override the clicked event
+    QHBoxLayout* btn_layout = new QHBoxLayout(scrollArea-> widget());
+    QRadioButton* yes = new QRadioButton("YES", btn_layout->widget());//i have to make them into mypushbutton to override the clicked event
     yes -> setCheckable(0);
-    QRadioButton* no = new QRadioButton("NO");
+    QRadioButton* no = new QRadioButton("NO", btn_layout->widget());
     no -> setCheckable(0);
-    btn_layout->addWidget(yes);
-    btn_layout->addWidget(no);
+    //btn_layout->addWidget(yes);
+    //btn_layout->addWidget(no);
     add_message(question);
     add_mascot(num);
-    chat_layout -> addLayout(btn_layout);
+    //chat_layout -> addLayout(btn_layout);
     if (yes -> isChecked()){
         answer = 1;
     }
