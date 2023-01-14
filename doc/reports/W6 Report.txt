@@ -1,0 +1,15 @@
+| Name                 |Team               |      What I did             |  What I will do |
+|:----------------------:|:-----------------:|:-------------------------|:------------------|
+| Romain Puech         |Data analysis/ link Frontend  |||
+| Bogdana Kolic        |Frontend/Fixes |||
+| Liam Loughman        |Frontend       |||
+| Yubo Cai             |Frontend/Fixes |||
+| Luigi Massacci       |Fixes          |||
+| Safaa Arbai          |Frontend/Fixes |||
+| Ahmed Benchekroun    |Frontend       |||
+| Mihaela Gledacheva   |Frontend       |||
+| Thomas Turkieh       |File processing|||
+| Junyuan (Frank) Wang |Frontend       |||
+| Octave Gaspard       |Data analysis  |||
+| Brook Nigatu         |Data analysis  |||
+| Artem Mamichev       |Data analysis  |||    
