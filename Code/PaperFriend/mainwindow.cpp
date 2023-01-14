@@ -138,8 +138,8 @@ MainWindow::MainWindow(QWidget *parent)
   chat = MascotChat(ui->scrollArea);
   welcome();
   chat.add_mascot(90);
-  std::string question = "did you sleep well";
-  chat.prompt_msg(question,0,55);
+  //std::string question = "did you sleep well";
+  //chat.prompt_msg(question,0,55);
 
   //Settings
   auto settings = findChild<QWidget *>("settings_frame");

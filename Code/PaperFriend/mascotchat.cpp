@@ -106,6 +106,9 @@ void MascotChat::prompt_msg(std::string question, int answer, int num){
 Message::Message()
 {
     this->setStyleSheet("background-color: white; border: 1px solid white; border-radius:5px; border-bottom-left-radius:0px; margin-bottom:10px;");
+   // this->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    //this->setWordWrap(true);
+
 }
 
 void Message::paintEvent(QPaintEvent *pe)
@@ -126,7 +129,7 @@ void Message::paintEvent(QPaintEvent *pe)
 
     painter.fillPath(path, QBrush(QColor ("white")));
     QLabel::paintEvent(pe);
-
+    QLabel::adjustSize();
 }
 
 
