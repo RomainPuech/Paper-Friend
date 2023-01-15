@@ -41,12 +41,12 @@ bool saved_productivity() {
     return current_settings[3];
 }
 
-bool saved_communications() {
+bool saved_socializing() {
     std::vector<bool> current_settings = saved_settings();
     return current_settings[4];
 }
 
-bool saved_screen_time() {
+bool saved_physical_activity() {
     std::vector<bool> current_settings = saved_settings();
     return current_settings[5];
 }

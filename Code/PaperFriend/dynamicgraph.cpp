@@ -80,10 +80,10 @@ double DynamicGraph::parameter_value(EntryPerso *entry, QString tracked_paramete
         return entry->get_eating_healthy();
     } else if (tracked_parameter == "productivity") {
         return entry->get_productivity();
-    } else if (tracked_parameter == "communications") {
-        return entry->get_communications();
+    } else if (tracked_parameter == "socializing") {
+        return entry->get_socializing();
     } else {
-        return entry->get_screen_time();
+        return entry->get_physical_activity();
     }
 }
 

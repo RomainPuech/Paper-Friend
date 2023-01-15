@@ -231,12 +231,12 @@ switch (var_name) {
         return entry.get_productivity();
         break;
 
-    case COMMUNICATIONS:
-        return entry.get_communications();
+    case SOCIALIZING:
+        return entry.get_socializing();
         break;
 
-    case SCREEN_TIME:
-        return entry.get_screen_time();
+    case PHYSICAL_ACTIVITY:
+        return entry.get_physical_activity();
 }
 
 
@@ -270,12 +270,12 @@ switch (var_name) {
             entry.set_productivity(value);
             break;
 
-        case COMMUNICATIONS:
-            entry.set_communications(value);
+        case SOCIALIZING:
+            entry.set_socializing(value);
             break;
 
-        case SCREEN_TIME:
-            entry.set_screen_time(value);
+        case PHYSICAL_ACTIVITY:
+            entry.set_physical_activity(value);
         }
 }
 */

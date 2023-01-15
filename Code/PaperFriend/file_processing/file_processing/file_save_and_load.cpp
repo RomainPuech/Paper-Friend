@@ -224,8 +224,8 @@ bool save_entryperso(EntryPerso entry){ //  create and save the entry file, titl
         {"sleep", entry.get_sleep()},
         {"eating_healthy",entry.get_eating_healthy()},
         {"productivity", entry.get_productivity()},
-        {"communications", entry.get_communications()},
-        {"screen_time", entry.get_screen_time()},
+        {"socializing", entry.get_socializing()},
+        {"physical_activity", entry.get_physical_activity()},
         {"activities",activities},
 
         {"friends", friends}
@@ -261,7 +261,7 @@ EntryPerso* load_entryperso(std::string filename,std::vector<Activity> possible_
     std::ifstream i("Entries/" + filename);
     nlohmann::json j;
     i >> j;
-    EntryPerso* res = new EntryPerso(j["text"], j["title"], str_to_vec_activities(possible_activities,j["activities"]), str_to_vec_friends(j["friends"]), j["mood"], j["sleep"], j["eating_healthy"], j["productivity"],j["communications"], j["screen_time"] );
+    EntryPerso* res = new EntryPerso(j["text"], j["title"], str_to_vec_activities(possible_activities,j["activities"]), str_to_vec_friends(j["friends"]), j["mood"], j["sleep"], j["eating_healthy"], j["productivity"],j["socializing"], j["physical_activity"] );
     for(Activity *act : res->get_activities()){
         qDebug()<<QString::fromStdString(act->get_name())<<QString::number(act->get_value())<<QString("Turbo debug");
     }

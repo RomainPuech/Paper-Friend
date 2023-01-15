@@ -216,8 +216,8 @@ void MainWindow::update_graphs() {
     if (saved_communications()) {
         display_graph("communications");
     }
-    if (saved_screen_time()) {
-        display_graph("screen time");
+    if (saved_physical_activity()) {
+        display_graph("physical activity");
     }
 }
 
@@ -293,7 +293,7 @@ void MainWindow::on_settingsButton_clicked() {
   findChild<QCheckBox *>("eating_healthy")->setChecked(saved_eating_healthy());
   findChild<QCheckBox *>("productivity")->setChecked(saved_productivity());
   findChild<QCheckBox *>("communications")->setChecked(saved_communications());
-  findChild<QCheckBox *>("screen_time")->setChecked(saved_screen_time());
+  findChild<QCheckBox *>("physical_activity")->setChecked(saved_physical_activity());
   auto settings = findChild<QWidget *>("settings_frame");
   toggle_visibility(settings);
   auto chat = findChild<QWidget *>("scrollArea");
@@ -308,7 +308,7 @@ void MainWindow::on_save_settings_clicked() {
   myfile << findChild<QCheckBox *>("eating_healthy")->isChecked() << "\n";
   myfile << findChild<QCheckBox *>("productivity")->isChecked() << "\n";
   myfile << findChild<QCheckBox *>("communications")->isChecked() << "\n";
-  myfile << findChild<QCheckBox *>("screen_time")->isChecked() << "\n";
+  myfile << findChild<QCheckBox *>("physical_activity")->isChecked() << "\n";
   myfile.close();
   MainWindow::settings_refresh();
   update_graphs();
@@ -331,7 +331,7 @@ void MainWindow::on_filterButton_clicked() {
     {"eating healthy", "eating_healthy"},
     {"productivity", "productivity"},
     {"communications", "communications"},
-    {"screen time", "screen_time"},
+    {"physical activity", "physical_activity"},
     {"show last n entries", "last_n_entries"}
   };
 

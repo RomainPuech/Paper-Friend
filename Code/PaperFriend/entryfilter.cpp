@@ -109,21 +109,21 @@ bool compare_value(const EntryPerso& e, std::string keyword, std::string opt, in
         } else if (opt == "=") {
             return e.get_productivity() == value;
         }
-    } else if (keyword == "communications") {
+    } else if (keyword == "socializing") {
         if (opt == ">") {
-            return e.get_communications() > value;
+            return e.get_socializing() > value;
         } else if (opt == "<") {
-            return e.get_communications() < value;
+            return e.get_socializing() < value;
         } else if (opt == "=") {
-            return e.get_communications() == value;
+            return e.get_socializing() == value;
         }
-    } else if (keyword == "screen_time") {
+    } else if (keyword == "physical_activity") {
         if (opt == ">") {
-            return e.get_screen_time() > value;
+            return e.get_physical_activity() > value;
         } else if (opt == "<") {
-            return e.get_screen_time() < value;
+            return e.get_physical_activity() < value;
         } else if (opt == "=") {
-            return e.get_screen_time() == value;
+            return e.get_physical_activity() == value;
         }
     }
     return false;
@@ -138,8 +138,8 @@ std::vector<EntryPerso> random_entryperso(int num){
         e.set_sleep(rand()%10);
         e.set_eating_healthy(rand()%10);
         e.set_productivity(rand()%10);
-        e.set_communications(rand()%10);
-        e.set_screen_time(rand()%10);
+        e.set_socializing(rand()%10);
+        e.set_physical_activity(rand()%10);
         entries.push_back(e);
     }
     return entries;

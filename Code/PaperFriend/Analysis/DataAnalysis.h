@@ -13,7 +13,7 @@ allows to parametrize
                     // which variable is being analyzed in a given method. (we
 avoid writing the
                     // same funcitons for each variable.)
-    MOOD, SLEEP, EATING_HEALTHY, PRODUCTIVITY, COMMUNICATIONS, SCREEN_TIME
+    MOOD, SLEEP, EATING_HEALTHY, PRODUCTIVITY, SOCIALIZING, PHYSICAL_ACTIVITY
 };
 */
 struct LinearRegressionCoeffs {

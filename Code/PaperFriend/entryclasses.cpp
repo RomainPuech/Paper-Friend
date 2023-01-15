@@ -56,18 +56,18 @@ EntryPerso::EntryPerso(std::string title, std::string text,
                        std::vector<Activity *> p_activities,
                        std::vector<Friend *> friends, double mood, double sleep,
                        double eating_healthy, double productivity,
-                       double communications, double screen_time)
+                       double socializing, double physical_activity)
     : Entry(title, text), activities(p_activities), friends(friends),
       mood(mood), sleep(sleep), eating_healthy(eating_healthy),
-      productivity(productivity), communications(communications),
-      screen_time(screen_time) {
+      productivity(productivity), socializing(socializing),
+      physical_activity(physical_activity) {
 
   all_activities.push_back(Activity("mood", mood));
   all_activities.push_back(Activity("sleep", sleep));
   all_activities.push_back(Activity("eating_healthy", eating_healthy));
   all_activities.push_back(Activity("productivity", productivity));
-  all_activities.push_back(Activity("communications", communications));
-  all_activities.push_back(Activity("screen_time", screen_time));
+  all_activities.push_back(Activity("socializing", socializing));
+  all_activities.push_back(Activity("physical_activity", physical_activity));
 
   for (auto &ptr : activities)
     all_activities.push_back(*ptr);
@@ -128,16 +128,16 @@ void EntryPerso::set_productivity(double productivity) {
   this->productivity = productivity;
 }
 
-double EntryPerso::get_communications() const { return communications; }
+double EntryPerso::get_socializing() const { return socializing; }
 
-void EntryPerso::set_communications(double communications) {
-  this->communications = communications;
+void EntryPerso::set_socializing(double socializing) {
+  this->socializing = socializing;
 }
 
-double EntryPerso::get_screen_time() const { return screen_time; }
+double EntryPerso::get_physical_activity() const { return physical_activity; }
 
-void EntryPerso::set_screen_time(double screen_time) {
-  this->screen_time = screen_time;
+void EntryPerso::set_physical_activity(double physical_activity) {
+  this->physical_activity = physical_activity;
 }
 
 int EntryPerso::entry_type() const { return 1; }
@@ -170,11 +170,11 @@ sample_entries(int n) {
     double sleep = rand() % 101;
     double eating_healthy = rand() % 101;
     double productivity = rand() % 101;
-    double communications = rand() % 101;
-    double screen_time = rand() % 101;
+    double socializing = rand() % 101;
+    double physical_activity = rand() % 101;
     EntryPerso *entry = new EntryPerso(
         "sample entry text", "The title of the entry", activities, friends,
-        mood, sleep, eating_healthy, productivity, communications, screen_time);
+        mood, sleep, eating_healthy, productivity, socializing, physical_activity);
     entry->set_qdate((QDate::currentDate()).addDays(-i));
     res.push_back(entry);
   }

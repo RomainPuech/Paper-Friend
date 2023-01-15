@@ -54,8 +54,8 @@ public:
                double sleep = 0,
                double eating_healthy = 0,
                double productivity = 0,
-               double communications = 0,
-               double screen_time = 0);
+               double socializing = 0,
+               double physical_activity = 0);
     ~EntryPerso();
 
     std::vector<Activity*> get_activities() const;
@@ -80,11 +80,11 @@ public:
     double get_productivity() const;
     void set_productivity(double productivity);
 
-    double get_communications() const;
-    void set_communications(double communications);
+    double get_socializing() const;
+    void set_socializing(double socializing);
 
-    double get_screen_time() const;
-    void set_screen_time(double screen_time);
+    double get_physical_activity() const;
+    void set_physical_activity(double physical_activity);
 
     int get_num_activities(){
         return all_activities.size();
@@ -99,8 +99,8 @@ private:
     double sleep;
     double eating_healthy;
     double productivity;
-    double communications;
-    double screen_time;
+    double socializing;
+    double physical_activity;
 };
 
 std::vector<EntryPerso*> sample_entries(int n);//gives n randomly generated sample entries
