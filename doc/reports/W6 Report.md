@@ -1,7 +1,7 @@
 | Name                 |Team               |      What I did             |  What I will do |
 |:----------------------:|:-----------------:|:-------------------------|:------------------|
 | Romain Puech         |Data analysis/ link Frontend  |||
-| Bogdana Kolic        |Frontend/Fixes |||
+| Bogdana Kolic        |Frontend/Fixes |- I made [EntryCard compatible with EntryRecap](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/87)<br>- Displayed the generated recaps<br>- We changed the way activities are stored in entry, so I modified the way they are displayed in EntryCard<br>- We now also store friends in activities, so I had to [remove friends](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/182) from EntryCard<br>- [Displayed all the habits](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/124) in the EntryCard<br>- [Synchronized EntryCard with currently tracked habits](https://github.com/CSE201-project/PaperFriend-desktop-app/issues/132)<br>- Worked on fixing various bugs - stacking of text, deleted activities causing problems, ...<br>| - Further clean and optimize code|
 | Liam Loughman        |Frontend       |||
 | Yubo Cai             |Frontend/Fixes |||
 | Luigi Massacci       |Fixes          |||
