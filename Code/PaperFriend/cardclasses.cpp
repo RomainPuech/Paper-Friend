@@ -886,7 +886,9 @@ void EntryCard::update() {
   main_window->update_graphs();
   // react to the entry - Important to call it *before* generate_recap
   qDebug() << QString("Reaction called");
-  main_window->react_to_last_entry();
+  if (entry->get_qdate() == QDate::currentDate()) {
+      main_window->react_to_last_entry();
+  }
   // check if a weekly/monthly/yearly recap has to be created
   main_window->generate_recap();
   // update style
