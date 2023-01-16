@@ -40,11 +40,9 @@ void TextEditor::set_title(QString text)
     // set the title of the text editor
     // We want to display the title in indipendent line writen in html and css
     // We want to make the text in lineEdit become the title
-    QString titleText = ui->lineEdit->text();
-    this->setWindowTitle(titleText);
-    // Get the current plain text of the textEdit widget
-    QString htmlText = "<h1 style='text-align:center;'>" + titleText + "</h1>";
-    ui->textEdit->setHtml("");
+    ui->lineEdit->clear();
+    ui->lineEdit->setText(text);
+    this->setWindowTitle(text);
 }
 
 
@@ -301,10 +299,14 @@ void TextEditor::on_action_Center_triggered()
     }
 }
 
+
 void TextEditor::on_action_Justify_triggered()
 {
-
-
+    QTextCursor cursor = ui->textEdit->textCursor();
+    QTextBlockFormat format = cursor.blockFormat();
+    format.setAlignment(Qt::AlignJustify);
+    cursor.mergeBlockFormat(format);
+    ui->textEdit->setTextCursor(cursor);
 }
 
 void TextEditor::textColor()
