@@ -31,6 +31,7 @@ public:
     static void update_activities(std::vector<Activity> activities);
     static void update_friends(std::vector<Friend> friends);
     static void settings_refresh(); // update display according to the settings
+    void change_editability();
     void update_graphs();
     void generate_recap();
     void react_to_last_entry();
