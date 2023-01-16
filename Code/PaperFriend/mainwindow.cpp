@@ -500,7 +500,7 @@ void MainWindow::on_newEntryButton_clicked() {
         Activity *to_add = new Activity(activity.get_name(),activity.get_type(),0);
         today_entry->add_activity(to_add);
     }
-    save_entryperso(*today_entry);
+    //save_entryperso(*today_entry);
     vector_entries.push_back(today_entry);
     displayed_entries.push_back(today_entry);
     today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
@@ -508,7 +508,7 @@ void MainWindow::on_newEntryButton_clicked() {
   } else {
     if (vector_entries.back()->get_qdate() != QDate::currentDate()) {
       EntryPerso *today_entry = new EntryPerso();
-      save_entryperso(*today_entry);
+      //save_entryperso(*today_entry);
       vector_entries.push_back(today_entry);
       displayed_entries.push_back(today_entry);
       today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);

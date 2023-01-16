@@ -798,18 +798,9 @@ void EntryCard::handleBack() {
     entry->set_title(new_title);
     entry->set_text(new_text);
     this->change();
+    qDebug()<< "changed";
     this->update();
-    //saved = save_entryperso(*entry_perso);
-    saved = true;
-    if (saved) {
-      QMessageBox msg;
-      msg.setText("successfully saved changes to the file");
-      msg.exec();
-    } else {
-      QMessageBox msg;
-      msg.setText("saving changes to the file failed");
-      msg.exec();
-    }
+    qDebug()<<"Updated";
     break;
   case QMessageBox::Discard:
     this->remove_non_existent_act();
