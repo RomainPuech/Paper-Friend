@@ -37,6 +37,7 @@ public:
     void welcome();
     void add_new_activities_to_old_enties();
     static void remove_activities_from_old_entries(int position);
+    static void refresh_acttivities(); // dynamically update the display of entryCard when activities are changed
 
 private slots:
     void on_pushButton_clicked();

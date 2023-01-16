@@ -681,3 +681,14 @@ void MainWindow::settings_refresh(){
     }
 }
 
+void MainWindow::refresh_acttivities(){
+    for(EntryCard *c : displayed_cards){
+        if(c->isReadOnly()){
+            c->remove_non_existent_act();
+        }
+        else{
+            c->update_fr_act_select();
+        }
+        c->set_correct_style();
+    }
+}

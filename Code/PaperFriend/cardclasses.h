@@ -71,6 +71,7 @@ public:
     void update_fr_act();
     void remove_non_existent_act();
     void update_settings();
+    void set_correct_style();
 
 private slots:
   void handleModify();

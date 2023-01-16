@@ -625,13 +625,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
       habits_display->setVisible(false);
     }
 
-    if (readOnly && fr_act_display->count() != 0) {
-      set_entryPerso_style(3);
-    } else if (!readOnly && !fr_act_options.empty()) {
-      set_entryPerso_style(3);
-    } else {
-      set_entryPerso_style(2);
-    }
+    set_correct_style();
 
     // add to the layout
     vb_layout->addItem(top_menu);
@@ -810,6 +804,16 @@ void EntryCard::handleBack() {
   }
 }
 
+void EntryCard::set_correct_style(){
+    if (readOnly && fr_act_display->count() != 0) {
+      set_entryPerso_style(3);
+    } else if (!readOnly && !fr_act_options.empty()) {
+      set_entryPerso_style(3);
+    } else {
+      set_entryPerso_style(2);
+    }
+}
+
 void EntryCard::change() {
   readOnly = !readOnly;
   if (isReadOnly()) {
@@ -828,13 +832,7 @@ void EntryCard::change() {
       mood_slider_w->setVisible(true);
     }
   }
-  if (readOnly && fr_act_display->count() != 0) {
-    set_entryPerso_style(3);
-  } else if (!readOnly && !fr_act_options.empty()) {
-    set_entryPerso_style(3);
-  } else {
-    set_entryPerso_style(2);
-  }
+  set_correct_style();
 }
 
 void EntryCard::update() {
@@ -891,13 +889,7 @@ void EntryCard::update() {
   // check if a weekly/monthly/yearly recap has to be created
   main_window->generate_recap();
   // update style
-  if (readOnly && fr_act_display->count() != 0) {
-    set_entryPerso_style(3);
-  } else if (!readOnly && !fr_act_options.empty()) {
-    set_entryPerso_style(3);
-  } else {
-    set_entryPerso_style(2);
-  }
+  set_correct_style();
 }
 
 void EntryCard::update_fr_act_select() {
