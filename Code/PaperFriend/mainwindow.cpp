@@ -152,6 +152,16 @@ MainWindow::MainWindow(QWidget *parent)
 
   update_graphs();
 
+  //style the application
+  QApplication::setStyle(QStyleFactory::create("Fusion"));
+  //check available built in styles
+  /*
+  const auto & styles = QStyleFactory::keys();
+  for(const auto & s : styles)
+  {
+    qDebug() << s;
+  }
+  */
 }
 
 MainWindow::~MainWindow() {
@@ -197,6 +207,12 @@ void MainWindow::toggle_visibility(QWidget *component) {
   } else {
     component->show();
   }
+}
+
+void MainWindow::change_editability() {
+  ui->left_frame->setEnabled(!isEnabled());
+  ui->right_frame->setEnabled(!isEnabled());
+  ui->filters->setEnabled(!isEnabled());
 }
 
 void MainWindow::update_graphs() {
@@ -262,6 +278,7 @@ void MainWindow::display_entries() {
 
 void MainWindow::display_graph(QString tracked_parameter) {
     QWidget *tab = new QWidget();
+    tab->setStyleSheet("QWidget{background-color: rgb(255,255,255);}");
     QHBoxLayout *graph = new QHBoxLayout(tab);
     ui->tabWidget->addTab(tab, tracked_parameter);
     qDebug()<<QString("I call it!");

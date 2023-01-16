@@ -77,10 +77,13 @@ EntryPerso::EntryPerso(std::string title, std::string text,
   }
 }
 EntryPerso::~EntryPerso() {
+  // the code below causes a crash when adding a new entry
+  /*
   for (auto el : activities)
     delete el;
   for (auto el : friends)
     delete el;
+  */
 }
 
 double EntryPerso::get_var_value(int index) const {

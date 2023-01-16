@@ -816,6 +816,7 @@ void EntryCard::set_correct_style(){
 
 void EntryCard::change() {
   readOnly = !readOnly;
+  main_window->change_editability();
   if (isReadOnly()) {
     text_title_w->setVisible(true);
     edit_and_return->setVisible(false); // for readOnly text
