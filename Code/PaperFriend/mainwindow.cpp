@@ -213,7 +213,7 @@ void MainWindow::update_graphs() {
     if (saved_productivity()) {
         display_graph("productivity");
     }
-    if (saved_communications()) {
+    if (saved_socializing()) {
         display_graph("communications");
     }
     if (saved_physical_activity()) {
@@ -292,7 +292,7 @@ void MainWindow::on_settingsButton_clicked() {
   findChild<QCheckBox *>("sleep")->setChecked(saved_sleep());
   findChild<QCheckBox *>("eating_healthy")->setChecked(saved_eating_healthy());
   findChild<QCheckBox *>("productivity")->setChecked(saved_productivity());
-  findChild<QCheckBox *>("communications")->setChecked(saved_communications());
+  findChild<QCheckBox *>("communications")->setChecked(saved_socializing());
   findChild<QCheckBox *>("physical_activity")->setChecked(saved_physical_activity());
   auto settings = findChild<QWidget *>("settings_frame");
   toggle_visibility(settings);
@@ -330,7 +330,7 @@ void MainWindow::on_filterButton_clicked() {
     {"sleep wellness", "sleep"},
     {"eating healthy", "eating_healthy"},
     {"productivity", "productivity"},
-    {"communications", "communications"},
+    {"socializing", "socializing"},
     {"physical activity", "physical_activity"},
     {"show last n entries", "last_n_entries"}
   };
@@ -448,11 +448,6 @@ void MainWindow::on_filterButton_clicked() {
   displayed_entries = entries_to_display;
   display_entries();
   update_graphs();
-}
-
-void MainWindow::on_helpFilterBox_clicked() {
-  // implement a help dialog here. show the dialog.
-  QMessageBox::information(this, "Help", "This is a help dialog");
 }
 
 void MainWindow::on_clear_button_clicked() {
