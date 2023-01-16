@@ -10,6 +10,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Analysis/textanalysis.cpp \
     activity_cell.cpp \
     activityclasses.cpp \
     all_activities.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
     welcome_msg.cpp
 
 HEADERS += \
+    Analysis/textanalysis.h \
     activity_cell.h \
     activityclasses.h \
     all_activities.h \

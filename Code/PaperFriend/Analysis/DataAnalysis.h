@@ -33,7 +33,7 @@ struct LinearRegressionCoeffs {
 
 class DataAnalysis {
 
-private:
+protected:
 
    std::vector<EntryPerso> log; // Data to be analysed
 
