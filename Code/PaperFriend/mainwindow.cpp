@@ -152,6 +152,16 @@ MainWindow::MainWindow(QWidget *parent)
 
   update_graphs();
 
+  //style the application
+  QApplication::setStyle(QStyleFactory::create("Fusion"));
+  //check available built in styles
+  /*
+  const auto & styles = QStyleFactory::keys();
+  for(const auto & s : styles)
+  {
+    qDebug() << s;
+  }
+  */
 }
 
 MainWindow::~MainWindow() {
@@ -197,6 +207,12 @@ void MainWindow::toggle_visibility(QWidget *component) {
   } else {
     component->show();
   }
+}
+
+void MainWindow::change_editability() {
+  ui->left_frame->setEnabled(!isEnabled());
+  ui->right_frame->setEnabled(!isEnabled());
+  ui->filters->setEnabled(!isEnabled());
 }
 
 void MainWindow::update_graphs() {
@@ -262,6 +278,7 @@ void MainWindow::display_entries() {
 
 void MainWindow::display_graph(QString tracked_parameter) {
     QWidget *tab = new QWidget();
+    tab->setStyleSheet("QWidget{background-color: rgb(255,255,255);}");
     QHBoxLayout *graph = new QHBoxLayout(tab);
     ui->tabWidget->addTab(tab, tracked_parameter);
     qDebug()<<QString("I call it!");
@@ -480,40 +497,16 @@ void MainWindow::on_type_filter_currentTextChanged(const QString &arg1) {
 }
 
 void MainWindow::on_newEntryButton_clicked() {
-  // more compact code for when the test entries are replaced with real entries
-  /*
-  if
-  (!std::filesystem::exists("Entries/"+QDate::currentDate().toString("MM.dd.yyyy").toStdString()+".json"))
-  { EntryPerso *today_entry = new EntryPerso(); save_entryperso(*today_entry);
-      vector_entries.push_back(today_entry);
-      displayed_entries.push_back(today_entry);
-      today_card = new EntryCard(20, 300, 300, "white", today_entry, true,
-  this); display_entries();
-  }
-  */
-  if (vector_entries.empty()) {
-    EntryPerso *today_entry = new EntryPerso();
-    //ADD ACTIVITIES BY DEF TO 0
-    qDebug()<<QString("Start to add activities by default to 0");
-    for(Activity const& activity : vector_activities){
-        qDebug()<<QString::fromStdString(activity.get_name());
-        Activity *to_add = new Activity(activity.get_name(),activity.get_type(),0);
-        today_entry->add_activity(to_add);
-    }
-    //save_entryperso(*today_entry);
-    vector_entries.push_back(today_entry);
-    displayed_entries.push_back(today_entry);
-    today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
-    display_entries();
-  } else {
-    if (vector_entries.back()->get_qdate() != QDate::currentDate()) {
+  if(!std::filesystem::exists("Entries/"+QDate::currentDate().toString("MM.dd.yyyy").toStdString()+".json")) {
       EntryPerso *today_entry = new EntryPerso();
-      //save_entryperso(*today_entry);
+      for(Activity const& activity : vector_activities) {
+          Activity *to_add = new Activity(activity.get_name(), activity.get_type(), 0);
+          today_entry->add_activity(to_add);
+      }
       vector_entries.push_back(today_entry);
       displayed_entries.push_back(today_entry);
       today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
       display_entries();
-    }
   }
   ui->EntriesScroll->verticalScrollBar()->setValue(0);
   today_card->change();
@@ -523,13 +516,19 @@ void MainWindow::generate_recap() {
     // first check if we need to generate a weekly/monthly/yearly recap
     // last_recaps_dates is the vector containing the string of the dates of the last [0]weekly, [1]monthly and [2]yearly recap.
     std::vector<QString> last_recaps_dates = load_last_recaps_dates();
+    if(last_recaps_dates.empty()){
+        QDate date = QDate::currentDate().addDays(-1);
+        last_recaps_dates.push_back(date.toString());
+        last_recaps_dates.push_back(date.toString());
+        last_recaps_dates.push_back(date.toString());
+    }
     //weekly
     if(QDate::currentDate().dayOfWeek()==7)//If it's Sunday
     {
-       QString date_last_recap = last_recaps_dates[0];
+        QString date_last_recap = last_recaps_dates[0];
         if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
         {
-            chat<<QString("It's Sunday! Time for a weekly recap 😉");
+            chat<<QString("It's Sunday! Time for a weekly recap ");
             chat.add_mascot(89);
             last_recaps_dates[0] = QDate::currentDate().toString("yyyy.MM.dd");
             DataAnalysis analysis = DataAnalysis(vector_entries);
