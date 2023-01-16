@@ -528,7 +528,7 @@ void MainWindow::generate_recap() {
         QString date_last_recap = last_recaps_dates[0];
         if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
         {
-            chat<<QString("It's Sunday! Time for a weekly recap 😉");
+            chat<<QString("It's Sunday! Time for a weekly recap ");
             chat.add_mascot(89);
             last_recaps_dates[0] = QDate::currentDate().toString("yyyy.MM.dd");
             DataAnalysis analysis = DataAnalysis(vector_entries);
