@@ -6,7 +6,8 @@ activity_cell::activity_cell(QWidget *parent) :
     ui(new Ui::activity_cell)
 {
     ui->setupUi(this);
-    ui->activity_type->addItem("Enter activity type");
+    ui->activity_type->addItem("Enter type");
+    ui->activity_type->addItem("Friend");
     ui->activity_type->addItem("Sport");
     ui->activity_type->addItem("Spiritual");
     ui->activity_type->addItem("Work");
@@ -31,6 +32,13 @@ void activity_cell::set_activity_cell_name(QString cellName){
 
 void activity_cell::set_activity_type(int type){
     ui->activity_type->setCurrentIndex(type);
+}
+
+void activity_cell::disable_change(){
+    QString act_name = ui->activity_name->text();
+    if(act_name != "Activity name"){
+        ui->activity_name->setReadOnly(true);
+    }
 }
 
 void activity_cell::on_delete_activity_button_clicked()

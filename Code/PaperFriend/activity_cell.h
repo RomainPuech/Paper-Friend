@@ -25,9 +25,11 @@ public:
     void setTextData(QString cellText);
     void set_activity_cell_name(QString CellName);
     void set_activity_type(int type);
+    void disable_change();
+    Ui::activity_cell *ui;
 
 private:
-    Ui::activity_cell *ui;
+    //Ui::activity_cell *ui;
 
 signals:
     void closeThisCell(int); // one needs signals so that whenever the activity cell is closed one can invoke it.

@@ -26,6 +26,7 @@ public:
       allCellPtr; // This vector saves all the data of the activity cell.
   void add_previous_cells();
   void closeEvent(QCloseEvent *event);
+  void disable_text_change();
 
 private slots:
   void on_add_activity_button_clicked();

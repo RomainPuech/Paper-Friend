@@ -1,5 +1,6 @@
 #include "all_activities.h"
 #include"activity_cell.h"
+#include"ui_activity_cell.h"
 #include "ui_all_activities.h"
 #include<QFile>
 #include <QMessageBox>
@@ -18,6 +19,7 @@ all_activities::all_activities(MainWindow *mainwindow,std::vector<Activity> &vec
     int ActivitiesCellNumberTotal = 0;
     are_equal = false;
     this->add_previous_cells();
+    disable_text_change();
 }
 
 all_activities::~all_activities()
@@ -105,6 +107,17 @@ void all_activities::on_save_activity_button_clicked()
     mainwindowptr->add_new_activities_to_old_enties();
     MainWindow::refresh_acttivities();
 
+}
+
+void all_activities::disable_text_change(){
+    QString name_activity;
+    for(int i=0;i<allCellPtr.size();++i){
+        name_activity = allCellPtr[i]->get_activity_name();
+        if(name_activity!="n"){
+            //qDebug()<<QString("hey");
+            allCellPtr[i]->ui->activity_name->setReadOnly(true);
+        }
+    }
 }
 
 void all_activities::closeEvent (QCloseEvent *event){
