@@ -497,40 +497,16 @@ void MainWindow::on_type_filter_currentTextChanged(const QString &arg1) {
 }
 
 void MainWindow::on_newEntryButton_clicked() {
-  // more compact code for when the test entries are replaced with real entries
-  /*
-  if
-  (!std::filesystem::exists("Entries/"+QDate::currentDate().toString("MM.dd.yyyy").toStdString()+".json"))
-  { EntryPerso *today_entry = new EntryPerso(); save_entryperso(*today_entry);
-      vector_entries.push_back(today_entry);
-      displayed_entries.push_back(today_entry);
-      today_card = new EntryCard(20, 300, 300, "white", today_entry, true,
-  this); display_entries();
-  }
-  */
-  if (vector_entries.empty()) {
-    EntryPerso *today_entry = new EntryPerso();
-    //ADD ACTIVITIES BY DEF TO 0
-    qDebug()<<QString("Start to add activities by default to 0");
-    for(Activity const& activity : vector_activities){
-        qDebug()<<QString::fromStdString(activity.get_name());
-        Activity *to_add = new Activity(activity.get_name(),activity.get_type(),0);
-        today_entry->add_activity(to_add);
-    }
-    //save_entryperso(*today_entry);
-    vector_entries.push_back(today_entry);
-    displayed_entries.push_back(today_entry);
-    today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
-    display_entries();
-  } else {
-    if (vector_entries.back()->get_qdate() != QDate::currentDate()) {
+  if(!std::filesystem::exists("Entries/"+QDate::currentDate().toString("MM.dd.yyyy").toStdString()+".json")) {
       EntryPerso *today_entry = new EntryPerso();
-      //save_entryperso(*today_entry);
+      for(Activity const& activity : vector_activities) {
+          Activity *to_add = new Activity(activity.get_name(), activity.get_type(), 0);
+          today_entry->add_activity(to_add);
+      }
       vector_entries.push_back(today_entry);
       displayed_entries.push_back(today_entry);
       today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
       display_entries();
-    }
   }
   ui->EntriesScroll->verticalScrollBar()->setValue(0);
   today_card->change();
