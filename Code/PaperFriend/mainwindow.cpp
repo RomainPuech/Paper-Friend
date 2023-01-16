@@ -516,10 +516,16 @@ void MainWindow::generate_recap() {
     // first check if we need to generate a weekly/monthly/yearly recap
     // last_recaps_dates is the vector containing the string of the dates of the last [0]weekly, [1]monthly and [2]yearly recap.
     std::vector<QString> last_recaps_dates = load_last_recaps_dates();
+    if(last_recaps_dates.empty()){
+        QDate date = QDate::currentDate().addDays(-1);
+        last_recaps_dates.push_back(date.toString());
+        last_recaps_dates.push_back(date.toString());
+        last_recaps_dates.push_back(date.toString());
+    }
     //weekly
     if(QDate::currentDate().dayOfWeek()==7)//If it's Sunday
     {
-       QString date_last_recap = last_recaps_dates[0];
+        QString date_last_recap = last_recaps_dates[0];
         if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
         {
             chat<<QString("It's Sunday! Time for a weekly recap 😉");
