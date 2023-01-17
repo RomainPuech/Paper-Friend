@@ -19,7 +19,7 @@ All_Habits::All_Habits(QWidget *parent) :
     std::vector<QStringList> current_habits = load_habits();
     QString text_to_insert;
     if (current_habits.size()>0){
-        for (int i = 0; i < current_habits.size()-1; i++) {
+        for (unsigned long i = 0; i < current_habits.size(); i++) {
             text_to_insert += current_habits[i][0] + ", " + current_habits[i][1] + '\n';
         }
         ui->all_habits_label->setText(text_to_insert);
@@ -40,40 +40,22 @@ void All_Habits::on_add_habit_button_clicked()
 
 void All_Habits::on_save_habit_button_clicked() {
     savedStatus = true;
-    QFile file("habits.txt");
-    if(file.exists()) {
-        std::ofstream myfile;
-        myfile.open("habits.txt",std::ios::app);
+    std::vector<QStringList> new_habits;
         for (int i = 1; i < ui->habits_cell_layout->count(); i++) {
+            QStringList tmp;
             QWidget *widget = ui->habits_cell_layout->itemAt(i)->widget();
-              if (widget != NULL)
-              {
-                  if (ui->habits_cell_layout->itemAt(i)->widget()->isVisible()){
-                      myfile<<ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit*>("habit_name")->text().toStdString() +
-                                  " |" +ui->habits_cell_layout->itemAt(i)->widget()->findChild<QComboBox*>("habit_frequency")->currentText().toStdString()<<std::endl;
-                  }
-              }
-        }
-        myfile.close();
+                if (widget != NULL) {
+                    if (ui->habits_cell_layout->itemAt(i)->widget()->isVisible()){
+                        tmp.push_back(ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit*>("habit_name")->text());
+                        tmp.push_back(ui->habits_cell_layout->itemAt(i)->widget()->findChild<QComboBox*>("habit_frequency")->currentText());
+                        tmp.push_back("0");
+                    }
+                }
+            new_habits.push_back(tmp);
     }
-    else {
-        std::cout<<"Creating new habits file"<<std::endl;
-        std::ofstream myfile;
-        myfile.open("habits.txt");
-        for (int i = 1; i < ui->habits_cell_layout->count(); i++) {
-            QWidget *widget = ui->habits_cell_layout->itemAt(i)->widget();
-              if (widget != NULL)
-              {
-                  if (ui->habits_cell_layout->itemAt(i)->widget()->isVisible()){
-
-                      myfile<<ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit*>("habit_name")->text().toStdString() +
-                                  " |" +ui->habits_cell_layout->itemAt(i)->widget()->findChild<QComboBox*>("habit_frequency")->currentText().toStdString()<<std::endl;
-                  }
-              }
-        }
-        myfile.close();
+    if (new_habits.size() > 0){
+        save_habits_to_file(new_habits);
     }
-    file.close();
 }
 
 void All_Habits::closeEvent (QCloseEvent *event){
@@ -122,15 +104,6 @@ Add_Habit_Cell::~Add_Habit_Cell()
 {
     delete ui;
 }
-
-/*void Add_Habit_Cell::set_habit_cell_name(QString cellName){
-    ui->habit_name->setText(cellName);
-    ui->habit_name->setMaxLength(30);
-}
-
-void Add_Habit_Cell::set_habit_frequency(int type){
-    ui->habit_frequency->setCurrentIndex(type);
-}*/
 
 void Add_Habit_Cell::on_delete_habit_button_clicked()
 {

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1134</width>
-    <height>587</height>
+    <width>1094</width>
+    <height>798</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -175,8 +175,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>171</width>
-             <height>85</height>
+             <width>141</width>
+             <height>130</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -499,8 +499,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>540</width>
-               <height>407</height>
+               <width>580</width>
+               <height>606</height>
               </rect>
              </property>
             </widget>
@@ -578,6 +578,29 @@
          </widget>
         </item>
         <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="generic_habit_label">
+          <property name="text">
+           <string>No habits done on this day.</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer_9">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -591,133 +614,21 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLabel" name="habits_label_1">
-          <property name="text">
-           <string/>
+         <widget class="QScrollArea" name="habits_scrollArea">
+          <property name="widgetResizable">
+           <bool>true</bool>
           </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents_2">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>289</width>
+             <height>72</height>
+            </rect>
+           </property>
+          </widget>
          </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_8">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QLabel" name="habits_label_2">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_7">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QLabel" name="habits_label_3">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_6">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QLabel" name="habits_label_4">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>400</height>
-           </size>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Maximum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QLabel" name="habits_label_5">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_10">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QLabel" name="habits_label_6">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_11">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </item>

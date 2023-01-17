@@ -20,6 +20,7 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_map>
+#include <QDate>
 
 //// Declarations
 std::vector<Filter_param> filter_params;
@@ -77,41 +78,101 @@ MainWindow::MainWindow(QWidget *parent)
   //qDebug()<<QString::fromStdString((vector_entries[0]->get_activities())[0]->get_name());
 
   //Load habits
+  QDate date = date.currentDate();
+  int tmp = date.dayOfWeek();
+  std::string day_of_week;
+  switch (tmp) {
+  case 1:
+    day_of_week = "Every Monday";
+    break;
+  case 2:
+    day_of_week = "Every Tuesday";
+    break;
+  case 3:
+    day_of_week = "Every Wednesday";
+    break;
+  case 4:
+    day_of_week = "Every Thursday";
+    break;
+  case 5:
+    day_of_week = "Every Friday";
+    break;
+  case 6:
+    day_of_week = "Every Saturday";
+    break;
+  case 7:
+    day_of_week = "Every Sunday";
+    break;
+  }
+
   std::vector<QStringList> current_habits = load_habits();
   std::cout<<current_habits.size()<<std::endl;
-  if (current_habits.size() == 2){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-  }
-  if (current_habits.size() == 3){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-  }
-  if (current_habits.size() == 4){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
-  }
-  if (current_habits.size() == 5){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
-      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
-  }
-  if (current_habits.size() == 6){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
-      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
-      ui->habits_label_5->setText(current_habits[4][0] + ", " + current_habits[4][1]);
-  }
-  if (current_habits.size() >= 7){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
-      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
-      ui->habits_label_5->setText(current_habits[4][0] + ", " + current_habits[4][1]);
-      ui->habits_label_6->setText(current_habits[5][0] + ", " + current_habits[5][1]);
-  }
+    std::vector<QStringList> habits_of_the_day;
+    for(unsigned long i = 0; i<current_habits.size(); i++) {
+        QStringList tmp;
+        if (current_habits[i][1].toStdString() == "Every Day") {
+            tmp.push_back(current_habits[i][0]);
+            tmp.push_back(current_habits[i][1]);
+            tmp.push_back(current_habits[i][2]);
+        }
+        if ((current_habits[i][1].toStdString() == "Every Weekday" && day_of_week == "Every Monday")
+               ||(current_habits[i][1].toStdString() == "Every Weekday" && day_of_week == "Every Tuesday")
+               ||(current_habits[i][1].toStdString() == "Every Weekday" && day_of_week == "Every Wednesday")
+               ||(current_habits[i][1].toStdString() == "Every Weekday" && day_of_week == "Every Thursday")
+               ||(current_habits[i][1].toStdString() == "Every Weekday" && day_of_week == "Every Friday")) {
+            tmp.push_back(current_habits[i][0]);
+            tmp.push_back(current_habits[i][1]);
+            tmp.push_back(current_habits[i][2]);
+        }
+        if ((current_habits[i][1].toStdString() == "Every Weekend" && day_of_week == "Every Saturday")
+              ||(current_habits[i][1].toStdString() == "Every Weekend" && day_of_week == "Every Sunday")) {
+            tmp.push_back(current_habits[i][0]);
+            tmp.push_back(current_habits[i][1]);
+            tmp.push_back(current_habits[i][2]);
+        }
+        bool s = current_habits[i][1].toStdString() == day_of_week;
+        if (current_habits[i][1].toStdString() == day_of_week) {
+            tmp.push_back(current_habits[i][0]);
+            tmp.push_back(current_habits[i][1]);
+            tmp.push_back(current_habits[i][2]);
+        }
+        if (tmp.size()>0){
+            habits_of_the_day.push_back(tmp);
+        }
+    }
+    if (habits_of_the_day.size()> 0) {
+        ui->generic_habit_label->setVisible(false);
+        QVBoxLayout *layout = new QVBoxLayout();
+        for (unsigned long i = 0; i < habits_of_the_day.size(); i++) {
+            QWidget* widget = new QWidget();
+            QLabel* label = new QLabel();
+            label->setText(habits_of_the_day[i][0] + ", " + habits_of_the_day[i][1] + ", " + habits_of_the_day[i][2]);
+            QPushButton *button1 = new QPushButton("Yes");
+            button1->setMaximumWidth(50);
+            QPushButton *button2 = new QPushButton("No");
+            button2->setMaximumWidth(50);
+            QPushButton *button3 = new QPushButton("Delete");
+            button3->setMaximumWidth(50);
+            QHBoxLayout* hlayout = new QHBoxLayout();
+            hlayout->addWidget(label);
+            hlayout->addWidget(button1);
+            hlayout->addWidget(button2);
+            hlayout->addWidget(button3);
+            widget->setLayout(hlayout);
+            layout->addWidget(widget);
+        }
+
+        QWidget *widget = new QWidget;
+        widget->setLayout(layout);
+
+        ui->habits_scrollArea->setWidget(widget);
+        ui->habits_scrollArea->setWidgetResizable(true);
+    }
+    else {
+        ui->habits_scrollArea->setVisible(false);
+    }
+
+
 
   displayed_entries = vector_entries;
 

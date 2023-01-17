@@ -2,7 +2,6 @@
 #define ALL_HABITS_H
 
 #include <QDialog>
-//#include "add_habit_cell.h"
 
 namespace Ui {
 class All_Habits;

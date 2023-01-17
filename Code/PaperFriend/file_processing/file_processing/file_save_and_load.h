@@ -59,5 +59,9 @@ std::vector<QString> load_last_recaps_dates();
 
 void save_last_recaps_dates(std::vector<QString> last_recaps_dates);
 
+void save_habits_to_file(std::vector<QStringList> new_habits);
+
+void save_incrementation_of_habits(std::vector<QStringList> new_habits);
+
 
 #endif
