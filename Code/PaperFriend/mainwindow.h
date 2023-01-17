@@ -54,6 +54,10 @@ private slots:
 
     void on_ppl_button_clicked();
 
+    void on_yes_button_clicked();
+    void on_no_button_clicked();
+    void on_delete_button_clicked();
+
 private:
     MascotChat chat;
     std::map<QString, DynamicGraph*> dynamic_graphs;

@@ -570,7 +570,7 @@
         <item>
          <widget class="QLabel" name="habit_title_label">
           <property name="text">
-           <string>My Habits:</string>
+           <string>Habits of The Day:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>

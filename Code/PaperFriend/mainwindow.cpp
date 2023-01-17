@@ -130,7 +130,6 @@ MainWindow::MainWindow(QWidget *parent)
             tmp.push_back(current_habits[i][1]);
             tmp.push_back(current_habits[i][2]);
         }
-        bool s = current_habits[i][1].toStdString() == day_of_week;
         if (current_habits[i][1].toStdString() == day_of_week) {
             tmp.push_back(current_habits[i][0]);
             tmp.push_back(current_habits[i][1]);
@@ -146,18 +145,25 @@ MainWindow::MainWindow(QWidget *parent)
         for (unsigned long i = 0; i < habits_of_the_day.size(); i++) {
             QWidget* widget = new QWidget();
             QLabel* label = new QLabel();
-            label->setText(habits_of_the_day[i][0] + ", " + habits_of_the_day[i][1] + ", " + habits_of_the_day[i][2]);
-            QPushButton *button1 = new QPushButton("Yes");
-            button1->setMaximumWidth(50);
-            QPushButton *button2 = new QPushButton("No");
-            button2->setMaximumWidth(50);
-            QPushButton *button3 = new QPushButton("Delete");
-            button3->setMaximumWidth(50);
+            label->setObjectName("habit_label");
+            label->setText(habits_of_the_day[i][0] + ". Did you do it today?" );
+            QPushButton *yes_button = new QPushButton("Yes");
+            yes_button->setObjectName("yes_button");
+            yes_button->setMaximumWidth(50);
+            connect(yes_button, SIGNAL(clicked()), this, SLOT(on_yes_button_clicked()));
+            QPushButton *no_button = new QPushButton("No");
+            no_button->setObjectName("no_button");
+            no_button->setMaximumWidth(50);
+            connect(no_button, SIGNAL(clicked()), this, SLOT(on_no_button_clicked()));
+            QPushButton *delete_button = new QPushButton("Delete");
+            delete_button->setObjectName("delete_button");
+            delete_button->setMaximumWidth(50);
+            connect(delete_button, SIGNAL(clicked()), this, SLOT(on_delete_button_clicked()));
             QHBoxLayout* hlayout = new QHBoxLayout();
             hlayout->addWidget(label);
-            hlayout->addWidget(button1);
-            hlayout->addWidget(button2);
-            hlayout->addWidget(button3);
+            hlayout->addWidget(yes_button);
+            hlayout->addWidget(no_button);
+            hlayout->addWidget(delete_button);
             widget->setLayout(hlayout);
             layout->addWidget(widget);
         }
@@ -751,4 +757,47 @@ void MainWindow::refresh_acttivities(){
         }
         c->set_correct_style();
     }
+}
+
+void MainWindow::on_yes_button_clicked() {
+    QAbstractButton* yes_button = qobject_cast<QAbstractButton*>(sender());
+    QWidget* parent = qobject_cast<QWidget *>(yes_button->parent());
+    QPushButton * no_button = parent->findChild<QPushButton *>("no_button");
+    QPushButton * delete_button = parent->findChild<QPushButton *>("delete_button");
+    yes_button->setDisabled(true);
+    no_button->setDisabled(true);
+    delete_button->setDisabled(true);
+    QLabel * habit_label = parent->findChild<QLabel *>("habit_label");
+    QStringList tmp = habit_label->text().split(".");
+    std::cout<<"Yes"<<std::endl;
+    std::cout<<habit_label->text().toStdString()<<std::endl;
+    save_incrementation_of_habits(tmp[0]);
+}
+
+void MainWindow::on_no_button_clicked() {
+    QAbstractButton* no_button = qobject_cast<QAbstractButton*>(sender());
+    QWidget* parent = qobject_cast<QWidget *>(no_button->parent());
+    QPushButton * yes_button = parent->findChild<QPushButton *>("yes_button");
+    QPushButton * delete_button = parent->findChild<QPushButton *>("delete_button");
+    yes_button->setDisabled(true);
+    no_button->setDisabled(true);
+    delete_button->setDisabled(true);
+    QLabel * habit_label = parent->findChild<QLabel *>("habit_label");
+    QStringList tmp = habit_label->text().split(".");
+    save_reset_of_habits(tmp[0]);
+    std::cout<<"No"<<std::endl;
+}
+
+void MainWindow::on_delete_button_clicked() {
+    QAbstractButton* delete_button = qobject_cast<QAbstractButton*>(sender());
+    QWidget* parent = qobject_cast<QWidget *>(delete_button->parent());
+    QPushButton * no_button = parent->findChild<QPushButton *>("no_button");
+    QPushButton * yes_button = parent->findChild<QPushButton *>("yes_button");
+    yes_button->setDisabled(true);
+    no_button->setDisabled(true);
+    delete_button->setDisabled(true);
+    QLabel * habit_label = parent->findChild<QLabel *>("habit_label");
+    QStringList tmp = habit_label->text().split(".");
+    save_delete_of_habits(tmp[0]);
+    std::cout<<"Delete"<<std::endl;
 }

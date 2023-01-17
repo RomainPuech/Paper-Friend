@@ -430,6 +430,7 @@ void save_habits_to_file(std::vector<QStringList>new_habits) {
         std::cout<<"File Exists"<<std::endl;
         std::ofstream myfile;
         myfile.open("habits.txt",std::ios::app);
+        myfile<<""<<std::endl;
         for (unsigned long i = 0; i < new_habits.size()-1; i++) {
             std::cout<<new_habits[i][0].toStdString()<<std::endl;
             myfile<<new_habits[i][0].toStdString() + "|" + new_habits[i][1].toStdString() + "|" + new_habits[i][2].toStdString()<<std::endl;
@@ -450,22 +451,47 @@ void save_habits_to_file(std::vector<QStringList>new_habits) {
     file.close();
 }
 
-void save_incrementation_of_habits(std::vector<QStringList> new_habits){
+void resave_habits_in_new_file(std::vector<QStringList> new_habits){
+    std::ofstream myfile;
+    myfile.open("habits.txt",std::ios::out);
+    for (unsigned long i = 0; i < new_habits.size()-1; i++) {
+        myfile<<new_habits[i][0].toStdString() + "|" + new_habits[i][1].toStdString() + "|" + new_habits[i][2].toStdString()<<std::endl;
+    }
+    myfile<<new_habits[new_habits.size()-1][0].toStdString() + "|" + new_habits[new_habits.size()-1][1].toStdString() + "|" + new_habits[new_habits.size()-1][2].toStdString();
+    myfile.close();
+}
+
+void save_incrementation_of_habits(QString to_increment) {
     std::vector<QStringList> old_habits = load_habits();
     for (unsigned long i = 0; i < old_habits.size(); i++) {
-        if (old_habits[i][0] == new_habits[0][0]){
-            if (new_habits[0][2] == "0") {
-                int tmp = old_habits[i][2].toInt();
-                tmp += 1;
-                old_habits[i][2] = QString::number(tmp);
-            }
-            else if (new_habits[0][2] == "1") {
-                old_habits[i][2] = QString::number(0);
-            }
-                /*else {
-
-                }*/
-
+        if (old_habits[i][0] == to_increment){
+            int j = old_habits[i][2].toInt();
+            j += 1;
+            old_habits[i][2] = QString::number(j);
+            break;
         }
     }
+    resave_habits_in_new_file(old_habits);
+}
+
+void save_reset_of_habits(QString to_reset) {
+    std::vector<QStringList> old_habits = load_habits();
+    for (unsigned long i = 0; i < old_habits.size(); i++) {
+        if (old_habits[i][0] == to_reset){
+            old_habits[i][2] = "0";
+            break;
+        }
+    }
+    resave_habits_in_new_file(old_habits);
+}
+
+void save_delete_of_habits(QString to_delete) {
+    std::vector<QStringList> old_habits = load_habits();
+    for (unsigned long i = 0; i < old_habits.size(); i++) {
+        if (old_habits[i][0] == to_delete){
+            old_habits.erase(old_habits.begin()+i);
+            break;
+        }
+    }
+    resave_habits_in_new_file(old_habits);
 }
