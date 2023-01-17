@@ -255,7 +255,7 @@ void MainWindow::update_friends(std::vector<Friend> friends) {
 void MainWindow::closeEvent(QCloseEvent *event) {
   QMessageBox::StandardButton answr_btn = QMessageBox::question(
       this, tr("Paper friend"), tr("Are you sure?\n"),
-      QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
+      QMessageBox::No | QMessageBox::Yes,
       QMessageBox::Yes);
   if (answr_btn != QMessageBox::Yes) {
     event->ignore();

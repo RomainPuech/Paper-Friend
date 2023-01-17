@@ -38,14 +38,11 @@ void MascotChat::operator<<(std::string txt){
 void MascotChat::operator<<(QString txt){
     add_message(txt);
 }
-
-//private methods
 void MascotChat::add_mascot(int num){
     QLabel *image_label = new QLabel;
     Mascot *mascot = new Mascot();
     QString text_to_set = mascot -> get_emotion(num);
     image_label->setTextFormat(Qt::RichText);
-    //image_label->setText("<img src=:/pictures/rsc/excited-resized.png align=middle height=\"85\">");
     image_label->setText(text_to_set);
     image_label->setFixedWidth(85);
     // setting a background color helps for debugging by showing the actual size of the label
@@ -55,23 +52,19 @@ void MascotChat::add_mascot(int num){
     image_label->setAutoFillBackground(true);
     image_label->setPalette(pali);
     */
-    scrollArea->widget()->layout()->addWidget(image_label);
+    if (scrollArea->widget()->layout()->count() == 1){
+        scrollArea->widget()->layout()->addWidget(image_label);
+        add_invisible_message();
 
-}
-void MascotChat::add_message(QString txt){
-    Message *text_label = new Message();
-    text_label->setTextFormat(Qt::RichText);
-    text_label->setWordWrap(true);
-    text_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
-    //text_label ->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    text_label->setText(txt);
-
-    scrollArea->widget()->layout()->addWidget(text_label);
+    }
+    else if (scrollArea->widget()->layout()->count() == 3){
+         scrollArea->widget()->layout()->addWidget(image_label);
+        }
+    else{
+        scrollArea->widget()->layout()->addWidget(image_label);
+    }
 }
 
-void MascotChat::add_message(std::string txt){
-    add_message(QString::fromStdString(txt));
-}
 void MascotChat::display(std::vector<QString> Qstr_vect, int num){
     if(Qstr_vect.size() == 0){return;}
     else if(Qstr_vect.size() == 1){
@@ -83,24 +76,44 @@ void MascotChat::display(std::vector<QString> Qstr_vect, int num){
             add_mascot(num);
         }
 }
-void MascotChat::prompt_msg(std::string question, int answer, int num){
+void MascotChat::prompt_msg(std::string question, int num){
     QHBoxLayout* btn_layout = new QHBoxLayout(scrollArea-> widget());
     QRadioButton* yes = new QRadioButton("YES", btn_layout->widget());//i have to make them into mypushbutton to override the clicked event
     yes -> setCheckable(0);
     QRadioButton* no = new QRadioButton("NO", btn_layout->widget());
     no -> setCheckable(0);
-    //btn_layout->addWidget(yes);
-    //btn_layout->addWidget(no);
     add_message(question);
     add_mascot(num);
-    //chat_layout -> addLayout(btn_layout);
-    if (yes -> isChecked()){
-        answer = 1;
     }
-    else if (no -> isChecked()){
-        answer = 0;
-    }
-    }
+
+//private methods
+void MascotChat::add_invisible_message(){
+    Message *invisible_text = new Message();
+    invisible_text->setTextFormat(Qt::RichText);
+    invisible_text->setWordWrap(true);
+    invisible_text->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
+    //text_label ->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    invisible_text->setText("Don't mind this message. I'm just trying to figure out how to fix a problem");
+    scrollArea->widget()->layout()->addWidget(invisible_text);
+    //invisible_text ->setVisible(false);
+    //invisible_text -> hide();
+}
+void MascotChat::add_message(QString txt){
+    Message *text_label = new Message();
+    text_label->setTextFormat(Qt::RichText);
+    text_label->setWordWrap(true);
+    text_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
+    //text_label ->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    text_label->setText(txt); 
+    //if (scrollArea -> widget()-> layout() ->count() == 1){
+        //delete scrollArea->widget()->layout()->takeAt(1);
+    scrollArea->widget()->layout()->addWidget(text_label);
+
+}
+
+void MascotChat::add_message(std::string txt){
+    add_message(QString::fromStdString(txt));
+}
 
 
 Message::Message()
