@@ -487,11 +487,19 @@ void save_reset_of_habits(QString to_reset) {
 
 void save_delete_of_habits(QString to_delete) {
     std::vector<QStringList> old_habits = load_habits();
-    for (unsigned long i = 0; i < old_habits.size(); i++) {
-        if (old_habits[i][0] == to_delete){
-            old_habits.erase(old_habits.begin()+i);
-            break;
-        }
+    if (old_habits.size() == 1) {
+        std::ofstream myfile;
+        myfile.open("habits.txt",std::ios::out);
+        int i = remove("habits.txt");
+        std::cout<<i<<std::endl;
     }
-    resave_habits_in_new_file(old_habits);
+    else {
+        for (unsigned long i = 0; i < old_habits.size(); i++) {
+            if (old_habits[i][0] == to_delete){
+                old_habits.erase(old_habits.begin()+i);
+                break;
+            }
+        }
+        resave_habits_in_new_file(old_habits);
+    }
 }
