@@ -5,7 +5,7 @@
 | Liam Loughman        |Frontend       |Implemented a add function which adds a habit in the ui and allows user to select frequency, along with a save function which takes the habit and frequency given by the user and saves themt to a habits.txt file. If that file does not exists, the it's created|Find a way to delete habits which are saved in the file and keep track of the habits being done (depending on the frequency)|
 | Yubo Cai             |Frontend/Fixes | - I work on the seperation of Title and Text of the `TextEditor` and the display on `Card`. <br> - Fix the problem of saving entry of the title and data in order make the title and text and work and display independently. <br> - Fixed some functions of TextEditor.| - Optimize code and fix bugs. <br> - Solve the bug of title doesn't save on the first time of save|
 | Luigi Massacci       |Fixes          |||
-| Safaa Arbai          |Frontend/Fixes |||
+| Safaa Arbai          |Frontend/Fixes |-Added a new method function in the mascot class and modified a bit both the mascot and mascot chat classes.<br>-Fixed the problem with the chat bubble being too big when there's only one message in the chat box.|Fix the issue with how the message and mascot get displayed when there's only one message.<br>-Clean code and add more comments for clarification|
 | Ahmed Benchekroun    |Frontend       |||
 | Mihaela Gledacheva   |Frontend       | - Applied a built-in style <br> - Tried fixing issue with today's entry | - Clean and optimize code |
 | Thomas Turkieh       |File processing|||
