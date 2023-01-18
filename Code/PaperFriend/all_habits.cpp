@@ -43,9 +43,11 @@ void All_Habits::on_save_habit_button_clicked() {
     for (int i = 0; i < ui->habits_cell_layout->count(); i++) {
         QWidget *widget = ui->habits_cell_layout->itemAt(i)->widget();
         if (widget != NULL) {
-            for (int j = 0; j < current_habits.size(); j++){
-                if (ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit*>("habit_name")->text() == current_habits[j][0]) {
-                    duplicates = true;
+            if (ui->habits_cell_layout->itemAt(i)->widget()->isVisible()) {
+                for (int j = 0; j < current_habits.size(); j++){
+                    if (ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit*>("habit_name")->text() == current_habits[j][0]) {
+                        duplicates = true;
+                    }
                 }
             }
 
@@ -53,9 +55,19 @@ void All_Habits::on_save_habit_button_clicked() {
     }
     bool duplicates_amoung_entered_habits = false;
     for (int i = 0; i < ui->habits_cell_layout->count()-1; i++) {
-        for (int j = i; j < ui->habits_cell_layout->count(); j++) {
-            if (ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit*>("habit_name")->text() == ui->habits_cell_layout->itemAt(j)->widget()->findChild<QLineEdit*>("habit_name")->text()) {
-                duplicates_amoung_entered_habits = true;
+        QWidget *widget1 = ui->habits_cell_layout->itemAt(i)->widget();
+        if (widget1 != NULL) {
+            if (ui->habits_cell_layout->itemAt(i)->widget()->isVisible()) {
+                for (int j = i; j < ui->habits_cell_layout->count(); j++) {
+                    QWidget *widget2 = ui->habits_cell_layout->itemAt(i)->widget();
+                    if (widget2 != NULL) {
+                        if (ui->habits_cell_layout->itemAt(i)->widget()->isVisible()) {
+                            if (ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit*>("habit_name")->text() == ui->habits_cell_layout->itemAt(j)->widget()->findChild<QLineEdit*>("habit_name")->text()) {
+                                duplicates_amoung_entered_habits = true;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
