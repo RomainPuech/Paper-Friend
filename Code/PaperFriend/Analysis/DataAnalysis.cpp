@@ -597,7 +597,7 @@ void DataAnalysis::monthly_anomalies_text(const std::vector<EntryPerso> &entries
             string_vect[i] += "The " + weeks[anomalies[0]] + " week of the past month was an outlier.";
         } else {
             string_vect[i] += "The ";
-            for (unsigned int m = 0; m < anomalies.size() - 2; ++m){
+            for (unsigned int m = 0; m < anomalies.size() - 1; ++m){
                 string_vect[i] += weeks[anomalies[m]] + ", ";
             }
             string_vect[i] += "and " + weeks[anomalies[anomalies.size() - 1]] + " weeks of the past month were outliers.";
@@ -644,10 +644,10 @@ void DataAnalysis::yearly_anomalies_text(const std::vector<EntryPerso> &entries,
             string_vect[i] += groups[anomalies[0]][groups[anomalies[0]].size() / 2].get_month_name() + " was an outlier in the past year.";
         } else {
             string_vect[i] += "The months of ";
-            for (unsigned int m = 0; m < anomalies.size() - 2; ++m){
-                string_vect[i] += groups[anomalies[0]][groups[anomalies[0]].size() / 2].get_month_name() + ", ";
+            for (unsigned int m = 0; m < anomalies.size() - 1; ++m){
+                string_vect[i] += groups[anomalies[m]][groups[anomalies[m]].size() / 2].get_month_name() + ", ";
             }
-            string_vect[i] += "and " + weeks[anomalies[anomalies.size() - 1]] + " were outliers in the past year.";
+            string_vect[i] += "and " + groups[anomalies[anomalies.size() - 1]][groups[anomalies[anomalies.size() - 1]].size() / 2].get_month_name() + " were outliers in the past year.";
           }
           string_vect[i] += "\n";
         anomalies.clear();
@@ -666,7 +666,7 @@ std::string DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &ent
     for (int i = 0; i < get_num_activities(); ++i){
         anomaly_texts.push_back("");
     }
-    switch(type){
+    /*switch(type){
         case 0:
             weekly_anomalies_text(entries, anomaly_texts);
             break;
@@ -676,7 +676,7 @@ std::string DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &ent
         case 2:
             yearly_anomalies_text(entries, anomaly_texts);
 
-    }
+    }*/
 
     double slight_threshold = 0.5; // Some constants to guide judgement
     double significant_threshold = 2;
@@ -721,7 +721,7 @@ std::string DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &ent
       res += " and ";
       res += var_to_str(influences[1]);
       res += " have the most effect.\n";
-      res += anomaly_texts[i];
+      //res += anomaly_texts[i];
 }
      return res;
 }
