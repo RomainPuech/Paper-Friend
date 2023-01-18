@@ -433,9 +433,9 @@ void save_habits_to_file(std::vector<QStringList>new_habits) {
         myfile<<""<<std::endl;
         for (unsigned long i = 0; i < new_habits.size()-1; i++) {
             std::cout<<new_habits[i][0].toStdString()<<std::endl;
-            myfile<<new_habits[i][0].toStdString() + "|" + new_habits[i][1].toStdString() + "|" + new_habits[i][2].toStdString()<<std::endl;
+            myfile<<new_habits[i][0].toStdString() + "|" + new_habits[i][1].toStdString() + "|" + new_habits[i][2].toStdString() + "|" + new_habits[i][3].toStdString()<<std::endl;
         }
-        myfile<<new_habits[new_habits.size()-1][0].toStdString() + "|" + new_habits[new_habits.size()-1][1].toStdString() + "|" + new_habits[new_habits.size()-1][2].toStdString();
+        myfile<<new_habits[new_habits.size()-1][0].toStdString() + "|" + new_habits[new_habits.size()-1][1].toStdString() + "|" + new_habits[new_habits.size()-1][2].toStdString() + "|" + new_habits[new_habits.size()-1][3].toStdString();
         myfile.close();
     }
     else {
@@ -443,9 +443,9 @@ void save_habits_to_file(std::vector<QStringList>new_habits) {
         std::ofstream myfile;
         myfile.open("habits.txt");
         for (unsigned long i = 0; i < new_habits.size()-1; i++) {
-            myfile<<new_habits[i][0].toStdString() + "|" + new_habits[i][1].toStdString() + "|" + new_habits[i][2].toStdString()<<std::endl;
+            myfile<<new_habits[i][0].toStdString() + "|" + new_habits[i][1].toStdString() + "|" + new_habits[i][2].toStdString() + "|" + new_habits[i][3].toStdString()<<std::endl;
         }
-        myfile<<new_habits[new_habits.size()-1][0].toStdString() + "|" + new_habits[new_habits.size()-1][1].toStdString() + "|" + new_habits[new_habits.size()-1][2].toStdString();
+        myfile<<new_habits[new_habits.size()-1][0].toStdString() + "|" + new_habits[new_habits.size()-1][1].toStdString() + "|" + new_habits[new_habits.size()-1][2].toStdString() + "|" + new_habits[new_habits.size()-1][3].toStdString();
         myfile.close();
     }
     file.close();
@@ -455,9 +455,9 @@ void resave_habits_in_new_file(std::vector<QStringList> new_habits){
     std::ofstream myfile;
     myfile.open("habits.txt",std::ios::out);
     for (unsigned long i = 0; i < new_habits.size()-1; i++) {
-        myfile<<new_habits[i][0].toStdString() + "|" + new_habits[i][1].toStdString() + "|" + new_habits[i][2].toStdString()<<std::endl;
+        myfile<<new_habits[i][0].toStdString() + "|" + new_habits[i][1].toStdString() + "|" + new_habits[i][2].toStdString() + "|" + new_habits[i][3].toStdString()<<std::endl;
     }
-    myfile<<new_habits[new_habits.size()-1][0].toStdString() + "|" + new_habits[new_habits.size()-1][1].toStdString() + "|" + new_habits[new_habits.size()-1][2].toStdString();
+    myfile<<new_habits[new_habits.size()-1][0].toStdString() + "|" + new_habits[new_habits.size()-1][1].toStdString() + "|" + new_habits[new_habits.size()-1][2].toStdString() + "|" + new_habits[new_habits.size()-1][3].toStdString();
     myfile.close();
 }
 
@@ -468,6 +468,7 @@ void save_incrementation_of_habits(QString to_increment) {
             int j = old_habits[i][2].toInt();
             j += 1;
             old_habits[i][2] = QString::number(j);
+            old_habits[i][3] = QDate::currentDate().toString();
             break;
         }
     }
@@ -479,6 +480,7 @@ void save_reset_of_habits(QString to_reset) {
     for (unsigned long i = 0; i < old_habits.size(); i++) {
         if (old_habits[i][0] == to_reset){
             old_habits[i][2] = "0";
+            old_habits[i][3] = QDate::currentDate().toString();
             break;
         }
     }
