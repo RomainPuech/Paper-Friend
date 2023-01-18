@@ -706,12 +706,6 @@ void MainWindow::on_Test_entries_clicked() {
   update_graphs();
 }
 
-void MainWindow::on_ppl_button_clicked(){
-    all_people *my_people = new all_people(vector_friends);
-    my_people->setModal(true);
-    my_people->exec();
-}
-
 void MainWindow::add_new_activities_to_old_enties(){
     qDebug()<<QString("add_new_activities_to_old_enties called");
 
