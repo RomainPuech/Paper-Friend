@@ -109,7 +109,7 @@ LinearRegressionCoeffs DataAnalysis::general_trend(const std::vector<EntryPerso>
       return empty;
   }
 
-  if (var_index>=6){
+  if (var_index>=6 || stl==false){
       std::vector<double> values = get_vect(entries, var_index);
       std::vector<double> no_of_days;
 
@@ -121,17 +121,19 @@ LinearRegressionCoeffs DataAnalysis::general_trend(const std::vector<EntryPerso>
   else{
       std::vector<double> Yvalues;
       std::vector<double> Xvalues;
-
+      bool haveX = false;
       for (int i=0; i<entries.size(); ++i){     //TODO : Optimize this by considering entries sorted chronologically
-          Xvalues.push_back(entries[i].get_absolute_day());
-          for (int j=0; j<STL_X[var_index].size(); ++i){
+          for (int j=0; j<STL_X[var_index].size(); ++j){
               if (STL_X[var_index][j] == entries[i].get_absolute_day()){
                   Yvalues.push_back(STL_Trends[var_index][j]);
+                  haveX = true;
               }
           }
+          if (haveX==true){
+              Xvalues.push_back(entries[i].get_absolute_day());
+              haveX = false;
+          }
       }
-
-
       return compute_linear_regression_coeffs(Xvalues, Yvalues);
   }
 }
@@ -190,7 +192,7 @@ std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n, int reference) 
   }
   int current; // represents the date from which we count backwards
   if (reference < 0){
-      current = log.back().get_absolute_day();
+      current = log.front().get_absolute_day()-1;
   }
 
   else{
@@ -316,10 +318,9 @@ std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<Entr
    * @return vector of entries at which anomalie in the variable was detected
    * (value is 2 SDs far from its mean).
    */
-
   std::vector<EntryPerso> res;
 
-  if (var_index >= 6){
+  if (var_index >= 6 || stl==false){
       int furthest_day = 0;
       for (int i=0; i<entries.size();++i){
           if (entries[i].get_absolute_day()-QDate::currentDate().toJulianDay() > furthest_day){
@@ -350,6 +351,7 @@ std::vector<EntryPerso> DataAnalysis::anomalies_detection(const std::vector<Entr
               }
           }
       }
+      return res;
   }
 }
 
@@ -374,15 +376,19 @@ std::vector<double> DataAnalysis::cyclic_week(int metric_index){
      * Output is a 7-len vector containing the average seasonality over [mondays, ..., sundays]
      *
      * */
-    std::vector<std::vector<double>> subSeries = {{}, {}, {}, {}, {}, {}, {}};
-    for (int i=0; i<STL_X[metric_index].size(); ++i){
-        subSeries[QDate::fromJulianDay(STL_X[metric_index][i]).dayOfWeek() - 1].push_back(STL_Seasonalities[metric_index][i]);
-    }
     std::vector<double> seasonality;
-    for (int sub=0; sub<7; ++sub){
-        seasonality.push_back(avg(subSeries[sub]));
+    if (stl==true){
+        std::vector<std::vector<double>> subSeries = {{}, {}, {}, {}, {}, {}, {}};
+        for (int i=0; i<STL_X[metric_index].size(); ++i){
+            subSeries[QDate::fromJulianDay(STL_X[metric_index][i]).dayOfWeek() - 1].push_back(STL_Seasonalities[metric_index][i]);
+        }
+        for (int sub=0; sub<7; ++sub){
+            seasonality.push_back(avg(subSeries[sub]));
+        }
     }
-
+    else{
+        seasonality = {0,0,0,0,0,0,0};
+    }
     return seasonality;
 
 }
@@ -906,16 +912,17 @@ std::vector<double> weighted_least_squares(std::vector<double> dataX, std::vecto
     double detA = determinant_m3(std::vector<std::vector<double>> {{sum_x2y, sum_x3, sum_x2}, {sum_xy, sum_x2, sum_x}, {sum_y, sum_x, sum_1}});
     double detB = determinant_m3(std::vector<std::vector<double>> {{sum_x4, sum_x2y, sum_x2}, {sum_x3, sum_xy, sum_x}, {sum_x2, sum_y, sum_1}});
     double detC = determinant_m3(std::vector<std::vector<double>> {{sum_x4, sum_x3, sum_x2y}, {sum_x3, sum_x2, sum_xy}, {sum_x2, sum_x, sum_y}});
+    //qDebug() << detA << " " << detB << " " << detC << " " << detMat;
     std::vector<double> coefficients = {detA/detMat, detB/detMat, detC/detMat};
     return coefficients;
 }
 
-double loess_x (std::vector<double> dataX, std::vector<double> dataY, int q, double x, std::vector<double> robust_w = {-1}){
+double loess_x (std::vector<double> dataX, std::vector<double> dataY, double q, double x, std::vector<double> robust_w = {-1}){
     // Computes g_hat (extrapolation of the trend-cycle ?) assuming dataX is sorted
 
     std::vector<int> closest_xi_index = closest_q_index_in_sorted(x, q, dataX);
 
-    double furthest_distance = std::max(std::abs(x-dataX[closest_xi_index[0]]), std::abs(x-dataX[closest_xi_index[closest_xi_index.size()-1]])) * std::max(1, q/static_cast<int>(dataX.size()));
+    double furthest_distance = std::max(static_cast<double>(std::abs(x-dataX[closest_xi_index[0]])), std::abs(x-dataX[closest_xi_index[closest_xi_index.size()-1]])) * std::max(static_cast<double>(1), q/static_cast<double>(dataX.size()));
 
     std::vector<double> weights, closest_xi, closest_yi;
 
@@ -981,7 +988,6 @@ std::vector<std::vector<double>> DataAnalysis::stl_regression(std::vector<double
     }
     dataX[0] = 0;
 
-
     int N = dataX[dataX.size() - 1]+1; //+1 bc start at 0
 
     int ni = 1;
@@ -989,7 +995,9 @@ std::vector<std::vector<double>> DataAnalysis::stl_regression(std::vector<double
     int np = seasonal_length;
     int ns = 35;                //how much cycle subseries will be smoothed
     int nl = np + (1-(np%2));
-    int nt = 13;                // how much trend is smooth
+    int nt;
+    if (dataX.size() > 200){nt = 13;}
+    else {nt = 17;}// how much trend is smooth
     int nb_seasons = N/np;
     if (np * nb_seasons != N){
         nb_seasons++;
@@ -1020,7 +1028,9 @@ std::vector<std::vector<double>> DataAnalysis::stl_regression(std::vector<double
         qDebug() << "\nrobustness_weight";
         qDebug()<< robustness_weight ;
         qDebug() << "\ndataX";
-        qDebug()<< dataX;*/
+        qDebug()<< dataX;
+        qDebug() << "\ndataY";
+        qDebug()<< dataY;*/
 
         for (int inner_loop = 0; inner_loop<ni; inner_loop++){
 
@@ -1071,13 +1081,16 @@ std::vector<std::vector<double>> DataAnalysis::stl_regression(std::vector<double
             Moving_averages_cycle_subseries = moving_average(Cycle_subseries_smoothed, np);
             Moving_averages_cycle_subseries = moving_average(Moving_averages_cycle_subseries, np);
             Moving_averages_cycle_subseries = moving_average(Moving_averages_cycle_subseries, 3);
-            qDebug() << "\nmoving_average3";
-            qDebug() << Cycle_subseries_smoothed;
+
+            /*qDebug() << "\nmoving_average3";
+            qDebug() << Moving_averages_cycle_subseries;*/
+
             for (int i=0; i<N; i++){
                 Loess_cycle_subseries[i] = loess_x(dataX, Moving_averages_cycle_subseries, nl, i);
             }
-            qDebug()<< "\nloess cycle";
-            qDebug()<< Loess_cycle_subseries;
+
+            /*qDebug()<< "\nloess cycle";
+            qDebug()<< Loess_cycle_subseries;*/
 
             // Step 4 : Detrending of Smoothed Cycle-Subseries
             for (int i=0; i<N; i++){
@@ -1089,7 +1102,8 @@ std::vector<std::vector<double>> DataAnalysis::stl_regression(std::vector<double
                 Deseasonalized[i] = dataY[i] - Seasonality[dataX[i]];
             }
 
-            /*qDebug() << "\nDeseasonalized";
+            /*
+             * qDebug() << "\nDeseasonalized";
             qDebug() <<Deseasonalized;
             qDebug() << "\n\n";
 
@@ -1153,22 +1167,33 @@ DataAnalysis::DataAnalysis(std::vector<EntryPerso*> vector_entries){
         log.push_back(*entry);
     }
 
+    std::vector<EntryPerso> last_3y_temp = get_lastn_days_data(1095);
+    std::vector<EntryPerso> last_3y;
 
-
-    std::vector<EntryPerso> last_3y = get_lastn_days_data(1095);
-    std::vector<std::vector<double>> stl_reg;
-    for (int metric; metric<6; ++metric){
-        std::vector<double> Xdata;
-        std::vector<double> Ydata;
-        for (int i=0; i<last_3y.size(); --i){
-            Xdata.push_back(last_3y[i].get_absolute_day());
-            Ydata.push_back(last_3y[i].get_var_value(metric));
-        }
-        stl_reg = stl_regression(Xdata, Ydata);
-        STL_X.push_back(Xdata);
-        STL_Trends.push_back(stl_reg[0]);
-        STL_Seasonalities.push_back(stl_reg[1]);
-        STL_Remainders.push_back(stl_reg[2]);
+    for (int i=0; i<last_3y_temp.size()-(last_3y_temp.size()%7); ++i){
+        last_3y.push_back(last_3y_temp[i]);
     }
+
+    if (last_3y.size() > 60){
+        stl = true;
+        std::vector<std::vector<double>> stl_reg;
+        for (int metric=0; metric<6; ++metric){
+            std::vector<double> Xdata;
+            std::vector<double> Ydata;
+            for (int i=0; i<last_3y.size(); ++i){
+                Xdata.push_back(last_3y[i].get_absolute_day());
+                Ydata.push_back(last_3y[i].get_var_value(metric));
+            }
+            STL_X.push_back(Xdata);
+            stl_reg = stl_regression(Xdata, Ydata);
+            STL_Trends.push_back(stl_reg[0]);
+            STL_Seasonalities.push_back(stl_reg[1]);
+            STL_Remainders.push_back(stl_reg[2]);
+        }
+        /*qDebug() << STL_Trends;
+        qDebug() << STL_Seasonalities;
+        qDebug() << STL_Remainders;*/
+    }
+    else {stl = false;}
 }
 
