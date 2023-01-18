@@ -272,6 +272,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     text_field->setContentsMargins(10, 0, 0, 5);
 
     // handle layout
+    title->setWordWrap(true);
     text_title_vb->addWidget(title);
     // text_title_vb->addWidget(title_container);
     text_title_vb->addWidget(text_field);

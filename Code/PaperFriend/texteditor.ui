@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1000</width>
-    <height>800</height>
+    <height>1200</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -82,14 +82,14 @@
         <x>0</x>
         <y>0</y>
         <width>974</width>
-        <height>674</height>
+        <height>1074</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QTextEdit" name="textEdit">
          <property name="autoFillBackground">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="styleSheet">
           <string notr="true">rgd(0, 0, 0)</string>
