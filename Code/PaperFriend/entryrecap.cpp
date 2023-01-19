@@ -2,7 +2,7 @@
 #include "entryclasses.h"
 
 
-EntryRecap::EntryRecap() : Entry() {
+EntryRecap::EntryRecap() : Entry() {// Initialize with default values
   this->best_day = EntryPerso();
   this->worst_day = EntryPerso();
   this->type = 0;
@@ -10,7 +10,7 @@ EntryRecap::EntryRecap() : Entry() {
 };
 
 EntryRecap::EntryRecap(EntryPerso best_day, EntryPerso worst_day,
-                       std::string text, double average_mood, int type)
+                       std::string text, double average_mood, int type)// Initialize with given values
     : Entry(text, "") {
   this->best_day = best_day;
   this->worst_day = worst_day;
@@ -27,6 +27,8 @@ int EntryRecap::entry_type() const { return 2; }
 //     ~worst_day();
 // }
 
+
+// Getters and setters:
 EntryPerso EntryRecap::get_best_day() { return this->best_day; }
 EntryPerso EntryRecap::get_worst_day() { return this->worst_day; }
 
