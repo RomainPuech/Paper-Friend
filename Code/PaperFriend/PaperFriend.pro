@@ -18,8 +18,6 @@ SOURCES += \
     all_people.cpp \
     cardclasses.cpp \
     Analysis/DataAnalysis.cpp \
-    cipher/Qt-AES-1.2/qaesencryption.cpp \
-    cipher/cipher.cpp \
     entryclasses.cpp \
     entryfilter.cpp \
     entryrecap.cpp \
@@ -45,11 +43,6 @@ HEADERS += \
     all_people.h \
     cardclasses.h \
     Analysis/DataAnalysis.h \
-    cipher/Qt-AES-1.2/aesni/aesni-enc-cbc.h \
-    cipher/Qt-AES-1.2/aesni/aesni-enc-ecb.h \
-    cipher/Qt-AES-1.2/aesni/aesni-key-exp.h \
-    cipher/Qt-AES-1.2/qaesencryption.h \
-    cipher/cipher.h \
     entryclasses.h \
     entryfilter.h \
     entryrecap.h \
