@@ -26,5 +26,8 @@
         <file>rsc/playful-resized.png</file>
         <file>rsc/pleading-resized.png</file>
         <file>rsc/welldone-resized.png</file>
+        <file>rsc/form.png</file>
+        <file>rsc/line.png</file>
+        <file>rsc/list.png</file>
     </qresource>
 </RCC>
