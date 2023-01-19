@@ -1,5 +1,4 @@
 #include "file_save_and_load.h"
-#include "cipher/cipher.h"
 #include "qdir.h"
 #include <QFile>
 #include <QDebug>
@@ -33,33 +32,6 @@ bool save_entry(Entry entry){ //  create and save the entry file, title format M
     return true;
 };
 
-bool save_entry_encrypt(Entry entry, std::string path, std::string key){ 
-    nlohmann::json  j = {
-        {"text", encode_string(entry.get_text(), key)},
-        {"title", encode_string(entry.get_title(), key)},
-        {"date", encode_string(entry.get_date(), key)}};
-
-    std::string filename = "Entries/" + entry.get_qdate().toString("MM.dd.yyyy").toStdString()+".json";
-    if (path.back() != '/'){
-        path += "/";
-    }// add a slash if there is none
-
-    QDir dir(QString::fromStdString(path));
-    if (!dir.exists()){
-        dir.mkpath(".");
-    } // create the directory if it does not exist
-
-    QFile file(QString::fromStdString(path + filename));
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)){
-        QTextStream out(&file);
-        file.write(j.dump().c_str());
-        file.close();
-        return true;
-    }
-    return false;
-};
-
-
 
 
 
@@ -70,19 +42,6 @@ Entry load_entry(std::string filename){//retrieve the data of a Json file and re
     i >> j;
     Entry res = Entry(j["text"], j["title"]);
     res.set_date(j["date"]);
-    return res;
-}
-
-Entry load_entry_decrypt(std::string filename, std::string key){
-    if(!QFile::exists(QString::fromStdString(filename))){
-        std::cout << "File does not exist" << std::endl;
-        return Entry();
-    }
-    std::ifstream i(filename);
-    nlohmann::json j;
-    i >> j;
-    Entry res = Entry(decode_string(j["text"], key), decode_string(j["title"], key));
-    res.set_date(decode_string(j["date"], key));
     return res;
 }
 
@@ -418,9 +377,9 @@ std::vector<QString> load_last_recaps_dates() {
 
 void save_last_recaps_dates(std::vector<QString> last_recaps_dates){
     std::ofstream myfile("last_recaps_dates.txt");
-    myfile << last_recaps_dates[0].toStdString()<<endl;
-    myfile << last_recaps_dates[1].toStdString()<<endl;
-    myfile << last_recaps_dates[2].toStdString()<<endl;
+    myfile << last_recaps_dates[0].toStdString()<<std::endl;
+    myfile << last_recaps_dates[1].toStdString()<<std::endl;
+    myfile << last_recaps_dates[2].toStdString()<<std::endl;
     myfile.close();
 }
 
