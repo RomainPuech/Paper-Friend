@@ -21,6 +21,8 @@ public:
     QString getCellName();
     QString get_activity_name();
     int get_activity_type();
+    int number_clicked();
+    int nb_clicked;
 
     void setTextData(QString cellText);
     void set_activity_cell_name(QString CellName);

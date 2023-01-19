@@ -6,6 +6,10 @@ activity_cell::activity_cell(QWidget *parent) :
     ui(new Ui::activity_cell)
 {
     ui->setupUi(this);
+    int nb_clicked = 0;
+    QRegularExpression regular_expression("[A-Za-z ]{0,30}");
+    QRegularExpressionValidator *validator = new QRegularExpressionValidator(regular_expression, this);
+    ui->activity_name->setValidator(validator);
     ui->activity_type->addItem("Enter type");
     ui->activity_type->addItem("Friend");
     ui->activity_type->addItem("Sport");
@@ -46,6 +50,7 @@ void activity_cell::on_delete_activity_button_clicked()
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Delete Confirmation", "Delete this activity ?",QMessageBox::Yes|QMessageBox::No);
     if (reply == QMessageBox::Yes){
+        nb_clicked += 1;
         emit closeThisCell(ActivitiesCellNumber);
         this->close();
     }
@@ -59,6 +64,10 @@ QString activity_cell::get_activity_name()
 int activity_cell::get_activity_type()
 {
     return ui->activity_type->currentIndex();
+}
+
+int activity_cell::number_clicked(){
+    return nb_clicked;
 }
 
 
