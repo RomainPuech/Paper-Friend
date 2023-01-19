@@ -37,6 +37,8 @@ public:
     void set_height(int height);
     void set_background_color(QString color);
 
+    bool eventFilter(QObject* target, QEvent *e); // to prevent mouse scrolling
+
     virtual void display(QLayout *layout)
     /*
     * A funtion for displaying the Card object on the screen

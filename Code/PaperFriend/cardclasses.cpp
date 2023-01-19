@@ -5,6 +5,7 @@
 #include <QCalendar>
 #include <QDate>
 #include <QMessageBox>
+#include <QWheelEvent>
 
 Card::Card(int border_radius, int width, int height, QString color)
     : border_radius(border_radius), background_color(color) {
@@ -1421,4 +1422,11 @@ void EntryCard::update_settings(){
 }
 
 
+bool Card::eventFilter(QObject* target, QEvent *e)
+{
+    if (qobject_cast<QComboBox*>(target)!=NULL && e->type() == QEvent::Wheel){
+        return true;
+    }
+    return false;
+}
 
