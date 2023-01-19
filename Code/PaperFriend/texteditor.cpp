@@ -287,3 +287,94 @@ void TextEditor::on_action_Cut_triggered()
 {
     textCut();
 }
+
+// Set form for the text editor
+void TextEditor::on_action_Form_triggered()
+{
+    // Ask the user for number of rows and columns
+    bool ok;
+    int rows = QInputDialog::getInt(this, tr("Number of rows"), tr("Enter the number of rows:"), 1, 1, 100, 1, &ok);
+    if (!ok)
+        return;
+    int columns = QInputDialog::getInt(this, tr("Number of columns"), tr("Enter the number of columns:"), 1, 1, 100, 1, &ok);
+    if (!ok)
+        return;
+
+    // Create the table
+    QTextTableFormat tableFormat;
+    tableFormat.setBorder(1);
+    tableFormat.setCellPadding(5);
+    tableFormat.setCellSpacing(5);
+    tableFormat.setAlignment(Qt::AlignCenter);
+    QTextCursor cursor = ui->textEdit->textCursor();
+    cursor.insertTable(rows, columns, tableFormat);
+
+    QTextCharFormat fmt;
+}
+
+// Add list
+void TextEditor::on_action_List_triggered()
+{
+    // Create a list of list types
+    QStringList listTypes;
+    listTypes << "ListDisc"
+              << "ListCircle"
+              << "ListSquare"
+              << "ListDecimal"
+              << "ListUpperRoman"
+              << "ListLowerRoman"
+              << "ListUpperAlpha"
+              << "ListLowerAlpha";
+
+    // Ask the user to select a list type
+    bool ok;
+    QString selectedType = QInputDialog::getItem(this, tr("Select List Type"),
+                                                 tr("List type:"), listTypes, 0, false, &ok);
+    // set some CSS for the list
+    QString css = "QListWidget {"
+                  "border: 1px solid gray;"
+                  "border-radius: 3px;"
+                  "padding: 1px 0px 1px 0px;"
+                  "}"
+                  "QListWidget::item {"
+                  "padding: 1px 0px 1px 0px;"
+                  "}";
+
+    if (!ok || selectedType.isEmpty())
+        return;
+
+    // Convert the selected list type to a QTextListFormat::Style
+    QTextListFormat::Style style;
+    if (selectedType == "ListDisc")
+        style = QTextListFormat::ListDisc;
+    else if (selectedType == "ListCircle")
+        style = QTextListFormat::ListCircle;
+    else if (selectedType == "ListSquare")
+        style = QTextListFormat::ListSquare;
+    else if (selectedType == "ListDecimal")
+        style = QTextListFormat::ListDecimal;
+    else if (selectedType == "ListUpperRoman")
+        style = QTextListFormat::ListUpperRoman;
+    else if (selectedType == "ListLowerRoman")
+        style = QTextListFormat::ListLowerRoman;
+    else if (selectedType == "ListUpperAlpha")
+        style = QTextListFormat::ListUpperAlpha;
+    else if (selectedType == "ListLowerAlpha")
+        style = QTextListFormat::ListLowerAlpha;
+
+    // Create the new list
+    QTextCursor cursor = ui->textEdit->textCursor();
+    cursor.beginEditBlock();
+
+    QTextList *list = cursor.createList(style);
+
+    cursor.endEditBlock();
+}
+
+// Add Horizontal line
+void TextEditor::on_action_Line_triggered()
+{
+    QTextCursor cursor = ui->textEdit->textCursor();
+    cursor.insertHtml("<hr>");
+}
+
