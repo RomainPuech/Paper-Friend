@@ -254,9 +254,8 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
 
     text_field->setMinimumWidth(this->get_width());
     text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    text_field->setAlignment(Qt::AlignCenter);
+    text_field->setAlignment(Qt::AlignLeft);
     text_field->setReadOnly(true);
-    text_field->setContentsMargins(0, 0, 0, 0);
 
     // handle layout
     title->setWordWrap(true);
@@ -271,7 +270,6 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     edit_text_w->setMinimumHeight(this->get_height());
     edit_text_w->setMaximumWidth((this->get_width()) + 530);
     edit_text_w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    edit_text_w->setContentsMargins(0, 0, 0, 0);
     edit_text->setMinimumWidth(this->get_width());
     edit_text->set_max_width((this->get_width()) + 510);
     edit_text->set_max_height((this->get_height()) - 50);

@@ -137,6 +137,7 @@ void TextEditor::on_action_Left_triggered()
         ui->action_Left->setChecked(true);
         ui->action_Right->setChecked(false);
         ui->action_Center->setChecked(false);
+        ui->action_Just->setChecked(false);
     }
 }
 
@@ -148,6 +149,7 @@ void TextEditor::on_action_Right_triggered()
         ui->action_Left->setChecked(false);
         ui->action_Right->setChecked(true);
         ui->action_Center->setChecked(false);
+        ui->action_Just->setChecked(false);
     }
 }
 
@@ -159,16 +161,20 @@ void TextEditor::on_action_Center_triggered()
         ui->action_Left->setChecked(false);
         ui->action_Right->setChecked(false);
         ui->action_Center->setChecked(true);
+        ui->action_Just->setChecked(false);
     }
 }
 
-void TextEditor::on_action_Justify_triggered()
+void TextEditor::on_action_Just_triggered()
 {
-    QTextCursor cursor = ui->textEdit->textCursor();
-    QTextBlockFormat format = cursor.blockFormat();
-    format.setAlignment(Qt::AlignJustify);
-    cursor.mergeBlockFormat(format);
-    ui->textEdit->setTextCursor(cursor);
+    ui->textEdit->setAlignment(Qt::AlignJustify);
+    if (ui->textEdit->alignment() == Qt::AlignJustify)
+    {
+        ui->action_Left->setChecked(false);
+        ui->action_Right->setChecked(false);
+        ui->action_Center->setChecked(false);
+        ui->action_Just->setChecked(true);
+    }
 }
 
 void TextEditor::textColor()
