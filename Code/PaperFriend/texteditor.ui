@@ -45,6 +45,7 @@
      <addaction name="action_Italic"/>
      <addaction name="action_Underline"/>
      <addaction name="action_Font"/>
+     <addaction name="action_Color"/>
      <addaction name="separator"/>
      <addaction name="action_Left"/>
      <addaction name="action_Right"/>
@@ -103,7 +104,7 @@
   </layout>
   <action name="action_New">
    <property name="icon">
-    <iconset resource="myresources.qrc">
+    <iconset>
      <normaloff>:/pictures/rsc/new.png</normaloff>:/pictures/rsc/new.png</iconset>
    </property>
    <property name="text">
@@ -115,7 +116,7 @@
   </action>
   <action name="action_Open">
    <property name="icon">
-    <iconset resource="myresources.qrc">
+    <iconset>
      <normaloff>:/pictures/rsc/open.png</normaloff>:/pictures/rsc/open.png</iconset>
    </property>
    <property name="text">

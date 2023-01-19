@@ -173,7 +173,8 @@ void TextEditor::on_action_Justify_triggered()
 
 void TextEditor::textColor()
 {
-    QColor c = QColorDialog::getColor(Qt::red, this); // get the color tool box from out side API
+    // get the color tool box from out side API
+    QColor c = QColorDialog::getColor(Qt::red, this);
     if (c.isValid())
     {
         QTextCharFormat fmt;
@@ -246,7 +247,7 @@ void TextEditor::on_textEdit_textChanged()
     }
 }
 
-// 以后的有关斜体，加粗，下标的代码 - Declearation Part
+// Text editor blod italic underline
 void TextEditor::on_action_Bold_triggered()
 {
     textBold();
