@@ -1,21 +1,26 @@
 #ifndef TEXTANALYSIS_H
 #define TEXTANALYSIS_H
 
+
 #include "DataAnalysis.h"
 
-class TextAnalysis : public DataAnalysis {
+
+class TextAnalysis{
 
 public:
-  TextAnalysis() : DataAnalysis() { text_mood = 0; };
 
-  void analyze_text();
+    TextAnalysis(EntryPerso* entry): entry(entry){text_mood=0;};
 
-  double str_to_double(std::string text);
+    void analyze_text();
 
-  double get_text_mood();
+    double str_to_double(std::string text);
+
+    double get_text_mood();
 
 private:
-  double text_mood; // mood predicted from the text from 0 to 1
+
+    double text_mood;  // mood predicted from the text from 0 to 1
+    EntryPerso * entry;
 };
 
 #endif // TEXTANALYSIS_H
