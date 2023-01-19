@@ -15,7 +15,6 @@ SOURCES += \
     activityclasses.cpp \
     all_activities.cpp \
     all_habits.cpp \
-    all_people.cpp \
     cardclasses.cpp \
     Analysis/DataAnalysis.cpp \
     entryclasses.cpp \
@@ -28,7 +27,6 @@ SOURCES += \
     dynamicgraph.cpp \
     mascot.cpp \
     mascotchat.cpp \
-    people_cell.cpp \
     settings.cpp \
     texteditor.cpp \
     edit.cpp \
@@ -40,7 +38,6 @@ HEADERS += \
     activityclasses.h \
     all_activities.h \
     all_habits.h \
-    all_people.h \
     cardclasses.h \
     Analysis/DataAnalysis.h \
     entryclasses.h \
@@ -53,7 +50,6 @@ HEADERS += \
     mascot.h \
     mascotchat.h \
     mascotchat.h \
-    people_cell.h \
     settings.h \
     texteditor.h \
     edit.h \
@@ -64,9 +60,7 @@ FORMS += \
     add_habit_cell.ui \
     all_activities.ui \
     all_habits.ui \
-    all_people.ui \
     mainwindow.ui \
-    people_cell.ui \
     texteditor.ui \
 
 TRANSLATIONS += \

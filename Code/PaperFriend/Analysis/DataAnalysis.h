@@ -37,7 +37,7 @@ protected:
 
    std::vector<EntryPerso> log; // Data to be analysed
 
-
+    bool stl = false; // If there is enough entries for us to use STL
     std::vector<std::vector<double>> STL_X;
     std::vector<std::vector<double>> STL_Trends;
     std::vector<std::vector<double>> STL_Seasonalities;

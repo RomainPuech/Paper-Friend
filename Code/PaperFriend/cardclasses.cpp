@@ -139,8 +139,6 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
   date_display = new QLabel();
   text_title_w = new QWidget();
   edit_and_return = new QGroupBox();
-  title_container = new QWidget();
-  title_layout = new QHBoxLayout();
   title = new QLabel(QString::fromStdString(entry->get_title()), text_title_w);
   text_field =
       new QTextEdit(QString::fromStdString(entry->get_text()), text_title_w);
@@ -249,29 +247,19 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     // Set the title on the top of the window
     // set get_title() as the title of the window, but only the text
     
-
+    // Set the background color of the title, and the font
     title->setMinimumHeight(40);
     title->setStyleSheet("background-color: rgb(205, 0, 0); border-radius: 5px;");
     title->setAlignment(Qt::AlignCenter);
-    
-    // title_layout->addWidget(title, 0, Qt::AlignCenter);
-    // title_layout->setAlignment(Qt::AlignCenter);
-    // title_layout->setContentsMargins(0, 0, 0, 0);
-    // title_container->setLayout(title_layout);
-    // display title in title_container
-    
-    // title_container->setContentsMargins(0, 0, 0, 0);
-    // title_container->setMaximumHeight(40);
-    // title_container->setGeometry(0, 0, this->get_width(), 40);
-    // title_container->setStyleSheet("background-color: rgb(220, 220, 220); border-radius: 5px;");
 
     text_field->setMinimumWidth(this->get_width());
     text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    text_field->setAlignment(Qt::AlignLeft);
+    text_field->setAlignment(Qt::AlignCenter);
     text_field->setReadOnly(true);
-    text_field->setContentsMargins(10, 0, 0, 5);
+    text_field->setContentsMargins(0, 0, 0, 0);
 
     // handle layout
+    title->setWordWrap(true);
     text_title_vb->addWidget(title);
     // text_title_vb->addWidget(title_container);
     text_title_vb->addWidget(text_field);
@@ -283,7 +271,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     edit_text_w->setMinimumHeight(this->get_height());
     edit_text_w->setMaximumWidth((this->get_width()) + 530);
     edit_text_w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    edit_text_w->setContentsMargins(0, 0, 0, 5);
+    edit_text_w->setContentsMargins(0, 0, 0, 0);
     edit_text->setMinimumWidth(this->get_width());
     edit_text->set_max_width((this->get_width()) + 510);
     edit_text->set_max_height((this->get_height()) - 50);

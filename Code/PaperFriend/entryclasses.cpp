@@ -62,12 +62,12 @@ EntryPerso::EntryPerso(std::string title, std::string text,
       productivity(productivity), socializing(socializing),
       physical_activity(physical_activity) {
 
-  all_activities.push_back(Activity("mood", mood));
-  all_activities.push_back(Activity("sleep", sleep));
-  all_activities.push_back(Activity("eating_healthy", eating_healthy));
-  all_activities.push_back(Activity("productivity", productivity));
-  all_activities.push_back(Activity("socializing", socializing));
-  all_activities.push_back(Activity("physical_activity", physical_activity));
+  all_activities.push_back(Activity("mood", mood, mood));
+  all_activities.push_back(Activity("sleep", sleep, sleep));
+  all_activities.push_back(Activity("eating_healthy", eating_healthy, eating_healthy));
+  all_activities.push_back(Activity("productivity", productivity, productivity));
+  all_activities.push_back(Activity("socializing", socializing, socializing));
+  all_activities.push_back(Activity("physical_activity", physical_activity, physical_activity));
 
   for (auto &ptr : activities)
     all_activities.push_back(*ptr);
@@ -142,8 +142,7 @@ void EntryPerso::set_physical_activity(double physical_activity) {
 
 int EntryPerso::entry_type() const { return 1; }
 
-std::vector<EntryPerso *>
-sample_entries(int n) {
+std::vector<EntryPerso *> sample_entries(int n) {
   std::default_random_engine generator;
   std::normal_distribution<double> distribution(65, 25);
   std::vector<EntryPerso *> res = std::vector<EntryPerso *>();
