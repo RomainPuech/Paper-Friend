@@ -1,10 +1,13 @@
 #include "cardclasses.h"
 #include "mainwindow.h"
+#include "Analysis/textanalysis.h"
+#include "text_analysis_window.h""
 
 #include <QCalendar>
 #include <QDate>
 #include <QMessageBox>
 #include <QWheelEvent>
+#include <QDialog>
 
 Card::Card(int border_radius, int width, int height, QString color)
     : border_radius(border_radius), background_color(color) {
@@ -156,6 +159,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
   edit_text_w = new QStackedWidget();
   edit_text = new TextEditor();
   modify = new QPushButton("Modify this entry", text_title_w);
+  analize = new QPushButton("Analize text", text_title_w);
   back_to_display = new QPushButton("Exit editing mode", edit_and_return);
 
   sleep_slider_w = new QWidget();
@@ -237,6 +241,10 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     modify->setMinimumWidth(40);
     connect(modify, &QPushButton::released, this, &EntryCard::handleModify);
 
+    // analize
+    analize->setMinimumWidth(40);
+    connect(analize, &QPushButton::released, this, &EntryCard::handleAnalize);
+
     // back_to_display
     back_to_display->setMinimumWidth(40);
     connect(back_to_display, &QPushButton::released, this,
@@ -262,6 +270,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     // text_title_vb->addWidget(title_container);
     text_title_vb->addWidget(text_field);
     text_title_vb->addWidget(modify);
+    text_title_vb->addWidget(analize);
     text_title_w->setLayout(text_title_vb);
 
     // Here we embed the text editor
@@ -678,6 +687,7 @@ EntryCard::~EntryCard() {
   delete edit_vb;
   delete edit_and_return;
   delete modify;
+  delete analize;
   delete back_to_display;
   //delete display_layout;
   delete mood_slider_w;
@@ -695,6 +705,14 @@ EntryCard::~EntryCard() {
 }
 
 void EntryCard::handleModify() { this->change(); }
+
+void EntryCard::handleAnalize(){
+    TextAnalysis analize_text = TextAnalysis();
+    text_analysis_window popup = text_analysis_window(this);
+    analize_text.analyze_text();
+    popup.set_message("The analysis of this entry suggests that your mood is " + QString::number(analize_text.get_text_mood()));
+    popup.exec();
+}
 
 void EntryCard::handleBack() {
   QMessageBox alert;
@@ -939,6 +957,10 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
   edit_text_w->setStyleSheet("border-style: none;");
   edit_and_return->setStyleSheet("border-style: none;");
   modify->setStyleSheet(
+      "QPushButton{color: white; background-color: black; font-weight: bold; "
+      "font: 15px; border: 2px solid black; border-radius: 5px;} "
+      "QPushButton:hover{background-color:white; color:black;}");
+  analize->setStyleSheet(
       "QPushButton{color: white; background-color: black; font-weight: bold; "
       "font: 15px; border: 2px solid black; border-radius: 5px;} "
       "QPushButton:hover{background-color:white; color:black;}");
