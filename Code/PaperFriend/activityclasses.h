@@ -1,9 +1,9 @@
 #ifndef ACTIVITYCLASSES_H
 #define ACTIVITYCLASSES_H
 
+#include <QString>
 #include <iostream>
 #include <string>
-#include <QString>
 
 /*
 class Activity {
@@ -30,31 +30,29 @@ protected:
 
 struct Activity {
 
-    Activity(std::string name = "", int type = 0, double value = 0);
-    ~Activity();
+  Activity(std::string name = "", int type = 0, double value = 0);
+  // ~Activity();
 
-    std::string get_name() const;
-    void set_name(std::string name);
+  std::string get_name() const;
+  void set_name(std::string name);
 
-    double get_value() const;
-    void set_value(double value);
+  double get_value() const;
+  void set_value(double value);
 
-    int get_type() const;
-    void set_type(int type);
+  int get_type() const;
+  void set_type(int type);
 
-    bool equal(Activity other);
+  bool equal(Activity other);
 
-    bool operator==(Activity other)const;//used when trying to find an activity in a vector
+  bool operator==(
+      Activity other) const; // used when trying to find an activity in a vector
 
 protected:
-    std::string name;
-    int type;
-    double value;
+  std::string name;
+  int type;
+  double value;
 };
 
-
-bool operator==(Activity& a, Activity& b);
-
-
+bool operator==(Activity &a, Activity &b);
 
 #endif // ACTIVITYCLASSES_H

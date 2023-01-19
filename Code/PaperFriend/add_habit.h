@@ -7,17 +7,16 @@ namespace Ui {
 class add_habit;
 }
 
-class add_habit : public QDialog
-{
+class add_habit : public QDialog {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit add_habit(QWidget *parent = nullptr);
-    ~add_habit();
+  explicit add_habit(QWidget *parent = nullptr);
+  ~add_habit();
 
 private:
-    Ui::add_habit *ui;
+  Ui::add_habit *ui;
 };
 
 #endif // ADD_HABIT_H

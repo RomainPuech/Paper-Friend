@@ -2,7 +2,6 @@
 #define WELCOME_MSG_H
 #include "file_processing/file_processing/file_save_and_load.h"
 
-
 std::string get_welcome_msg();
 
 #endif // WELCOME_MSG_H
