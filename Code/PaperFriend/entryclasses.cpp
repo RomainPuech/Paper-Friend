@@ -64,16 +64,20 @@ EntryPerso::EntryPerso(std::string title, std::string text,
 
   all_activities.push_back(Activity("mood", mood, mood));
   all_activities.push_back(Activity("sleep", sleep, sleep));
-  all_activities.push_back(Activity("eating_healthy", eating_healthy, eating_healthy));
-  all_activities.push_back(Activity("productivity", productivity, productivity));
+  all_activities.push_back(
+      Activity("eating_healthy", eating_healthy, eating_healthy));
+  all_activities.push_back(
+      Activity("productivity", productivity, productivity));
   all_activities.push_back(Activity("socializing", socializing, socializing));
-  all_activities.push_back(Activity("physical_activity", physical_activity, physical_activity));
+  all_activities.push_back(
+      Activity("physical_activity", physical_activity, physical_activity));
 
   for (auto &ptr : activities)
     all_activities.push_back(*ptr);
 
-  for (auto &ptr : friends){
-      all_activities.push_back(Activity("Seeing " + ptr->get_name(), ptr->get_duration()));
+  for (auto &ptr : friends) {
+    all_activities.push_back(
+        Activity("Seeing " + ptr->get_name(), ptr->get_duration()));
   }
 }
 EntryPerso::~EntryPerso() {
@@ -148,16 +152,16 @@ std::vector<EntryPerso *> sample_entries(int n) {
   std::vector<EntryPerso *> res = std::vector<EntryPerso *>();
   std::vector<Activity> activities_main = MainWindow::get_activities();
   std::vector<Activity *> activities;
-  std::vector<Friend*> friends;
+  std::vector<Friend *> friends;
   for (int i = n; i > 5; --i) {
-      activities.clear();
-      for(Activity activity: activities_main){
-          Activity *to_add = new Activity();
-          to_add->set_name(activity.get_name());
-          to_add->set_type(activity.get_type());
-          to_add->set_value(rand() % 2);
-          activities.push_back(to_add);
-      }
+    activities.clear();
+    for (Activity activity : activities_main) {
+      Activity *to_add = new Activity();
+      to_add->set_name(activity.get_name());
+      to_add->set_type(activity.get_type());
+      to_add->set_value(rand() % 2);
+      activities.push_back(to_add);
+    }
     double mood = distribution(generator);
     mood = std::llround(mood * 2) / 2.0;
     if (mood > 100) {
@@ -171,9 +175,10 @@ std::vector<EntryPerso *> sample_entries(int n) {
     double productivity = rand() % 101;
     double socializing = rand() % 101;
     double physical_activity = rand() % 101;
-    EntryPerso *entry = new EntryPerso(
-        "sample entry text", "The title of the entry", activities, friends,
-        mood, sleep, eating_healthy, productivity, socializing, physical_activity);
+    EntryPerso *entry =
+        new EntryPerso("sample entry text", "The title of the entry",
+                       activities, friends, mood, sleep, eating_healthy,
+                       productivity, socializing, physical_activity);
     entry->set_qdate((QDate::currentDate()).addDays(-i));
     res.push_back(entry);
   }

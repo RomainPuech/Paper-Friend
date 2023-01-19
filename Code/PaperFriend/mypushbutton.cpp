@@ -1,6 +1,3 @@
 #include "mypushbutton.h"
 
-MyPushButton::MyPushButton()
-{
-
-}
+MyPushButton::MyPushButton() {}
