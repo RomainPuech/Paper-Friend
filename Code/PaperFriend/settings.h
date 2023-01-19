@@ -14,9 +14,9 @@ bool saved_eating_healthy();
 
 bool saved_productivity();
 
-bool saved_communications();
+bool saved_socializing();
 
-bool saved_screen_time();
+bool saved_physical_activity();
 
 const int NUMBER_OF_SETTINGS = 6;
 

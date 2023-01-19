@@ -14,27 +14,32 @@
 #include "ui_all_habits.h"
 #include "ui_mainwindow.h"
 #include "ui_texteditor.h"
-#include "add_habit.h"
+#include <QDate>
 #include <QDebug>
 #include <QString>
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <unordered_map>
 
 //// Declarations
 std::vector<Filter_param> filter_params;
-std::vector<EntryPerso *> MainWindow::vector_entries;//All the entries
-std::vector<Activity> MainWindow::vector_activities;//All the possible activities to choose from
-std::vector<Friend> MainWindow::vector_friends;//All the friends we can choose from
+std::vector<EntryPerso *> MainWindow::vector_entries; // All the personal
+                                                      // entries
+std::vector<EntryRecap *> MainWindow::vector_recaps; // All the recap entries
+std::vector<Activity>
+    MainWindow::vector_activities; // All the possible activities to choose from
+std::vector<Friend>
+    MainWindow::vector_friends; // All the friends we can choose from
+std::vector<EntryCard *> MainWindow::displayed_cards;
 
 //// Helper functions
-bool sort_by_date(const EntryPerso *e1, const EntryPerso *e2){
-    return e1->get_qdate().daysTo(e2->get_qdate()) > 0;
+bool sort_by_date(const EntryPerso *e1, const EntryPerso *e2) {
+  return e1->get_qdate().daysTo(e2->get_qdate()) > 0;
 }
 
-
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow),reacted_to_entry(false) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), reacted_to_entry(false) {
 
   //////// Layout
   ui->setupUi(this); // display canvas created in drag-and-drop
@@ -58,84 +63,166 @@ MainWindow::MainWindow(QWidget *parent)
     QDir().mkdir("Entries");
   }
 
-  //load previously entered activities
+  // load previously entered activities
   if (!std::filesystem::exists("activities.json")) {
     save_activities(vector_activities);
   }
   vector_activities = load_activities();
-  qDebug()<<vector_activities.size();
+  qDebug() << vector_activities.size();
 
   // load previous entries
   QDir dir(QDir::currentPath() + "/Entries");
   for (const QString &filename : dir.entryList(QDir::Files)) {
     vector_entries.push_back(
-        load_entryperso(filename.toStdString(),vector_activities));
+        load_entryperso(filename.toStdString(), vector_activities));
   }
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
-  //qDebug()<<QString::fromStdString((vector_entries[0]->get_activities())[0]->get_name());
+  // qDebug()<<QString::fromStdString((vector_entries[0]->get_activities())[0]->get_name());
 
-  //Load habits
+  // Load habits
+
+  // std::vector<QStringList> habits_of_the_day = get_habits_of_the_day();
+
+  QDate date = date.currentDate();
+  int tmp = date.dayOfWeek();
+  std::string day_of_week;
+  switch (tmp) {
+  case 1:
+    day_of_week = "Every Monday";
+    break;
+  case 2:
+    day_of_week = "Every Tuesday";
+    break;
+  case 3:
+    day_of_week = "Every Wednesday";
+    break;
+  case 4:
+    day_of_week = "Every Thursday";
+    break;
+  case 5:
+    day_of_week = "Every Friday";
+    break;
+  case 6:
+    day_of_week = "Every Saturday";
+    break;
+  case 7:
+    day_of_week = "Every Sunday";
+    break;
+  }
   std::vector<QStringList> current_habits = load_habits();
-  if (current_habits.size() == 1){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-  }
-  if (current_habits.size() == 2){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-  }
-  if (current_habits.size() == 3){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
-  }
-  if (current_habits.size() == 4){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
-      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
-  }
-  if (current_habits.size() == 5){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
-      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
-      ui->habits_label_5->setText(current_habits[4][0] + ", " + current_habits[4][1]);
-  }
-  if (current_habits.size() >= 6){
-      ui->habits_label_1->setText(current_habits[0][0] + ", " + current_habits[0][1]);
-      ui->habits_label_2->setText(current_habits[1][0] + ", " + current_habits[1][1]);
-      ui->habits_label_3->setText(current_habits[2][0] + ", " + current_habits[2][1]);
-      ui->habits_label_4->setText(current_habits[3][0] + ", " + current_habits[3][1]);
-      ui->habits_label_5->setText(current_habits[4][0] + ", " + current_habits[4][1]);
-      ui->habits_label_6->setText(current_habits[5][0] + ", " + current_habits[5][1]);
-  }
-
-  displayed_entries = vector_entries;
-
-  // save the card corresponding to the current day in case it has to be modified
-  if (!vector_entries.empty()) {
-    EntryPerso *newest_entry = vector_entries.back();
-    if (newest_entry->get_qdate() == QDate::currentDate()) {
-      today_card = new EntryCard(20, 300, 300, "white", newest_entry, true, this);
+  std::vector<QStringList> habits_of_the_day;
+  for (unsigned long i = 0; i < current_habits.size(); i++) {
+    if (QDate::currentDate().toString() != current_habits[i][3]) {
+      QStringList tmp;
+      if (current_habits[i][1].toStdString() == "Every Day") {
+        tmp.push_back(current_habits[i][0]);
+        tmp.push_back(current_habits[i][1]);
+        tmp.push_back(current_habits[i][2]);
+      }
+      if ((current_habits[i][1].toStdString() == "Every Weekday" &&
+           day_of_week == "Every Monday") ||
+          (current_habits[i][1].toStdString() == "Every Weekday" &&
+           day_of_week == "Every Tuesday") ||
+          (current_habits[i][1].toStdString() == "Every Weekday" &&
+           day_of_week == "Every Wednesday") ||
+          (current_habits[i][1].toStdString() == "Every Weekday" &&
+           day_of_week == "Every Thursday") ||
+          (current_habits[i][1].toStdString() == "Every Weekday" &&
+           day_of_week == "Every Friday")) {
+        tmp.push_back(current_habits[i][0]);
+        tmp.push_back(current_habits[i][1]);
+        tmp.push_back(current_habits[i][2]);
+      }
+      if ((current_habits[i][1].toStdString() == "Every Weekend" &&
+           day_of_week == "Every Saturday") ||
+          (current_habits[i][1].toStdString() == "Every Weekend" &&
+           day_of_week == "Every Sunday")) {
+        tmp.push_back(current_habits[i][0]);
+        tmp.push_back(current_habits[i][1]);
+        tmp.push_back(current_habits[i][2]);
+      }
+      if (current_habits[i][1].toStdString() == day_of_week) {
+        tmp.push_back(current_habits[i][0]);
+        tmp.push_back(current_habits[i][1]);
+        tmp.push_back(current_habits[i][2]);
+      }
+      if (tmp.size() > 0) {
+        habits_of_the_day.push_back(tmp);
+      }
     }
   }
 
-  //Load previous recaps dates
+  if (habits_of_the_day.size() > 0) {
+    ui->generic_habit_label->setVisible(false);
+    QVBoxLayout *layout = new QVBoxLayout();
+    for (unsigned long i = 0; i < habits_of_the_day.size(); i++) {
+      QWidget *widget = new QWidget();
+      QLabel *label = new QLabel();
+      label->setObjectName("habit_label");
+      label->setText(habits_of_the_day[i][0] + ".\n You did it " +
+                     habits_of_the_day[i][2] + " time! Did you do it today?");
+      QPushButton *yes_button = new QPushButton("Yes");
+      yes_button->setObjectName("yes_button");
+      yes_button->setMaximumWidth(50);
+      connect(yes_button, SIGNAL(clicked()), this,
+              SLOT(on_yes_button_clicked()));
+      QPushButton *no_button = new QPushButton("No");
+      no_button->setObjectName("no_button");
+      no_button->setMaximumWidth(50);
+      connect(no_button, SIGNAL(clicked()), this, SLOT(on_no_button_clicked()));
+      QPushButton *delete_button = new QPushButton("Delete");
+      delete_button->setObjectName("delete_button");
+      delete_button->setMaximumWidth(50);
+      connect(delete_button, SIGNAL(clicked()), this,
+              SLOT(on_delete_button_clicked()));
+      QHBoxLayout *hlayout = new QHBoxLayout();
+      hlayout->addWidget(label);
+      hlayout->addWidget(yes_button);
+      hlayout->addWidget(no_button);
+      hlayout->addWidget(delete_button);
+      widget->setLayout(hlayout);
+      layout->addWidget(widget);
+    }
+
+    QWidget *widget = new QWidget;
+    widget->setLayout(layout);
+
+    ui->habits_scrollArea->setWidget(widget);
+    ui->habits_scrollArea->setWidgetResizable(true);
+  } else {
+    ui->habits_scrollArea->setVisible(false);
+  }
+
+  // display_habits_of_the_day(habits_of_the_day, ui);
+
+  displayed_entries = vector_entries;
+
+  // save the card corresponding to the current day in case it has to be
+  // modified
+  if (!vector_entries.empty()) {
+    EntryPerso *newest_entry = vector_entries.back();
+    if (newest_entry->get_qdate() == QDate::currentDate()) {
+      today_card =
+          new EntryCard(20, 300, 300, "white", newest_entry, true, this);
+    }
+  }
+
+  // Load previous recaps dates
   std::vector<QString> last_recaps_dates = load_last_recaps_dates();
+
+  // load previous recaps
 
   //// frontend that needs data to be rendered
   display_entries();
 
-
-
-
   // Chatbox
   chat = MascotChat(ui->scrollArea);
   welcome();
-  chat.add_mascot();
+  chat.add_mascot(90);
+  // std::string question = "did you sleep well";
+  // chat.prompt_msg(question,0,55);
 
-
-  //Settings
+  // Settings
   auto settings = findChild<QWidget *>("settings_frame");
   settings->hide(); // hide the settings menu on launch
   // setting the icon for the setting button
@@ -146,21 +233,28 @@ MainWindow::MainWindow(QWidget *parent)
 
   update_graphs();
 
+  // style the application
+  QApplication::setStyle(QStyleFactory::create("Fusion"));
+  // check available built in styles
+  /*
+  const auto & styles = QStyleFactory::keys();
+  for(const auto & s : styles)
+  {
+    qDebug() << s;
+  }
+  */
 }
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() {
+  delete ui;
+  for (auto const &[key, graphptr] : dynamic_graphs) {
+    delete graphptr;
+  }
+}
 
 std::vector<Activity> MainWindow::get_activities() { return vector_activities; }
 
-Activity *MainWindow::get_activity_at_i(long long unsigned i) {
-  return &vector_activities.at(i);
-}
-
 std::vector<Friend> MainWindow::get_friends() { return vector_friends; }
-
-Friend *MainWindow::get_friend_at_i(long long unsigned i) {
-  return &vector_friends.at(i);
-}
 
 void MainWindow::update_activities(std::vector<Activity> activities) {
   vector_activities = activities;
@@ -173,11 +267,14 @@ void MainWindow::update_friends(std::vector<Friend> friends) {
 void MainWindow::closeEvent(QCloseEvent *event) {
   QMessageBox::StandardButton answr_btn = QMessageBox::question(
       this, tr("Paper friend"), tr("Are you sure?\n"),
-      QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
-      QMessageBox::Yes);
+      QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
   if (answr_btn != QMessageBox::Yes) {
     event->ignore();
   } else {
+    for (auto entry : vector_entries) {
+      save_entryperso(*entry);
+      // add saving of entry_recaps
+    }
     event->accept();
   }
 }
@@ -190,78 +287,89 @@ void MainWindow::toggle_visibility(QWidget *component) {
   }
 }
 
+void MainWindow::change_editability() {
+  ui->left_frame->setEnabled(!isEnabled());
+  ui->right_frame->setEnabled(!isEnabled());
+  ui->filters->setEnabled(!isEnabled());
+}
+
 void MainWindow::update_graphs() {
-    ui->tabWidget->clear();
-    if (saved_mood()) {
-        display_graph("mood");
-    }
-    if (saved_sleep()) {
-        display_graph("sleep");
-    }
-    if (saved_eating_healthy()) {
-        display_graph("eating healthy");
-    }
-    if (saved_productivity()) {
-        display_graph("productivity");
-    }
-    if (saved_communications()) {
-        display_graph("communications");
-    }
-    if (saved_screen_time()) {
-        display_graph("screen time");
-    }
+  ui->tabWidget->clear();
+  if (saved_mood()) {
+    display_graph("mood");
+  }
+  if (saved_sleep()) {
+    display_graph("sleep");
+  }
+  if (saved_eating_healthy()) {
+    display_graph("eating healthy");
+  }
+  if (saved_productivity()) {
+    display_graph("productivity");
+  }
+  if (saved_socializing()) {
+    display_graph("communications");
+  }
+  if (saved_physical_activity()) {
+    display_graph("physical activity");
+  }
 }
 
-void MainWindow::remove_non_existent_friends(EntryPerso* entry){
-    std::vector<Friend*> friends;
-    for(long long unsigned fr = 0; fr < entry->get_friends().size(); fr++){
-        for(long long unsigned i = 0; i < vector_friends.size(); i++){
-            if((entry->get_friends().at(fr))->equal(vector_friends.at(i))){
-                friends.push_back(&vector_friends.at(i));
-                break;
-            }
-        }
-    }
-    entry->set_friends(friends);
-}
 void MainWindow::display_entries() {
-
 
   while (!ui->EntriesScroll->widget()->layout()->isEmpty()) {
     QLayoutItem *item = ui->EntriesScroll->widget()->layout()->takeAt(0);
-    //ui->graph_frame->removeItem(item);
+    // ui->graph_frame->removeItem(item);
     delete item->widget();
     delete item;
     qDebug() << "removed";
   }
+  displayed_cards.clear();
   /*for (auto entry: entries) {
       EntryCard *c = new EntryCard(20, 300, 300, "white", entry, true, this);
       c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in
   the main_frame. qDebug()<< "displayed";
   }*/
-
+  std::vector<EntryRecap *>::iterator rec = vector_recaps.begin();
   // displaying in reversed order
-  for (auto entry = displayed_entries.rbegin(); entry != displayed_entries.rend(); ++entry) {
-    //remove friends and activities that shouldn't be displayed
-      remove_non_existent_friends(*entry);
-    if ((*entry)->get_qdate() == QDate::currentDate()) {
+  for (auto entry = displayed_entries.rbegin();
+       entry != displayed_entries.rend(); ++entry) {
+    if (rec < vector_recaps.end() &&
+        (*rec)->get_qdate().daysTo((*entry)->get_qdate()) > 0) {
+      EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
+      c->display(ui->EntriesScroll->widget()
+                     ->layout()); // displays the entry in the main_frame.
+      qDebug() << "displayed recap";
+      rec++;
+      entry--;
+    } else if ((*entry)->get_qdate() == QDate::currentDate()) {
       today_card = new EntryCard(20, 300, 300, "white", *entry, true, this);
       today_card->display(ui->EntriesScroll->widget()->layout());
+      displayed_cards.push_back(today_card);
     } else {
       EntryCard *c = new EntryCard(20, 300, 300, "white", *entry, true, this);
-      c->display(ui->EntriesScroll->widget()->layout()); // displays the entry in the main_frame.
+      c->display(ui->EntriesScroll->widget()
+                     ->layout()); // displays the entry in the main_frame.
+      displayed_cards.push_back(c);
       qDebug() << "displayed";
     }
   }
 }
 
 void MainWindow::display_graph(QString tracked_parameter) {
-    QWidget *tab = new QWidget();
-    QHBoxLayout *graph = new QHBoxLayout(tab);
-    ui->tabWidget->addTab(tab, tracked_parameter);
-    DynamicGraph dynamicGraph = DynamicGraph(displayed_entries, tracked_parameter);
-    dynamicGraph.display(graph);
-    this->showMaximized();
+  QWidget *tab = new QWidget();
+  tab->setStyleSheet("QWidget{background-color: rgb(255,255,255);}");
+  QHBoxLayout *graph = new QHBoxLayout(tab);
+  ui->tabWidget->addTab(tab, tracked_parameter);
+  qDebug() << QString("I call it!");
+  if (dynamic_graphs.find(tracked_parameter) != dynamic_graphs.end()) {
+    delete dynamic_graphs[tracked_parameter];
+  }
+  DynamicGraph *graphptr =
+      new DynamicGraph(displayed_entries, tracked_parameter);
+  dynamic_graphs[tracked_parameter] = graphptr;
+  graphptr->display(graph);
+  this->showMaximized();
 }
 
 void MainWindow::on_pushButton_clicked() {
@@ -271,8 +379,8 @@ void MainWindow::on_pushButton_clicked() {
 }
 
 void MainWindow::on_activitie_button_clicked() {
-  all_activities *my_activities = new all_activities(this,vector_activities);
-  //my_activities->add_previous_cells();
+  all_activities *my_activities = new all_activities(this, vector_activities);
+  // my_activities->add_previous_cells();
   my_activities->setModal(true);
   my_activities->exec();
 }
@@ -282,8 +390,9 @@ void MainWindow::on_settingsButton_clicked() {
   findChild<QCheckBox *>("sleep")->setChecked(saved_sleep());
   findChild<QCheckBox *>("eating_healthy")->setChecked(saved_eating_healthy());
   findChild<QCheckBox *>("productivity")->setChecked(saved_productivity());
-  findChild<QCheckBox *>("communications")->setChecked(saved_communications());
-  findChild<QCheckBox *>("screen_time")->setChecked(saved_screen_time());
+  findChild<QCheckBox *>("communications")->setChecked(saved_socializing());
+  findChild<QCheckBox *>("physical_activity")
+      ->setChecked(saved_physical_activity());
   auto settings = findChild<QWidget *>("settings_frame");
   toggle_visibility(settings);
   auto chat = findChild<QWidget *>("scrollArea");
@@ -298,7 +407,7 @@ void MainWindow::on_save_settings_clicked() {
   myfile << findChild<QCheckBox *>("eating_healthy")->isChecked() << "\n";
   myfile << findChild<QCheckBox *>("productivity")->isChecked() << "\n";
   myfile << findChild<QCheckBox *>("communications")->isChecked() << "\n";
-  myfile << findChild<QCheckBox *>("screen_time")->isChecked() << "\n";
+  myfile << findChild<QCheckBox *>("physical_activity")->isChecked() << "\n";
   myfile.close();
   update_graphs();
   auto settings = findChild<QWidget *>("settings_frame");
@@ -308,23 +417,34 @@ void MainWindow::on_save_settings_clicked() {
 }
 
 void MainWindow::on_filterButton_clicked() {
-  if (vector_entries.size()==0) {
-    //error dialogue box
-    QMessageBox::warning(this, "Error", "No entries to filter. Please add an entry first.");
+  if (vector_entries.size() == 0) {
+    // error dialogue box
+    QMessageBox::warning(this, "Error",
+                         "No entries to filter. Please add an entry first.");
     return;
   }
+
+  std::unordered_map<std::string, std::string> map_filter{
+      {"mood", "mood"},
+      {"sleep wellness", "sleep"},
+      {"eating healthy", "eating_healthy"},
+      {"productivity", "productivity"},
+      {"socializing", "socializing"},
+      {"physical activity", "physical_activity"},
+      {"show last n entries", "last_n_entries"}};
 
   QString type_filter_value =
       findChild<QComboBox *>("type_filter")->currentText();
   std::string type_filter_str = type_filter_value.toStdString();
+  type_filter_str = map_filter[type_filter_str];
+  std::cout << type_filter_str << std::endl;
   QString operator_filter_value =
       findChild<QComboBox *>("operation_filter")->currentText();
   std::string operator_filter_str = operator_filter_value.toStdString();
-  //QString value_filter_value =
-      //findChild<QDoubleSpinBox *>("value_filter")->text();
+  // QString value_filter_value =
+  // findChild<QDoubleSpinBox *>("value_filter")->text();
   double value = findChild<QDoubleSpinBox *>("value_filter")->value();
   int n = 20;
-  
 
   // construct a filter_param object
   struct Filter_param filt;
@@ -334,7 +454,6 @@ void MainWindow::on_filterButton_clicked() {
   filt.value = value;
   filt.display_num = n;
 
-  
   // handling duplicated filters
   bool is_insert = true;
   for (int i = 0; i < filter_params.size(); i++) {
@@ -357,22 +476,26 @@ void MainWindow::on_filterButton_clicked() {
       filter_params.erase(filter_params.begin() + i);
       i--;
     }
+    if (filter_params[i].keyword == filt.keyword &&
+        filter_params[i].value == filt.value) {
+      filter_params.erase(filter_params.begin() + i);
+      i--;
+    }
   }
 
   if (is_insert) {
     filter_params.push_back(filt);
   }
 
-  for(int i=0; i<filter_params.size(); i++){
-    if(filter_params[i].keyword == "last_n_entries"){
+  for (int i = 0; i < filter_params.size(); i++) {
+    if (filter_params[i].keyword == "last_n_entries") {
       n = filter_params[i].value;
       break;
     }
   }
 
-
   // filter the entries
-  std::vector<EntryPerso *> filtered_entries  = vector_entries;
+  std::vector<EntryPerso *> filtered_entries = vector_entries;
   for (int i = 0; i < filter_params.size(); i++) {
     if (filter_params[i].keyword == "last_n_entries") {
       continue;
@@ -399,7 +522,7 @@ void MainWindow::on_filterButton_clicked() {
   for (int i = 0; i < filter_params.size(); i++) {
     // value keeps 2 digits after the decimal point
     std::stringstream stream;
-    //qDebug()<<filter_params[i].value<<"HERE";
+    // qDebug()<<filter_params[i].value<<"HERE";
     stream << std::fixed << std::setprecision(1) << filter_params[i].value;
     std::string s = stream.str();
     f +=
@@ -422,11 +545,6 @@ void MainWindow::on_filterButton_clicked() {
   update_graphs();
 }
 
-void MainWindow::on_helpFilterBox_clicked() {
-  // implement a help dialog here. show the dialog.
-  QMessageBox::information(this, "Help", "This is a help dialog");
-}
-
 void MainWindow::on_clear_button_clicked() {
   filter_params.clear();
   findChild<QLabel *>("existing_filters")->setText("Filters: ");
@@ -441,13 +559,13 @@ void MainWindow::on_clear_button_clicked() {
 void MainWindow::on_type_filter_currentTextChanged(const QString &arg1) {
   // update the operator_filter
   std::string type_filter_str = arg1.toStdString();
-  
-  if (type_filter_str == "last_n_entries") {
-    //change the operator_filter to "="
+
+  if (type_filter_str == "show last n entries") {
+    // change the operator_filter to "="
     findChild<QComboBox *>("operation_filter")->clear();
     findChild<QComboBox *>("operation_filter")->addItem("=");
     findChild<QComboBox *>("operation_filter")->setEnabled(false);
-  }else{
+  } else {
     findChild<QComboBox *>("operation_filter")->clear();
     findChild<QComboBox *>("operation_filter")->addItem("=");
     findChild<QComboBox *>("operation_filter")->addItem(">");
@@ -457,191 +575,268 @@ void MainWindow::on_type_filter_currentTextChanged(const QString &arg1) {
 }
 
 void MainWindow::on_newEntryButton_clicked() {
-  // more compact code for when the test entries are replaced with real entries
-  /*
-  if
-  (!std::filesystem::exists("Entries/"+QDate::currentDate().toString("MM.dd.yyyy").toStdString()+".json"))
-  { EntryPerso *today_entry = new EntryPerso(); save_entryperso(*today_entry);
-      vector_entries.push_back(today_entry);
-      displayed_entries.push_back(today_entry);
-      today_card = new EntryCard(20, 300, 300, "white", today_entry, true,
-  this); display_entries();
-  }
-  */
-  if (vector_entries.empty()) {
+  if (!std::filesystem::exists(
+          "Entries/" +
+          QDate::currentDate().toString("MM.dd.yyyy").toStdString() +
+          ".json")) {
     EntryPerso *today_entry = new EntryPerso();
-    //ADD ACTIVITIES BY DEF TO 0
-    qDebug()<<QString("Start to add activities by default to 0");
-    for(Activity const& activity : vector_activities){
-        qDebug()<<QString::fromStdString(activity.get_name());
-        Activity *to_add = new Activity(activity.get_name(),activity.get_type(),0);
-        today_entry->add_activity(to_add);
+    for (Activity const &activity : vector_activities) {
+      Activity *to_add =
+          new Activity(activity.get_name(), activity.get_type(), 0);
+      today_entry->add_activity(to_add);
     }
-    save_entryperso(*today_entry);
     vector_entries.push_back(today_entry);
     displayed_entries.push_back(today_entry);
     today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
     display_entries();
-  } else {
-    if (vector_entries.back()->get_qdate() != QDate::currentDate()) {
-      EntryPerso *today_entry = new EntryPerso();
-      save_entryperso(*today_entry);
-      vector_entries.push_back(today_entry);
-      displayed_entries.push_back(today_entry);
-      today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
-      display_entries();
-    }
   }
   ui->EntriesScroll->verticalScrollBar()->setValue(0);
   today_card->change();
 }
 
 void MainWindow::generate_recap() {
-    // first check if we need to generate a weekly/monthly/yearly recap
-    // last_recaps_dates is the vector containing the string of the dates of the last [0]weekly, [1]monthly and [2]yearly recap.
-    std::vector<QString> last_recaps_dates = load_last_recaps_dates();
-    //weekly
-    if(QDate::currentDate().dayOfWeek()==7)//If it's Sunday
-    {
-       QString date_last_recap = last_recaps_dates[0];
-        if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
-        {
-            chat<<QString("It's Sunday! Time for a weekly recap 😉");
-            chat.add_mascot();
-            last_recaps_dates[0] = QDate::currentDate().toString("yyyy.MM.dd");
-            DataAnalysis analysis = DataAnalysis(vector_entries);
-            EntryRecap recap = analysis.weekly_recap();
-
-            save_last_recaps_dates(last_recaps_dates);
-        }
-
-
+  // first check if we need to generate a weekly/monthly/yearly recap
+  // last_recaps_dates is the vector containing the string of the dates of the
+  // last [0]weekly, [1]monthly and [2]yearly recap.
+  std::vector<QString> last_recaps_dates = load_last_recaps_dates();
+  if (last_recaps_dates.empty()) {
+    QDate date = QDate::currentDate().addDays(-1);
+    last_recaps_dates.push_back(date.toString());
+    last_recaps_dates.push_back(date.toString());
+    last_recaps_dates.push_back(date.toString());
+  }
+  // weekly
+  if (QDate::currentDate().dayOfWeek() == 7) // If it's Sunday
+  {
+    QString date_last_recap = last_recaps_dates[0];
+    if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
+      chat << QString("It's Sunday! Time for a weekly recap ");
+      chat.add_mascot(89);
+      last_recaps_dates[0] = QDate::currentDate().toString("yyyy.MM.dd");
+      DataAnalysis analysis = DataAnalysis(vector_entries);
+      EntryRecap recap = analysis.weekly_recap();
+      vector_recaps.push_back(&recap);
+      EntryCard *recap_card =
+          new EntryCard(20, 300, 300, "white", &recap, true, this);
+      recap_card->display(
+          ui->EntriesScroll->widget()
+              ->layout()); // displays the entry in the main_frame.
+      qDebug() << "displayed";
+      save_last_recaps_dates(last_recaps_dates);
     }
-    //monthly
-    if(QDate::currentDate().daysInMonth()==QDate::currentDate().day())//If it's the last day of the month
-    {
-        QString date_last_recap = last_recaps_dates[1];
-        if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
-        {
-        chat<<QString("Last day of the month means time for a montly recap!");
-        chat.add_mascot();
-        last_recaps_dates[1] = QDate::currentDate().toString("yyyy.MM.dd");
-        DataAnalysis analysis = DataAnalysis(vector_entries);
-        EntryRecap recap = analysis.monthly_recap();
-
-        save_last_recaps_dates(last_recaps_dates);
-        }
+  }
+  // monthly
+  if (QDate::currentDate().daysInMonth() ==
+      QDate::currentDate().day()) // If it's the last day of the month
+  {
+    QString date_last_recap = last_recaps_dates[1];
+    if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
+      chat << QString("Last day of the month means time for a montly recap!");
+      chat.add_mascot(65);
+      last_recaps_dates[1] = QDate::currentDate().toString("yyyy.MM.dd");
+      DataAnalysis analysis = DataAnalysis(vector_entries);
+      EntryRecap recap = analysis.monthly_recap();
+      vector_recaps.push_back(&recap);
+      EntryCard *recap_card =
+          new EntryCard(20, 300, 300, "white", &recap, true, this);
+      recap_card->display(
+          ui->EntriesScroll->widget()
+              ->layout()); // displays the entry in the main_frame.
+      qDebug() << "displayed";
+      save_last_recaps_dates(last_recaps_dates);
     }
-    //yearly
-    if(QDate::currentDate().month()==12 && QDate::currentDate().day()==31)//If it's December 31st
-    {
-        QString date_last_recap = last_recaps_dates[2];
-        if(date_last_recap!=QDate::currentDate().toString("yyyy.MM.dd"))
-        {
-        chat<<QString("Before celebrating the new year, let's look back to ")+QString::number(QDate::currentDate().year())+QString(" and ponder.");
-        chat.add_mascot();
-        last_recaps_dates[2] = QDate::currentDate().toString("yyyy.MM.dd");
-        DataAnalysis analysis = DataAnalysis(vector_entries);
-        EntryRecap recap = analysis.yearly_recap();
-
-        save_last_recaps_dates(last_recaps_dates);
-        }
+  }
+  // yearly
+  if (QDate::currentDate().month() == 12 &&
+      QDate::currentDate().day() == 31) // If it's December 31st
+  {
+    QString date_last_recap = last_recaps_dates[2];
+    if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
+      chat << QString("Before celebrating the new year, let's look back to ") +
+                  QString::number(QDate::currentDate().year()) +
+                  QString(" and ponder.");
+      chat.add_mascot(66);
+      last_recaps_dates[2] = QDate::currentDate().toString("yyyy.MM.dd");
+      DataAnalysis analysis = DataAnalysis(vector_entries);
+      EntryRecap recap = analysis.yearly_recap();
+      vector_recaps.push_back(&recap);
+      EntryCard *recap_card =
+          new EntryCard(20, 300, 300, "white", &recap, true, this);
+      recap_card->display(
+          ui->EntriesScroll->widget()
+              ->layout()); // displays the entry in the main_frame.
+      qDebug() << "displayed";
+      save_last_recaps_dates(last_recaps_dates);
     }
+  }
 }
 
-void MainWindow::react_to_last_entry(){
-    if(!reacted_to_entry){
-        EntryPerso* last_entry = vector_entries[vector_entries.size()-1];//called before generate recap so we are sure it is an EntryPerso
-        if(last_entry->get_mood()==0){
-            chat<<QString("Did you forget to put in your mood ?<br> If not, I'm very sorry for the day you had. It's good that you put your thoughts on paper.<br> Don't hesitate to seek the help of a relative or of a professional if you feel like you loose control. Don't worry, everything eventually gets better.");
-        }else if(last_entry->get_mood()<30){
-            chat<<QString("Oh, I'm sorry for the day you had. Don't forget that you are never alone and talking to a relative or a professional can help you going through hard times.");
-        }else if(last_entry->get_mood()<50){
-            chat<<QString("Seems like you spent a pretty tough day... I hope it'll be better tomorrow.");
-        }else if(last_entry->get_mood()<75){//between 50 and 75
-            chat<<QString("Looks like a fine day. What could you improve to make it better?");
-        }else if(last_entry->get_mood()<85){
-            chat<<QString("Someone had a happy day ;)");
-        }else if(last_entry->get_mood()<95){//between 85 and 90
-            chat<<QString("What a great day! Take the time to savor it.");
-        }else{
-            chat<<QString("Wow, you spent an amazing day! It hope it will stay anchored in your memory forever.");
-        }
-        chat.add_mascot();
-        reacted_to_entry = true;
+void MainWindow::react_to_last_entry() {
+  if (!reacted_to_entry) {
+    EntryPerso *last_entry =
+        vector_entries[vector_entries.size() -
+                       1]; // called before generate recap so we are sure it is
+                           // an EntryPerso
+    if (last_entry->get_mood() == 0) {
+      chat << QString(
+          "Did you forget to put in your mood ?<br> If not, I'm very sorry for "
+          "the day you had. It's good that you put your thoughts on paper.<br> "
+          "Don't hesitate to seek the help of a relative or of a professional "
+          "if you feel like you loose control. Don't worry, everything "
+          "eventually gets better.");
+    } else if (last_entry->get_mood() < 30) {
+      chat << QString("Oh, I'm sorry for the day you had. Don't forget that "
+                      "you are never alone and talking to a relative or a "
+                      "professional can help you going through hard times.");
+    } else if (last_entry->get_mood() < 50) {
+      chat << QString("Seems like you spent a pretty tough day... I hope it'll "
+                      "be better tomorrow.");
+    } else if (last_entry->get_mood() < 75) { // between 50 and 75
+      chat << QString(
+          "Looks like a fine day. What could you improve to make it better?");
+    } else if (last_entry->get_mood() < 85) {
+      chat << QString("Someone had a happy day ;)");
+    } else if (last_entry->get_mood() < 95) { // between 85 and 90
+      chat << QString("What a great day! Take the time to savor it.");
+    } else {
+      chat << QString("Wow, you spent an amazing day! It hope it will stay "
+                      "anchored in your memory forever.");
     }
+    chat.add_mascot(last_entry->get_mood());
+    reacted_to_entry = true;
+  }
 }
 
-void MainWindow::welcome(){
-    if(!vector_entries.empty()){
-        EntryPerso* last_entry = vector_entries[vector_entries.size()-1];
-        int daysago = (last_entry->get_qdate()).daysTo(QDate::currentDate());
-        if(daysago==0){
-            chat<<QString("Hello again!");
-        }else if(daysago==1){
-            chat<<QString("Hello!");
-        }else if(daysago>365){
-            chat<<QString("Oh, you! I though I would never see you again! How are you?");
-        }else if(daysago>14){
-        chat<<QString("It's been a while! Good to see you again.");
-        }else if(daysago>6){
-            chat<<QString("Welcome back! How has it been going?");
-        }else if(daysago>1){
-            chat<<QString("Hi! How did it go since last time?");
-        }
-    }else{
-        chat<<QString("Hello, it seems like it's your first time here! I'm Rooxie, your well-being assistant! You can create an entry in you diary by clicking the \"New entry\" button on the top of the screen.");
+void MainWindow::welcome() {
+  if (!vector_entries.empty()) {
+    EntryPerso *last_entry = vector_entries[vector_entries.size() - 1];
+    int daysago = (last_entry->get_qdate()).daysTo(QDate::currentDate());
+    if (daysago == 0) {
+      chat << QString("Hello again!");
+    } else if (daysago == 1) {
+      chat << QString("Hello!");
+    } else if (daysago > 365) {
+      chat << QString(
+          "Oh, you! I though I would never see you again! How are you?");
+    } else if (daysago > 14) {
+      chat << QString("It's been a while! Good to see you again.");
+    } else if (daysago > 6) {
+      chat << QString("Welcome back! How has it been going?");
+    } else if (daysago > 1) {
+      chat << QString("Hi! How did it go since last time?");
     }
+  } else {
+    chat << QString(
+        "Hello, it seems like it's your first time here! I'm Rooxie, your "
+        "well-being assistant! You can create an entry in you diary by "
+        "clicking the \"New entry\" button on the top of the screen.");
+  }
 }
-
 
 void MainWindow::on_Test_entries_clicked() {
-  vector_entries = sample_entries(100);
+  vector_entries = sample_entries(20);
   displayed_entries = vector_entries;
   display_entries();
   update_graphs();
 }
 
-void MainWindow::on_ppl_button_clicked(){
-    all_people *my_people = new all_people(vector_friends);
-    my_people->setModal(true);
-    my_people->exec();
+void MainWindow::add_new_activities_to_old_enties() {
+  qDebug() << QString("add_new_activities_to_old_enties called");
+
+  for (EntryPerso *entry :
+       vector_entries) { // to modify if we change the type of vector_entries
+    if (entry->entry_type() ==
+        1) { // useful when we change the type of vector_entries
+      // we now know it's an entry perso so we can cast it
+      // qDebug()<<QString("cast");
+      // EntryPerso *entry = static_cast<EntryPerso*>(entry); //would be the
+      // way, but makes the program crash at the line indicated in the following
+      // comment
+      for (Activity const &activity : vector_activities) {
+        Activity *to_add = new Activity();
+        to_add->set_name(activity.get_name());
+        to_add->set_type(activity.get_type());
+        std::vector<Activity *> entry_activities =
+            entry->get_activities(); // crashes here if static cast used
+        if (std::find_if(entry_activities.begin(), entry_activities.end(),
+                         [to_add](Activity *a) -> bool {
+                           return *a == *to_add;
+                         }) == entry_activities.end()) {
+          qDebug() << QString("Does not contain")
+                   << QString::fromStdString(activity.get_name())
+                   << QString::number(activity.get_type());
+          // does not contain activity
+          Activity *to_add = new Activity();
+          to_add->set_name(activity.get_name());
+          to_add->set_type(activity.get_type());
+          to_add->set_value(0.0);
+          entry->add_activity(to_add);
+        }
+      }
+    }
+  }
+}
+void MainWindow::remove_activities_from_old_entries(int position) {
+  /* remove an activity after it has been deleted */
+  for (EntryPerso *entry : vector_entries) {
+    std::vector<Activity *> activities_removed = entry->get_activities();
+    activities_removed.erase(activities_removed.begin() + position);
+    entry->set_activities(activities_removed);
+  }
 }
 
-void MainWindow::add_new_activities_to_old_enties(){
-    qDebug()<<QString("add_new_activities_to_old_enties called");
-
-    for(EntryPerso *entry : vector_entries){//to modify if we change the type of vector_entries
-        if(entry->entry_type()==1){//useful when we change the type of vector_entries
-            //we now know it's an entry perso so we can cast it
-            //qDebug()<<QString("cast");
-            //EntryPerso *entry = static_cast<EntryPerso*>(entry); //would be the way, but makes the program crash at the line indicated in the following comment
-            for(Activity const&activity : vector_activities){
-                Activity *to_add = new Activity();
-                to_add->set_name(activity.get_name());
-                to_add->set_type(activity.get_type());
-                std::vector<Activity*> entry_activities = entry->get_activities();//crashes here if static cast used
-                if(std::find_if(entry_activities.begin(), entry_activities.end(),[to_add](Activity *a)->bool{ return *a == *to_add; }) == entry_activities.end()) {
-                    qDebug()<<QString("Does not contain")<<QString::fromStdString(activity.get_name())<<QString::number(activity.get_type());
-                    //does not contain activity
-                    Activity *to_add = new Activity();
-                    to_add->set_name(activity.get_name());
-                    to_add->set_type(activity.get_type());
-                    to_add->set_value(0.0);
-                    entry->add_activity(to_add);
-                }
-            }
-        }
+void MainWindow::refresh_activities() {
+  for (EntryCard *c : displayed_cards) {
+    if (c->isReadOnly()) {
+      c->remove_non_existent_act();
+    } else {
+      c->update_fr_act_select();
     }
-
+    c->set_correct_style();
+  }
 }
-void MainWindow::remove_activities_from_old_entries(int position){
-    /* remove an activity after it has been deleted */
-    for(EntryPerso *entry : vector_entries){
-            std::vector<Activity*> activities_removed = entry->get_activities();
-            activities_removed.erase(activities_removed.begin() + position);
-            entry->set_activities(activities_removed);
-        }
-    }
 
+void MainWindow::on_yes_button_clicked() {
+  QAbstractButton *yes_button = qobject_cast<QAbstractButton *>(sender());
+  QWidget *parent = qobject_cast<QWidget *>(yes_button->parent());
+  QPushButton *no_button = parent->findChild<QPushButton *>("no_button");
+  QPushButton *delete_button =
+      parent->findChild<QPushButton *>("delete_button");
+  yes_button->setDisabled(true);
+  no_button->setDisabled(true);
+  delete_button->setDisabled(true);
+  QLabel *habit_label = parent->findChild<QLabel *>("habit_label");
+  QStringList tmp = habit_label->text().split(".");
+  std::cout << "Yes" << std::endl;
+  std::cout << habit_label->text().toStdString() << std::endl;
+  save_incrementation_of_habits(tmp[0]);
+}
 
+void MainWindow::on_no_button_clicked() {
+  QAbstractButton *no_button = qobject_cast<QAbstractButton *>(sender());
+  QWidget *parent = qobject_cast<QWidget *>(no_button->parent());
+  QPushButton *yes_button = parent->findChild<QPushButton *>("yes_button");
+  QPushButton *delete_button =
+      parent->findChild<QPushButton *>("delete_button");
+  yes_button->setDisabled(true);
+  no_button->setDisabled(true);
+  delete_button->setDisabled(true);
+  QLabel *habit_label = parent->findChild<QLabel *>("habit_label");
+  QStringList tmp = habit_label->text().split(".");
+  save_reset_of_habits(tmp[0]);
+  std::cout << "No" << std::endl;
+}
+
+void MainWindow::on_delete_button_clicked() {
+  QAbstractButton *delete_button = qobject_cast<QAbstractButton *>(sender());
+  QWidget *parent = qobject_cast<QWidget *>(delete_button->parent());
+  QPushButton *no_button = parent->findChild<QPushButton *>("no_button");
+  QPushButton *yes_button = parent->findChild<QPushButton *>("yes_button");
+  yes_button->setDisabled(true);
+  no_button->setDisabled(true);
+  delete_button->setDisabled(true);
+  QLabel *habit_label = parent->findChild<QLabel *>("habit_label");
+  QStringList tmp = habit_label->text().split(".");
+  save_delete_of_habits(tmp[0]);
+  std::cout << "Delete" << std::endl;
+}

@@ -10,15 +10,13 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Analysis/textanalysis.cpp \
     activity_cell.cpp \
     activityclasses.cpp \
     all_activities.cpp \
     all_habits.cpp \
-    all_people.cpp \
     cardclasses.cpp \
     Analysis/DataAnalysis.cpp \
-    cipher/Qt-AES-1.2/qaesencryption.cpp \
-    cipher/cipher.cpp \
     entryclasses.cpp \
     entryfilter.cpp \
     entryrecap.cpp \
@@ -29,26 +27,19 @@ SOURCES += \
     dynamicgraph.cpp \
     mascot.cpp \
     mascotchat.cpp \
-    mypushbutton.cpp \
-    people_cell.cpp \
     settings.cpp \
     texteditor.cpp \
     edit.cpp \
     welcome_msg.cpp
 
 HEADERS += \
+    Analysis/textanalysis.h \
     activity_cell.h \
     activityclasses.h \
     all_activities.h \
     all_habits.h \
-    all_people.h \
     cardclasses.h \
     Analysis/DataAnalysis.h \
-    cipher/Qt-AES-1.2/aesni/aesni-enc-cbc.h \
-    cipher/Qt-AES-1.2/aesni/aesni-enc-ecb.h \
-    cipher/Qt-AES-1.2/aesni/aesni-key-exp.h \
-    cipher/Qt-AES-1.2/qaesencryption.h \
-    cipher/cipher.h \
     entryclasses.h \
     entryfilter.h \
     entryrecap.h \
@@ -59,8 +50,6 @@ HEADERS += \
     mascot.h \
     mascotchat.h \
     mascotchat.h \
-    mypushbutton.h \
-    people_cell.h \
     settings.h \
     texteditor.h \
     edit.h \
@@ -68,11 +57,10 @@ HEADERS += \
 
 FORMS += \
     activity_cell.ui \
+    add_habit_cell.ui \
     all_activities.ui \
     all_habits.ui \
-    all_people.ui \
     mainwindow.ui \
-    people_cell.ui \
     texteditor.ui \
 
 TRANSLATIONS += \

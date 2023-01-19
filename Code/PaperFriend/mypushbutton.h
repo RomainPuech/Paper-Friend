@@ -1,11 +1,9 @@
 #ifndef MYPUSHBUTTON_H
 #define MYPUSHBUTTON_H
 
-
-class MyPushButton
-{
+class MyPushButton {
 public:
-    MyPushButton();
+  MyPushButton();
 };
 
 #endif // MYPUSHBUTTON_H
