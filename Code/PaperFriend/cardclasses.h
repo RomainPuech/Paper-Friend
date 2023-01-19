@@ -101,6 +101,7 @@ private:
   QGroupBox *edit_and_return;  // contains text editor and back_to_display
   QVBoxLayout *edit_vb;        // layout for edit_and_return
   QPushButton *modify;
+  QPushButton *analize;
   QPushButton *back_to_display;
   QLayout *display_layout;   // parent layout of the card
   QWidget *mood_slider_w;    // widget for displaying mood slider
