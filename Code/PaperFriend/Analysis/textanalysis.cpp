@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "TextAnalysis.h"
+#include "DataAnalysis.h"
 
 
 double TextAnalysis::get_text_mood(){
@@ -49,19 +50,26 @@ double TextAnalysis::str_to_double(std::string text){
 
 void TextAnalysis::analyze_text(){
     /**
-     *  Analyzes text in "./nlp/input.txt" file and writes the resulting mood (from -1 to 1) in text_mood
+     *  Analyzes text in "./nlp/input.txt" file and writes the resulting mood (from 0 to 1) in text_mood
      */
+    std::ofstream f_write;
+    f_write.open ("./nlp/input.txt");
+
+    std::string text_in = log.end()->get_text();
+    f_write << text_in << std::endl;
 
     system("./nlp/nlp_text_sentiment");  // runs the python exe file and writes the result in "output.txt"
 
     // Reading the result str and converting it to number:
-    std::ifstream file;
-    file.open("./nlp/output.txt");
+    std::ifstream f_read;
+    f_read.open("./nlp/output.txt");
 
     std::string text;
-    file >> text;
+    f_read >> text;
 
-    text_mood = str_to_double(text);
+    // rescaling mood to be from 0 to 1
+    text_mood = (1 + str_to_double(text)) / 2;
 
-    file.close();
+    f_read.close();
+    f_write.close();
 }
