@@ -78,6 +78,7 @@ public:
   void set_correct_style();
 private slots:
   void handleModify();
+  void handleAnalize();
   void handleBack();
 
 private:
@@ -108,6 +109,7 @@ private:
   QVBoxLayout *mood_slider_vb; // layout of mood_slider_w;
   QListWidget *fr_act_select;
   static std::vector<QListWidgetItem *> fr_act_options;
+
 
   QWidget *sleep_slider_w;
   QLabel *sleep_slider_instr;

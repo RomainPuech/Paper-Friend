@@ -28,6 +28,7 @@ SOURCES += \
     mascot.cpp \
     mascotchat.cpp \
     settings.cpp \
+    text_analysis_window.cpp \
     texteditor.cpp \
     edit.cpp \
     welcome_msg.cpp
@@ -51,6 +52,7 @@ HEADERS += \
     mascotchat.h \
     mascotchat.h \
     settings.h \
+    text_analysis_window.h \
     texteditor.h \
     edit.h \
     welcome_msg.h
@@ -61,6 +63,7 @@ FORMS += \
     all_activities.ui \
     all_habits.ui \
     mainwindow.ui \
+    text_analysis_window.ui \
     texteditor.ui \
 
 TRANSLATIONS += \
