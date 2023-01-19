@@ -73,7 +73,7 @@ void all_activities::closeCell(int ActivitiesCellNumber){
     allCellPtr.remove(ActivitiesCellNumber);
     vector_activities.erase(vector_activities.begin() + ActivitiesCellNumber);
     MainWindow::remove_activities_from_old_entries(ActivitiesCellNumber);
-    MainWindow::refresh_acttivities();
+    MainWindow::refresh_activities();
 }
 
 void all_activities::on_save_activity_button_clicked()
@@ -127,7 +127,7 @@ void all_activities::on_save_activity_button_clicked()
     // we add the activity with value 0 to all existing entryPerso.
     //In terms of complexity it is not the best option but given that the number of entries will reasonably be less than 1000 it is going to be immediate in practice and saves us a lot of time in terms of coding
     mainwindowptr->add_new_activities_to_old_enties();
-    MainWindow::refresh_acttivities();
+    MainWindow::refresh_activities();
 
 }
 

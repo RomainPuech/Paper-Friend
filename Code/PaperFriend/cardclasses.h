@@ -72,9 +72,7 @@ public:
     void update_fr_act_select();
     void update_fr_act();
     void remove_non_existent_act();
-    void update_settings();
     void set_correct_style();
-
 private slots:
   void handleModify();
   void handleBack();
@@ -132,7 +130,6 @@ private:
     QVBoxLayout *sliders_right;
     QHBoxLayout *sliders;
     QComboBox *habits_display;
-    QListView *habits_view;
 
     //display of entry_recap
     QLabel *recap_title;

@@ -400,7 +400,6 @@ void MainWindow::on_save_settings_clicked() {
   myfile << findChild<QCheckBox *>("communications")->isChecked() << "\n";
   myfile << findChild<QCheckBox *>("physical_activity")->isChecked() << "\n";
   myfile.close();
-  MainWindow::settings_refresh();
   update_graphs();
   auto settings = findChild<QWidget *>("settings_frame");
   settings->hide();
@@ -741,13 +740,9 @@ void MainWindow::remove_activities_from_old_entries(int position){
             entry->set_activities(activities_removed);
         }
     }
-void MainWindow::settings_refresh(){
-    for(EntryCard *c : displayed_cards){
-        c->update_settings();
-    }
-}
 
-void MainWindow::refresh_acttivities(){
+
+void MainWindow::refresh_activities(){
     for(EntryCard *c : displayed_cards){
         if(c->isReadOnly()){
             c->remove_non_existent_act();
