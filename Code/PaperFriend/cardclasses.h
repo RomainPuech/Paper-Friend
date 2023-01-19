@@ -91,8 +91,6 @@ private:
     QLabel *mood_display;
     QListWidget *fr_act_display;
     QLabel *title;
-    QWidget *title_container;
-    QHBoxLayout *title_layout;
     QTextEdit *text_field;
     QWidget *text_title_w; // widget for title, text_field and modify
     QVBoxLayout *text_title_vb; // handles the layout of text_title_w
