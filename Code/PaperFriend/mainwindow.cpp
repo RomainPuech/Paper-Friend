@@ -81,8 +81,6 @@ MainWindow::MainWindow(QWidget *parent)
 
   // Load habits
 
-  // std::vector<QStringList> habits_of_the_day = get_habits_of_the_day();
-
   QDate date = date.currentDate();
   int tmp = date.dayOfWeek();
   std::string day_of_week;
@@ -159,7 +157,7 @@ MainWindow::MainWindow(QWidget *parent)
       QWidget *widget = new QWidget();
       QLabel *label = new QLabel();
       label->setObjectName("habit_label");
-      label->setText(habits_of_the_day[i][0] + ".\n You did it " +
+      label->setText(habits_of_the_day[i][0] + ".\nYou did it " +
                      habits_of_the_day[i][2] + " time! Did you do it today?");
       QPushButton *yes_button = new QPushButton("Yes");
       yes_button->setObjectName("yes_button");
@@ -192,8 +190,6 @@ MainWindow::MainWindow(QWidget *parent)
   } else {
     ui->habits_scrollArea->setVisible(false);
   }
-
-  // display_habits_of_the_day(habits_of_the_day, ui);
 
   displayed_entries = vector_entries;
 
@@ -807,9 +803,8 @@ void MainWindow::on_yes_button_clicked() {
   delete_button->setDisabled(true);
   QLabel *habit_label = parent->findChild<QLabel *>("habit_label");
   QStringList tmp = habit_label->text().split(".");
-  std::cout << "Yes" << std::endl;
-  std::cout << habit_label->text().toStdString() << std::endl;
-  save_incrementation_of_habits(tmp[0]);
+  int i = save_incrementation_of_habits(tmp[0]);
+  habit_label->setText(tmp[0] + ".\nYou just did it " + QString::number(i) + " time!");
 }
 
 void MainWindow::on_no_button_clicked() {
@@ -824,7 +819,7 @@ void MainWindow::on_no_button_clicked() {
   QLabel *habit_label = parent->findChild<QLabel *>("habit_label");
   QStringList tmp = habit_label->text().split(".");
   save_reset_of_habits(tmp[0]);
-  std::cout << "No" << std::endl;
+  habit_label->setText(tmp[0] + ".\nIt got reset to 0.");
 }
 
 void MainWindow::on_delete_button_clicked() {
@@ -838,5 +833,6 @@ void MainWindow::on_delete_button_clicked() {
   QLabel *habit_label = parent->findChild<QLabel *>("habit_label");
   QStringList tmp = habit_label->text().split(".");
   save_delete_of_habits(tmp[0]);
-  std::cout << "Delete" << std::endl;
+  habit_label->setTextFormat(Qt::RichText);
+  habit_label->setText("<s>" + tmp[0] + "</s>");
 }
