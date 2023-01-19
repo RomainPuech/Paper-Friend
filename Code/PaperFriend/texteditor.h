@@ -25,12 +25,6 @@ public:
     ~TextEditor();
     friend class MainWindow;
     class MainWindow *mainUi;
-    void newFile();                         // Create a New file
-    bool maybeSave();                       // check if the file is saved
-    bool save();                            // save operation
-    bool saveAs();                          // save as operation
-    bool saveFile(const QString &fileName); // Save the file
-    bool loadFile(const QString &fileName); // Load the file
     void mergeformat(const QTextCharFormat &fmt);
     void textColor();                                          // Set the text color
     void textCurrentFormatChanged(const QTextCharFormat &fmt); // Change the status of the menu
@@ -58,13 +52,6 @@ public:
     void set_max_height(int height);
 
 private slots:
-    void on_action_New_triggered();
-
-    void on_action_Save_triggered();
-
-    void on_action_SavaAs_triggered();
-
-    void on_action_Open_triggered();
 
     void on_action_Color_triggered();
 
@@ -95,9 +82,7 @@ private:
     Edit edit;
     Ui::TextEditor *ui;
     // if isUntitled is true, the file is not saved
-    bool isUntitled;
     // Save the current file path
-    QString curFile;
     bool isUndo = 0;
     bool isRedo = 0;
     bool isLoadFile = 0;

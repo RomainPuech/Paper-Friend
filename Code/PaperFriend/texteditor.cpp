@@ -19,14 +19,12 @@ TextEditor::TextEditor(QWidget *parent) : QWidget(parent),
                                           ui(new Ui::TextEditor)
 {
     ui->setupUi(this);
-    isUntitled = true;                    // initialize the text as the status of unsaved
-    curFile = tr("Untitled.txt");         // initialize the current file name as "untitled.txt"
     strUndo.push(ui->textEdit->toHtml()); // Here the strUndo is a stack
     connect(ui->textEdit, SIGNAL(textChanged(QString)), this, SLOT(on_textEdit_textChanged));
     // Set Background color
-    ui -> lineEdit -> setStyleSheet("background-color: rgb(220, 220, 220); border-radius: 5px;");
-    ui -> line -> setStyleSheet("background-color: rgb(0,0,0); border-radius: 50%; width: 90%;");
-    ui -> lineEdit -> setPlaceholderText("Edit Entry Title");
+    ui->lineEdit->setStyleSheet("background-color: rgb(220, 220, 220); border-radius: 5px;");
+    ui->line->setStyleSheet("background-color: rgb(0,0,0); border-radius: 50%; width: 90%;");
+    ui->lineEdit->setPlaceholderText("Edit Entry Title");
     ui->textEdit->setPlaceholderText("Edit Entry Text");
 }
 
@@ -44,7 +42,6 @@ void TextEditor::set_title(QString text)
     ui->lineEdit->setText(text);
     this->setWindowTitle(text);
 }
-
 
 // Set the maximum height of the text editor
 void TextEditor::set_max_height(int height)
@@ -80,67 +77,6 @@ void TextEditor::set_text(QString text)
     ui->textEdit->insertHtml(text);
 }
 
-// Create a new file - checked
-// If you create a file without saving the previous file, the warning will pop up to remind you to save the previous file
-void TextEditor::newFile()
-{
-    if (maybeSave() == true)
-    {
-        isUntitled = true;
-        curFile = tr("Untitled.txt");
-        setWindowTitle(curFile);
-        ui->textEdit->clear();
-        ui->textEdit->setVisible(true);
-        strUndo.push(ui->textEdit->toHtml());
-    }
-    resetStack();                         // clean and reset the stack and return to the initial state of 0
-    strUndo.push(ui->textEdit->toHtml()); // push the current text into the stack
-}
-
-// Check if the file is saved - checked
-// If the file is not saved, then pop up a dialog box to ask the user to save the file, otherwise, return false
-bool TextEditor::maybeSave()
-{
-    // if the file is modified
-    if ((ui->textEdit->document()->isModified()) || ((undoIsUsed) && (!strUndo.isEmpty())))
-    {
-        // Waring part, we create a warning box here
-        QMessageBox box;
-        isUntitled = false;
-        box.setWindowTitle(tr("Warning"));
-        box.setIcon(QMessageBox::Warning);
-        box.setText(curFile + tr(" haven't been saved, Do you want to save it?"));
-        QPushButton *yesBtn = box.addButton(tr("YES"),
-                                            QMessageBox::YesRole);
-        QPushButton *noBtn = box.addButton(tr("NO"),
-                                           QMessageBox::NoRole);
-        QPushButton *cancelBut = box.addButton(tr("CANCEL"),
-                                               QMessageBox::RejectRole);
-        box.exec();
-        if (box.clickedButton() == yesBtn)
-            return save();
-        else if (box.clickedButton() == cancelBut)
-            return false;
-    }
-    return true;
-}
-
-// Save the file - checked
-bool TextEditor::save()
-{
-    isUntitled == true ? saveAs() : saveFile(curFile);
-}
-
-// Save the file as - checked
-bool TextEditor::saveAs()
-{
-    QString fileName = QFileDialog::getSaveFileName(this,
-                                                    tr("Save As"), curFile);
-    if (fileName.isEmpty())
-        return false;
-    return saveFile(fileName);
-}
-
 // Clean the stack when open a new file
 void TextEditor::resetStack()
 {
@@ -154,79 +90,6 @@ void TextEditor::resetStack()
         strRedo.pop();
     }
     undoIsUsed = 0;
-}
-
-// Save the file
-bool TextEditor::saveFile(const QString &fileName)
-{
-    QFile file(fileName);
-
-    QTextStream out(&file);
-    // mouse pointer change to wait
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    out << ui->textEdit->toHtml();
-    // mouse pointer change to original
-    QApplication::restoreOverrideCursor();
-    isUntitled = false;
-    // get the current file name
-    curFile = QFileInfo(fileName).canonicalFilePath();
-    setWindowTitle(curFile);
-    return true;
-}
-
-// Load the file
-bool TextEditor::loadFile(const QString &fileName)
-{
-    // resetStack();
-    QFile file(fileName); // create a new Qfile object
-
-    QTextStream in(&file); // create a new QTextStream object
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    // Read the file
-    ui->textEdit->setHtml(in.readAll());
-    resetStack();
-    strUndo.push(ui->textEdit->toHtml());
-    QApplication::restoreOverrideCursor();
-
-    // Set the current file name
-    curFile = QFileInfo(fileName).canonicalFilePath();
-    setWindowTitle(curFile + tr(" TextEditor"));
-    ui->textEdit->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
-    return true;
-}
-
-// Justify Triggered Part
-void TextEditor::on_action_New_triggered()
-{
-    newFile();
-}
-
-void TextEditor::on_action_Save_triggered()
-{
-    save();
-}
-
-void TextEditor::on_action_SavaAs_triggered()
-{
-    saveAs();
-}
-
-void TextEditor::on_action_Open_triggered()
-{
-    //    resetStack();
-    //    isLoadFile=1;
-    if (maybeSave())
-    {
-
-        QString fileName = QFileDialog::getOpenFileName(this);
-
-        // 如果文件名不为空，则加载文件
-        if (!fileName.isEmpty())
-        {
-            loadFile(fileName);
-            ui->textEdit->setVisible(true);
-        }
-    }
 }
 
 void TextEditor::mergeformat(const QTextCharFormat &fmt)
@@ -298,7 +161,6 @@ void TextEditor::on_action_Center_triggered()
         ui->action_Center->setChecked(true);
     }
 }
-
 
 void TextEditor::on_action_Justify_triggered()
 {
