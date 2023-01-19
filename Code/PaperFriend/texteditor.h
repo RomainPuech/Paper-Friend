@@ -76,7 +76,7 @@ private slots:
 
     void on_action_Center_triggered();
 
-    void on_action_Justify_triggered();
+    void on_action_Just_triggered();
 
 private:
     Edit edit;
