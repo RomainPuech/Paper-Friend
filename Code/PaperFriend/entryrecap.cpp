@@ -1,6 +1,7 @@
 #include "entryrecap.h"
 #include "entryclasses.h"
 
+
 EntryRecap::EntryRecap() : Entry() {
   this->best_day = EntryPerso();
   this->worst_day = EntryPerso();
@@ -16,6 +17,7 @@ EntryRecap::EntryRecap(EntryPerso best_day, EntryPerso worst_day,
   this->text = text;
   this->type = type;
   this->average_mood = average_mood;
+
 }
 
 int EntryRecap::entry_type() const { return 2; }
