@@ -55,7 +55,7 @@ void TextAnalysis::analyze_text(){
     std::ofstream f_write;
     f_write.open ("./nlp/input.txt");
 
-    std::string text_in = log.end()->get_text();
+    std::string text_in = entry->get_text();
     f_write << text_in << std::endl;
 
     system("./nlp/nlp_text_sentiment");  // runs the python exe file and writes the result in "output.txt"

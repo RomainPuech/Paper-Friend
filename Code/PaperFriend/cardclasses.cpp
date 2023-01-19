@@ -707,7 +707,7 @@ EntryCard::~EntryCard() {
 void EntryCard::handleModify() { this->change(); }
 
 void EntryCard::handleAnalize(){
-    TextAnalysis analize_text = TextAnalysis();
+    TextAnalysis analize_text = TextAnalysis(entry_perso);
     text_analysis_window popup = text_analysis_window(this);
     analize_text.analyze_text();
     popup.set_message("The analysis of this entry suggests that your mood is " + QString::number(analize_text.get_text_mood()));

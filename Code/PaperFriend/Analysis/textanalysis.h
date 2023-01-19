@@ -5,11 +5,11 @@
 #include "DataAnalysis.h"
 
 
-class TextAnalysis: public DataAnalysis{
+class TextAnalysis{
 
 public:
 
-    TextAnalysis(): DataAnalysis(){text_mood=0;};
+    TextAnalysis(EntryPerso* entry): entry(entry){text_mood=0;};
 
     void analyze_text();
 
@@ -20,7 +20,7 @@ public:
 private:
 
     double text_mood;  // mood predicted from the text from 0 to 1
-
+    EntryPerso * entry;
 };
 
 #endif // TEXTANALYSIS_H
