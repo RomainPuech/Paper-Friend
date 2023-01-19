@@ -35,6 +35,7 @@ EntryPerso EntryRecap::get_worst_day() { return this->worst_day; }
 double EntryRecap::get_average_mood() { return this->average_mood; }
 
 int EntryRecap::get_type() { return this->type; }
+
 std::string EntryRecap::get_text() { return this->text; }
 
 void EntryRecap::set_best_day(EntryPerso best_day) {
@@ -45,9 +46,11 @@ void EntryRecap::set_worst_day(EntryPerso worst_day) {
   this->worst_day = worst_day;
 }
 
+
 void EntryRecap::set_average_mood(double average_mood) {
   this->average_mood = average_mood;
 }
+
 void EntryRecap::set_type(int type) { this->type = type; }
 
 void EntryRecap::set_text(std::string text) { this->text = text; }
