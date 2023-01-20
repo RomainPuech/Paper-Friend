@@ -76,6 +76,7 @@ public:
   void update_fr_act();
   void remove_non_existent_act();
   void set_correct_style();
+  void set_habits_colors();
 private slots:
   void handleModify();
   void handleAnalize();
@@ -137,6 +138,7 @@ private:
   QVBoxLayout *sliders_right;
   QHBoxLayout *sliders;
   QComboBox *habits_display;
+  QListView *habits_view;
 
   // display of entry_recap
   QLabel *recap_title;

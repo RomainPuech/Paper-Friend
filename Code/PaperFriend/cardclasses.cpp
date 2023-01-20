@@ -161,6 +161,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
   fr_act_display = new QListWidget();
   fr_act_select = new QListWidget();
   habits_display = new QComboBox();
+  habits_view = new QListView();
   mood_display = new QLabel();
   mood_slider_w = new QWidget();
   mood_slider_instr = new QLabel(mood_slider_w);
@@ -407,41 +408,37 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     // display habits
     // habits_display->setParent(this);
     habits_display->setEditable(false);
+    habits_display->setView(habits_view);
     habits_display->setLayoutDirection(Qt::RightToLeft);
+    habits_display->setItemData(0, QBrush(Qt::black), Qt::ForegroundRole);
     // display mood
     habits_display->addItem(
         "Mood: " + QString::number(std::round(entry_perso->get_mood())) + "%");
     habits_display->setItemData(0, Qt::AlignCenter, Qt::TextAlignmentRole);
-    // display sleep
+    //display sleep
     habits_display->addItem(
-        "Sleep: " + QString::number(std::round(entry_perso->get_sleep())) +
-        "%");
+        "Sleep: " + QString::number(std::round(entry_perso->get_sleep())) + "%");
     habits_display->setItemData(1, Qt::AlignCenter, Qt::TextAlignmentRole);
-    // display eating
+    //display eating
     habits_display->addItem(
-        "Eating healthy: " +
-        QString::number(std::round(entry_perso->get_eating_healthy())) + "%");
+        "Eating healthy: " + QString::number(std::round(entry_perso->get_eating_healthy())) + "%");
     habits_display->setItemData(2, Qt::AlignCenter, Qt::TextAlignmentRole);
-    // display productivity
+    //display productivity
     habits_display->addItem(
-        "Productivity: " +
-        QString::number(std::round(entry_perso->get_productivity())) + "%");
+        "Productivity: " + QString::number(std::round(entry_perso->get_productivity())) + "%");
     habits_display->setItemData(3, Qt::AlignCenter, Qt::TextAlignmentRole);
-    // display socializing
+    //display communications
     habits_display->addItem(
-        "Socializing: " +
-        QString::number(std::round(entry_perso->get_socializing())) + "%");
+        "Socializing: " + QString::number(std::round(entry_perso->get_socializing())) + "%");
     habits_display->setItemData(4, Qt::AlignCenter, Qt::TextAlignmentRole);
-    // display physical_activity
+    //display screen
     habits_display->addItem(
-        "Physical activity: " +
-        QString::number(std::round(entry_perso->get_physical_activity())) +
-        "%");
+        "Physical activity: " + QString::number(std::round(entry_perso->get_physical_activity())) + "%");
     habits_display->setItemData(5, Qt::AlignCenter, Qt::TextAlignmentRole);
 
-    // mood_display->setMaximumSize(47);
+    //mood_display->setMaximumSize(47);
     habits_display->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    // mood_display->setAlignment(Qt::AlignCenter);
+    //mood_display->setAlignment(Qt::AlignCenter);
 
     // get mood
     mood_slider->setMinimum(0);
@@ -990,6 +987,22 @@ void EntryCard::update_fr_act() {
   this->remove_non_existent_act();
 }
 
+void EntryCard::set_habits_colors(){
+    int red, green;
+    generate_rgb(red, green, entry_perso->get_mood() / 100);
+    habits_display->setItemData(0, QBrush(QColor(red, green, 0)), Qt::ForegroundRole);
+    generate_rgb(red, green, entry_perso->get_sleep() / 100);
+    habits_display->setItemData(1, QBrush(QColor(red, green, 0)), Qt::ForegroundRole);
+    generate_rgb(red, green, entry_perso->get_eating_healthy() / 100);
+    habits_display->setItemData(2, QBrush(QColor(red, green, 0)), Qt::ForegroundRole);
+    generate_rgb(red, green, entry_perso->get_productivity() / 100);
+    habits_display->setItemData(3, QBrush(QColor(red, green, 0)), Qt::ForegroundRole);
+    generate_rgb(red, green, entry_perso->get_socializing() / 100);
+    habits_display->setItemData(4, QBrush(QColor(red, green, 0)), Qt::ForegroundRole);
+    generate_rgb(red, green, entry_perso->get_physical_activity() / 100);
+    habits_display->setItemData(5, QBrush(QColor(red, green, 0)), Qt::ForegroundRole);
+}
+
 void EntryCard::set_entryPerso_style(int top_menu_num_items) {
   if (top_menu_num_items == 3 and readOnly) {
     fr_act_display->setVisible(true);
@@ -1040,157 +1053,108 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
       "font-weight: bold; border-style: none; border-radius: 0px; "
       "border-right: 1px solid black; border-bottom: 1px solid black;");
   int red, green;
-
-  switch (habits_display->currentIndex()) {
-  case 0:
-    generate_rgb(red, green, entry_perso->get_mood() / 100);
-    habits_display->setStyleSheet(
-        "font-weight: bold; border-style: none; border-bottom: 1px solid "
-        "black; "
-        "border-radius: 0px; border-top-right-radius:" +
-        QString::number(this->get_border_radius()) + "px; color: rgb(" +
-        QString::number(red) + ", " + QString::number(green) + ", 0);");
-    break;
-  case 1:
-    generate_rgb(red, green, entry_perso->get_sleep() / 100);
-    habits_display->setStyleSheet(
-        "font-weight: bold; border-style: none; border-bottom: 1px solid "
-        "black; "
-        "border-radius: 0px; border-top-right-radius:" +
-        QString::number(this->get_border_radius()) + "px; color: rgb(" +
-        QString::number(red) + ", " + QString::number(green) + ", 0);");
-    break;
-  case 2:
-    generate_rgb(red, green, entry_perso->get_eating_healthy() / 100);
-    habits_display->setStyleSheet(
-        "font-weight: bold; border-style: none; border-bottom: 1px solid "
-        "black; "
-        "border-radius: 0px; border-top-right-radius:" +
-        QString::number(this->get_border_radius()) + "px; color: rgb(" +
-        QString::number(red) + ", " + QString::number(green) + ", 0);");
-    break;
-  case 3:
-    generate_rgb(red, green, entry_perso->get_productivity() / 100);
-    habits_display->setStyleSheet(
-        "font-weight: bold; border-style: none; border-bottom: 1px solid "
-        "black; "
-        "border-radius: 0px; border-top-right-radius:" +
-        QString::number(this->get_border_radius()) + "px; color: rgb(" +
-        QString::number(red) + ", " + QString::number(green) + ", 0);");
-    break;
-  case 4:
-    generate_rgb(red, green, entry_perso->get_socializing() / 100);
-    habits_display->setStyleSheet(
-        "font-weight: bold; border-style: none; border-bottom: 1px solid "
-        "black; "
-        "border-radius: 0px; border-top-right-radius:" +
-        QString::number(this->get_border_radius()) + "px; color: rgb(" +
-        QString::number(red) + ", " + QString::number(green) + ", 0);");
-    break;
-  case 5:
-    generate_rgb(red, green, entry_perso->get_physical_activity() / 100);
-    habits_display->setStyleSheet(
-        "font-weight: bold; border-style: none; border-bottom: 1px solid "
-        "black; "
-        "border-radius: 0px; border-top-right-radius:" +
-        QString::number(this->get_border_radius()) + "px; color: rgb(" +
-        QString::number(red) + ", " + QString::number(green) + ", 0);");
-    break;
-  default:
-    habits_display->setStyleSheet(
-        "font-weight: bold; border-style: none; border-bottom: 1px solid "
-        "black; "
-        "border-radius: 0px; border-top-right-radius:" +
-        QString::number(this->get_border_radius()) + "px;");
-    break;
+    switch(habits_display->currentIndex()){
+    case 0:
+        generate_rgb(red, green, entry_perso->get_mood() / 100);
+        habits_display->setStyleSheet(
+            "font-weight: bold; border-style: none; border-bottom: 1px solid black; "
+            "border-radius: 0px; border-top-right-radius:" +
+            QString::number(this->get_border_radius()) + "px; color: rgb(" + QString::number(red) + ", " + QString::number(green) + ", 0);");
+        break;
+    case 1:
+        generate_rgb(red, green, entry_perso->get_sleep() / 100);
+        habits_display->setStyleSheet(
+            "font-weight: bold; border-style: none; border-bottom: 1px solid black; "
+            "border-radius: 0px; border-top-right-radius:" +
+            QString::number(this->get_border_radius()) + "px; color: rgb(" + QString::number(red) + ", " + QString::number(green) + ", 0);");
+        break;
+    case 2:
+        generate_rgb(red, green, entry_perso->get_eating_healthy() / 100);
+        habits_display->setStyleSheet(
+            "font-weight: bold; border-style: none; border-bottom: 1px solid black; "
+            "border-radius: 0px; border-top-right-radius:" +
+            QString::number(this->get_border_radius()) + "px; color: rgb(" + QString::number(red) + ", " + QString::number(green) + ", 0);");
+        break;
+     case 3:
+        generate_rgb(red, green, entry_perso->get_productivity() / 100);
+        habits_display->setStyleSheet(
+            "font-weight: bold; border-style: none; border-bottom: 1px solid black; "
+            "border-radius: 0px; border-top-right-radius:" +
+            QString::number(this->get_border_radius()) + "px; color: rgb(" + QString::number(red) + ", " + QString::number(green) + ", 0);");
+        break;
+      case 4:
+        generate_rgb(red, green, entry_perso->get_socializing() / 100);
+        habits_display->setStyleSheet(
+            "font-weight: bold; border-style: none; border-bottom: 1px solid black; "
+            "border-radius: 0px; border-top-right-radius:" +
+            QString::number(this->get_border_radius()) + "px; color: rgb(" + QString::number(red) + ", " + QString::number(green) +  ", 0);");
+        break;
+       case 5:
+        generate_rgb(red, green, entry_perso->get_physical_activity() / 100);
+        habits_display->setStyleSheet(
+            "font-weight: bold; border-style: none; border-bottom: 1px solid black; "
+            "border-radius: 0px; border-top-right-radius:" +
+            QString::number(this->get_border_radius()) + "px; color: rgb(" + QString::number(red) + ", " + QString::number(green) + ", 0);");
+        break;
+     default:
+        break;
   }
-  generate_rgb(red, green, entry_perso->get_mood() / 100);
-  habits_display->setItemData(0, QBrush(QColor(red, green, 0)),
-                              Qt::ForegroundRole);
-  generate_rgb(red, green, entry_perso->get_sleep() / 100);
-  habits_display->setItemData(1, QBrush(QColor(red, green, 0)),
-                              Qt::ForegroundRole);
-  generate_rgb(red, green, entry_perso->get_eating_healthy() / 100);
-  habits_display->setItemData(2, QBrush(QColor(red, green, 0)),
-                              Qt::ForegroundRole);
-  generate_rgb(red, green, entry_perso->get_productivity() / 100);
-  habits_display->setItemData(3, QBrush(QColor(red, green, 0)),
-                              Qt::ForegroundRole);
-  generate_rgb(red, green, entry_perso->get_socializing() / 100);
-  habits_display->setItemData(4, QBrush(QColor(red, green, 0)),
-                              Qt::ForegroundRole);
-  generate_rgb(red, green, entry_perso->get_physical_activity() / 100);
-  habits_display->setItemData(5, QBrush(QColor(red, green, 0)),
-                              Qt::ForegroundRole);
-  connect(
-      habits_display, QOverload<int>::of(&QComboBox::currentIndexChanged),
-      [=](int index) {
-        switch (index) {
+    set_habits_colors();
+    connect(habits_display, QOverload<int>::of(&QComboBox::currentIndexChanged),
+        [=](int index){ switch(index){
 
-          int red, green;
+        int red, green;
         case 0:
-          generate_rgb(red, green, entry_perso->get_mood() / 100);
-          habits_display->setStyleSheet(
-              "font-weight: bold; border-style: none; border-bottom: 1px solid "
-              "black; "
-              "border-radius: 0px; border-top-right-radius:" +
-              QString::number(this->get_border_radius()) + "px; color: rgb(" +
-              QString::number(red) + ", " + QString::number(green) + ", 0);");
-          break;
+            generate_rgb(red, green, entry_perso->get_mood() / 100);
+            habits_display->setStyleSheet(
+                "font-weight: bold; border-style: none; border-bottom: 1px solid black; "
+                "border-radius: 0px; border-top-right-radius:" +
+                QString::number(this->get_border_radius()) + "px; color: rgb(" + QString::number(red) + ", " + QString::number(green) + ", 0);");
+            set_habits_colors();
+            break;
         case 1:
-          generate_rgb(red, green, entry_perso->get_sleep() / 100);
-          habits_display->setStyleSheet(
-              "font-weight: bold; border-style: none; border-bottom: 1px solid "
-              "black; "
-              "border-radius: 0px; border-top-right-radius:" +
-              QString::number(this->get_border_radius()) + "px; color: rgb(" +
-              QString::number(red) + ", " + QString::number(green) + ", 0);");
-          break;
+            generate_rgb(red, green, entry_perso->get_sleep() / 100);
+            habits_display->setStyleSheet(
+                "font-weight: bold; border-style: none; border-bottom: 1px solid black; "
+                "border-radius: 0px; border-top-right-radius:" +
+                QString::number(this->get_border_radius()) + "px; color: rgb(" + QString::number(red) + ", " + QString::number(green) + ", 0);");
+            set_habits_colors();
+            break;
         case 2:
-          generate_rgb(red, green, entry_perso->get_eating_healthy() / 100);
-          habits_display->setStyleSheet(
-              "font-weight: bold; border-style: none; border-bottom: 1px solid "
-              "black; "
-              "border-radius: 0px; border-top-right-radius:" +
-              QString::number(this->get_border_radius()) + "px; color: rgb(" +
-              QString::number(red) + ", " + QString::number(green) + ", 0);");
-          break;
-        case 3:
-          generate_rgb(red, green, entry_perso->get_productivity() / 100);
-          habits_display->setStyleSheet(
-              "font-weight: bold; border-style: none; border-bottom: 1px solid "
-              "black; "
-              "border-radius: 0px; border-top-right-radius:" +
-              QString::number(this->get_border_radius()) + "px; color: rgb(" +
-              QString::number(red) + ", " + QString::number(green) + ", 0);");
-          break;
-        case 4:
-          generate_rgb(red, green, entry_perso->get_socializing() / 100);
-          habits_display->setStyleSheet(
-              "font-weight: bold; border-style: none; border-bottom: 1px solid "
-              "black; "
-              "border-radius: 0px; border-top-right-radius:" +
-              QString::number(this->get_border_radius()) + "px; color: rgb(" +
-              QString::number(red) + ", " + QString::number(green) + ", 0);");
-          break;
-        case 5:
-          generate_rgb(red, green, entry_perso->get_physical_activity() / 100);
-          habits_display->setStyleSheet(
-              "font-weight: bold; border-style: none; border-bottom: 1px solid "
-              "black; "
-              "border-radius: 0px; border-top-right-radius:" +
-              QString::number(this->get_border_radius()) + "px; color: rgb(" +
-              QString::number(red) + ", " + QString::number(green) + ", 0);");
-          break;
-        default:
-          habits_display->setStyleSheet(
-              "font-weight: bold; border-style: none; border-bottom: 1px solid "
-              "black; "
-              "border-radius: 0px; border-top-right-radius:" +
-              QString::number(this->get_border_radius()) + "px;");
-          break;
-        }
-      });
+            generate_rgb(red, green, entry_perso->get_eating_healthy() / 100);
+            habits_display->setStyleSheet(
+                "font-weight: bold; border-style: none; border-bottom: 1px solid black; "
+                "border-radius: 0px; border-top-right-radius:" +
+                QString::number(this->get_border_radius()) + "px; color: rgb(" + QString::number(red) + ", " + QString::number(green) + ", 0);");
+            set_habits_colors();
+            break;
+         case 3:
+            generate_rgb(red, green, entry_perso->get_productivity() / 100);
+            habits_display->setStyleSheet(
+                "font-weight: bold; border-style: none; border-bottom: 1px solid black; "
+                "border-radius: 0px; border-top-right-radius:" +
+                QString::number(this->get_border_radius()) + "px; color: rgb(" + QString::number(red) + ", " + QString::number(green) + ", 0);");
+            set_habits_colors();
+            break;
+          case 4:
+            generate_rgb(red, green, entry_perso->get_socializing() / 100);
+            habits_display->setStyleSheet(
+                "font-weight: bold; border-style: none; border-bottom: 1px solid black; "
+                "border-radius: 0px; border-top-right-radius:" +
+                QString::number(this->get_border_radius()) + "px; color: rgb(" + QString::number(red) + ", " + QString::number(green) +  ", 0);");
+            set_habits_colors();
+            break;
+           case 5:
+            generate_rgb(red, green, entry_perso->get_physical_activity() / 100);
+            habits_display->setStyleSheet(
+                "font-weight: bold; border-style: none; border-bottom: 1px solid black; "
+                "border-radius: 0px; border-top-right-radius:" +
+                QString::number(this->get_border_radius()) + "px; color: rgb(" + QString::number(red) + ", " + QString::number(green) + ", 0);");
+            set_habits_colors();
+            break;
+         default:
+            break;
+        }});
   mood_slider_w->setStyleSheet(
       "border-style: none; border-bottom: 1px solid black; border-radius: 0px; "
       "border-top-right-radius: " +
