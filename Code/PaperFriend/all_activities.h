@@ -42,7 +42,6 @@ public slots:
 
 private:
   MainWindow *mainwindowptr;
-  bool are_equal;
   std::vector<Activity> &vector_activities;
   Ui::all_activities *ui;
 };
