@@ -1346,3 +1346,7 @@ bool Card::eventFilter(QObject *target, QEvent *e) {
   }
   return false;
 }
+
+QDate EntryCard::get_entry_date(){
+    return entry->get_qdate();
+}

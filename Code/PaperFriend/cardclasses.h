@@ -77,6 +77,7 @@ public:
   void remove_non_existent_act();
   void set_correct_style();
   void set_habits_colors();
+  QDate get_entry_date();
 private slots:
   void handleModify();
   void handleAnalize();
