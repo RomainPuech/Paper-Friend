@@ -334,7 +334,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
             (entry_perso->get_activities().at(act))->get_name());
         switch ((entry_perso->get_activities().at(act))->get_type()) {
         case 1: // friends
-            name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+            name += QString::fromUtf8("\xF0\x9F\x91\xAD\xF0\x9F\x91\xAB\xF0\x9F\x91\xAC");
             break;
         case 2: // sports
           name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
@@ -372,7 +372,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
           (entry_perso->get_activities().at(act))->get_name());
       switch ((MainWindow::get_activities().at(act)).get_type()) {
       case 1: // friends
-          name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+          name += QString::fromUtf8("\xF0\x9F\x91\xAC\xF0\x9F\x91\xAB\xF0\x9F\x91\xAD");
           break;
       case 2: // sports
         name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
@@ -895,7 +895,7 @@ void EntryCard::update_fr_act_select() {
         (entry_perso->get_activities().at(act))->get_name());
     switch (entry_perso->get_activities().at(act)->get_type()) {
     case 1: // friends
-        name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+        name += QString::fromUtf8("\xF0\x9F\x91\xAD\xF0\x9F\x91\xAB\xF0\x9F\x91\xAC");
         break;
     case 2: // sports
       name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
@@ -940,7 +940,7 @@ void EntryCard::remove_non_existent_act() {
           (entry_perso->get_activities()).at(act)->get_name());
       switch ((entry_perso->get_activities().at(act))->get_type()) {
       case 1: // friends
-          name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+          name += QString::fromUtf8("\xF0\x9F\x91\xAD\xF0\x9F\x91\xAB\xF0\x9F\x91\xAC");
           break;
       case 2: // sports
         name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");

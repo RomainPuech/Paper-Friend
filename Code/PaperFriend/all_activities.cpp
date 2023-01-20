@@ -66,15 +66,14 @@ void all_activities::add_previous_cells() {
 }
 
 void all_activities::closeCell(int ActivitiesCellNumber) {
-  allCellPtr[ActivitiesCellNumber]->close();
   for (int i = ActivitiesCellNumber + 1; i < allCellPtr.length(); i++) {
     allCellPtr[i]->ActivitiesCellNumber--;
   }
   ActivitiesCellNumberTotal--;
+  allCellPtr[ActivitiesCellNumber]->close();
+  qDebug()<<allCellPtr.at(ActivitiesCellNumber)->get_activity_name();
   allCellPtr.remove(ActivitiesCellNumber);
-  vector_activities.erase(vector_activities.begin() + ActivitiesCellNumber);
-  MainWindow::remove_activities_from_old_entries(ActivitiesCellNumber);
-  MainWindow::refresh_activities();
+  qDebug()<<"Activity removed";
 }
 
 void all_activities::on_save_activity_button_clicked() {
@@ -86,6 +85,8 @@ void all_activities::on_save_activity_button_clicked() {
   QString name_activity;
   int type_activity;
   vector_activities.clear();
+  qDebug()<<"v_e size:" + QString::number(vector_activities.size());
+  qDebug()<<QString::number(allCellPtr.size());
   for (int i = 0; i < allCellPtr.size(); ++i) {
     name_activity = allCellPtr[i]->get_activity_name();
     type_activity = allCellPtr[i]->get_activity_type();
@@ -95,6 +96,7 @@ void all_activities::on_save_activity_button_clicked() {
         Activity(name_activity.toStdString(), type_activity, 0));
     // out << name_activity << " , " << type_activity << "⧵n";
   }
+  qDebug()<<"v_e size:" + QString::number(vector_activities.size());
   save_activities(vector_activities);
 
   bool condition = false;
@@ -137,6 +139,8 @@ void all_activities::on_save_activity_button_clicked() {
   // In terms of complexity it is not the best option but given that the number
   // of entries will reasonably be less than 1000 it is going to be immediate in
   // practice and saves us a lot of time in terms of coding
+
+  MainWindow::remove_activities_from_old_entries();
   mainwindowptr->add_new_activities_to_old_enties();
   MainWindow::refresh_activities();
 }

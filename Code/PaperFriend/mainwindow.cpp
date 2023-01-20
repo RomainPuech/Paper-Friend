@@ -668,13 +668,34 @@ void MainWindow::add_new_activities_to_old_enties() {
     }
   }
 }
-void MainWindow::remove_activities_from_old_entries(int position) {
+void MainWindow::remove_activities_from_old_entries() {
   /* remove an activity after it has been deleted */
-  for (EntryPerso *entry : vector_entries) {
-    std::vector<Activity *> activities_removed = entry->get_activities();
-    activities_removed.erase(activities_removed.begin() + position);
-    entry->set_activities(activities_removed);
-  }
+  if(vector_entries.empty()){return;}
+  std::vector<Activity*> reference_for_entries = vector_entries.at(0)->get_activities(); // the activities currently in entries
+  std::vector<unsigned long long> to_remove; //positions of activities that should be removed
+  // find activities that are present in entries but not in the vector of all activities
+  for(unsigned long long activity = 0; activity < reference_for_entries.size(); activity++){
+      bool not_found = true;
+       for(Activity act: vector_activities) {
+           if(act == *reference_for_entries.at(activity)){// found it
+               not_found = false;
+              break;
+           }
+
+       }
+       if(not_found){to_remove.push_back(activity);}
+ }
+  qDebug()<<"remove: " + QString::number(to_remove.size());
+ for(EntryPerso* entry: vector_entries){
+     std::vector<Activity*> entry_activities = entry->get_activities();
+     for(unsigned long long act_remove : to_remove){
+         qDebug()<<QString::number(act_remove);
+         entry_activities.erase(entry_activities.begin()+act_remove);
+         qDebug()<<"removed from entry" +   QString::number(entry_activities.size());
+     }
+     entry->set_activities(entry_activities);
+ }
+
 }
 
 void MainWindow::refresh_activities() {
