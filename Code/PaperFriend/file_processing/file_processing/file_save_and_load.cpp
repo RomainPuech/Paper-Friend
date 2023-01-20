@@ -379,47 +379,49 @@ void save_last_recaps_dates(std::vector<QString> last_recaps_dates) {
 
 void save_habits_to_file(std::vector<QStringList> new_habits) {
   QFile file("habits.txt");
-  if (file.exists()) {
+  if (file.exists()) { //Check if file already exists in directory.
     std::cout << "File Exists" << std::endl;
     std::ofstream myfile;
-    myfile.open("habits.txt", std::ios::app);
-    myfile << "" << std::endl;
-    for (unsigned long i = 0; i < new_habits.size() - 1; i++) {
+    myfile.open("habits.txt", std::ios::app); //Open the file in append mode (to add at the end of it and not overwrite the file).
+    myfile << "" << std::endl; //Add std::endl to the previous line which doesnt have it.
+    for (unsigned long i = 0; i < new_habits.size() - 1; i++) { //Iterate over vector of Qstring vectors, without the last one (explanation below).
       std::cout << new_habits[i][0].toStdString() << std::endl;
-      myfile << new_habits[i][0].toStdString() + "|" +
-                    new_habits[i][1].toStdString() + "|" +
-                    new_habits[i][2].toStdString() + "|" +
-                    new_habits[i][3].toStdString()
+      myfile << new_habits[i][0].toStdString() + "|" +     //Add habit to the file.
+                    new_habits[i][1].toStdString() + "|" + //Add which day repeated to the file.
+                    new_habits[i][2].toStdString() + "|" + //Add number of streak (initially 0) to the file.
+                    new_habits[i][3].toStdString()         //Add last day modified (initially yesterday's date) to the file.
              << std::endl;
     }
-    myfile << new_habits[new_habits.size() - 1][0].toStdString() + "|" +
+    myfile << new_habits[new_habits.size() - 1][0].toStdString() + "|" +     //Same as above but for last line.
                   new_habits[new_habits.size() - 1][1].toStdString() + "|" +
                   new_habits[new_habits.size() - 1][2].toStdString() + "|" +
                   new_habits[new_habits.size() - 1][3].toStdString();
-    myfile.close();
-  } else {
+    //I excluded the last line from the loop in order not to have std::endl in it, which would create some bugs in loading/saving other habits (empty strings!).
+    myfile.close(); //Close the file.
+  } else { //Create new file.
     std::cout << "Creating new habits file" << std::endl;
     std::ofstream myfile;
     myfile.open("habits.txt");
-    for (unsigned long i = 0; i < new_habits.size() - 1; i++) {
+    for (unsigned long i = 0; i < new_habits.size() - 1; i++) { //Same explanation as above.
       myfile << new_habits[i][0].toStdString() + "|" +
                     new_habits[i][1].toStdString() + "|" +
                     new_habits[i][2].toStdString() + "|" +
                     new_habits[i][3].toStdString()
              << std::endl;
     }
-    myfile << new_habits[new_habits.size() - 1][0].toStdString() + "|" +
+    myfile << new_habits[new_habits.size() - 1][0].toStdString() + "|" +     //Same explanation as above.
                   new_habits[new_habits.size() - 1][1].toStdString() + "|" +
                   new_habits[new_habits.size() - 1][2].toStdString() + "|" +
                   new_habits[new_habits.size() - 1][3].toStdString();
-    myfile.close();
+    myfile.close(); //Close file.
   }
-  file.close();
+  file.close(); //Close file we used to check if file exists or not.
 }
 
-void resave_habits_in_new_file(std::vector<QStringList> new_habits) {
+void resave_habits_in_new_file(std::vector<QStringList> new_habits) { //Resave function for all habits (used to save incrementation/reset of streak and the deletion of habits).
   std::ofstream myfile;
-  myfile.open("habits.txt", std::ios::out);
+  myfile.open("habits.txt", std::ios::out); //The only main difference between this function and the previous one is that we open the file in out mode in order to over write
+                                            //everything.
   for (unsigned long i = 0; i < new_habits.size() - 1; i++) {
     myfile << new_habits[i][0].toStdString() + "|" +
                   new_habits[i][1].toStdString() + "|" +
@@ -434,11 +436,13 @@ void resave_habits_in_new_file(std::vector<QStringList> new_habits) {
   myfile.close();
 }
 
-void save_incrementation_of_habits(QString to_increment) {
+int save_incrementation_of_habits(QString to_increment) { //Functions that loads previously saved habits, finds the habit to icrement its streak and uses function resave
+                                                           //(in order to save the incrementation).
   std::vector<QStringList> old_habits = load_habits();
+  int j;
   for (unsigned long i = 0; i < old_habits.size(); i++) {
     if (old_habits[i][0] == to_increment) {
-      int j = old_habits[i][2].toInt();
+      j = old_habits[i][2].toInt();
       j += 1;
       old_habits[i][2] = QString::number(j);
       old_habits[i][3] = QDate::currentDate().toString();
@@ -446,9 +450,11 @@ void save_incrementation_of_habits(QString to_increment) {
     }
   }
   resave_habits_in_new_file(old_habits);
+  return j;
 }
 
-void save_reset_of_habits(QString to_reset) {
+void save_reset_of_habits(QString to_reset) {//Functions that loads previously saved habits, finds the habit to reset its streak and uses function resave
+                                             //(in order to save the reset).
   std::vector<QStringList> old_habits = load_habits();
   for (unsigned long i = 0; i < old_habits.size(); i++) {
     if (old_habits[i][0] == to_reset) {
@@ -460,14 +466,14 @@ void save_reset_of_habits(QString to_reset) {
   resave_habits_in_new_file(old_habits);
 }
 
-void save_delete_of_habits(QString to_delete) {
+void save_delete_of_habits(QString to_delete) { //Functions that loads previously saved habits, finds the habit to completely delete and uses function resave
+                                                //(in order to completely delete it).
   std::vector<QStringList> old_habits = load_habits();
-  if (old_habits.size() == 1) {
+  if (old_habits.size() == 1) { //If there's only one previously saved habit, then it is for sure the one to delete, so we simply over write it empty.
     std::ofstream myfile;
     myfile.open("habits.txt", std::ios::out);
-    int i = remove("habits.txt");
-    std::cout << i << std::endl;
-  } else {
+    myfile.close();
+  } else { //Find and delete habit from vector of previously saved habits, then resave the new vector.
     for (unsigned long i = 0; i < old_habits.size(); i++) {
       if (old_habits[i][0] == to_delete) {
         old_habits.erase(old_habits.begin() + i);

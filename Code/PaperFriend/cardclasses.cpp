@@ -264,7 +264,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     title->setMinimumHeight(40);
     title->setStyleSheet(
         "background-color: rgb(205, 0, 0); border-radius: 5px;");
-    title->setAlignment(Qt::AlignCenter);
+    title->setAlignment(Qt::AlignCenter | Qt::AlignVCenter);
 
     text_field->setMinimumWidth(this->get_width());
     text_field->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
