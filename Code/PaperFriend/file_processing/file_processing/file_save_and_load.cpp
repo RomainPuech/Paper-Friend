@@ -540,3 +540,76 @@ EntryRecap* load_entryrecap(std::string filename, std::vector<Activity> possible
     return res;
 }
 
+std::vector<QStringList> get_daily_habits() {
+
+    QDate date = date.currentDate();
+    int tmp = date.dayOfWeek();
+    std::string day_of_week;
+    switch (tmp) {
+    case 1:
+      day_of_week = "Every Monday";
+      break;
+    case 2:
+      day_of_week = "Every Tuesday";
+      break;
+    case 3:
+      day_of_week = "Every Wednesday";
+      break;
+    case 4:
+      day_of_week = "Every Thursday";
+      break;
+    case 5:
+      day_of_week = "Every Friday";
+      break;
+    case 6:
+      day_of_week = "Every Saturday";
+      break;
+    case 7:
+      day_of_week = "Every Sunday";
+      break;
+    }
+    std::vector<QStringList> current_habits = load_habits();
+    std::vector<QStringList> habits_of_the_day;
+    for (unsigned long i = 0; i < current_habits.size(); i++) {
+      if (QDate::currentDate().toString() != current_habits[i][3]) {
+        QStringList tmp;
+        if (current_habits[i][1].toStdString() == "Every Day") {
+          tmp.push_back(current_habits[i][0]);
+          tmp.push_back(current_habits[i][1]);
+          tmp.push_back(current_habits[i][2]);
+        }
+        if ((current_habits[i][1].toStdString() == "Every Weekday" &&
+             day_of_week == "Every Monday") ||
+            (current_habits[i][1].toStdString() == "Every Weekday" &&
+             day_of_week == "Every Tuesday") ||
+            (current_habits[i][1].toStdString() == "Every Weekday" &&
+             day_of_week == "Every Wednesday") ||
+            (current_habits[i][1].toStdString() == "Every Weekday" &&
+             day_of_week == "Every Thursday") ||
+            (current_habits[i][1].toStdString() == "Every Weekday" &&
+             day_of_week == "Every Friday")) {
+          tmp.push_back(current_habits[i][0]);
+          tmp.push_back(current_habits[i][1]);
+          tmp.push_back(current_habits[i][2]);
+        }
+        if ((current_habits[i][1].toStdString() == "Every Weekend" &&
+             day_of_week == "Every Saturday") ||
+            (current_habits[i][1].toStdString() == "Every Weekend" &&
+             day_of_week == "Every Sunday")) {
+          tmp.push_back(current_habits[i][0]);
+          tmp.push_back(current_habits[i][1]);
+          tmp.push_back(current_habits[i][2]);
+        }
+        if (current_habits[i][1].toStdString() == day_of_week) {
+          tmp.push_back(current_habits[i][0]);
+          tmp.push_back(current_habits[i][1]);
+          tmp.push_back(current_habits[i][2]);
+        }
+        if (tmp.size() > 0) {
+          habits_of_the_day.push_back(tmp);
+        }
+      }
+    }
+    return habits_of_the_day;
+}
+
