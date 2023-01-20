@@ -189,17 +189,22 @@ std::vector<EntryPerso> DataAnalysis::get_lastn_days_data(int n,
 
   int current; // represents the date from which we count backwards
   if (reference < 0)
-    current = log.front().get_absolute_day() - 1;
+    current = log[log.size() - 1].get_absolute_day();
   else
     current = reference;
 
-  auto comp{[current](auto &entry, int n) {
-    return entry.get_absolute_day() >= current - n &&
-           entry.get_absolute_day() <= current;
+  auto comp_l{[current](auto &entry, int n) {
+    return entry.get_absolute_day() < current - n ||
+           entry.get_absolute_day() > current;
   }};
-  auto cutoff = std::lower_bound(log.begin(), log.end(), n, comp);
+  auto cutoff_l = std::lower_bound(log.begin(), log.end(), n, comp_l);
 
-  std::vector<EntryPerso> res(cutoff, log.end());
+  auto comp_r{[current](auto &entry, int n) {
+    return entry.get_absolute_day() <= current;
+  }};
+
+  auto cutoff_r = std::lower_bound(cutoff_l, log.end(), n, comp_r);
+  std::vector<EntryPerso> res(cutoff_l, cutoff_r);
   return res;
 }
 
@@ -703,7 +708,7 @@ DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &entries,
   for (int i = 0; i < get_num_activities(); ++i) {
     anomaly_texts.push_back("");
   }
-  /*switch(type){
+  switch(type){
       case 0:
           weekly_anomalies_text(entries, anomaly_texts);
           break;
@@ -713,7 +718,7 @@ DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &entries,
       case 2:
           yearly_anomalies_text(entries, anomaly_texts);
 
-  }*/
+  }
 
   double slight_threshold = 0.5; // Some constants to guide judgement
   double significant_threshold = 2;
@@ -762,7 +767,7 @@ DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &entries,
     res += " and ";
     res += var_to_str(influences[1]);
     res += " have the most effect.\n";
-    // res += anomaly_texts[i];
+    res += anomaly_texts[i];
   }
   return res;
 }
@@ -1300,6 +1305,9 @@ DataAnalysis::DataAnalysis(std::vector<EntryPerso *> vector_entries) {
     log.push_back(*entry);
   }
 
+  for (int i = 0; i < log.size(); ++i){
+      qDebug() << log[i].get_absolute_day();
+  }
   std::vector<EntryPerso> last_3y_temp = get_lastn_days_data(1095);
   std::vector<EntryPerso> last_3y;
 
