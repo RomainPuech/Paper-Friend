@@ -21,6 +21,7 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_map>
+#include "display_daily_habit.h""
 
 //// Declarations
 std::vector<Filter_param> filter_params;
@@ -84,112 +85,14 @@ MainWindow::MainWindow(QWidget *parent)
 
   // Load habits
 
-  QDate date = date.currentDate();
-  int tmp = date.dayOfWeek();
-  std::string day_of_week;
-  switch (tmp) {
-  case 1:
-    day_of_week = "Every Monday";
-    break;
-  case 2:
-    day_of_week = "Every Tuesday";
-    break;
-  case 3:
-    day_of_week = "Every Wednesday";
-    break;
-  case 4:
-    day_of_week = "Every Thursday";
-    break;
-  case 5:
-    day_of_week = "Every Friday";
-    break;
-  case 6:
-    day_of_week = "Every Saturday";
-    break;
-  case 7:
-    day_of_week = "Every Sunday";
-    break;
-  }
-  std::vector<QStringList> current_habits = load_habits();
-  std::vector<QStringList> habits_of_the_day;
-  for (unsigned long i = 0; i < current_habits.size(); i++) {
-    if (QDate::currentDate().toString() != current_habits[i][3]) {
-      QStringList tmp;
-      if (current_habits[i][1].toStdString() == "Every Day") {
-        tmp.push_back(current_habits[i][0]);
-        tmp.push_back(current_habits[i][1]);
-        tmp.push_back(current_habits[i][2]);
-      }
-      if ((current_habits[i][1].toStdString() == "Every Weekday" &&
-           day_of_week == "Every Monday") ||
-          (current_habits[i][1].toStdString() == "Every Weekday" &&
-           day_of_week == "Every Tuesday") ||
-          (current_habits[i][1].toStdString() == "Every Weekday" &&
-           day_of_week == "Every Wednesday") ||
-          (current_habits[i][1].toStdString() == "Every Weekday" &&
-           day_of_week == "Every Thursday") ||
-          (current_habits[i][1].toStdString() == "Every Weekday" &&
-           day_of_week == "Every Friday")) {
-        tmp.push_back(current_habits[i][0]);
-        tmp.push_back(current_habits[i][1]);
-        tmp.push_back(current_habits[i][2]);
-      }
-      if ((current_habits[i][1].toStdString() == "Every Weekend" &&
-           day_of_week == "Every Saturday") ||
-          (current_habits[i][1].toStdString() == "Every Weekend" &&
-           day_of_week == "Every Sunday")) {
-        tmp.push_back(current_habits[i][0]);
-        tmp.push_back(current_habits[i][1]);
-        tmp.push_back(current_habits[i][2]);
-      }
-      if (current_habits[i][1].toStdString() == day_of_week) {
-        tmp.push_back(current_habits[i][0]);
-        tmp.push_back(current_habits[i][1]);
-        tmp.push_back(current_habits[i][2]);
-      }
-      if (tmp.size() > 0) {
-        habits_of_the_day.push_back(tmp);
-      }
-    }
-  }
+  std::vector<QStringList> habits_of_the_day = get_daily_habits();
 
   if (habits_of_the_day.size() > 0) {
     ui->generic_habit_label->setVisible(false);
-    QVBoxLayout *layout = new QVBoxLayout();
-    for (unsigned long i = 0; i < habits_of_the_day.size(); i++) {
-      QWidget *widget = new QWidget();
-      QLabel *label = new QLabel();
-      label->setObjectName("habit_label");
-      label->setText(habits_of_the_day[i][0] + ".\nYou did it " +
-                     habits_of_the_day[i][2] + " time! Did you do it today?");
-      QPushButton *yes_button = new QPushButton("Yes");
-      yes_button->setObjectName("yes_button");
-      yes_button->setMaximumWidth(50);
-      connect(yes_button, SIGNAL(clicked()), this,
-              SLOT(on_yes_button_clicked()));
-      QPushButton *no_button = new QPushButton("No");
-      no_button->setObjectName("no_button");
-      no_button->setMaximumWidth(50);
-      connect(no_button, SIGNAL(clicked()), this, SLOT(on_no_button_clicked()));
-      QPushButton *delete_button = new QPushButton("Delete");
-      delete_button->setObjectName("delete_button");
-      delete_button->setMaximumWidth(50);
-      connect(delete_button, SIGNAL(clicked()), this,
-              SLOT(on_delete_button_clicked()));
-      QHBoxLayout *hlayout = new QHBoxLayout();
-      hlayout->addWidget(label);
-      hlayout->addWidget(yes_button);
-      hlayout->addWidget(no_button);
-      hlayout->addWidget(delete_button);
-      widget->setLayout(hlayout);
-      layout->addWidget(widget);
-    }
-
-    QWidget *widget = new QWidget;
-    widget->setLayout(layout);
-
-    ui->habits_scrollArea->setWidget(widget);
-    ui->habits_scrollArea->setWidgetResizable(true);
+      for (unsigned long i = 0; i < habits_of_the_day.size(); i++) {
+        Display_Daily_Habit *new_daily_habit = new Display_Daily_Habit(habits_of_the_day[i][0], habits_of_the_day[i][2], this);
+        ui->verticalLayout_daily_habits->addWidget(new_daily_habit);
+      }
   } else {
     ui->habits_scrollArea->setVisible(false);
   }
@@ -381,7 +284,7 @@ void MainWindow::display_graph(QString tracked_parameter) {
 }
 
 void MainWindow::on_pushButton_clicked() {
-  all_habits = new All_Habits(this);
+  all_habits = new All_Habits(ui, this);
   all_habits->setModal(true);
   all_habits->exec();
 }
@@ -783,49 +686,4 @@ void MainWindow::refresh_activities() {
     }
     c->set_correct_style();
   }
-}
-
-void MainWindow::on_yes_button_clicked() {
-  QAbstractButton *yes_button = qobject_cast<QAbstractButton *>(sender());
-  QWidget *parent = qobject_cast<QWidget *>(yes_button->parent());
-  QPushButton *no_button = parent->findChild<QPushButton *>("no_button");
-  QPushButton *delete_button =
-      parent->findChild<QPushButton *>("delete_button");
-  yes_button->setDisabled(true);
-  no_button->setDisabled(true);
-  delete_button->setDisabled(true);
-  QLabel *habit_label = parent->findChild<QLabel *>("habit_label");
-  QStringList tmp = habit_label->text().split(".");
-  int i = save_incrementation_of_habits(tmp[0]);
-  habit_label->setText(tmp[0] + ".\nYou just did it " + QString::number(i) + " time!");
-}
-
-void MainWindow::on_no_button_clicked() {
-  QAbstractButton *no_button = qobject_cast<QAbstractButton *>(sender());
-  QWidget *parent = qobject_cast<QWidget *>(no_button->parent());
-  QPushButton *yes_button = parent->findChild<QPushButton *>("yes_button");
-  QPushButton *delete_button =
-      parent->findChild<QPushButton *>("delete_button");
-  yes_button->setDisabled(true);
-  no_button->setDisabled(true);
-  delete_button->setDisabled(true);
-  QLabel *habit_label = parent->findChild<QLabel *>("habit_label");
-  QStringList tmp = habit_label->text().split(".");
-  save_reset_of_habits(tmp[0]);
-  habit_label->setText(tmp[0] + ".\nIt got reset to 0.");
-}
-
-void MainWindow::on_delete_button_clicked() {
-  QAbstractButton *delete_button = qobject_cast<QAbstractButton *>(sender());
-  QWidget *parent = qobject_cast<QWidget *>(delete_button->parent());
-  QPushButton *no_button = parent->findChild<QPushButton *>("no_button");
-  QPushButton *yes_button = parent->findChild<QPushButton *>("yes_button");
-  yes_button->setDisabled(true);
-  no_button->setDisabled(true);
-  delete_button->setDisabled(true);
-  QLabel *habit_label = parent->findChild<QLabel *>("habit_label");
-  QStringList tmp = habit_label->text().split(".");
-  save_delete_of_habits(tmp[0]);
-  habit_label->setTextFormat(Qt::RichText);
-  habit_label->setText("<s>" + tmp[0] + "</s>");
 }

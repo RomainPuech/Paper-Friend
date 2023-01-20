@@ -67,4 +67,6 @@ void save_reset_of_habits(QString to_reset);
 
 void save_delete_of_habits(QString to_delete);
 
+std::vector<QStringList> get_daily_habits();
+
 #endif

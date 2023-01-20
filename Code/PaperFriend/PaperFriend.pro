@@ -17,6 +17,7 @@ SOURCES += \
     all_habits.cpp \
     cardclasses.cpp \
     Analysis/DataAnalysis.cpp \
+    display_daily_habit.cpp \
     entryclasses.cpp \
     entryfilter.cpp \
     entryrecap.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     all_habits.h \
     cardclasses.h \
     Analysis/DataAnalysis.h \
+    display_daily_habit.h \
     entryclasses.h \
     entryfilter.h \
     entryrecap.h \
@@ -62,6 +64,7 @@ FORMS += \
     add_habit_cell.ui \
     all_activities.ui \
     all_habits.ui \
+    display_daily_habit.ui \
     mainwindow.ui \
     text_analysis_window.ui \
     texteditor.ui \
