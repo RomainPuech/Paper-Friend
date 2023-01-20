@@ -332,25 +332,26 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
         QString name = QString::fromStdString(
             (entry_perso->get_activities().at(act))->get_name());
         switch ((entry_perso->get_activities().at(act))->get_type()) {
-        case 1: // sports
+        case 1: // friends
+            name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+            break;
+        case 2: // sports
+          name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+          break;
+        case 3: // spiritual
+          name += QString::fromUtf8("\xE2\x9B\xAA\xF0\x9F\xA7\x98\xF0\x9F\x95\x8C");
+          break;
+        case 4: // work
           name +=
-              QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+              QString::fromUtf8("\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
           break;
-        case 2: // spiritual
-          name += QString::fromUtf8("\xE2\x9B\xAA");
-          name += "🧘🕌";
+        case 5: // study
+          name +=
+              QString::fromUtf8("\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
           break;
-        case 3: // work
-          name += QString::fromUtf8(
-              "\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
-          break;
-        case 4: // study
-          name += QString::fromUtf8(
-              "\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
-          break;
-        case 5: // art
-          name += QString::fromUtf8(
-              "\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
+        case 6: // art
+          name +=
+              QString::fromUtf8("\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
           break;
         default:
           break;
@@ -369,26 +370,26 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
       QString name = QString::fromStdString(
           (entry_perso->get_activities().at(act))->get_name());
       switch ((MainWindow::get_activities().at(act)).get_type()) {
-      case 1: // sports
+      case 1: // friends
+          name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+          break;
+      case 2: // sports
+        name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+        break;
+      case 3: // spiritual
+        name += QString::fromUtf8("\xE2\x9B\xAA\xF0\x9F\xA7\x98\xF0\x9F\x95\x8C");
+        break;
+      case 4: // work
         name +=
-            QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+            QString::fromUtf8("\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
         break;
-      case 2: // spiritual
-        name += QString::fromUtf8("\xE2\x9B\xAA");
-        name += "🧘🕌";
+      case 5: // study
+        name +=
+            QString::fromUtf8("\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
         break;
-
-      case 3: // work
-        name += QString::fromUtf8(
-            "\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
-        break;
-      case 4: // study
-        name += QString::fromUtf8(
-            "\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
-        break;
-      case 5: // art
-        name += QString::fromUtf8(
-            "\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
+      case 6: // art
+        name +=
+            QString::fromUtf8("\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
         break;
       default:
         break;
@@ -896,22 +897,24 @@ void EntryCard::update_fr_act_select() {
     QString name = QString::fromStdString(
         (entry_perso->get_activities().at(act))->get_name());
     switch (entry_perso->get_activities().at(act)->get_type()) {
-    case 1: // sports
+    case 1: // friends
+        name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+        break;
+    case 2: // sports
       name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
       break;
-    case 2: // spiritual
-      name += QString::fromUtf8("\xE2\x9B\xAA");
-      name += "🧘🕌";
+    case 3: // spiritual
+      name += QString::fromUtf8("\xE2\x9B\xAA\xF0\x9F\xA7\x98\xF0\x9F\x95\x8C");
       break;
-    case 3: // work
+    case 4: // work
       name +=
           QString::fromUtf8("\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
       break;
-    case 4: // study
+    case 5: // study
       name +=
           QString::fromUtf8("\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
       break;
-    case 5: // art
+    case 6: // art
       name +=
           QString::fromUtf8("\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
       break;
@@ -939,25 +942,26 @@ void EntryCard::remove_non_existent_act() {
       QString name = QString::fromStdString(
           (entry_perso->get_activities()).at(act)->get_name());
       switch ((entry_perso->get_activities().at(act))->get_type()) {
-      case 1: // sports
+      case 1: // friends
+          name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+          break;
+      case 2: // sports
+        name += QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+        break;
+      case 3: // spiritual
+        name += QString::fromUtf8("\xE2\x9B\xAA\xF0\x9F\xA7\x98\xF0\x9F\x95\x8C");
+        break;
+      case 4: // work
         name +=
-            QString::fromUtf8("\xF0\x9F\x8F\x80\xF0\x9F\x8E\xBE\xE2\x9A\xBD");
+            QString::fromUtf8("\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
         break;
-      case 2: // spiritual
-        name += QString::fromUtf8("\xE2\x9B\xAA");
-        name += "🧘🕌";
+      case 5: // study
+        name +=
+            QString::fromUtf8("\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
         break;
-      case 3: // work
-        name += QString::fromUtf8(
-            "\xF0\x9F\x92\xBC\xF0\x9F\x92\xBB\xF0\x9F\x92\xB5");
-        break;
-      case 4: // study
-        name += QString::fromUtf8(
-            "\xF0\x9F\x93\x96\xF0\x9F\x93\x9A\xF0\x9F\x93\x9D");
-        break;
-      case 5: // art
-        name += QString::fromUtf8(
-            "\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
+      case 6: // art
+        name +=
+            QString::fromUtf8("\xF0\x9F\x8E\xBC\xF0\x9F\x8E\xBB\xF0\x9F\x8E\xA8");
         break;
       default:
         break;
