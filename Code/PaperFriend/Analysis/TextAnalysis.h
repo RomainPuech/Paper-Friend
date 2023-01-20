@@ -9,7 +9,7 @@ class TextAnalysis{
 
 public:
 
-    TextAnalysis(QString text): text_to_analize(text){text_mood=0;};
+    TextAnalysis(QString text_to_analize): text_to_analize(text_to_analize.toStdString()){text_mood=0; qDebug()<<QString::fromStdString(this->text_to_analize);};
 
     void analyze_text();
 
@@ -20,7 +20,7 @@ public:
 private:
 
     double text_mood;  // mood predicted from the text from 0 to 1
-    QString text_to_analize;
+    std::string text_to_analize;
 };
 
 #endif // TEXTANALYSIS_H

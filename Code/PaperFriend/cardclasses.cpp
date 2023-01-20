@@ -749,10 +749,11 @@ void EntryCard::handleModify() {
 }
 
 void EntryCard::handleAnalize(){
-    TextAnalysis analize_text = TextAnalysis(edit_text->get_plain_text());
+    TextAnalysis analize_text = TextAnalysis(edit_text->get_title() + " " + edit_text->get_plain_text());
     text_analysis_window popup = text_analysis_window(this);
     analize_text.analyze_text();
     popup.set_message("The analysis of this entry suggests that your mood is " + QString::number(analize_text.get_text_mood()));
+    ///popup.set_message(edit_text->get_plain_text());
     popup.exec();
 }
 

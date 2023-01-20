@@ -64,7 +64,7 @@ void TextAnalysis::analyze_text(){
     std::ofstream f_write;
     f_write.open ("input.txt");
 
-    std::string text_in = (text_to_analize).toStdString();
+    std::string text_in = text_to_analize;
     f_write << text_in << std::endl;
 
     // Calls the python exe file and writes the result in "output.txt"
