@@ -78,6 +78,7 @@ public:
   void set_correct_style();
   void set_habits_colors();
   QDate get_entry_date();
+  void automatic_mood(double mood); // updates after the user has chosen automatic mood entry
 private slots:
   void handleModify();
   void handleAnalize();
