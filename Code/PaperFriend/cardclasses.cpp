@@ -9,6 +9,8 @@
 #include <QWheelEvent>
 #include <QDialog>
 
+bool EntryCard::can_be_modified = true;
+
 Card::Card(int border_radius, int width, int height, QString color)
     : border_radius(border_radius), background_color(color) {
   this->resize(width, height);
@@ -137,9 +139,13 @@ std::vector<QListWidgetItem *> EntryCard::fr_act_options;
 
 EntryCard::EntryCard(int border_radius, int width, int height, QString color,
                      Entry *entry, bool readOnly, MainWindow *main_window)
-    : Card(border_radius, width, height, color), entry(entry),
-      readOnly(readOnly), main_window(main_window) {
-  display_layout =
+    : Card(border_radius, width, height, color), entry(entry), main_window(main_window) {
+  this->readOnly = true;
+  if(!readOnly and can_be_modified){
+      this->readOnly = readOnly;
+      can_be_modified = false;
+  }
+    display_layout =
       new QVBoxLayout(); // to be changed - layout containing the card
   entry_perso = nullptr;
   entry_recap = nullptr;
@@ -600,7 +606,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
       recap_title->setText("Monthly recap");
       break;
     case 2:
-      recap_title->setText("Annual recap");
+      recap_title->setText("Yearly recap");
       break;
     }
 
@@ -728,7 +734,19 @@ EntryCard::~EntryCard() {
   */
 }
 
-void EntryCard::handleModify() { this->change(); }
+void EntryCard::handleModify() {
+    if(can_be_modified){
+    this->change();
+    can_be_modified = false;}
+    else{
+        QMessageBox alert;
+        alert.setWindowTitle("Error");
+        alert.setText("One of the entries is already being modified, finish editing to modify this entry.");
+        alert.setStandardButtons(QMessageBox::Close);
+        alert.setDefaultButton(QMessageBox::Close);
+        int choice = alert.exec();
+    }
+}
 
 void EntryCard::handleAnalize(){
     TextAnalysis analize_text = TextAnalysis(edit_text->get_plain_text());
@@ -765,6 +783,7 @@ void EntryCard::handleBack() {
     break;
     alert.close();
   }
+  can_be_modified = true;
 }
 
 void EntryCard::set_correct_style() {

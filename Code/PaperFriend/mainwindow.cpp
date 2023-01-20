@@ -579,11 +579,11 @@ void MainWindow::on_newEntryButton_clicked() {
     }
     vector_entries.push_back(today_entry);
     displayed_entries.push_back(today_entry);
-    today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
+    today_card = new EntryCard(20, 300, 300, "white", today_entry, false, this);
     display_entries();
   }
   ui->EntriesScroll->verticalScrollBar()->setValue(0);
-  today_card->change();
+  //today_card->change();
 }
 
 void MainWindow::generate_recap() {
@@ -598,7 +598,7 @@ void MainWindow::generate_recap() {
     last_recaps_dates.push_back(date.toString());
   }
   // weekly
-  if (saved_week() and QDate::currentDate().dayOfWeek() == 5) // If it's Sunday
+  if (saved_week() and QDate::currentDate().dayOfWeek() == 7) // If it's Sunday
   {
     QString date_last_recap = last_recaps_dates[0];
     if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
@@ -616,7 +616,7 @@ void MainWindow::generate_recap() {
   }
   // monthly
   if (saved_month() and QDate::currentDate().daysInMonth() ==
-      QDate::currentDate().day()) // If it's the last day of the month
+     QDate::currentDate().day()) // If it's the last day of the month
   {
     QString date_last_recap = last_recaps_dates[1];
     if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {

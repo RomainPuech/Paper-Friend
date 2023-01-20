@@ -82,6 +82,7 @@ private slots:
   void handleBack();
 
 private:
+  static bool can_be_modified;
   bool readOnly;
   MainWindow *main_window;
   Entry *entry;
