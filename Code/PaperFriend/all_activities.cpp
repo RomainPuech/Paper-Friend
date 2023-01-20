@@ -144,11 +144,15 @@ void all_activities::on_save_activity_button_clicked() {
 
 void all_activities::disable_text_change() {
   QString name_activity;
+  int type_activity;
   for (int i = 0; i < allCellPtr.size(); ++i) {
     name_activity = allCellPtr[i]->get_activity_name();
+    type_activity = allCellPtr[i]->get_activity_type();
     if (name_activity != "n") {
       // qDebug()<<QString("hey");
       allCellPtr[i]->ui->activity_name->setReadOnly(true);
+    }if(type_activity != 1000) {
+        allCellPtr[i]->ui->activity_type->setDisabled(true);
     }
   }
 }
@@ -232,10 +236,10 @@ void all_activities::closeEvent(QCloseEvent *event) {
           are_equal = false;
         }
       }
-      if (allCellPtr[i]->get_activity_type() != 1 && are_equal == true) {
+      if (are_equal == true) {
         QMessageBox::StandardButton answr_btn = QMessageBox::warning(
             this, tr("Paper friend"),
-            tr("Some activities have the same name. It is not allowed."),
+            tr("Some activities/friends have the same name. It is not allowed."),
             QMessageBox::Ok);
 
         if (answr_btn != QMessageBox::Ok) {
