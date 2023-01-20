@@ -2,6 +2,9 @@
 #include <fstream>
 #include <string>
 #include <math.h>
+#include <filesystem>
+
+#include <QProcess>
 
 #include "TextAnalysis.h"
 #include "DataAnalysis.h"
@@ -49,20 +52,27 @@ double TextAnalysis::str_to_double(std::string text){
 
 
 void TextAnalysis::analyze_text(){
-    /**
+/**
      *  Analyzes text in "./nlp/input.txt" file and writes the resulting mood (from 0 to 1) in text_mood
      */
+    std::filesystem::path cwd = std::filesystem::current_path();
+    std::string path = cwd.string();
+    path.append("/nlp_text_sentiment");
+
+
+
     std::ofstream f_write;
-    f_write.open ("./nlp/input.txt");
+    f_write.open ("input.txt");
 
     std::string text_in = entry->get_text();
     f_write << text_in << std::endl;
 
-    system("./nlp/nlp_text_sentiment");  // runs the python exe file and writes the result in "output.txt"
+    // Calls the python exe file and writes the result in "output.txt"
+    system(path.c_str());
 
     // Reading the result str and converting it to number:
     std::ifstream f_read;
-    f_read.open("./nlp/output.txt");
+    f_read.open("output.txt");
 
     std::string text;
     f_read >> text;

@@ -8,6 +8,7 @@ build-PaperFriend-Qt_6_4_1_for_macOS-Debug/*
 Code/.DS_Store
 Code/build-PaperFriend-Qt_6_2_4_for_macOS-Debug/
 Code/build-PaperFriend-Desktop_Qt_6_3_2_MinGW_64_bit-Debug
+Code/build-PaperFriend-Qt_6_2_4_for_macOS-Debug/PaperFriend.app/Contents/MacOS/nlp_text_sentiment
 
 # C++ objects and libs
 *.slo
