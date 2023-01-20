@@ -14,7 +14,6 @@ all_activities::all_activities(MainWindow *mainwindow,
       QDialog(parent), ui(new Ui::all_activities) {
   ui->setupUi(this);
   int ActivitiesCellNumberTotal = 0;
-  are_equal = false;
   this->add_previous_cells();
   disable_text_change();
 }
@@ -48,14 +47,14 @@ void all_activities::addNewCell(QString cellText, QString cellName, int type) {
   name_activity<<type_activity;*/
   new_activity_cell->set_activity_type(type);
   vector_activities.push_back(Activity(cellName.toStdString(), type, 0));
-  ActivitiesCellNumberTotal++; // the total number of activities is incremented
-                               // by 1.
-  for (int i = 1; i < allCellPtr.size(); ++i) {
+  ActivitiesCellNumberTotal++; // the total number of activities is incremented by 1.
+
+  /*for (int i = 1; i < allCellPtr.size(); ++i) {
     if (allCellPtr[i - 1]->get_activity_name() ==
         allCellPtr[i]->get_activity_name()) {
       are_equal = true;
     }
-  }
+  }*/
 }
 
 void all_activities::add_previous_cells() {
@@ -227,16 +226,17 @@ void all_activities::closeEvent(QCloseEvent *event) {
       }
     }
 
+    bool same_name = false ;
     for (int i = 0; i < allCellPtr.size(); ++i) {
       for (int j = 0; j < allCellPtr.size(); ++j) {
         if (i != j && allCellPtr[j]->get_activity_name() ==
                           allCellPtr[i]->get_activity_name()) {
-          are_equal = true;
+          same_name = true;
         } else {
-          are_equal = false;
+          same_name = false;
         }
       }
-      if (are_equal == true) {
+      if (same_name == true) {
         QMessageBox::StandardButton answr_btn = QMessageBox::warning(
             this, tr("Paper friend"),
             tr("Some activities/friends have the same name. It is not allowed."),
@@ -247,8 +247,8 @@ void all_activities::closeEvent(QCloseEvent *event) {
         } else {
           event->ignore();
         }
-      }
-      are_equal = false;
+      }same_name = false;
+
     }
   }
 }

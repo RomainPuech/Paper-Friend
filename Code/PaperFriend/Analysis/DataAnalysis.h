@@ -158,7 +158,7 @@ public:
   EntryRecap monthly_recap();
   EntryRecap yearly_recap();
   std::string
-  suggestion(int var_index); // text that will be suggested to user daily
+  suggestion(); // text that will be suggested to user daily
 };
 
 #endif // DATAANALYSIS_H

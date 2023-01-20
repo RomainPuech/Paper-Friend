@@ -466,35 +466,46 @@ std::string int_to_str(int a) {
   return str;
 }
 
-std::string DataAnalysis::suggestion(
-    int var_index = 0) { // some more exciting gameplay can be implementen later
+std::string DataAnalysis::suggestion() { // some more exciting gameplay can be implementen later
   /**
-   * @param index of the variable concerned (mood by default)
    *
    * @returns string "general review + suggestion" concerning the variable.
+   * - Iterates through variables (except of mood) and says if
+   *   there is anomaly in them, and if yes, says how it affected mood (in a good or in a bad way).
+   *
+     - Compares todays mood to last 7 days avg. If the mood got wors,
+       it recommends to work on top 2 items which contributed to this the most,
+       or if the progress in mood is positive, tells which are the top two items that improved the progress the most.
+
+     - Tells the user if he didn't see his friends for last n days
+
    */
   std::string str{};
-  // alerting depression
-  if (anomalies_detection(log, var_index).end()->get_absolute_day() ==
-      log.end()->get_absolute_day()) {
-    str += "We've detected an anomalie in your " +
-           log[0].get_var_name(var_index) + ". It ";
-    if (get_lastn_average(7, 0) < log.end()->get_mood()) {
-      str += "has affected your " + log[0].get_var_name(var_index) +
-             " in a good way. \n";
-      str += "Keep it up! :)\n";
-    } else {
-      if (get_lastn_average(7, 0) > 2 * log.end()->get_mood())
-        str +=
-            "made your " + log[0].get_var_name(var_index) + " much worse. \n";
-      else
-        str +=
-            "made your " + log[0].get_var_name(var_index) + " much worse. \n";
-      str += "Consider to normalize " + log[0].get_var_name(var_index) + " \n";
-    }
-  }
+  // Alerting depression
+  // Iterating through variables:
+  for (int var_index = 1; var_index <= 5; var_index++){
+      if (anomalies_detection(log, var_index).end()->get_absolute_day() ==
+          log.end()->get_absolute_day()) {
+        str += "We've detected an anomalie in your " +
+               log[0].get_var_name(var_index) + ". It ";
+        if (get_lastn_average(7, 0) < log.end()->get_mood()) {
+          str += "has affected your " + log[0].get_var_name(var_index) +
+                 " in a good way. \n";
+          str += "Keep it up! :)\n";
+        } else {
+          if (get_lastn_average(7, 0) > 2 * log.end()->get_mood())
+            str +=
+                "made your " + log[0].get_var_name(var_index) + " much worse. \n";
+          else
+            str +=
+                "made your " + log[0].get_var_name(var_index) + " much worse. \n";
+          str += "Consider to normalize " + log[0].get_var_name(var_index) + " \n";
+        }
+      }
+   }
 
-  // comparing to previous results:
+  // Comparing to previous results of mood:
+  int var_index = 0;
   if (log.end()->get_var_value(var_index) >=
       get_lastn_average(7, var_index)) { // compares to last 7 days
     str += "Your " + log[0].get_var_name(var_index) +
@@ -514,7 +525,7 @@ std::string DataAnalysis::suggestion(
            var_to_str(*(item_priority(log, var_index).begin() + 1)) + "! \n";
   }
 
-  // haven’t seen anyone in days:
+  // Haven’t seen anyone in days:
   bool seen_nobody = true;
   int i = 0; // days without friends in a row
 
