@@ -859,10 +859,11 @@ void EntryCard::update() {
   if (entry->get_qdate() == QDate::currentDate()) {
     main_window->react_to_last_entry();
   }
-  // check if a weekly/monthly/yearly recap has to be created
-  main_window->generate_recap();
   // update style
   set_correct_style();
+
+  // check if a weekly/monthly/yearly recap has to be created
+  main_window->generate_recap();
 }
 
 void EntryCard::update_fr_act_select() {

@@ -32,7 +32,6 @@ std::vector<Activity>
 std::vector<Friend>
     MainWindow::vector_friends; // All the friends we can choose from
 std::vector<EntryCard *> MainWindow::displayed_cards;
-std::vector<EntryCard *> MainWindow::displayed_recaps;
 
 //// Helper functions
 bool sort_by_date(const EntryPerso *e1, const EntryPerso *e2) {
@@ -62,6 +61,9 @@ MainWindow::MainWindow(QWidget *parent)
   // create a folder for the entries if it doesn't already exist
   if (!QDir("Entries").exists()) {
     QDir().mkdir("Entries");
+  }
+  if (!QDir("Recap_entries").exists()) {
+    QDir().mkdir("Recap_entries");
   }
 
   // load previously entered activities
@@ -208,7 +210,13 @@ MainWindow::MainWindow(QWidget *parent)
   std::vector<QString> last_recaps_dates = load_last_recaps_dates();
 
   // load previous recaps
-
+  QDir dir_recaps(QDir::currentPath() + "/Recap_entries");
+  for (const QString &filename : dir_recaps.entryList(QDir::Files)) {
+    vector_recaps.push_back(
+        load_entryrecap(filename.toStdString(), vector_activities));
+  }
+  // sort them by the date
+  sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
   //// frontend that needs data to be rendered
   display_entries();
 
@@ -320,7 +328,7 @@ void MainWindow::display_entries() {
   for (auto entry = displayed_entries.rbegin();
        entry != displayed_entries.rend(); ++entry) {
     if (rec < vector_recaps.end() &&
-        (*rec)->get_qdate().daysTo((*entry)->get_qdate()) > 0) {
+        (*rec)->get_qdate().daysTo((*entry)->get_qdate()) <= 0) {
       EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
       c->display(ui->EntriesScroll->widget()
                      ->layout()); // displays the entry in the main_frame.
@@ -338,6 +346,12 @@ void MainWindow::display_entries() {
       displayed_cards.push_back(c);
       qDebug() << "displayed";
     }
+  } while(rec != vector_recaps.end()){
+      EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
+      c->display(ui->EntriesScroll->widget()
+                     ->layout()); // displays the entry in the main_frame.
+      qDebug() << "displayed recap";
+      rec++;
   }
 }
 
@@ -584,7 +598,7 @@ void MainWindow::generate_recap() {
     last_recaps_dates.push_back(date.toString());
   }
   // weekly
-  if (saved_week() and QDate::currentDate().dayOfWeek() == 7) // If it's Sunday
+  if (saved_week() and QDate::currentDate().dayOfWeek() == 5) // If it's Sunday
   {
     QString date_last_recap = last_recaps_dates[0];
     if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
@@ -594,13 +608,10 @@ void MainWindow::generate_recap() {
       DataAnalysis analysis = DataAnalysis(vector_entries);
       EntryRecap recap = analysis.weekly_recap();
       vector_recaps.push_back(&recap);
-      EntryCard *recap_card =
-          new EntryCard(20, 300, 300, "white", &recap, true, this);
-      recap_card->display(
-          ui->EntriesScroll->widget()
-              ->layout()); // displays the entry in the main_frame.
+      display_entries();// displays the entry in the main_frame.
       qDebug() << "displayed";
       save_last_recaps_dates(last_recaps_dates);
+      save_entryrecap(recap);
     }
   }
   // monthly
@@ -615,13 +626,10 @@ void MainWindow::generate_recap() {
       DataAnalysis analysis = DataAnalysis(vector_entries);
       EntryRecap recap = analysis.monthly_recap();
       vector_recaps.push_back(&recap);
-      EntryCard *recap_card =
-          new EntryCard(20, 300, 300, "white", &recap, true, this);
-      recap_card->display(
-          ui->EntriesScroll->widget()
-              ->layout()); // displays the entry in the main_frame.
+      display_entries(); // displays the entry in the main_frame.
       qDebug() << "displayed";
       save_last_recaps_dates(last_recaps_dates);
+      save_entryrecap(recap);
     }
   }
   // yearly
@@ -638,13 +646,10 @@ void MainWindow::generate_recap() {
       DataAnalysis analysis = DataAnalysis(vector_entries);
       EntryRecap recap = analysis.yearly_recap();
       vector_recaps.push_back(&recap);
-      EntryCard *recap_card =
-          new EntryCard(20, 300, 300, "white", &recap, true, this);
-      recap_card->display(
-          ui->EntriesScroll->widget()
-              ->layout()); // displays the entry in the main_frame.
+      display_entries(); // displays the entry in the main_frame.
       qDebug() << "displayed";
       save_last_recaps_dates(last_recaps_dates);
+      save_entryrecap(recap);
     }
   }
 }

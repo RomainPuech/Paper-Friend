@@ -68,7 +68,6 @@ private:
   static std::vector<Activity> vector_activities;
   static std::vector<Friend> vector_friends;
   static std::vector<EntryRecap *> vector_recaps;
-  static std::vector<EntryCard *> displayed_recaps;
 
   std::vector<EntryPerso *> displayed_entries;
   static std::vector<EntryCard *>
