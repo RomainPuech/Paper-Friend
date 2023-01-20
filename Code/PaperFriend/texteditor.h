@@ -42,6 +42,7 @@ public:
   QString pasteBoard;
   void createPdf();
   QString get_text() const;
+  QString get_plain_text() const;
   QString get_title() const;
   QString htmlText;
   void set_title(QString text);

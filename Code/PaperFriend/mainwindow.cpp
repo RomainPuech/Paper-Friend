@@ -32,6 +32,7 @@ std::vector<Activity>
 std::vector<Friend>
     MainWindow::vector_friends; // All the friends we can choose from
 std::vector<EntryCard *> MainWindow::displayed_cards;
+std::vector<EntryCard *> MainWindow::displayed_recaps;
 
 //// Helper functions
 bool sort_by_date(const EntryPerso *e1, const EntryPerso *e2) {
@@ -295,24 +296,12 @@ void MainWindow::change_editability() {
 
 void MainWindow::update_graphs() {
   ui->tabWidget->clear();
-  if (saved_mood()) {
-    display_graph("mood");
-  }
-  if (saved_sleep()) {
-    display_graph("sleep");
-  }
-  if (saved_eating_healthy()) {
-    display_graph("eating healthy");
-  }
-  if (saved_productivity()) {
-    display_graph("productivity");
-  }
-  if (saved_socializing()) {
-    display_graph("communications");
-  }
-  if (saved_physical_activity()) {
-    display_graph("physical activity");
-  }
+  display_graph("mood");
+  display_graph("sleep");
+  display_graph("eating healthy");
+  display_graph("productivity");
+  display_graph("communications");
+  display_graph("physical activity");
 }
 
 void MainWindow::display_entries() {
@@ -386,13 +375,9 @@ void MainWindow::on_activitie_button_clicked() {
 }
 
 void MainWindow::on_settingsButton_clicked() {
-  findChild<QCheckBox *>("mood")->setChecked(saved_mood());
-  findChild<QCheckBox *>("sleep")->setChecked(saved_sleep());
-  findChild<QCheckBox *>("eating_healthy")->setChecked(saved_eating_healthy());
-  findChild<QCheckBox *>("productivity")->setChecked(saved_productivity());
-  findChild<QCheckBox *>("communications")->setChecked(saved_socializing());
-  findChild<QCheckBox *>("physical_activity")
-      ->setChecked(saved_physical_activity());
+  findChild<QCheckBox *>("Weekly_recaps")->setChecked(saved_week());
+  findChild<QCheckBox *>("Monthly_recaps")->setChecked(saved_month());
+  findChild<QCheckBox *>("Yearly_recaps")->setChecked(saved_year());
   auto settings = findChild<QWidget *>("settings_frame");
   toggle_visibility(settings);
   auto chat = findChild<QWidget *>("scrollArea");
@@ -402,12 +387,9 @@ void MainWindow::on_settingsButton_clicked() {
 void MainWindow::on_save_settings_clicked() {
   std::ofstream myfile;
   myfile.open("settings.txt");
-  myfile << findChild<QCheckBox *>("mood")->isChecked() << "\n";
-  myfile << findChild<QCheckBox *>("sleep")->isChecked() << "\n";
-  myfile << findChild<QCheckBox *>("eating_healthy")->isChecked() << "\n";
-  myfile << findChild<QCheckBox *>("productivity")->isChecked() << "\n";
-  myfile << findChild<QCheckBox *>("communications")->isChecked() << "\n";
-  myfile << findChild<QCheckBox *>("physical_activity")->isChecked() << "\n";
+  myfile << findChild<QCheckBox *>("Weekly_recaps")->isChecked() << "\n";
+  myfile << findChild<QCheckBox *>("Monthly_recaps")->isChecked() << "\n";
+  myfile << findChild<QCheckBox *>("Yearly_recaps")->isChecked() << "\n";
   myfile.close();
   update_graphs();
   auto settings = findChild<QWidget *>("settings_frame");
@@ -606,7 +588,7 @@ void MainWindow::generate_recap() {
     last_recaps_dates.push_back(date.toString());
   }
   // weekly
-  if (QDate::currentDate().dayOfWeek() == 7) // If it's Sunday
+  if (saved_week() and QDate::currentDate().dayOfWeek() == 7) // If it's Sunday
   {
     QString date_last_recap = last_recaps_dates[0];
     if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
@@ -626,7 +608,7 @@ void MainWindow::generate_recap() {
     }
   }
   // monthly
-  if (QDate::currentDate().daysInMonth() ==
+  if (saved_month() and QDate::currentDate().daysInMonth() ==
       QDate::currentDate().day()) // If it's the last day of the month
   {
     QString date_last_recap = last_recaps_dates[1];
@@ -647,7 +629,7 @@ void MainWindow::generate_recap() {
     }
   }
   // yearly
-  if (QDate::currentDate().month() == 12 &&
+  if (saved_year() and QDate::currentDate().month() == 12 &&
       QDate::currentDate().day() == 31) // If it's December 31st
   {
     QString date_last_recap = last_recaps_dates[2];

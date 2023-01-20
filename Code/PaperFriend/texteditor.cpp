@@ -58,7 +58,10 @@ QString TextEditor::get_title() const {
   return ui->lineEdit->text();
 }
 
-QString TextEditor::get_text() const { return ui->textEdit->toHtml(); }
+QString TextEditor::get_text() const { return ui->textEdit->toHtml();}
+
+QString TextEditor::get_plain_text() const{ return ui->textEdit->toPlainText();}
+
 
 void TextEditor::append_title(QString text) { ui->lineEdit->setText(text); }
 

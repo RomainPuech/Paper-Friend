@@ -40,7 +40,7 @@
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>...</string>
+              <string>Recaps settings</string>
              </property>
              <property name="popupMode">
               <enum>QToolButton::InstantPopup</enum>
@@ -72,14 +72,14 @@
            <item>
             <widget class="QLabel" name="label">
              <property name="text">
-              <string>Track:</string>
+              <string>I should do:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="mood">
+            <widget class="QCheckBox" name="Weekly_recaps">
              <property name="text">
-              <string>Mood</string>
+              <string>Weekly recaps</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -87,9 +87,9 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="sleep">
+            <widget class="QCheckBox" name="Monthly_recaps">
              <property name="text">
-              <string>Sleep</string>
+              <string>Mothly recaps</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -97,39 +97,9 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="eating_healthy">
+            <widget class="QCheckBox" name="Yearly_recaps">
              <property name="text">
-              <string>Eating healthy </string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="productivity">
-             <property name="text">
-              <string>Productivity </string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="communications">
-             <property name="text">
-              <string>Communications </string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="screen_time">
-             <property name="text">
-              <string>Screen time </string>
+              <string>Yearly recaps</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -175,8 +145,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>141</width>
-             <height>72</height>
+             <width>157</width>
+             <height>83</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -479,8 +449,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>580</width>
-               <height>408</height>
+               <width>542</width>
+               <height>420</height>
               </rect>
              </property>
             </widget>
@@ -606,8 +576,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>291</width>
-             <height>72</height>
+             <width>323</width>
+             <height>83</height>
             </rect>
            </property>
           </widget>
@@ -622,7 +592,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Open">
    <property name="icon">
-    <iconset resource="myresources.qrc">
+    <iconset>
      <normaloff>:/pictures/rsc/open.png</normaloff>:/pictures/rsc/open.png</iconset>
    </property>
    <property name="text">
@@ -631,7 +601,7 @@
   </action>
   <action name="action_New">
    <property name="icon">
-    <iconset resource="myresources.qrc">
+    <iconset>
      <normaloff>:/pictures/rsc/new.png</normaloff>:/pictures/rsc/new.png</iconset>
    </property>
    <property name="text">

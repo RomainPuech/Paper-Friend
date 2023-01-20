@@ -6,18 +6,12 @@
 
 std::vector<bool> saved_settings();
 
-bool saved_mood();
+bool saved_week();
 
-bool saved_sleep();
+bool saved_month();
 
-bool saved_eating_healthy();
+bool saved_year();
 
-bool saved_productivity();
-
-bool saved_socializing();
-
-bool saved_physical_activity();
-
-const int NUMBER_OF_SETTINGS = 6;
+const int NUMBER_OF_SETTINGS = 3;
 
 #endif // SETTINGS_H
