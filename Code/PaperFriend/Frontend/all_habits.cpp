@@ -47,8 +47,6 @@ bool All_Habits::duplicates_between_entered_saved_habits() {
     std::vector<QStringList> current_habits = load_habits();
     for (int i = 0; i < ui->habits_cell_layout->count(); i++) { //Iterate over each element of habits_cell_layout, which are
                                                                 //going to be the added add_habit_cell.ui.
-      /*QWidget *widget = ui->habits_cell_layout->itemAt(i)->widget();
-      if (widget != nullptr) { //Safety check to be sure we are accessing a widget child of the layout.*/
         if (ui->habits_cell_layout->itemAt(i)->widget()->isVisible()) { //Method to check if we still want to consider the ui
                                                                         //add_habit_cell.ui added, since when removing by
                                                                         //pressing on delete, it remains in the children of
@@ -64,7 +62,6 @@ bool All_Habits::duplicates_between_entered_saved_habits() {
             }
           }
         }
-      //}
     }
     return duplicates;
 }
@@ -72,28 +69,16 @@ bool All_Habits::duplicates_between_entered_saved_habits() {
 bool All_Habits::duplicates_between_entered_habits() { //This function is quite similar to the one above, the only difference is we check for duplicates amoung entered habits.
     bool duplicates_amoung_entered_habits = false;
     for (int i = 0; i < ui->habits_cell_layout->count() - 1; i++) {
-      /*QWidget *widget1 = ui->habits_cell_layout->itemAt(i)->widget();
-      if (widget1 != nullptr) {*/
         if (ui->habits_cell_layout->itemAt(i)->widget()->isVisible()) {
           for (int j = i+1; j < ui->habits_cell_layout->count(); j++) {
-            /*QWidget *widget2 = ui->habits_cell_layout->itemAt(i)->widget();
-            if (widget2 != nullptr) {*/
               if (ui->habits_cell_layout->itemAt(i)->widget()->isVisible()) {
                 if (ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit *>("habit_name")->text() ==
                         ui->habits_cell_layout->itemAt(j)->widget()->findChild<QLineEdit *>("habit_name")->text()) {
-                  //following code may be useful later for debug
-                  /*
-                  std::cout<<"text here:"<<std::endl;
-                  std::cout<<ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit *>("habit_name")->text().toStdString()<<std::endl;
-                  std::cout<<ui->habits_cell_layout->itemAt(j)->widget()->findChild<QLineEdit *>("habit_name")->text().toStdString()<<std::endl;
-                  */
                   duplicates_amoung_entered_habits = true;
                 }
               }
-            //}
           }
         }
-      //}
     }
     return duplicates_amoung_entered_habits;
 }
@@ -111,6 +96,16 @@ bool All_Habits::unnamed_habits() {
     }
   }
   return unnamed;
+}
+
+bool All_Habits::more_than_50_char_entered_habits() { //This function is quite similar to the one above, the only difference is we check for duplicates amoung entered habits.
+    bool excess = false;
+    for (int i = 0; i < ui->habits_cell_layout->count(); i++) {
+        if (ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit *>("habit_name")->text().size() > 50) {
+            excess = true;
+        }
+    }
+    return excess;
 }
 
 std::vector<QStringList> All_Habits::get_habits_to_be_displayed(){
@@ -137,6 +132,7 @@ std::vector<QStringList> All_Habits::get_habits_to_be_displayed(){
 void All_Habits::on_save_habit_button_clicked() {
   bool duplicates = duplicates_between_entered_saved_habits();
   bool duplicates_amoung_entered_habits = duplicates_between_entered_habits();
+  bool excess = more_than_50_char_entered_habits();
   bool unnamed = unnamed_habits();
   if (duplicates) {
     QMessageBox::warning(this, "", "One or more habits entered already exist.",
@@ -144,6 +140,9 @@ void All_Habits::on_save_habit_button_clicked() {
   } else if (duplicates_amoung_entered_habits) {
     QMessageBox::warning(this, "", "One or more habits entered are the same.",
                          QMessageBox::Close); //Pop up message in case of duplicates amoung entered habits.
+  }  else if (excess) {
+      QMessageBox::warning(this, "", "One or more habits entered have more than 50 characters. Please decrease the character count.",
+                           QMessageBox::Close); //Pop up message in case there is more than 50 characters in one of the entered habits.
   } else if (unnamed) {
     QMessageBox::warning(this, "", "No habit name entered.",
                          QMessageBox::Close); //Pop up message in case one of the habits is without a name.
@@ -159,8 +158,6 @@ void All_Habits::on_save_habit_button_clicked() {
     std::vector<QStringList> new_habits;
     for (int i = 0; i < ui->habits_cell_layout->count(); i++) {
       QStringList tmp; //Initialisaton of a temprory vector of QString.
-      /*QWidget *widget = ui->habits_cell_layout->itemAt(i)->widget();
-      if (widget != nullptr) {*/
         if (ui->habits_cell_layout->itemAt(i)->widget()->isVisible()) { //Same explanation as above.
           tmp.push_back(ui->habits_cell_layout->itemAt(i)
                             ->widget()
@@ -173,7 +170,6 @@ void All_Habits::on_save_habit_button_clicked() {
           tmp.push_back("0"); //Add value of streak of habit (keeping track the numbers of days he has done his habit without breaks). Initially 0.
           tmp.push_back(yesterday.toString()); //Add date to each habit.
         }
-      //}
       if (tmp.size() > 0) { //Safety check in order to avoid empty elements and result in bugs while saving/loading habits.txt.
         new_habits.push_back(tmp);
       }

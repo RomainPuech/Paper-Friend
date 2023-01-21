@@ -21,6 +21,7 @@ public:
   void closeEvent(QCloseEvent *event);
   bool duplicates_between_entered_saved_habits();
   bool duplicates_between_entered_habits();
+  bool more_than_50_char_entered_habits();
   bool unnamed_habits();
   std::vector<QStringList> get_habits_to_be_displayed();
 
