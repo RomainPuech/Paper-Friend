@@ -606,27 +606,43 @@ void MainWindow::welcome() {
     EntryPerso *last_entry = vector_entries[vector_entries.size() - 1];
     int daysago = (last_entry->get_qdate()).daysTo(QDate::currentDate());
     if (daysago == 0) {
-        std::vector<QString> msg_vect={"Hello again!", "I hope you enjoyed yourself today!!"};
-        chat.display(msg_vect,-1);
+        chat << QString("Hello again!");
+        chat.add_mascot(-1);
+        chat << QString("I hope you enjoyed yourself today!!");
+        chat.add_mascot(60);
     } else if (daysago == 1) {
-        std::vector<QString> msg_vect={"Hello!", "I would love to know how was your day!", "Tell me through the entry."};
-        chat.display(msg_vect,-1);
+        chat << QString("Hello!I would love to know how was your day!");
+        chat.add_mascot(-1);
+        chat << QString("Tell me through the entry.");
+        chat.add_mascot(90);
     } else if (daysago > 365) {
-        std::vector<QString> msg_vect={"Welcome back","I though I would never see you again! How are you?"};
-        chat.display(msg_vect,-1);
+        chat << QString("Welcome back");
+        chat.add_mascot(-1);
+        chat << QString("I though I would never see you again! How are you?");
+        chat.add_mascot(60);
     } else if (daysago > 14) {
-        std::vector<QString> msg_vect={"It's been a while!","It's good to see you again!!"};
-        chat.display(msg_vect,-1);
+        chat << QString("It's been a while!");
+        chat.add_mascot(-1);
+        chat << QString("It's good to see you again!!");
+        chat.add_mascot(90);
     } else if (daysago > 6) {
-        std::vector<QString> msg_vect={"Welcome back!", "How has it been going?"};
-        chat.display(msg_vect,-1);
+        chat << QString("Welcome back!");
+        chat.add_mascot(-1);
+        chat << QString("How has it been going?");
+        chat.add_mascot(60);
     } else if (daysago > 1) {
-        std::vector<QString> msg_vect={"Hellooo!!", "How did it go since last time?"};
-        chat.display(msg_vect,-1);
+        chat << QString("Hellooo!!");
+        chat.add_mascot(-1);
+        chat << QString("How did it go since last time?");
+        chat.add_mascot(60);
     }
   } else {
-      std::vector<QString> msg_vect={"Hello, it seems like it's your first time here! I'm Rooxie, your well-being assistant!", "You can create an entry in you diary by clicking the New entry button on the top of the screen.", "Go on and add an entry! I can't wait to hear about your day!"};
-      chat.display(msg_vect,-1);
+      chat << QString("Hello, it seems like it's your first time here! I'm Rooxie, your well-being assistant!");
+      chat.add_mascot(-1);
+      chat << QString("You can create an entry in you diary by clicking the New entry button on the top of the screen.");
+      chat.add_mascot(60);
+      chat << QString("Go on and add an entry! I can't wait to hear about your day!");
+      chat.add_mascot(90);
   }
 }
 
@@ -641,29 +657,6 @@ void MainWindow::add_new_activities_to_old_enties() {
 
 
   for (EntryPerso *entry : vector_entries) {
-      for (Activity const &activity : vector_activities) {
-        Activity *to_add = new Activity();
-        to_add->set_name(activity.get_name());
-        to_add->set_type(activity.get_type());
-        std::vector<Activity *> entry_activities =
-            entry->get_activities(); // crashes here if static cast used
-        if (std::find_if(entry_activities.begin(), entry_activities.end(),
-                         [to_add](Activity *a) -> bool {
-                           return *a == *to_add;
-                         }) == entry_activities.end()) {
-          qDebug() << QString("Does not contain")
-                   << QString::fromStdString(activity.get_name())
-                   << QString::number(activity.get_type());
-          // does not contain activity
-          Activity *to_add = new Activity();
-          to_add->set_name(activity.get_name());
-          to_add->set_type(activity.get_type());
-          to_add->set_value(0.0);
-          entry->add_activity(to_add);
-        }
-      }
-    }
-  for (EntryPerso *entry : displayed_entries) {
       for (Activity const &activity : vector_activities) {
         Activity *to_add = new Activity();
         to_add->set_name(activity.get_name());
@@ -706,14 +699,6 @@ void MainWindow::remove_activities_from_old_entries() {
  }
 
  for(EntryPerso* entry: vector_entries){
-     std::vector<Activity*> entry_activities = entry->get_activities();
-     for(unsigned long long act_remove : to_remove){
-         entry_activities.erase(entry_activities.begin()+act_remove);
-     }
-     entry->set_activities(entry_activities);
- }
-
- for(EntryPerso* entry: displayed_entries){
      std::vector<Activity*> entry_activities = entry->get_activities();
      for(unsigned long long act_remove : to_remove){
          entry_activities.erase(entry_activities.begin()+act_remove);
