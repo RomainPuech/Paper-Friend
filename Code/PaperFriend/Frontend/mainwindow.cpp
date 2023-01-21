@@ -195,11 +195,11 @@ void MainWindow::display_entries() {
 
   }
   displayed_cards.clear();
-  std::vector<EntryRecap *>::iterator rec = vector_recaps.begin();
+  std::vector<EntryRecap *>::reverse_iterator rec = vector_recaps.rbegin();
   // displaying in reversed order
   for (auto entry = displayed_entries.rbegin();
        entry != displayed_entries.rend(); ++entry) {
-    if (rec < vector_recaps.end() &&
+    if (rec < vector_recaps.rend() &&
         (*rec)->get_qdate().daysTo((*entry)->get_qdate()) <= 0) {
       EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
       c->display(ui->EntriesScroll->widget()
@@ -223,7 +223,7 @@ void MainWindow::display_entries() {
       displayed_cards.push_back(c);
 
     }
-  } while(rec != vector_recaps.end()){
+  } while(rec != vector_recaps.rend()){
       EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
       c->display(ui->EntriesScroll->widget()
                      ->layout()); // displays the entry in the main_frame.
@@ -470,9 +470,9 @@ void MainWindow::generate_recap() {
   std::vector<QString> last_recaps_dates = load_last_recaps_dates();
   if (last_recaps_dates.empty()) {
     QDate date = QDate::currentDate().addDays(-1);
-    last_recaps_dates.push_back(date.toString());
-    last_recaps_dates.push_back(date.toString());
-    last_recaps_dates.push_back(date.toString());
+    last_recaps_dates.push_back(date.toString("yyyy.MM.dd"));
+    last_recaps_dates.push_back(date.toString("yyyy.MM.dd"));
+    last_recaps_dates.push_back(date.toString("yyyy.MM.dd"));
   }
   // weekly
   if (saved_week() and QDate::currentDate().dayOfWeek() == 7) // If it's Sunday
