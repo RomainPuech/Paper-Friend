@@ -4,7 +4,7 @@
 #include <QLabel>
 #include <QScrollArea>
 #include <QWidget>
-#include <Frontend/mascot.h>
+#include <mascot.h>
 #include <string>
 #include <vector>
 

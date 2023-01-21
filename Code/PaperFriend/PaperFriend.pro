@@ -11,61 +11,61 @@ CONFIG += c++17
 
 SOURCES += \
     Analysis/textanalysis.cpp \
+    activity_cell.cpp \
+    activityclasses.cpp \
+    all_activities.cpp \
+    all_habits.cpp \
+    cardclasses.cpp \
     Analysis/DataAnalysis.cpp \
+    display_daily_habit.cpp \
+    entryclasses.cpp \
+    entryfilter.cpp \
+    entryrecap.cpp \
     file_processing/file_processing/file_save_and_load.cpp \
-    Frontend/activity_cell.cpp \
-    Frontend/activityclasses.cpp \
-    Frontend/all_activities.cpp \
-    Frontend/all_habits.cpp \
-    Frontend/cardclasses.cpp \
-    Frontend/display_daily_habit.cpp \
-    Frontend/dynamicgraph.cpp \
-    Frontend/entryclasses.cpp \
-    Frontend/entryfilter.cpp \
-    Frontend/entryrecap.cpp \
-    Frontend/main.cpp \
-    Frontend/mainwindow.cpp\
-    Frontend/mascot.cpp \
-    Frontend/mascotchat.cpp \
-    Frontend/settings.cpp \
-    Frontend/text_analysis_window.cpp \
-    Frontend/texteditor.cpp \
-    Frontend/edit.cpp \
-    Frontend/welcome_msg.cpp
+    main.cpp \
+    mainwindow.cpp\
+    dynamicgraph.cpp \
+    mascot.cpp \
+    mascotchat.cpp \
+    settings.cpp \
+    text_analysis_window.cpp \
+    texteditor.cpp \
+    edit.cpp \
+    welcome_msg.cpp
 
 HEADERS += \
     Analysis/textanalysis.h \
+    activity_cell.h \
+    activityclasses.h \
+    all_activities.h \
+    all_habits.h \
+    cardclasses.h \
     Analysis/DataAnalysis.h \
+    display_daily_habit.h \
+    entryclasses.h \
+    entryfilter.h \
+    entryrecap.h \
     file_processing/file_processing/file_save_and_load.h \
-    Frontend/activity_cell.h \
-    Frontend/activityclasses.h \
-    Frontend/all_activities.h \
-    Frontend/all_habits.h \
-    Frontend/cardclasses.h \
-    Frontend/display_daily_habit.h \
-    Frontend/dynamicgraph.h \
-    Frontend/entryclasses.h \
-    Frontend/entryfilter.h \
-    Frontend/entryrecap.h \
-    Frontend/mainwindow.h \
-    Frontend/mascot.h \
-    Frontend/mascotchat.h \
-    Frontend/mascotchat.h \
-    Frontend/settings.h \
-    Frontend/text_analysis_window.h \
-    Frontend/texteditor.h \
-    Frontend/edit.h \
-    Frontend/welcome_msg.h
+    mainwindow.h\
+    dynamicgraph.h \
+    mascot.h \
+    mascotchat.h \
+    mascotchat.h \
+    settings.h \
+    text_analysis_window.h \
+    texteditor.h \
+    edit.h \
+    welcome_msg.h
 
 FORMS += \
-    Frontend/activity_cell.ui \
-    Frontend/add_habit_cell.ui \
-    Frontend/all_activities.ui \
-    Frontend/all_habits.ui \
-    Frontend/display_daily_habit.ui \
-    Frontend/mainwindow.ui \
-    Frontend/text_analysis_window.ui \
-    Frontend/texteditor.ui \
+    activity_cell.ui \
+    add_habit_cell.ui \
+    all_activities.ui \
+    all_habits.ui \
+    display_daily_habit.ui \
+    mainwindow.ui \
+    text_analysis_window.ui \
+    texteditor.ui \
 
 TRANSLATIONS += \
     PaperFriend_en_US.ts

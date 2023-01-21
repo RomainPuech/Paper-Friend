@@ -1,8 +1,8 @@
 #ifndef FILE_SAVE_AND_LOAD_H
 #define FILE_SAVE_AND_LOAD_H
-#include "Frontend/activityclasses.h"
-#include "Frontend/entryclasses.h"
-#include "Frontend/entryrecap.h"
+#include "activityclasses.h"
+#include "entryclasses.h"
+#include "entryrecap.h"
 #include "json-develop/single_include/nlohmann/json.hpp"
 #include <QJsonDocument>
 #include <fstream>
