@@ -1,5 +1,5 @@
 #include "DataAnalysis.h"
-#include <entryclasses.h>
+#include <Frontend/entryclasses.h>
 
 #include <algorithm>
 #include <cmath> //prefer the c- version rather than the .h

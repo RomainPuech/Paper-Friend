@@ -1,8 +1,8 @@
 #ifndef DATAANALYSIS_H
 #define DATAANALYSIS_H
 
-#include "entryclasses.h"
-#include "entryrecap.h"
+#include "Frontend/entryclasses.h"
+#include "Frontend/entryrecap.h"
 #include <QDebug>
 #include <map>
 #include <numeric>
