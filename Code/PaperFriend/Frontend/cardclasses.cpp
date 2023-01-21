@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QWheelEvent>
 #include <QDialog>
+#include <thread>
 
 bool EntryCard::can_be_modified = true;
 
@@ -146,9 +147,10 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
       can_be_modified = false;
   }
     display_layout =
-      new QVBoxLayout(); // to be changed - layout containing the card
+      new QVBoxLayout(); // to be changed when the card is displayed- layout containing the card
   entry_perso = nullptr;
   entry_recap = nullptr;
+  text_analysis = new text_analysis_window();
   // entry_perso display
   date_display = new QLabel();
   text_title_w = new QWidget();
@@ -716,17 +718,16 @@ void EntryCard::handleModify() {
         alert.setText("One of the entries is already being modified, finish editing to modify this entry.");
         alert.setStandardButtons(QMessageBox::Close);
         alert.setDefaultButton(QMessageBox::Close);
-        int choice = alert.exec();
     }
 }
 
 void EntryCard::handleAnalize(){
-    TextAnalysis analize_text = TextAnalysis(edit_text->get_title() + " " + edit_text->get_plain_text());
-    analize_text.analyze_text();
-    text_analysis_window popup = text_analysis_window(analize_text.get_text_mood(), this, this);
-    popup.set_message("The analysis of this entry suggests that your mood is " + QString::number(analize_text.get_text_mood()));
-    ///popup.set_message(edit_text->get_plain_text());
-    popup.exec();
+
+    text_analysis = new text_analysis_window(edit_text->get_title() + " " + edit_text->get_plain_text(), entry_perso->get_mood());
+    text_analysis->setWindowFlags(Qt::WindowStaysOnTopHint);
+    text_analysis->show();
+    text_analysis->analize();
+    this->automatic_mood();
 }
 
 void EntryCard::handleBack() {
@@ -740,7 +741,6 @@ void EntryCard::handleBack() {
   // std::string new_title = retrieve_text.substr(0, retrieve_text.find("\n"));
   std::string new_title = (edit_text->get_title()).toStdString();
   std::string new_text = retrieve_text.substr(retrieve_text.find("\n") + 1);
-  bool saved;
   switch (choice) {
   case QMessageBox::Save:
     entry->set_title(new_title);
@@ -1324,11 +1324,12 @@ QDate EntryCard::get_entry_date(){
     return entry->get_qdate();
 }
 
-void EntryCard::automatic_mood(double mood){
-    entry_perso->set_mood(mood*100);
-    mood_slider->setValue(round(mood*100));
+void EntryCard::automatic_mood(){
+    double mood = text_analysis->get_mood()*100;
+    entry_perso->set_mood(mood);
+    mood_slider->setValue(round(mood));
     habits_display->setItemText(
         0,
-        "Mood: " + QString::number(round(mood*100)) + "%");
+        "Mood: " + QString::number(round(mood)) + "%");
     this->set_correct_style();
 }

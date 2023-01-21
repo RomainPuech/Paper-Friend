@@ -7,6 +7,7 @@
 #include "entryrecap.h"
 #include "file_processing/file_processing/file_save_and_load.h"
 #include "texteditor.h"
+#include "text_analysis_window.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -80,13 +81,14 @@ public:
   void set_correct_style();
   void set_habits_colors();
   QDate get_entry_date();
-  void automatic_mood(double mood); // updates after the user has chosen automatic mood entry
+  void automatic_mood(); // updates after the user has chosen automatic mood entry
 private slots:
   void handleModify();
   void handleAnalize();
   void handleBack();
 
 private:
+  text_analysis_window* text_analysis;
   static bool can_be_modified; // true if there are no cards in modify mode
   bool readOnly; // is this card in readOnly mode
   MainWindow *main_window;
