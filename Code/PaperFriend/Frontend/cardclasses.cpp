@@ -701,35 +701,9 @@ EntryCard::~EntryCard() {
   worst_day_hb
   */
 
-  // delete entry;
-  /*
-  //delete date_display;
-  //delete mood_display;
-  delete fr_act_display;
-  delete title;
-  delete text_field;
-  delete text_title_vb;
-  //delete entry_perso;
-  delete edit_text;
-  delete edit_text_w;
-  delete edit_vb;
-  delete modify;
-  delete analize;
-  delete back_to_display;
-  delete display_layout;
-  //delete mood_slider_w;
-  delete mood_slider_instr;
-  delete mood_slider;
-  delete mood_slider_vb;
-  //delete fr_act_select;
-  delete main_window;
-  delete recap_title;
-  //delete message;
-  //delete avg_mood;
-  //delete recap_days;
-  //delete recap_layout;
-  //delete recap_days_hb;
-  */
+  if(!isReadOnly()){ //this card was in modify mode
+      can_be_modified = true; // now the other cards can be modified
+  }
 }
 
 void EntryCard::handleModify() {

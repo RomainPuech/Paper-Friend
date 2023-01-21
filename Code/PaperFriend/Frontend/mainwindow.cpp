@@ -448,36 +448,18 @@ void MainWindow::on_type_filter_currentTextChanged(const QString &arg1) {
 }
 
 void MainWindow::on_newEntryButton_clicked() {
-  if (vector_entries.empty()) {
+  if (vector_entries.empty() || vector_entries.back()->get_qdate() != QDate::currentDate()) {
     EntryPerso *today_entry = new EntryPerso();
     for(Activity const& activity : vector_activities){
       Activity *to_add = new Activity(activity.get_name(),activity.get_type(),0);
       today_entry->add_activity(to_add);
      }
      vector_entries.push_back(today_entry);
-     displayed_entries.push_back(today_entry);
-     today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
      display_entries();
-   } else {
-     if (vector_entries.back()->get_qdate() != QDate::currentDate()) {
-       EntryPerso *today_entry = new EntryPerso();
-       for(Activity const& activity : vector_activities){
-         Activity *to_add = new Activity(activity.get_name(),activity.get_type(),0);
-         today_entry->add_activity(to_add);
-       }
-       vector_entries.push_back(today_entry);
-       displayed_entries.push_back(today_entry);
-       today_card = new EntryCard(20, 300, 300, "white", today_entry, false, this);
-       display_entries();
-     } else {
-       if (displayed_entries.back()->get_qdate() != QDate::currentDate()) {
-         displayed_entries.push_back(vector_entries.back());
-         display_entries();
-       }
-     }
+     ui->EntriesScroll->verticalScrollBar()->setValue(0);
    }
-   ui->EntriesScroll->verticalScrollBar()->setValue(0);
-   today_card->change();
+
+   //today_card->change(); this will mess up the program because we can end up with two cards in modify mode
 }
 
 void MainWindow::generate_recap() {

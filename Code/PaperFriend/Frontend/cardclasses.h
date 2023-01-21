@@ -93,9 +93,10 @@ private:
   Entry *entry;
   EntryPerso *entry_perso;
   EntryRecap *entry_recap;
-  // display of entry_perso
+  //always used for display
   QHBoxLayout *top_menu;
   QLabel *date_display;
+  // display of entry_perso
   QLabel *mood_display;
   QListWidget *fr_act_display;
   QLabel *title;
