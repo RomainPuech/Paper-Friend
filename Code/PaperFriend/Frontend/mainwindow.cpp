@@ -713,11 +713,11 @@ std::vector<QStringList> MainWindow::habit_repeated_5() {
     return tmp;
 }
 
-std::vector<QStringList> MainWindow::habit_repeated_33() {
+std::vector<QStringList> MainWindow::habit_repeated_66() {
     std::vector<QStringList> current_habits = load_habits();
     std::vector<QStringList> tmp;
     for (unsigned long i = 0; i < current_habits.size(); i++) {
-        if (current_habits[i][2].toInt() == 33) {
+        if (current_habits[i][2].toInt() == 66) {
             tmp.push_back(current_habits[i]);
         }
     }
