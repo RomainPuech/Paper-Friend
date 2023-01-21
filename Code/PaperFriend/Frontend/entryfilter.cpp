@@ -119,18 +119,3 @@ bool compare_value(const EntryPerso &e, std::string keyword, std::string opt,
 }
 
 
-std::vector<EntryPerso> random_entryperso(int num) {
-  std::vector<EntryPerso> entries;
-  for (int i = 0; i < num; i++) {
-    EntryPerso e;
-    e.set_mood(rand() % 10);
-    e.set_sleep(rand() % 10);
-    e.set_eating_healthy(rand() % 10);
-    e.set_productivity(rand() % 10);
-    e.set_socializing(rand() % 10);
-    e.set_physical_activity(rand() % 10);
-    entries.push_back(e);
-  }
-  return entries;
-
-}
