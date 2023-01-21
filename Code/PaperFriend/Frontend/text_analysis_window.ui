@@ -25,6 +25,19 @@
     </property>
     <layout class="QVBoxLayout" name="verticalLayout"/>
    </widget>
+   <widget class="QPushButton" name="apply_mood">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>250</y>
+      <width>301</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Use this data to record mood</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

@@ -7,28 +7,19 @@
 #include <QMovie>
 
 
-text_analysis_window::text_analysis_window(QString text_to_analize, double mood) :
+text_analysis_window::text_analysis_window(QString text_to_analize, double mood, EntryCard *card) :
         QMainWindow(),
         text_to_analize(text_to_analize),
         mood(mood),
+        card(card),
         ui(new Ui::text_analysis_window)
     {
 
         ui->setupUi(this);
         analize_text = new TextAnalysis(text_to_analize);
+        message = new QTextEdit();
         load_container = new QLabel();
         movie = new QMovie("../PaperFriend/rsc/loading.gif");
-        if (!movie->isValid())
-        {
-            qDebug()<<"gif not loadeed";
-        }
-        load_container->setMovie(movie);
-        load_container->setMaximumSize(150, 150);
-        movie->setScaledSize(QSize(150, 150));
-        this->setWindowTitle("Analysis in progres...");
-        movie->start();
-        ui->verticalLayout->addWidget(load_container);
-        ui->verticalLayout->setAlignment(Qt::AlignCenter);
 }
 
 
@@ -38,6 +29,23 @@ text_analysis_window::~text_analysis_window(){
     delete analize_text;
     delete load_container;
     delete movie;
+}
+
+void text_analysis_window::set(QString text){
+    text_to_analize = text;
+    analize_text = new TextAnalysis(text_to_analize);
+    if (!movie->isValid())
+    {
+        qDebug()<<"gif not loadeed";
+    }
+    load_container->setMovie(movie);
+    load_container->setMaximumSize(150, 150);
+    movie->setScaledSize(QSize(150, 150));
+    this->setWindowTitle("Analysis in progres...");
+    movie->start();
+    ui->verticalLayout->addWidget(load_container);
+    ui->verticalLayout->setAlignment(Qt::AlignCenter);
+    ui->apply_mood->setVisible(false);
 }
 
 void text_analysis_window::set_message(QString message){
@@ -58,15 +66,24 @@ void text_analysis_window::analize(){
     movie->stop();
     qDebug()<<"removing everything";
     ui->verticalLayout->removeWidget(load_container);
-    message = new QTextEdit("The analysis of this entry suggests that your mood is " + QString::number(analize_text->get_text_mood()));
+    ui->apply_mood->setVisible(true);
+    message->setText("The analysis of this entry suggests that your mood is " + QString::number(analize_text->get_text_mood()));
     this->setWindowTitle("Sentiment analysis of the text");
     message->setReadOnly(true);
     ui->verticalLayoutWidget->setStyleSheet("border-style: none;");
+    ui->apply_mood->setStyleSheet("QPushButton{color: white; background-color: black; font-weight: bold; "
+                                                              "font: 18px; border: 2px solid black; border-radius:"+ QString::number(card->get_border_radius())+"px;} "
+                                                              "QPushButton:hover{background-color:white; color:black;}");
     message->setStyleSheet("font: 15px; font-weight: bold; border-style: 2px solid black; border-radius: 10px;");
     message->setAlignment(Qt::AlignCenter);
     message->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    mood = analize_text->get_text_mood();
     ui->verticalLayout->addWidget(message);
 
+}
+
+
+void text_analysis_window::on_apply_mood_clicked()
+{
+    card->automatic_mood(analize_text->get_text_mood()*100);
 }
 

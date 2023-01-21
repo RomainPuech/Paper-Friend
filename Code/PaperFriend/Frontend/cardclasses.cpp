@@ -150,7 +150,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
       new QVBoxLayout(); // to be changed when the card is displayed- layout containing the card
   entry_perso = nullptr;
   entry_recap = nullptr;
-  text_analysis = new text_analysis_window();
+  text_analysis = new text_analysis_window("", 0, this);
   // entry_perso display
   date_display = new QLabel();
   text_title_w = new QWidget();
@@ -227,7 +227,6 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
 
   // display specific for entryPerso
   if (entry_perso != nullptr) {
-
     // set structure
     text_title_w->setParent(this);
     edit_and_return->setParent(this);
@@ -724,11 +723,11 @@ void EntryCard::handleModify() {
 
 void EntryCard::handleAnalize(){
 
-    text_analysis = new text_analysis_window(edit_text->get_title() + " " + edit_text->get_plain_text(), entry_perso->get_mood());
-    text_analysis->setWindowFlags(Qt::WindowStaysOnTopHint);
-    text_analysis->show();
-    text_analysis->analize();
-    this->automatic_mood();
+    text_analysis_window* t = dynamic_cast<text_analysis_window*>(text_analysis);
+    t->set(edit_text->get_title() + " " + edit_text->get_plain_text());
+    t->setWindowFlags(Qt::WindowStaysOnTopHint);
+    t->show();
+    t->analize();
 }
 
 void EntryCard::handleBack() {
@@ -1318,8 +1317,7 @@ QDate EntryCard::get_entry_date(){
     return entry->get_qdate();
 }
 
-void EntryCard::automatic_mood(){
-    double mood = text_analysis->get_mood()*100;
+void EntryCard::automatic_mood(double mood){
     entry_perso->set_mood(mood);
     mood_slider->setValue(round(mood));
     habits_display->setItemText(
