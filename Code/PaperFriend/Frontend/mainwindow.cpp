@@ -41,11 +41,14 @@ bool sort_by_date(const T e1, const T e2) {
 /// To generate example data for the presentation
 
 std::vector<EntryPerso*> MainWindow::for_presentation__generate_entries_from_date_mood(int n, std::vector<double> moods){
+    qDebug()<<QString("data I'm called");
     std::vector<EntryPerso*> res;
-    for(int i; i<n; ++i){
+    for(int i=n-1; i>+0; ++i){
+        qDebug()<<QString::number(i);
         EntryPerso* e = new EntryPerso();
-        e->set_qdate(QDate::currentDate().addDays(-(n+i)));
+        e->set_qdate(QDate::currentDate().addDays(i));
         e->set_mood(moods[i]);
+        res.push_back(e);
     }
     return res;
 }
@@ -84,6 +87,16 @@ MainWindow::MainWindow(QWidget *parent)
   }
   vector_activities = load_activities();
 
+  ///To generate example data for presentation:
+  /*
+  std::vector<double> moods = {10.,10.,40.,50.,99.};
+  int n =5;
+  std::vector<EntryPerso*> demo_data = MainWindow::for_presentation__generate_entries_from_date_mood(n,moods);
+  qDebug()<<QString::number(demo_data.size())<<QString("Debug here");
+  for(EntryPerso*e:demo_data){
+      vector_entries.push_back(e);
+  }
+  */
   // load previous entries
   QDir dir(QDir::currentPath() + "/Entries");
   for (const QString &filename : dir.entryList(QDir::Files)) {
@@ -91,15 +104,6 @@ MainWindow::MainWindow(QWidget *parent)
   }
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date<EntryPerso*>);
 
-  //To generate example data for presentation:
-  /*
-  std::vector<double> moods = {10.,10.,40.,50.,99.};
-  int n =10;
-  std::vector<EntryPerso*> demo_data = MainWindow::for_presentation__generate_entries_from_date_mood(n,moods);
-  for(EntryPerso*e:demo_data){
-      vector_entries.push_back(e);
-  }
-  */
 
   // Load habits
 
