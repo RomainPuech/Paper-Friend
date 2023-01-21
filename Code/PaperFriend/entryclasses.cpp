@@ -1,6 +1,5 @@
 #include "entryclasses.h"
 #include "activityclasses.h"
-#include "friendclasses.h"
 #include "mainwindow.h"
 
 #include <iostream>
@@ -52,12 +51,11 @@ int Entry::get_absolute_day() const { return absolute_day; }
 int Entry::entry_type() const { return 0; }
 
 EntryPerso::EntryPerso(std::string title, std::string text,
-                       std::vector<Activity *> p_activities,
-                       std::vector<Friend *> friends, double mood, double sleep,
-                       double eating_healthy, double productivity,
+                       std::vector<Activity *> p_activities, double mood,
+                       double sleep, double eating_healthy, double productivity,
                        double socializing, double physical_activity)
-    : Entry(title, text), activities(p_activities), friends(friends),
-      mood(mood), sleep(sleep), eating_healthy(eating_healthy),
+    : Entry(title, text), activities(p_activities), mood(mood),
+      sleep(sleep), eating_healthy(eating_healthy),
       productivity(productivity), socializing(socializing),
       physical_activity(physical_activity) {
 
@@ -74,16 +72,10 @@ EntryPerso::EntryPerso(std::string title, std::string text,
   for (auto &ptr : activities)
     all_activities.push_back(*ptr);
 
-  for (auto &ptr : friends) {
-    all_activities.push_back(
-        Activity("Seeing " + ptr->get_name(), ptr->get_duration()));
-  }
 }
 EntryPerso::~EntryPerso() {
-  /*for (auto el : activities)
+  for (auto el : activities)
     delete el;
-  for (auto el : friends)
-    delete el;*/
 }
 
 double EntryPerso::get_var_value(int index) const {
@@ -103,12 +95,6 @@ void EntryPerso::set_activities(std::vector<Activity *> activities) {
 }
 void EntryPerso::add_activity(Activity *activity) {
   activities.push_back(activity);
-}
-
-std::vector<Friend *> EntryPerso::get_friends() const { return friends; }
-
-void EntryPerso::set_friends(std::vector<Friend *> friends) {
-  this->friends = friends;
 }
 
 double EntryPerso::get_mood() const { return mood; }
@@ -151,7 +137,6 @@ std::vector<EntryPerso *> sample_entries(int n) {
   std::vector<EntryPerso *> res = std::vector<EntryPerso *>();
   std::vector<Activity> activities_main = MainWindow::get_activities();
   std::vector<Activity *> activities;
-  std::vector<Friend *> friends;
   for (int i = n; i > 5; --i) {
     activities.clear();
     for (Activity activity : activities_main) {
@@ -176,7 +161,7 @@ std::vector<EntryPerso *> sample_entries(int n) {
     double physical_activity = rand() % 101;
     EntryPerso *entry =
         new EntryPerso("sample entry text", "The title of the entry",
-                       activities, friends, mood, sleep, eating_healthy,
+                       activities, mood, sleep, eating_healthy,
                        productivity, socializing, physical_activity);
     entry->set_qdate((QDate::currentDate()).addDays(-i));
     res.push_back(entry);

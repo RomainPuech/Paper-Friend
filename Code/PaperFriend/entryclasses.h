@@ -6,7 +6,6 @@
 #include <string>
 
 #include "activityclasses.h"
-#include "friendclasses.h"
 
 class Entry {
 public:
@@ -44,7 +43,6 @@ class EntryPerso : public Entry {
 public:
   EntryPerso(std::string text = "", std::string title = "",
              std::vector<Activity *> activities = std::vector<Activity *>(),
-             std::vector<Friend *> friends = std::vector<Friend *>(),
              double mood = 0, double sleep = 0, double eating_healthy = 0,
              double productivity = 0, double socializing = 0,
              double physical_activity = 0);
@@ -53,9 +51,6 @@ public:
   std::vector<Activity *> get_activities() const;
   void set_activities(std::vector<Activity *> activities);
   void add_activity(Activity *activity);
-
-  std::vector<Friend *> get_friends() const;
-  void set_friends(std::vector<Friend *> friends);
 
   double get_var_value(int index) const;
   std::string get_var_name(int index) const;
@@ -84,7 +79,6 @@ public:
 private:
   std::vector<Activity> all_activities;
   std::vector<Activity *> activities;
-  std::vector<Friend *> friends;
   double mood;
   double sleep;
   double eating_healthy;

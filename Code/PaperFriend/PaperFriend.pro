@@ -22,7 +22,6 @@ SOURCES += \
     entryfilter.cpp \
     entryrecap.cpp \
     file_processing/file_processing/file_save_and_load.cpp \
-    friendclasses.cpp \
     main.cpp \
     mainwindow.cpp\
     dynamicgraph.cpp \
@@ -47,7 +46,6 @@ HEADERS += \
     entryfilter.h \
     entryrecap.h \
     file_processing/file_processing/file_save_and_load.h \
-    friendclasses.h \
     mainwindow.h\
     dynamicgraph.h \
     mascot.h \

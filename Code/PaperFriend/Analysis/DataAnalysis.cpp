@@ -530,6 +530,7 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
            var_to_str(*(item_priority(log, var_index).begin() + 1)) + "! \n";
   }
 
+  /*
   // Haven’t seen anyone in days:
   bool seen_nobody = true;
   int i = 0; // days without friends in a row
@@ -545,6 +546,7 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
     str += "You haven't seen your friends for the last " + int_to_str(i) +
            " days. Want to meet up?:)";
   }
+  */
 
   return str;
 }

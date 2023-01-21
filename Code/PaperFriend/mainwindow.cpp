@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "all_activities.h"
-#include "all_people.h"
 #include "cardclasses.h"
 #include "dynamicgraph.h"
 #include "entryfilter.h"
@@ -30,8 +29,6 @@ std::vector<EntryPerso *> MainWindow::vector_entries; // All the personal
 std::vector<EntryRecap *> MainWindow::vector_recaps; // All the recap entries
 std::vector<Activity>
     MainWindow::vector_activities; // All the possible activities to choose from
-std::vector<Friend>
-    MainWindow::vector_friends; // All the friends we can choose from
 std::vector<EntryCard *> MainWindow::displayed_cards;
 
 //// Helper functions
@@ -152,14 +149,8 @@ MainWindow::~MainWindow() {
 
 std::vector<Activity> MainWindow::get_activities() { return vector_activities; }
 
-std::vector<Friend> MainWindow::get_friends() { return vector_friends; }
-
 void MainWindow::update_activities(std::vector<Activity> activities) {
   vector_activities = activities;
-}
-
-void MainWindow::update_friends(std::vector<Friend> friends) {
-  vector_friends = friends;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {

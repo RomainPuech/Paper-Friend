@@ -27,9 +27,7 @@ public:
   class TextEditor *textEditor;
   void closeEvent(QCloseEvent *event);
   static std::vector<Activity> get_activities();
-  static std::vector<Friend> get_friends();
   static void update_activities(std::vector<Activity> activities);
-  static void update_friends(std::vector<Friend> friends);
   void update_graphs();
   void generate_recap();
   void react_to_last_entry();
@@ -61,7 +59,6 @@ private:
   All_Habits *all_habits;
   static std::vector<EntryPerso *> vector_entries;
   static std::vector<Activity> vector_activities;
-  static std::vector<Friend> vector_friends;
   static std::vector<EntryRecap *> vector_recaps;
 
   std::vector<EntryPerso *> displayed_entries;
