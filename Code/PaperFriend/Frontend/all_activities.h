@@ -8,7 +8,7 @@
 #include <QLineSeries>
 #include <QVector>
 #include <QtCharts>
-#include <activity_cell.h>
+#include <Frontend/activity_cell.h>
 
 namespace Ui {
 class all_activities;
