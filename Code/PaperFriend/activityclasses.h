@@ -42,8 +42,6 @@ struct Activity {
   int get_type() const;
   void set_type(int type);
 
-  bool equal(Activity other);
-
   bool operator==(
       Activity other) const; // used when trying to find an activity in a vector
 

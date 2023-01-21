@@ -21,10 +21,6 @@ int Activity::get_type() const { return type; }
 
 void Activity::set_type(int type) { this->type = type; }
 
-bool Activity::equal(Activity other) {
-  return this->name == other.name && this->type == other.type;
-}
-
 bool Activity::operator==(Activity other) const {
   qDebug() << QString("== for act called,")
            << QString::fromStdString(other.get_name());

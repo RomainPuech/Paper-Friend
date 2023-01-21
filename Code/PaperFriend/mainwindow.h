@@ -36,7 +36,7 @@ public:
   void react_to_last_entry();
   void welcome();
   void add_new_activities_to_old_enties();
-  static void remove_activities_from_old_entries(int position);
+  static void remove_activities_from_old_entries();
   static void refresh_activities(); // dynamically update the display of
                                     // entryCard when activities are changed
 
