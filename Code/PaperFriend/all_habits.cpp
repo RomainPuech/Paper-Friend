@@ -95,16 +95,36 @@ bool All_Habits::duplicates_between_entered_habits() { //This function is quite 
     return duplicates_amoung_entered_habits;
 }
 
+bool All_Habits::unnamed_habits() {
+  bool unnamed = false;
+  std::vector<QStringList> current_habits = load_habits();
+  for (int i = 0; i < ui->habits_cell_layout->count(); i++) {
+    if (ui->habits_cell_layout->itemAt(i)->widget()->isVisible()) {
+      for (unsigned long j = 0; j < current_habits.size(); j++) {
+        if (ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit *>("habit_name")->text() == "") {
+          unnamed = true;
+        }
+      }
+    }
+  }
+  return unnamed;
+}
+
+
 void All_Habits::on_save_habit_button_clicked() {
   bool duplicates = duplicates_between_entered_saved_habits();
   bool duplicates_amoung_entered_habits = duplicates_between_entered_habits();
+  bool unnamed = unnamed_habits();
   if (duplicates) {
     QMessageBox::warning(this, "", "One or more habits entered already exist.",
                          QMessageBox::Close); //Pop up message in case of duplicates between entered habits and previously saved habits.
   } else if (duplicates_amoung_entered_habits) {
     QMessageBox::warning(this, "", "One or more habits entered are the same.",
                          QMessageBox::Close); //Pop up message in case of duplicates amoung entered habits.
-  } else { //If no duplicates found, we proceed with saving our entered habits.
+  } else if (unnamed) {
+    QMessageBox::warning(this, "", "No habit name entered.",
+                         QMessageBox::Close); //Pop up message in case one of the habits is without a name.
+    } else { //If no duplicates found, we proceed with saving our entered habits.
     QDate today = QDate::currentDate();
     QDate yesterday = today.addDays(-1); //We save yesterday's date to be able to ask the question on the mainwindow whether the user
                                          //did his habit or no, or delete it, on the same day specified.

@@ -6,7 +6,6 @@
 
 Friend::Friend(std::string name, int type, int duration)
     : name(name), type(type), duration(duration) {}
-Friend::~Friend() {}
 
 std::string Friend::get_name() const { return name; }
 

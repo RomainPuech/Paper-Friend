@@ -30,7 +30,6 @@ public:
   static std::vector<Friend> get_friends();
   static void update_activities(std::vector<Activity> activities);
   static void update_friends(std::vector<Friend> friends);
-  void change_editability();
   void update_graphs();
   void generate_recap();
   void react_to_last_entry();

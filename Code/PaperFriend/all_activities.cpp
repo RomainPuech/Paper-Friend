@@ -13,7 +13,6 @@ all_activities::all_activities(MainWindow *mainwindow,
     : mainwindowptr(mainwindow), vector_activities(vector_activity),
       QDialog(parent), ui(new Ui::all_activities) {
   ui->setupUi(this);
-  int ActivitiesCellNumberTotal = 0;
   this->add_previous_cells();
   disable_text_change();
 }
@@ -22,7 +21,7 @@ all_activities::~all_activities() { delete ui; }
 
 void all_activities::on_add_activity_button_clicked() { addNewCell(); }
 
-void all_activities::addNewCell(QString cellText, QString cellName, int type) {
+void all_activities::addNewCell(QString cellName, int type) {
   // are_equal=false;
   activity_cell *new_activity_cell =
       new activity_cell(this); // Create a new activity_cell.
@@ -59,7 +58,7 @@ void all_activities::addNewCell(QString cellText, QString cellName, int type) {
 
 void all_activities::add_previous_cells() {
   for (long long unsigned i = 0; i < vector_activities.size(); i++) {
-    addNewCell("", QString::fromStdString(vector_activities.at(i).get_name()),
+    addNewCell(QString::fromStdString(vector_activities.at(i).get_name()),
                vector_activities.at(i).get_type());
     vector_activities.pop_back();
   }
@@ -77,51 +76,55 @@ void all_activities::closeCell(int ActivitiesCellNumber) {
 }
 
 void all_activities::on_save_activity_button_clicked() {
-  QFile activities_file("./activities.txt");
-  activities_file.open(QIODevice::WriteOnly |
-                       QIODevice::Text); // Opens activities_file and allow to
-                                         // write in the text file.
-  QApplication::processEvents();
-  QString name_activity;
-  int type_activity;
-  vector_activities.clear();
-  qDebug()<<"v_e size:" + QString::number(vector_activities.size());
-  qDebug()<<QString::number(allCellPtr.size());
-  for (int i = 0; i < allCellPtr.size(); ++i) {
-    name_activity = allCellPtr[i]->get_activity_name();
-    type_activity = allCellPtr[i]->get_activity_type();
-    // qDebug()<< name_activity<<type_activity;
-    QTextStream out(&activities_file);
-    vector_activities.push_back(
-        Activity(name_activity.toStdString(), type_activity, 0));
-    // out << name_activity << " , " << type_activity << "⧵n";
-  }
-  qDebug()<<"v_e size:" + QString::number(vector_activities.size());
-  save_activities(vector_activities);
-
-  bool condition = false;
-  for (int i = 0; i < allCellPtr.size(); ++i) {
-    name_activity = allCellPtr[i]->get_activity_name();
-    type_activity = allCellPtr[i]->get_activity_type();
-    if (allCellPtr.size() == vector_activities.size() &&
-        name_activity != "Activity name" && type_activity != 0) {
-      condition = true;
-    } else {
-      condition = false;
+  if (!error_messages()) {
+    QFile activities_file("./activities.txt");
+    activities_file.open(QIODevice::WriteOnly |
+                         QIODevice::Text); // Opens activities_file and allow to
+                                           // write in the text file.
+    QApplication::processEvents();
+    QString name_activity;
+    int type_activity;
+    vector_activities.clear();
+    qDebug()<<"v_e size:" + QString::number(vector_activities.size());
+    qDebug()<<QString::number(allCellPtr.size());
+    for (int i = 0; i < allCellPtr.size(); ++i) {
+      name_activity = allCellPtr[i]->get_activity_name();
+      type_activity = allCellPtr[i]->get_activity_type();
+      // qDebug()<< name_activity<<type_activity;
+      QTextStream out(&activities_file);
+      vector_activities.push_back(
+          Activity(name_activity.toStdString(), type_activity, 0));
+      // out << name_activity << " , " << type_activity << "⧵n";
     }
-  }
-  if (condition == true) {
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::information(
-        this, "Save Confirmation", "All your activities and friends are saved.",
-        QMessageBox::Ok);
-    if (reply == QMessageBox::Ok) {
+    qDebug()<<"v_e size:" + QString::number(vector_activities.size());
+    save_activities(vector_activities);
+
+    bool condition = false;
+    for (int i = 0; i < allCellPtr.size(); ++i) {
+      name_activity = allCellPtr[i]->get_activity_name();
+      type_activity = allCellPtr[i]->get_activity_type();
+      if (allCellPtr.size() == vector_activities.size() &&
+          name_activity != "" && type_activity != 0) {
+        condition = true;
+      } else {
+        condition = false;
+      }
+    }
+    if (condition == true) {
+      QMessageBox::StandardButton reply;
+      reply = QMessageBox::information(
+          this, "Save Confirmation", "All your activities and friends are saved.",
+          QMessageBox::Ok);
+      if (reply == QMessageBox::Ok) {
+        this->close();
+      }
+    } else {
       this->close();
     }
-  } else {
-    this->close();
   }
 
+
+  /*
   activity_cell A;
   int dlt_number;
   dlt_number = A.number_clicked();
@@ -134,6 +137,7 @@ void all_activities::on_save_activity_button_clicked() {
       this->close();
     }
   }
+  */
 
   // we add the activity with value 0 to all existing entryPerso.
   // In terms of complexity it is not the best option but given that the number
@@ -161,98 +165,83 @@ void all_activities::disable_text_change() {
 }
 
 void all_activities::closeEvent(QCloseEvent *event) {
-  bool changed_type, type_error, name_error;
-  changed_type = false;
-  type_error = false;
-  name_error = false;
-  if (allCellPtr.size() != vector_activities.size()) {
-    QMessageBox::StandardButton answr_btn = QMessageBox::warning(
-        this, tr("Paper friend"), tr("Have you saved your activities ?"),
-        QMessageBox::No);
-
-    if (answr_btn != QMessageBox::No) {
+  bool changed_type = false;
+    if (unsigned(allCellPtr.size()) != vector_activities.size()) {
+      QMessageBox::warning(this, tr("Paper friend"),
+                           tr("Please save your changes."),
+                           QMessageBox::Ok);
       event->ignore();
     } else {
-      this->close();
-    }
-  } else {
-    for (int i = 0; i < allCellPtr.size(); ++i) {
-      QString name_activity_acp;
-      name_activity_acp = allCellPtr[i]->get_activity_name();
-      std::string name_activity_vec;
-      name_activity_vec = vector_activities[i].get_name();
-      int type_activity_acp;
-      type_activity_acp = allCellPtr[i]->get_activity_type();
-      int type_activity_vec;
-      type_activity_vec = vector_activities[i].get_type();
-      if (name_activity_acp.toStdString() != name_activity_vec ||
+      for (int i = 0; i < allCellPtr.size(); ++i) {
+        QString name_activity_acp;
+        name_activity_acp = allCellPtr[i]->get_activity_name();
+        std::string name_activity_vec;
+        name_activity_vec = vector_activities[i].get_name();
+        int type_activity_acp;
+        type_activity_acp = allCellPtr[i]->get_activity_type();
+        int type_activity_vec;
+        type_activity_vec = vector_activities[i].get_type();
+        if (name_activity_acp.toStdString() != name_activity_vec ||
           type_activity_acp != type_activity_vec) {
-        changed_type = true;
-      }
-      if (type_activity_acp == 0) {
-        type_error = true;
-      }
-      if (name_activity_acp.toStdString() == "Activity name") {
-        name_error = true;
-      }
-    }
-    if (changed_type == true) {
-      QMessageBox::StandardButton answr_btn = QMessageBox::warning(
-          this, tr("Paper friend"),
-          tr("Have you saved your activities and friends ?"), QMessageBox::No);
-
-      if (answr_btn != QMessageBox::No) {
+            changed_type = true;
+          }
+        }
+      if (changed_type == true) {
+        QMessageBox::warning(this, tr("Paper friend"),
+                             tr("Please save your changes."),
+                             QMessageBox::Ok);
         event->ignore();
-      } else {
+      } else if (error_messages()) {
         event->ignore();
       }
     }
-    if (type_error == true) {
-      QMessageBox::StandardButton answr_btn = QMessageBox::warning(
-          this, tr("Paper friend"), tr("Please enter an activity/friend type."),
-          QMessageBox::Ok);
+}
 
-      if (answr_btn != QMessageBox::Ok) {
-        event->ignore();
-      } else {
-        event->ignore();
-      }
+bool all_activities::error_messages() {
+  bool type_error = false;
+  bool name_error = false;
+  for (int i = 0; i < allCellPtr.size(); ++i) {
+    QString name_activity_acp;
+    name_activity_acp = allCellPtr[i]->get_activity_name();
+    std::string name_activity_vec;
+    name_activity_vec = vector_activities[i].get_name();
+    int type_activity_acp;
+    type_activity_acp = allCellPtr[i]->get_activity_type();
+    if (type_activity_acp == 0) {
+      type_error = true;
     }
-    if (name_error == true) {
-      QMessageBox::StandardButton answr_btn = QMessageBox::warning(
-          this, tr("Paper friend"), tr("Please enter an activity/friend name."),
-          QMessageBox::Ok);
-
-      if (answr_btn != QMessageBox::Ok) {
-        event->ignore();
-      } else {
-        event->ignore();
-      }
+    if (name_activity_acp.toStdString() == "") {
+      name_error = true;
     }
-
+  }
+  if (name_error == true) {
+    QMessageBox::warning(this, tr("Paper friend"),
+                         tr("Please enter an activity/friend name."),
+                         QMessageBox::Ok);
+    return true;
+  } else if (type_error == true) {
+    QMessageBox::warning(this, tr("Paper friend"),
+                         tr("Please enter an activity/friend type."),
+                         QMessageBox::Ok);
+    return true;
+  } else {
     bool same_name = false ;
     for (int i = 0; i < allCellPtr.size(); ++i) {
       for (int j = 0; j < allCellPtr.size(); ++j) {
         if (i != j && allCellPtr[j]->get_activity_name() ==
-                          allCellPtr[i]->get_activity_name()) {
+                allCellPtr[i]->get_activity_name()) {
           same_name = true;
         } else {
           same_name = false;
         }
       }
       if (same_name == true) {
-        QMessageBox::StandardButton answr_btn = QMessageBox::warning(
-            this, tr("Paper friend"),
-            tr("Some activities/friends have the same name. It is not allowed."),
-            QMessageBox::Ok);
-
-        if (answr_btn != QMessageBox::Ok) {
-          event->ignore();
-        } else {
-          event->ignore();
-        }
-      }same_name = false;
-
+        QMessageBox::warning(this, tr("Paper friend"),
+                             tr("Some activities/friends have the same name. It is not allowed."),
+                             QMessageBox::Ok);
+        return true;
+      }
     }
   }
+  return false;
 }

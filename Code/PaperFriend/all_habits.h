@@ -20,6 +20,7 @@ public:
   void closeEvent(QCloseEvent *event);
   bool duplicates_between_entered_saved_habits();
   bool duplicates_between_entered_habits();
+  bool unnamed_habits();
 
 private slots:
   void on_add_habit_button_clicked();

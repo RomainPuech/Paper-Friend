@@ -11,7 +11,6 @@
 Entry::Entry(std::string text, std::string title) : title(title), text(text) {
   this->set_qdate(QDate::currentDate());
 }
-// Entry::~Entry() {}
 
 std::string Entry::get_text() const { return text; }
 

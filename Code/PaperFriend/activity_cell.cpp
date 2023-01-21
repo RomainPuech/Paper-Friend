@@ -4,11 +4,11 @@
 activity_cell::activity_cell(QWidget *parent)
     : QWidget(parent), ui(new Ui::activity_cell) {
   ui->setupUi(this);
-  int nb_clicked = 0;
   QRegularExpression regular_expression("[A-Za-z ]{0,30}");
   QRegularExpressionValidator *validator =
       new QRegularExpressionValidator(regular_expression, this);
   ui->activity_name->setValidator(validator);
+  ui->activity_name->setPlaceholderText("Activity name");
   ui->activity_type->addItem("Enter type");
   ui->activity_type->addItem("Friend");
   ui->activity_type->addItem("Sport");
@@ -37,7 +37,7 @@ void activity_cell::set_activity_type(int type) {
 
 void activity_cell::disable_change() {
   QString act_name = ui->activity_name->text();
-  if (act_name != "Activity name") {
+  if (act_name != "") {
     ui->activity_name->setReadOnly(true);
   }
 }

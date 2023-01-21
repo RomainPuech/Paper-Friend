@@ -32,10 +32,11 @@ public:
 private slots:
   void on_add_activity_button_clicked();
 
-  void addNewCell(QString cellText = "", QString cellName = "Activity name",
-                  int type = 0);
+  void addNewCell(QString cellName = "", int type = 0);
 
   void on_save_activity_button_clicked();
+
+  bool error_messages();
 
 public slots:
   void closeCell(int);

@@ -141,14 +141,6 @@ MainWindow::MainWindow(QWidget *parent)
 
   // style the application
   QApplication::setStyle(QStyleFactory::create("Fusion"));
-  // check available built in styles
-  /*
-  const auto & styles = QStyleFactory::keys();
-  for(const auto & s : styles)
-  {
-    qDebug() << s;
-  }
-  */
 }
 
 MainWindow::~MainWindow() {
@@ -193,12 +185,6 @@ void MainWindow::toggle_visibility(QWidget *component) {
   }
 }
 
-void MainWindow::change_editability() {
-  ui->left_frame->setEnabled(!isEnabled());
-  ui->right_frame->setEnabled(!isEnabled());
-  ui->filters->setEnabled(!isEnabled());
-}
-
 void MainWindow::update_graphs() {
   ui->tabWidget->clear();
   display_graph("mood");
@@ -220,11 +206,6 @@ void MainWindow::display_entries() {
   }
   displayed_entries.clear();
   displayed_cards.clear();
-  /*for (auto entry: entries) {
-      EntryCard *c = new EntryCard(20, 300, 300, "white", entry, true, this);
-      c->display(ui->EntriesScroll->widget()->layout()); //displays the entry in
-  the main_frame. qDebug()<< "displayed";
-  }*/
   std::vector<EntryRecap *>::iterator rec = vector_recaps.begin();
   // displaying in reversed order
   for (auto entry = vector_entries.rbegin();
@@ -476,20 +457,36 @@ void MainWindow::on_type_filter_currentTextChanged(const QString &arg1) {
 }
 
 void MainWindow::on_newEntryButton_clicked() {
-  if (today_card == nullptr or today_card->get_entry_date()!=QDate::currentDate()) {
+  if (vector_entries.empty()) {
     EntryPerso *today_entry = new EntryPerso();
-    for (Activity const &activity : vector_activities) {
-      Activity *to_add =
-          new Activity(activity.get_name(), activity.get_type(), 0);
+    for(Activity const& activity : vector_activities){
+      Activity *to_add = new Activity(activity.get_name(),activity.get_type(),0);
       today_entry->add_activity(to_add);
-    }
-    vector_entries.push_back(today_entry);
-    //displayed_entries.push_back(today_entry);
-    //today_card = new EntryCard(20, 300, 300, "white", today_entry, false, this);
-    display_entries();
+     }
+     vector_entries.push_back(today_entry);
+     displayed_entries.push_back(today_entry);
+     today_card = new EntryCard(20, 300, 300, "white", today_entry, true, this);
+     display_entries();
+   } else {
+     if (vector_entries.back()->get_qdate() != QDate::currentDate()) {
+       EntryPerso *today_entry = new EntryPerso();
+       for(Activity const& activity : vector_activities){
+         Activity *to_add = new Activity(activity.get_name(),activity.get_type(),0);
+         today_entry->add_activity(to_add);
+       }
+       vector_entries.push_back(today_entry);
+       displayed_entries.push_back(today_entry);
+       today_card = new EntryCard(20, 300, 300, "white", today_entry, false, this);
+       display_entries();
+     } else {
+       if (displayed_entries.back()->get_qdate() != QDate::currentDate()) {
+         displayed_entries.push_back(vector_entries.back());
+         display_entries();
+       }
+     }
    }
-  ui->EntriesScroll->verticalScrollBar()->setValue(0);
-  //today_card->change();
+   ui->EntriesScroll->verticalScrollBar()->setValue(0);
+   today_card->change();
 }
 
 void MainWindow::generate_recap() {

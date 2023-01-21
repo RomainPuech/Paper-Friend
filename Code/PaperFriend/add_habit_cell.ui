@@ -22,6 +22,9 @@
         <string/>
        </property>
        <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
         <string>Enter Habit</string>
        </property>
       </widget>
