@@ -21,6 +21,7 @@ public:
   bool duplicates_between_entered_saved_habits();
   bool duplicates_between_entered_habits();
   bool unnamed_habits();
+  std::vector<QStringList> get_habits_to_be_displayed();
 
 private slots:
   void on_add_habit_button_clicked();

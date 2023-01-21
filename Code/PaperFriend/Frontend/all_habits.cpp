@@ -110,6 +110,26 @@ bool All_Habits::unnamed_habits() {
   return unnamed;
 }
 
+std::vector<QStringList> All_Habits::get_habits_to_be_displayed(){
+    std::vector<QString> displayed_habits;
+    for (int i = 0; i < ui_mainwindow->verticalLayout_daily_habits->count(); i++) {
+        displayed_habits.push_back(ui_mainwindow->verticalLayout_daily_habits->itemAt(i)->widget()->findChild<QLabel *>("habit_label")->text().split(".")[0]);
+    }
+    std::vector<QStringList> to_return;
+    std::vector<QStringList> daily_habits = get_daily_habits();
+    for (unsigned long i = 0; i < daily_habits.size(); i++) {
+        bool different = true;
+        for (unsigned long j = 0; j < displayed_habits.size(); j++) {
+            if (daily_habits[i][0] == displayed_habits[j]) {
+                different = false;
+            }
+        }
+        if (different) {
+            to_return.push_back(daily_habits[i]);
+        }
+    }
+    return to_return;
+}
 
 void All_Habits::on_save_habit_button_clicked() {
   bool duplicates = duplicates_between_entered_saved_habits();
@@ -159,7 +179,7 @@ void All_Habits::on_save_habit_button_clicked() {
       save_habits_to_file(new_habits); //Function to save habits
       QMessageBox::about(this, "", "All entered habits have been saved."); //Pop up message to inform user that entered habits have been saved successfully.
 
-      std::vector<QStringList> new_habits_of_the_day = get_daily_habits();
+      std::vector<QStringList> new_habits_of_the_day = get_habits_to_be_displayed();
       if (new_habits_of_the_day.size() > 0) {
           if (ui_mainwindow->generic_habit_label->isVisible()) {
               ui_mainwindow->generic_habit_label->setVisible(false);
