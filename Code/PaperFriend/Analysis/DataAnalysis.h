@@ -1,6 +1,8 @@
 #ifndef DATAANALYSIS_H
 #define DATAANALYSIS_H
 
+#pragma once
+
 #include "Frontend/entryclasses.h"
 #include "Frontend/entryrecap.h"
 #include <QDebug>

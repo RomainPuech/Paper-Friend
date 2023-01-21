@@ -1,5 +1,6 @@
 #ifndef ACTIVITYCLASSES_H
 #define ACTIVITYCLASSES_H
+#pragma once
 
 #include <QString>
 #include <iostream>

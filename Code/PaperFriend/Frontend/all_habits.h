@@ -1,5 +1,6 @@
 #ifndef ALL_HABITS_H
 #define ALL_HABITS_H
+#pragma once
 
 #include "ui_mainwindow.h"
 #include <ui_mainwindow.h>

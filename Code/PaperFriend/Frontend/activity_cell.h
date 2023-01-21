@@ -1,6 +1,8 @@
 #ifndef ACTIVITY_CELL_H
 #define ACTIVITY_CELL_H
 
+#pragma once
+
 #include <QMessageBox>
 #include <QString>
 #include <QWidget>

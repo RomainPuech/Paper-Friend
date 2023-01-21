@@ -1,5 +1,7 @@
 #ifndef DISPLAY_DAILY_HABIT_H
 #define DISPLAY_DAILY_HABIT_H
+#pragma once
+
 #include "ui_display_daily_habit.h"
 #include <QDialog>
 

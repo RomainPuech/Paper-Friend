@@ -1,5 +1,7 @@
 #ifndef MASCOT_H
 #define MASCOT_H
+#pragma once
+
 #include <Analysis/DataAnalysis.h>
 #include <iostream>
 #include <string>

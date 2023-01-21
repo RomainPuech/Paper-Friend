@@ -1,6 +1,8 @@
 #ifndef DYNAMICGRAPH_H
 #define DYNAMICGRAPH_H
 
+#pragma once
+
 #include <QChartView>
 #include <QLineSeries>
 #include <QWidget>

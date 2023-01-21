@@ -1,5 +1,6 @@
 #ifndef ENTRYRECAP_H
 #define ENTRYRECAP_H
+#pragma once
 #include "entryclasses.h"
 
 class EntryRecap

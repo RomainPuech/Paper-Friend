@@ -1,5 +1,8 @@
 #ifndef ENTRYFILTER_H
 #define ENTRYFILTER_H
+
+#pragma once
+
 #include "entryclasses.h"
 #include <functional>
 #include <iostream>

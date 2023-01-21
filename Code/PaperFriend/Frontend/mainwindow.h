@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#pragma once
+
 #include "all_habits.h"
 #include "cardclasses.h"
 #include "dynamicgraph.h"

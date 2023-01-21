@@ -9,6 +9,8 @@
 #include <iostream>
 #include <string>
 
+#pragma once
+
 bool save_entry(Entry entry);
 
 Entry load_entry(std::string filename);

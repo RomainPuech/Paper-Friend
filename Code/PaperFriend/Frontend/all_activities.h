@@ -1,5 +1,6 @@
 #ifndef ALL_ACTIVITIES_H
 #define ALL_ACTIVITIES_H
+#pragma once
 
 #include "activityclasses.h"
 #include "mainwindow.h"

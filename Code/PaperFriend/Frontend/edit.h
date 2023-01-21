@@ -1,6 +1,8 @@
 #ifndef EDIT_H
 #define EDIT_H
 
+#pragma once
+
 #include <QTextEdit>
 
 class Edit : public QTextEdit {

@@ -1,6 +1,8 @@
 #ifndef CARDCLASSES_H
 #define CARDCLASSES_H
 
+#pragma once
+
 #include "entryclasses.h"
 #include "entryrecap.h"
 #include "file_processing/file_processing/file_save_and_load.h"

@@ -1,6 +1,7 @@
 // Head file of texteditor.cpp
 #ifndef TEXTEDITOR_H
 #define TEXTEDITOR_H
+#pragma once
 
 #include <QMainWindow>
 // #include "finddlg.h"

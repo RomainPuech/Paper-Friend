@@ -1,5 +1,7 @@
 #ifndef MASCOTCHAT_H
 #define MASCOTCHAT_H
+#pragma once
+
 #include "qboxlayout.h"
 #include <QLabel>
 #include <QScrollArea>

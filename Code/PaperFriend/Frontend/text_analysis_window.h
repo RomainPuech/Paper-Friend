@@ -1,5 +1,6 @@
 #ifndef TEXT_ANALYSIS_WINDOW_H
 #define TEXT_ANALYSIS_WINDOW_H
+#pragma once
 #include "entryclasses.h"
 #include "cardclasses.h"
 

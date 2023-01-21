@@ -1,6 +1,7 @@
 #ifndef TEXTANALYSIS_H
 #define TEXTANALYSIS_H
 
+#pragma once
 
 #include "DataAnalysis.h"
 

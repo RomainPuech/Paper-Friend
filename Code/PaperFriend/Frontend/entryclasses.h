@@ -1,6 +1,8 @@
 #ifndef ENTRYCLASSES_H
 #define ENTRYCLASSES_H
 
+#pragma once
+
 #include <QDate>
 #include <iostream>
 #include <string>
