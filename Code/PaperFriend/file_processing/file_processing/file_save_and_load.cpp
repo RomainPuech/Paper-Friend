@@ -2,7 +2,7 @@
 #include "qdir.h"
 #include <QDebug>
 #include <QFile>
-
+#include <cstdio>
 #include <QApplication>
 #include <QFile>
 #include <QLabel>
@@ -371,9 +371,7 @@ void save_delete_of_habits(QString to_delete) { //Functions that loads previousl
                                                 //(in order to completely delete it).
   std::vector<QStringList> old_habits = load_habits();
   if (old_habits.size() == 1) { //If there's only one previously saved habit, then it is for sure the one to delete, so we simply over write it empty.
-    std::ofstream myfile;
-    myfile.open("habits.txt", std::ios::out);
-    myfile.close();
+    remove("habits.txt");
   } else { //Find and delete habit from vector of previously saved habits, then resave the new vector.
     for (unsigned long i = 0; i < old_habits.size(); i++) {
       if (old_habits[i][0] == to_delete) {

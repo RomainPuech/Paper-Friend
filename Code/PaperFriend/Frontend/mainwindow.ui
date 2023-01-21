@@ -525,7 +525,7 @@
            <item>
             <widget class="QLabel" name="habit_title_label">
              <property name="text">
-              <string>Habits of The Day:</string>
+              <string>Habits Yet to Be Done</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -551,7 +551,7 @@
            <item>
             <widget class="QLabel" name="generic_habit_label">
              <property name="text">
-              <string>No habits done on this day.</string>
+              <string>No Habits Left to do Today</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -619,7 +619,7 @@
   </action>
   <action name="action_Save">
    <property name="icon">
-    <iconset resource="myresources.qrc">
+    <iconset resource="../myresources.qrc">
      <normaloff>:/pictures/rsc/save.png</normaloff>:/pictures/rsc/save.png</iconset>
    </property>
    <property name="text">
@@ -628,7 +628,7 @@
   </action>
   <action name="action_SaveAs">
    <property name="icon">
-    <iconset resource="myresources.qrc">
+    <iconset resource="../myresources.qrc">
      <normaloff>:/pictures/rsc/saveas.png</normaloff>:/pictures/rsc/saveas.png</iconset>
    </property>
    <property name="text">
@@ -637,7 +637,7 @@
   </action>
   <action name="action_Copy">
    <property name="icon">
-    <iconset resource="myresources.qrc">
+    <iconset resource="../myresources.qrc">
      <normaloff>:/pictures/rsc/copy.png</normaloff>:/pictures/rsc/copy.png</iconset>
    </property>
    <property name="text">
@@ -646,7 +646,7 @@
   </action>
   <action name="action_Cut">
    <property name="icon">
-    <iconset resource="myresources.qrc">
+    <iconset resource="../myresources.qrc">
      <normaloff>:/pictures/rsc/cut.png</normaloff>:/pictures/rsc/cut.png</iconset>
    </property>
    <property name="text">
@@ -655,7 +655,7 @@
   </action>
   <action name="action_Paste">
    <property name="icon">
-    <iconset resource="myresources.qrc">
+    <iconset resource="../myresources.qrc">
      <normaloff>:/pictures/rsc/paste.png</normaloff>:/pictures/rsc/paste.png</iconset>
    </property>
    <property name="text">
@@ -684,7 +684,7 @@
   </action>
  </widget>
  <resources>
-  <include location="myresources.qrc"/>
+  <include location="../myresources.qrc"/>
  </resources>
  <connections/>
 </ui>
