@@ -755,6 +755,8 @@ void EntryCard::handleBack() {
     alert.close();
   }
   can_be_modified = true;
+  // check if a weekly/monthly/yearly recap has to be created
+  main_window->generate_recap();
 }
 
 void EntryCard::set_correct_style() {
@@ -850,8 +852,6 @@ void EntryCard::update() {
   // update style
   set_correct_style();
 
-  // check if a weekly/monthly/yearly recap has to be created
-  main_window->generate_recap();
 }
 
 void EntryCard::update_fr_act_select() {

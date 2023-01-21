@@ -67,7 +67,7 @@ void text_analysis_window::analize(){
     qDebug()<<"removing everything";
     ui->verticalLayout->removeWidget(load_container);
     ui->apply_mood->setVisible(true);
-    message->setText("The analysis of this entry suggests that your mood is " + QString::number(analize_text->get_text_mood()));
+    message->setText("The analysis of this entry suggests that your mood is " + QString::number(analize_text->get_text_mood()*100) + "%");
     this->setWindowTitle("Sentiment analysis of the text");
     message->setReadOnly(true);
     ui->verticalLayoutWidget->setStyleSheet("border-style: none;");
