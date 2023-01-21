@@ -92,12 +92,14 @@ MainWindow::MainWindow(QWidget *parent)
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date<EntryPerso*>);
 
   //To generate example data for presentation:
+  /*
   std::vector<double> moods = {10.,10.,40.,50.,99.};
   int n =10;
   std::vector<EntryPerso*> demo_data = MainWindow::for_presentation__generate_entries_from_date_mood(n,moods);
   for(EntryPerso*e:demo_data){
       vector_entries.push_back(e);
   }
+  */
 
   // Load habits
 
