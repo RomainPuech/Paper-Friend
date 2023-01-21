@@ -537,7 +537,7 @@ void MainWindow::react_to_last_entry() {
                        1]; // called before generate recap so we are sure it is
                            // an EntryPerso
     if (last_entry->get_mood() == 0) {
-        std::vector<QString> msg_vect={"Did you forget to put in your mood ?","If not, I'm very sorry for the day you had. It's good that you put your thoughts on paper. Don't hesitate to seek the help of a relative or of a professional if you feel like you loose control.", "Don't worry, everything eventually gets better."};
+        std::vector<QString> msg_vect={"Did you forget to put in your mood ?","If not, I'm very sorry for the day you had. It's good that you put your thoughts on paper.","Don't hesitate to seek the help of a relative or of a professional if you feel like you loose control.<br>Don't worry, everything eventually gets better."};
         chat.display(msg_vect,last_entry->get_mood());
     }
     else if (last_entry->get_mood() < 30) {
@@ -574,26 +574,26 @@ void MainWindow::welcome() {
     int daysago = (last_entry->get_qdate()).daysTo(QDate::currentDate());
     if (daysago == 0) {
         std::vector<QString> msg_vect={"Hello again!", "I hope you enjoyed yourself today!!"};
-        chat.display(msg_vect,90);
+        chat.display(msg_vect,-1);
     } else if (daysago == 1) {
         std::vector<QString> msg_vect={"Hello!", "I would love to know how was your day!", "Tell me through the entry."};
-        chat.display(msg_vect,90);
+        chat.display(msg_vect,-1);
     } else if (daysago > 365) {
         std::vector<QString> msg_vect={"Welcome back","I though I would never see you again! How are you?"};
-        chat.display(msg_vect,90);
+        chat.display(msg_vect,-1);
     } else if (daysago > 14) {
         std::vector<QString> msg_vect={"It's been a while!","It's good to see you again!!"};
-        chat.display(msg_vect,90);
+        chat.display(msg_vect,-1);
     } else if (daysago > 6) {
         std::vector<QString> msg_vect={"Welcome back!", "How has it been going?"};
-        chat.display(msg_vect,90);
+        chat.display(msg_vect,-1);
     } else if (daysago > 1) {
         std::vector<QString> msg_vect={"Hellooo!!", "How did it go since last time?"};
-        chat.display(msg_vect,90);
+        chat.display(msg_vect,-1);
     }
   } else {
       std::vector<QString> msg_vect={"Hello, it seems like it's your first time here! I'm Rooxie, your well-being assistant!", "You can create an entry in you diary by clicking the New entry button on the top of the screen.", "Go on and add an entry! I can't wait to hear about your day!"};
-      chat.display(msg_vect,90);
+      chat.display(msg_vect,-1);
   }
 }
 
