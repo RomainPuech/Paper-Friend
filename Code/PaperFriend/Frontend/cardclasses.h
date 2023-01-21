@@ -87,35 +87,34 @@ private slots:
   void handleBack();
 
 private:
-  static bool can_be_modified;
-  bool readOnly;
+  static bool can_be_modified; // true if there are no cards in modify mode
+  bool readOnly; // is this card in readOnly mode
   MainWindow *main_window;
   Entry *entry;
-  EntryPerso *entry_perso;
-  EntryRecap *entry_recap;
+  EntryPerso *entry_perso; // casted entry into entry_perso
+  EntryRecap *entry_recap; // casted entry into entry_recap
   //always used for display
   QHBoxLayout *top_menu;
-  QLabel *date_display;
+  QLabel *date_display; //part of the top menu
   // display of entry_perso
-  QLabel *mood_display;
-  QListWidget *fr_act_display;
-  QLabel *title;
-  QTextEdit *text_field;
+  QListWidget *fr_act_display; // part of the top menu, displays activities in readOnly mode
+  QLabel *title; // title of entry_perso, part of top_menu
+  QTextEdit *text_field; // displays the text of the entry, contained in text_title_w
   QWidget *text_title_w;      // widget for title, text_field and modify
   QVBoxLayout *text_title_vb; // handles the layout of text_title_w
-  TextEditor *edit_text;
+  TextEditor *edit_text; // the text editor
   QStackedWidget *edit_text_w; // contains only the text editor
-  QGroupBox *edit_and_return;  // contains text editor and back_to_display
+  QGroupBox *edit_and_return;  // contains text editor and back_to_display, part of vb_layout
   QVBoxLayout *edit_vb;        // layout for edit_and_return
-  QPushButton *modify;
-  QPushButton *analize;
-  QPushButton *back_to_display;
+  QPushButton *modify; // button to switch to modify mode
+  QPushButton *analize; // button to analize text
+  QPushButton *back_to_display; // button to switch to readOnly mode
   QLayout *display_layout;   // parent layout of the card
-  QWidget *mood_slider_w;    // widget for displaying mood slider
+  QWidget *mood_slider_w;    // widget for displaying mood slider, part of the top menu
   QLabel *mood_slider_instr; // label for the mood slider
   QSlider *mood_slider;
   QVBoxLayout *mood_slider_vb; // layout of mood_slider_w;
-  QListWidget *fr_act_select;
+  QListWidget *fr_act_select; // checklist of activities
   static std::vector<QListWidgetItem *> fr_act_options;
 
 
@@ -148,8 +147,9 @@ private:
   // display of entry_recap
   QLabel *recap_title;
   QTextEdit *recap_text;
-  QHBoxLayout *best_day_hb;
-  QHBoxLayout *worst_day_hb;
+  QLabel *mood_display;
+  QHBoxLayout *best_day_hb; // layout of the best day
+  QHBoxLayout *worst_day_hb; // layout of the worst day
   QLabel *best_day;
   QLabel *worst_day;
   QLabel *best_date;
