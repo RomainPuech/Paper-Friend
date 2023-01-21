@@ -127,9 +127,6 @@ MainWindow::MainWindow(QWidget *parent)
   // Chatbox
   chat = MascotChat(ui->scrollArea);
   welcome();
-  chat.add_mascot(90);
-  // std::string question = "did you sleep well";
-  // chat.prompt_msg(question,0,55);
 
   // Settings
   auto settings = findChild<QWidget *>("settings_frame");
@@ -570,31 +567,33 @@ void MainWindow::react_to_last_entry() {
                        1]; // called before generate recap so we are sure it is
                            // an EntryPerso
     if (last_entry->get_mood() == 0) {
-      chat << QString(
-          "Did you forget to put in your mood ?<br> If not, I'm very sorry for "
-          "the day you had. It's good that you put your thoughts on paper.<br> "
-          "Don't hesitate to seek the help of a relative or of a professional "
-          "if you feel like you loose control. Don't worry, everything "
-          "eventually gets better.");
-    } else if (last_entry->get_mood() < 30) {
-      chat << QString("Oh, I'm sorry for the day you had. Don't forget that "
-                      "you are never alone and talking to a relative or a "
-                      "professional can help you going through hard times.");
-    } else if (last_entry->get_mood() < 50) {
-      chat << QString("Seems like you spent a pretty tough day... I hope it'll "
-                      "be better tomorrow.");
-    } else if (last_entry->get_mood() < 75) { // between 50 and 75
-      chat << QString(
-          "Looks like a fine day. What could you improve to make it better?");
-    } else if (last_entry->get_mood() < 85) {
-      chat << QString("Someone had a happy day ;)");
-    } else if (last_entry->get_mood() < 95) { // between 85 and 90
-      chat << QString("What a great day! Take the time to savor it.");
-    } else {
-      chat << QString("Wow, you spent an amazing day! It hope it will stay "
-                      "anchored in your memory forever.");
+        std::vector<QString> msg_vect={"Did you forget to put in your mood ?","If not, I'm very sorry for the day you had. It's good that you put your thoughts on paper. Don't hesitate to seek the help of a relative or of a professional if you feel like you loose control.", "Don't worry, everything eventually gets better."};
+        chat.display(msg_vect,last_entry->get_mood());
     }
-    chat.add_mascot(last_entry->get_mood());
+    else if (last_entry->get_mood() < 30) {
+        std::vector<QString> msg_vect={"Oh, I'm sorry for the day you had.","Don't forget that you are never alone and talking to a relative or a professional can help you going through hard times."};
+        chat.display(msg_vect,last_entry->get_mood());
+    }
+    else if (last_entry->get_mood() < 50) {
+        std::vector<QString> msg_vect={"Seems like you spent a pretty tough day...", "I hope it'll be better tomorrow."};
+        chat.display(msg_vect,last_entry->get_mood());
+    }
+    else if (last_entry->get_mood() < 75) { // between 50 and 75
+        std::vector<QString> msg_vect={"Looks like a fine day.","What could you improve to make it better?"};
+        chat.display(msg_vect,last_entry->get_mood());
+    }
+    else if (last_entry->get_mood() < 85) {
+        std::vector<QString> msg_vect={"Someone had a happy day.", "It's awesome!!"};
+        chat.display(msg_vect,last_entry->get_mood());
+    }
+    else if (last_entry->get_mood() < 95) { // between 85 and 90
+        std::vector<QString> msg_vect={"What a great day!","Take the time to savor it."};
+        chat.display(msg_vect,last_entry->get_mood());
+    }
+    else {
+        std::vector<QString> msg_vect={"Wow, you spent an amazing day!","It hope it will stay anchored in your memory forever."};
+        chat.display(msg_vect,last_entry->get_mood());
+    }
     reacted_to_entry = true;
   }
 }
@@ -604,24 +603,27 @@ void MainWindow::welcome() {
     EntryPerso *last_entry = vector_entries[vector_entries.size() - 1];
     int daysago = (last_entry->get_qdate()).daysTo(QDate::currentDate());
     if (daysago == 0) {
-      chat << QString("Hello again!");
+        std::vector<QString> msg_vect={"Hello again!", "I hope you enjoyed yourself today!!"};
+        chat.display(msg_vect,90);
     } else if (daysago == 1) {
-      chat << QString("Hello!");
+        std::vector<QString> msg_vect={"Hello!", "I would love to know how was your day!", "Tell me through the entry."};
+        chat.display(msg_vect,90);
     } else if (daysago > 365) {
-      chat << QString(
-          "Oh, you! I though I would never see you again! How are you?");
+        std::vector<QString> msg_vect={"Welcome back","I though I would never see you again! How are you?"};
+        chat.display(msg_vect,90);
     } else if (daysago > 14) {
-      chat << QString("It's been a while! Good to see you again.");
+        std::vector<QString> msg_vect={"It's been a while!","It's good to see you again!!"};
+        chat.display(msg_vect,90);
     } else if (daysago > 6) {
-      chat << QString("Welcome back! How has it been going?");
+        std::vector<QString> msg_vect={"Welcome back!", "How has it been going?"};
+        chat.display(msg_vect,90);
     } else if (daysago > 1) {
-      chat << QString("Hi! How did it go since last time?");
+        std::vector<QString> msg_vect={"Hellooo!!", "How did it go since last time?"};
+        chat.display(msg_vect,90);
     }
   } else {
-    chat << QString(
-        "Hello, it seems like it's your first time here! I'm Rooxie, your "
-        "well-being assistant! You can create an entry in you diary by "
-        "clicking the \"New entry\" button on the top of the screen.");
+      std::vector<QString> msg_vect={"Hello, it seems like it's your first time here! I'm Rooxie, your well-being assistant!", "You can create an entry in you diary by clicking the New entry button on the top of the screen.", "Go on and add an entry! I can't wait to hear about your day!"};
+      chat.display(msg_vect,90);
   }
 }
 
