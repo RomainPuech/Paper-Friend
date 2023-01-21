@@ -63,7 +63,7 @@ private:
   static std::vector<Activity> vector_activities;
   static std::vector<EntryRecap *> vector_recaps;
 
-  std::vector<EntryPerso *> displayed_entries;
+  static std::vector<EntryPerso *> displayed_entries;
   static std::vector<EntryCard *>
       displayed_cards; // entry perso cards that are currently on display
   EntryCard *today_card;

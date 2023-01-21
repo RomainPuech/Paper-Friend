@@ -718,6 +718,7 @@ void EntryCard::handleModify() {
         alert.setText("One of the entries is already being modified, finish editing to modify this entry.");
         alert.setStandardButtons(QMessageBox::Close);
         alert.setDefaultButton(QMessageBox::Close);
+        alert.show();
     }
 }
 
