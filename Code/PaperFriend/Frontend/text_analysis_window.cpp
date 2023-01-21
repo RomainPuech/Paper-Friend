@@ -67,5 +67,6 @@ void text_analysis_window::analize(){
     message->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     mood = analize_text->get_text_mood();
     ui->verticalLayout->addWidget(message);
+
 }
 

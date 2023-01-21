@@ -746,9 +746,7 @@ void EntryCard::handleBack() {
     entry->set_title(new_title);
     entry->set_text(new_text);
     this->change();
-    qDebug() << "changed";
     this->update();
-    qDebug() << "Updated";
     break;
   case QMessageBox::Discard:
     this->remove_non_existent_act();
@@ -846,7 +844,6 @@ void EntryCard::update() {
   // update dynamic graph
   main_window->update_graphs();
   // react to the entry - Important to call it *before* generate_recap
-  qDebug() << QString("Reaction called");
   if (entry->get_qdate() == QDate::currentDate()) {
     main_window->react_to_last_entry();
   }
@@ -944,7 +941,6 @@ void EntryCard::remove_non_existent_act() {
 void EntryCard::update_fr_act() {
   // update the display and values before going back to readOnly mode
   unsigned long long num_activities = (entry_perso->get_activities()).size();
-  // qDebug() << QString::number((MainWindow::get_activities()).size());
   for (unsigned long long i = 0; i < num_activities; i++) {
     QListWidgetItem *option = fr_act_options.at(i);
     if (option->checkState() == Qt::Checked) {
@@ -980,15 +976,12 @@ void EntryCard::set_entryPerso_style(int top_menu_num_items) {
   if (top_menu_num_items == 3 and readOnly) {
     fr_act_display->setVisible(true);
     fr_act_select->setVisible(false);
-    qDebug() << "READONLY MODE";
   } else if (top_menu_num_items == 3) {
     fr_act_display->setVisible(false);
     fr_act_select->setVisible(true);
-    qDebug() << "CORRECT DISPLAY FOR MODIFYING";
   } else {
     fr_act_display->setVisible(false);
     fr_act_select->setVisible(false);
-    qDebug() << "BOTH INVISIBLE";
   }
 
   this->setStyleSheet("background-color: " + get_background_color() +

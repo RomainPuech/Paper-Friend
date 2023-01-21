@@ -13,7 +13,6 @@ std::vector<std::string> load_habits() {
   if (myfile.is_open()) {
     while (myfile.good()) {
       std::getline(myfile, habit);
-      std::cout << habit << '\n';
       current_habits.push_back(habit);
     }
   } else {
