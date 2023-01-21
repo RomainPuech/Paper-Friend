@@ -145,8 +145,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>127</width>
-             <height>74</height>
+             <width>163</width>
+             <height>137</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -156,9 +156,29 @@
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,2,0">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,2,0">
         <item>
          <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="suggestions_button">
+          <property name="text">
+           <string>Get suggestions</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -449,8 +469,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>580</width>
-               <height>408</height>
+               <width>490</width>
+               <height>467</height>
               </rect>
              </property>
             </widget>
@@ -580,7 +600,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>243</width>
+             <width>333</width>
              <height>200</height>
             </rect>
            </property>
