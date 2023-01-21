@@ -112,6 +112,8 @@ protected:
 
   std::vector<double> cyclic_week(int metric_index);
 
+  std::string react_depression();
+
   std::string var_to_str(int var_index) const {
     if (log.size() == 0) {
       return "";

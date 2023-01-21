@@ -552,7 +552,7 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
 }
 
 std::string DataAnalysis::react_depression(){
-    std::string str;
+    std::string str = "";
     if (log.end()->get_var_value(0) <= 0.5 * get_lastn_average(7, 0)){
         str += "Seems like you have a depression:(";
         str += "The two main things to fix is your " +
