@@ -214,7 +214,6 @@ DynamicGraph::DynamicGraph(std::vector<EntryPerso *> &entries,
 ////////////////////////
 // destructor
 DynamicGraph::~DynamicGraph() {
-  qDebug() << QString("I'm being called...");
   delete visible_green_points;
   delete visible_orange_points;
   delete visible_red_points;

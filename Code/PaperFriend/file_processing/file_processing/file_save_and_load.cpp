@@ -99,8 +99,6 @@ str_to_vec_activities(std::vector<Activity> possible_activities,
   }
   for (Activity const &activity : possible_activities) {
     if (activities_done.find(activity.get_name()) != activities_done.end()) {
-      qDebug() << QString("this act was seleected:")
-               << QString::fromStdString(activity.get_name());
       Activity *to_add = new Activity(activity);
       to_add->set_value(1);
       res.push_back(to_add);
@@ -150,9 +148,7 @@ bool save_entryperso(EntryPerso entry) { //  create and save the entry file,
     return false;
   }
   o << j << std::endl;
-  std::cout << "ouii";
   o.close();
-  std::cout << "nonnn";
   return true;
 };
 
@@ -169,10 +165,7 @@ EntryPerso *load_entryperso(
       str_to_vec_activities(possible_activities, j["activities"]),
       j["mood"], j["sleep"],j["eating_healthy"], j["productivity"],
       j["socializing"], j["physical_activity"]);
-  for (Activity *act : res->get_activities()) {
-    qDebug() << QString::fromStdString(act->get_name())
-             << QString::number(act->get_value()) << QString("Turbo debug");
-  }
+
   res->set_date(j["date"]);
   return res;
 }

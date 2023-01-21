@@ -56,8 +56,6 @@ std::vector<EntryPerso *> filter(std::vector<EntryPerso *> entries,
       if (compare_value(*(entries[i]), param.keyword, param.opt, param.value)) {
         filteredEntries.push_back(entries[i]);
       }
-    } else {
-      std::cout << "not implemented yet" << std::endl;
     }
   }
   return filteredEntries;

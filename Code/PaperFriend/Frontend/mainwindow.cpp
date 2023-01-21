@@ -69,7 +69,6 @@ MainWindow::MainWindow(QWidget *parent)
     save_activities(vector_activities);
   }
   vector_activities = load_activities();
-  qDebug() << vector_activities.size();
 
   // load previous entries
   QDir dir(QDir::currentPath() + "/Entries");
@@ -78,7 +77,7 @@ MainWindow::MainWindow(QWidget *parent)
         load_entryperso(filename.toStdString(), vector_activities));
   }
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date);
-  // qDebug()<<QString::fromStdString((vector_entries[0]->get_activities())[0]->get_name());
+
 
   // Load habits
 
@@ -193,7 +192,7 @@ void MainWindow::display_entries() {
     // ui->graph_frame->removeItem(item);
     delete item->widget();
     delete item;
-    qDebug() << "removed";
+
   }
   displayed_entries.clear();
   displayed_cards.clear();
@@ -206,7 +205,7 @@ void MainWindow::display_entries() {
       EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
       c->display(ui->EntriesScroll->widget()
                      ->layout()); // displays the entry in the main_frame.
-      qDebug() << "displayed recap";
+
       rec++;
       entry--;
     } else if ((*entry)->get_qdate() == QDate::currentDate()) {
@@ -225,13 +224,13 @@ void MainWindow::display_entries() {
                      ->layout()); // displays the entry in the main_frame.
       displayed_entries.push_back(*entry);
       displayed_cards.push_back(c);
-      qDebug() << "displayed";
+
     }
   } while(rec != vector_recaps.end()){
       EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
       c->display(ui->EntriesScroll->widget()
                      ->layout()); // displays the entry in the main_frame.
-      qDebug() << "displayed recap";
+
       rec++;
   }
 }
@@ -241,7 +240,7 @@ void MainWindow::display_graph(QString tracked_parameter) {
   tab->setStyleSheet("QWidget{background-color: rgb(255,255,255);}");
   QHBoxLayout *graph = new QHBoxLayout(tab);
   ui->tabWidget->addTab(tab, tracked_parameter);
-  qDebug() << QString("I call it!");
+
   if (dynamic_graphs.find(tracked_parameter) != dynamic_graphs.end()) {
     delete dynamic_graphs[tracked_parameter];
   }
@@ -310,7 +309,6 @@ void MainWindow::on_filterButton_clicked() {
       findChild<QComboBox *>("type_filter")->currentText();
   std::string type_filter_str = type_filter_value.toStdString();
   type_filter_str = map_filter[type_filter_str];
-  std::cout << type_filter_str << std::endl;
   QString operator_filter_value =
       findChild<QComboBox *>("operation_filter")->currentText();
   std::string operator_filter_str = operator_filter_value.toStdString();
@@ -377,9 +375,7 @@ void MainWindow::on_filterButton_clicked() {
   }
 
   // error handling
-  std::cout << "filtered" << std::endl;
   if (filtered_entries.size() == 0) {
-    std::cout << "no entries" << std::endl;
     if (is_insert) {
       filter_params.pop_back();
     }
@@ -395,7 +391,7 @@ void MainWindow::on_filterButton_clicked() {
   for (int i = 0; i < filter_params.size(); i++) {
     // value keeps 2 digits after the decimal point
     std::stringstream stream;
-    // qDebug()<<filter_params[i].value<<"HERE";
+
     stream << std::fixed << std::setprecision(1) << filter_params[i].value;
     std::string s = stream.str();
     f +=
@@ -485,7 +481,7 @@ void MainWindow::generate_recap() {
       EntryRecap recap = analysis.weekly_recap();
       vector_recaps.push_back(&recap);
       display_entries();// displays the entry in the main_frame.
-      qDebug() << "displayed";
+
       save_last_recaps_dates(last_recaps_dates);
       save_entryrecap(recap);
     }
@@ -503,7 +499,7 @@ void MainWindow::generate_recap() {
       EntryRecap recap = analysis.monthly_recap();
       vector_recaps.push_back(&recap);
       display_entries(); // displays the entry in the main_frame.
-      qDebug() << "displayed";
+
       save_last_recaps_dates(last_recaps_dates);
       save_entryrecap(recap);
     }
@@ -523,7 +519,7 @@ void MainWindow::generate_recap() {
       EntryRecap recap = analysis.yearly_recap();
       vector_recaps.push_back(&recap);
       display_entries(); // displays the entry in the main_frame.
-      qDebug() << "displayed";
+
       save_last_recaps_dates(last_recaps_dates);
       save_entryrecap(recap);
     }
@@ -605,17 +601,9 @@ void MainWindow::on_Test_entries_clicked() {
 }
 
 void MainWindow::add_new_activities_to_old_enties() {
-  qDebug() << QString("add_new_activities_to_old_enties called");
 
-  for (EntryPerso *entry :
-       vector_entries) { // to modify if we change the type of vector_entries
-    if (entry->entry_type() ==
-        1) { // useful when we change the type of vector_entries
-      // we now know it's an entry perso so we can cast it
-      // qDebug()<<QString("cast");
-      // EntryPerso *entry = static_cast<EntryPerso*>(entry); //would be the
-      // way, but makes the program crash at the line indicated in the following
-      // comment
+
+  for (EntryPerso *entry : vector_entries) {
       for (Activity const &activity : vector_activities) {
         Activity *to_add = new Activity();
         to_add->set_name(activity.get_name());
@@ -638,7 +626,6 @@ void MainWindow::add_new_activities_to_old_enties() {
         }
       }
     }
-  }
 }
 void MainWindow::remove_activities_from_old_entries() {
   /* remove an activity after it has been deleted */
@@ -657,13 +644,11 @@ void MainWindow::remove_activities_from_old_entries() {
        }
        if(not_found){to_remove.push_back(activity);}
  }
-  qDebug()<<"remove: " + QString::number(to_remove.size());
+
  for(EntryPerso* entry: vector_entries){
      std::vector<Activity*> entry_activities = entry->get_activities();
      for(unsigned long long act_remove : to_remove){
-         qDebug()<<QString::number(act_remove);
          entry_activities.erase(entry_activities.begin()+act_remove);
-         qDebug()<<"removed from entry" +   QString::number(entry_activities.size());
      }
      entry->set_activities(entry_activities);
  }

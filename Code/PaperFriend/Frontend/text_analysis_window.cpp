@@ -35,6 +35,5 @@ void text_analysis_window::set_message(QString message){
 void text_analysis_window::on_apply_mood_clicked(bool checked)
 {
     card->automatic_mood(mood);
-    qDebug()<<"mood set";
 }
 

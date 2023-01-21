@@ -20,16 +20,13 @@ int Activity::get_type() const { return type; }
 
 void Activity::set_type(int type) { this->type = type; }
 
+//operator== used for stl find function
 bool Activity::operator==(Activity other) const {
-  qDebug() << QString("== for act called,")
-           << QString::fromStdString(other.get_name());
   return (name == other.get_name());
 }
 
 bool operator==(Activity &a, Activity &b)
 
 {
-  qDebug() << QString("outside == for act called,")
-           << QString::fromStdString(a.get_name());
   return (a.get_name() == b.get_name());
 }

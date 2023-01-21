@@ -81,9 +81,12 @@ bool All_Habits::duplicates_between_entered_habits() { //This function is quite 
               if (ui->habits_cell_layout->itemAt(i)->widget()->isVisible()) {
                 if (ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit *>("habit_name")->text() ==
                         ui->habits_cell_layout->itemAt(j)->widget()->findChild<QLineEdit *>("habit_name")->text()) {
+                  //following code may be useful later for debug
+                  /*
                   std::cout<<"text here:"<<std::endl;
                   std::cout<<ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit *>("habit_name")->text().toStdString()<<std::endl;
                   std::cout<<ui->habits_cell_layout->itemAt(j)->widget()->findChild<QLineEdit *>("habit_name")->text().toStdString()<<std::endl;
+                  */
                   duplicates_amoung_entered_habits = true;
                 }
               }
