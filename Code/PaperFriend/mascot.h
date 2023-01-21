@@ -8,10 +8,8 @@
 class Mascot {
 public:
   Mascot();
-  ~Mascot();
-  QString
-  get_emotion(int num); /*returns a string containing the image path of a
-                         specific mascot image based on the num thatshould range
+  QString get_emotion(int num); /*returns a string containing the image path of a
+                         specific mascot image based on the num that should range
                          from 0 to 100 written in way such that it could be
                          displayed in the chat_layout */
 private:
