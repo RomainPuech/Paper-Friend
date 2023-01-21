@@ -38,6 +38,8 @@ public:
   static void remove_activities_from_old_entries();
   static void refresh_activities(); // dynamically update the display of
                                     // entryCard when activities are changed
+  std::vector<QStringList> habit_repeated_5();
+  std::vector<QStringList> habit_repeated_66();
 
 private slots:
   void on_pushButton_clicked();
