@@ -3,11 +3,8 @@
 #include <QChartView>
 #include <QtCharts/QLegend>
 #include <QtCharts>
-// Adds categories to the charts axes
-#include <QtCharts/QBarCategoryAxis>
 // Used to create a line chart
 #include <QtCharts/QLineSeries>
-// Used to change names on axis
 #include "entryclasses.h"
 #include <QDebug>
 #include <QString>
@@ -34,7 +31,7 @@ DynamicGraph::associated_parameter_level(double parameter) const {
 void DynamicGraph::set_color(
     QLineSeries *series,
     parameterlevel level) { // can transform into a template to handle
-                            // line/spline customization
+                            // line/spline curve customization
   /*
    changes the color of the line corresponding to this series on the graph with
    the color corresponding to the level of parameter. If the parameter is bad,
@@ -115,6 +112,8 @@ DynamicGraph::DynamicGraph(std::vector<EntryPerso *> &entries,
   QDate today = QDate::currentDate();
 
   //////
+  //points that are going to be displayed in a certain color.
+  //Points and curves belong to different superimposed graphs.
   visible_green_points = new QScatterSeries();
   visible_green_points->setBorderColor("green");
   visible_green_points->setColor("green");
@@ -145,15 +144,13 @@ DynamicGraph::DynamicGraph(std::vector<EntryPerso *> &entries,
   double y1;
   double x1 = -(entries[0]->get_qdate().daysTo(today));
 
-  for (auto e : entries) {
+  for (auto e : entries) {//loop in entries to create the graph
 
     double x2 = -(e->get_qdate().daysTo(today));
     double y2 = parameter_value(e, tracked_parameter); // current point
-    // qDebug() << x2 << y2;
 
     parameterlevel level = associated_parameter_level(y2);
     if (abs(x1 - x2) > 3) {
-      // qDebug() << x1 << x2;
       listofseries.push_back(series);
       series =
           new QLineSeries(); // all pointers series will be deleted by looping
@@ -264,38 +261,29 @@ void DynamicGraph::display(QLayout *layout) {
                            QDate::currentDate())) +
                            1,
                        0);
-  int end = -(entries[0]->get_qdate().daysTo(QDate::currentDate()));
-  // qDebug() << "yo mec" << start << end;
-  parameter_chart->axes(Qt::Horizontal).first()->setRange(end, start);
+  int end = -(entries[0]->get_qdate().daysTo(QDate::currentDate()))-1;
+  parameter_chart->axes(Qt::Horizontal).first()->setRange(end,start+0.015);//0.015 for margin in order to see today's point
   parameter_chart->axes(Qt::Horizontal).first()->setTitleFont(font);
   parameter_chart->axes(Qt::Horizontal)
       .first()
       ->setTitleText(QString::fromStdString("Days ago"));
+
   QValueAxis *xaxis = static_cast<QValueAxis *>(
       parameter_chart->axes(Qt::Horizontal)
           .first()); // used to be able to call QValueAxis methods as we know
                      // that the axis is of type QValueAxis, which inherits from
                      // QAbstractAxis, returned by the function
-  xaxis->setLabelFormat("%0.1f");
-  // qDebug()<<"here";
 
-  // qDebug()<<"et pas here";
-  // mood_chart->axes(Qt::Horizontal).first()->setLabelFormat("%.2f");
-  // tests to put absolute value as an x axis.
-  /*
-  //QValueAxis *axisX = new QValueAxis;
-  mood_chart->Xaxis.setLabelFormat("%.2f");
-  */
+  xaxis->setLabelFormat("%0.1f");
 
   parameter_chart->setAnimationOptions(QChart::GridAxisAnimations);
-  /*
-  QFont titlefont = QFont();
-  titlefont.setWeight(QFont::Bold);
-  parameter_chart->setTitleFont(titlefont);
-  parameter_chart->setTitle("My mood");
-  */
+
   parameter_view = new QChartView(parameter_chart);
   parameter_view->setRenderHint(QPainter::Antialiasing);
   layout->addWidget(parameter_view); // displays the graph on the screen in the
                                      // indicated layout
 }
+
+
+
+//This is an easter egg :p
