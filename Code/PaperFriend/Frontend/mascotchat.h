@@ -25,7 +25,6 @@ public:
   QScrollArea *get_scrollArea();
 
 private:
-  void add_notif_sound();
   void set_scroll_area(QScrollArea *area);
   void add_message(QString txt);//takes QString and displays it in the chat box
   void add_message(std::string txt);//takes an std string and displays this message in the chat box
