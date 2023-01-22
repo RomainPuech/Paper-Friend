@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "all_activities.h"
 #include "cardclasses.h"
+#include "display_daily_habit.h"
 #include "dynamicgraph.h"
 #include "entryfilter.h"
 #include "error_dlg.h"
@@ -20,7 +21,6 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_map>
-#include "display_daily_habit.h""
 
 //// Declarations
 std::vector<Filter_param> filter_params;
@@ -33,24 +33,25 @@ std::vector<Activity>
 std::vector<EntryCard *> MainWindow::displayed_cards;
 
 //// Helper functions
-template<typename T>
-bool sort_by_date(const T e1, const T e2) {
+template <typename T> bool sort_by_date(const T e1, const T e2) {
   return e1->get_qdate().daysTo(e2->get_qdate()) > 0;
 }
 
 /// To generate example data for the presentation
 
-std::vector<EntryPerso*> MainWindow::for_presentation__generate_entries_from_date_mood(int n, std::vector<double> moods){
-    qDebug()<<QString("data I'm called");
-    std::vector<EntryPerso*> res;
-    for(int i=n-1; i>+0; ++i){
-        qDebug()<<QString::number(i);
-        EntryPerso* e = new EntryPerso();
-        e->set_qdate(QDate::currentDate().addDays(i));
-        e->set_mood(moods[i]);
-        res.push_back(e);
-    }
-    return res;
+std::vector<EntryPerso *>
+MainWindow::for_presentation__generate_entries_from_date_mood(
+    int n, std::vector<double> moods) {
+  qDebug() << QString("data I'm called");
+  std::vector<EntryPerso *> res;
+  for (int i = n - 1; i > +0; ++i) {
+    qDebug() << QString::number(i);
+    EntryPerso *e = new EntryPerso();
+    e->set_qdate(QDate::currentDate().addDays(i));
+    e->set_mood(moods[i]);
+    res.push_back(e);
+  }
+  return res;
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -87,11 +88,12 @@ MainWindow::MainWindow(QWidget *parent)
   }
   vector_activities = load_activities();
 
-  ///To generate example data for presentation:
+  /// To generate example data for presentation:
   /*
   std::vector<double> moods = {10.,10.,40.,50.,99.};
   int n =5;
-  std::vector<EntryPerso*> demo_data = MainWindow::for_presentation__generate_entries_from_date_mood(n,moods);
+  std::vector<EntryPerso*> demo_data =
+  MainWindow::for_presentation__generate_entries_from_date_mood(n,moods);
   qDebug()<<QString::number(demo_data.size())<<QString("Debug here");
   for(EntryPerso*e:demo_data){
       vector_entries.push_back(e);
@@ -100,10 +102,11 @@ MainWindow::MainWindow(QWidget *parent)
   // load previous entries
   QDir dir(QDir::currentPath() + "/Entries");
   for (const QString &filename : dir.entryList(QDir::Files)) {
-    vector_entries.push_back(load_entryperso(filename.toStdString(), vector_activities));
+    vector_entries.push_back(
+        load_entryperso(filename.toStdString(), vector_activities));
   }
-  sort(vector_entries.begin(), vector_entries.end(), sort_by_date<EntryPerso*>);
-
+  sort(vector_entries.begin(), vector_entries.end(),
+       sort_by_date<EntryPerso *>);
 
   // Load habits
 
@@ -111,10 +114,11 @@ MainWindow::MainWindow(QWidget *parent)
 
   if (habits_of_the_day.size() > 0) {
     ui->generic_habit_label->setVisible(false);
-      for (unsigned long i = 0; i < habits_of_the_day.size(); i++) {
-        Display_Daily_Habit *new_daily_habit = new Display_Daily_Habit(habits_of_the_day[i][0], habits_of_the_day[i][2], this);
-        ui->verticalLayout_daily_habits->addWidget(new_daily_habit);
-      }
+    for (unsigned long i = 0; i < habits_of_the_day.size(); i++) {
+      Display_Daily_Habit *new_daily_habit = new Display_Daily_Habit(
+          habits_of_the_day[i][0], habits_of_the_day[i][2], this);
+      ui->verticalLayout_daily_habits->addWidget(new_daily_habit);
+    }
   } else {
     ui->habits_scrollArea->setVisible(false);
   }
@@ -124,7 +128,8 @@ MainWindow::MainWindow(QWidget *parent)
   // save the card corresponding to the current day in case it has to be
   // modified
   today_card = nullptr;
-  if (!vector_entries.empty() && vector_entries.back()->get_qdate()==QDate::currentDate()) {
+  if (!vector_entries.empty() &&
+      vector_entries.back()->get_qdate() == QDate::currentDate()) {
     EntryPerso *newest_entry = vector_entries.back();
     if (newest_entry->get_qdate() == QDate::currentDate()) {
       today_card =
@@ -142,7 +147,7 @@ MainWindow::MainWindow(QWidget *parent)
         load_entryrecap(filename.toStdString(), vector_activities));
   }
   // sort them by the date
-  sort(vector_recaps.begin(), vector_recaps.end(), sort_by_date<EntryRecap*>);
+  sort(vector_recaps.begin(), vector_recaps.end(), sort_by_date<EntryRecap *>);
   //// frontend that needs data to be rendered
   display_entries(false);
 
@@ -218,27 +223,28 @@ void MainWindow::display_entries(bool dont_display_recaps) {
     // ui->graph_frame->removeItem(item);
     delete item->widget();
     delete item;
-
   }
   displayed_cards.clear();
   // displaying in reversed order
   std::vector<EntryRecap *>::reverse_iterator rec = vector_recaps.rbegin();
-  if(dont_display_recaps){rec = vector_recaps.rend();}
+  if (dont_display_recaps) {
+    rec = vector_recaps.rend();
+  }
   for (auto entry = displayed_entries.rbegin();
        entry != displayed_entries.rend(); ++entry) {
-    if (rec != vector_recaps.rend() && (*rec)->get_qdate().daysTo((*entry)->get_qdate()) <= 0) {
+    if (rec != vector_recaps.rend() &&
+        (*rec)->get_qdate().daysTo((*entry)->get_qdate()) <= 0) {
       EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
       c->display(ui->EntriesScroll->widget()
                      ->layout()); // displays the entry in the main_frame.
       ++rec;
       entry--;
     } else if ((*entry)->get_qdate() == QDate::currentDate()) {
-          if(today_card == nullptr){
-            today_card = new EntryCard(20, 300, 300, "white", *entry, false, this);
-          }
-          else{
-            today_card = new EntryCard(20, 300, 300, "white", *entry, true, this);
-          }
+      if (today_card == nullptr) {
+        today_card = new EntryCard(20, 300, 300, "white", *entry, false, this);
+      } else {
+        today_card = new EntryCard(20, 300, 300, "white", *entry, true, this);
+      }
       today_card->display(ui->EntriesScroll->widget()->layout());
       displayed_cards.push_back(today_card);
     } else {
@@ -246,7 +252,6 @@ void MainWindow::display_entries(bool dont_display_recaps) {
       c->display(ui->EntriesScroll->widget()
                      ->layout()); // displays the entry in the main_frame.
       displayed_cards.push_back(c);
-
     }
   } /*while(rec != vector_recaps.rend()){
       EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
@@ -425,7 +430,8 @@ void MainWindow::on_filterButton_clicked() {
 
   // select the n last entries
   std::vector<EntryPerso *> entries_to_display;
-  for (size_t i = filtered_entries.size() - n; i < filtered_entries.size(); i++) {
+  for (size_t i = filtered_entries.size() - n; i < filtered_entries.size();
+       i++) {
     entries_to_display.push_back(filtered_entries[i]);
   }
 
@@ -464,32 +470,34 @@ void MainWindow::on_type_filter_currentTextChanged(const QString &arg1) {
 }
 
 void MainWindow::on_newEntryButton_clicked() {
-   if(vector_entries.empty() || vector_entries.back()->get_qdate() != QDate::currentDate()){
-       // today entry doesn't exist
-       EntryPerso *today_entry = new EntryPerso();
-       for(Activity const& activity : vector_activities){
-         Activity *to_add = new Activity(activity.get_name(),activity.get_type(),0);
-         today_entry->add_activity(to_add);
-        }
-        vector_entries.push_back(today_entry);
-        displayed_entries.push_back(today_entry);
-        display_entries(false);
-   }
-   else{
-       if(displayed_entries.empty() || displayed_entries.back()->get_qdate() != QDate::currentDate()){
-           // today entry exists but is not in the displayed entries
-           displayed_entries.push_back(vector_entries.back());
-           display_entries(false);
-       }
-   }
-     ui->EntriesScroll->verticalScrollBar()->setValue(0);
-   //today_card->change(); this will mess up the program because we can end up with two cards in modify mode
+  if (vector_entries.empty() ||
+      vector_entries.back()->get_qdate() != QDate::currentDate()) {
+    // today entry doesn't exist
+    EntryPerso *today_entry = new EntryPerso();
+    for (Activity const &activity : vector_activities) {
+      Activity *to_add =
+          new Activity(activity.get_name(), activity.get_type(), 0);
+      today_entry->add_activity(to_add);
+    }
+    vector_entries.push_back(today_entry);
+    displayed_entries.push_back(today_entry);
+    display_entries(false);
+  } else {
+    if (displayed_entries.empty() ||
+        displayed_entries.back()->get_qdate() != QDate::currentDate()) {
+      // today entry exists but is not in the displayed entries
+      displayed_entries.push_back(vector_entries.back());
+      display_entries(false);
+    }
+  }
+  ui->EntriesScroll->verticalScrollBar()->setValue(0);
+  // today_card->change(); this will mess up the program because we can end up
+  // with two cards in modify mode
 }
-void MainWindow::on_suggestions_button_clicked()
-{
-    DataAnalysis data_analysis = DataAnalysis(vector_entries);
-    std::string suggestion = data_analysis.suggestion();
-    chat<<suggestion;
+void MainWindow::on_suggestions_button_clicked() {
+  DataAnalysis data_analysis = DataAnalysis(vector_entries);
+  std::string suggestion = data_analysis.suggestion();
+  chat << suggestion;
 }
 void MainWindow::generate_recap() {
   // first check if we need to generate a weekly/monthly/yearly recap
@@ -512,15 +520,16 @@ void MainWindow::generate_recap() {
       chat.add_mascot(89);
       last_recaps_dates[0] = QDate::currentDate().toString("yyyy.MM.dd");
       DataAnalysis analysis = DataAnalysis(vector_entries);
-      EntryRecap* recap_w = analysis.weekly_recap();
+      EntryRecap *recap_w = analysis.weekly_recap();
       generated_recap = true;
       vector_recaps.push_back(recap_w);
       save_entryrecap(*recap_w);
     }
   }
   // monthly
-  if (saved_month() and QDate::currentDate().daysInMonth() ==
-     QDate::currentDate().day()) // If it's the last day of the month
+  if (saved_month() and
+      QDate::currentDate().daysInMonth() ==
+          QDate::currentDate().day()) // If it's the last day of the month
   {
     QString date_last_recap = last_recaps_dates[1];
     if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
@@ -528,7 +537,7 @@ void MainWindow::generate_recap() {
       chat.add_mascot(65);
       last_recaps_dates[1] = QDate::currentDate().toString("yyyy.MM.dd");
       DataAnalysis analysis = DataAnalysis(vector_entries);
-      EntryRecap* recap_m = analysis.monthly_recap();
+      EntryRecap *recap_m = analysis.monthly_recap();
       generated_recap = true;
       vector_recaps.push_back(recap_m);
       save_entryrecap(*recap_m);
@@ -538,7 +547,7 @@ void MainWindow::generate_recap() {
   if (saved_year() and QDate::currentDate().month() == 12 &&
       QDate::currentDate().day() == 31) // If it's December 31st
   {
-      qDebug() << "yearly recap";
+    qDebug() << "yearly recap";
     QString date_last_recap = last_recaps_dates[2];
     if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
       chat << QString("Before celebrating the new year, let's look back to ") +
@@ -553,12 +562,12 @@ void MainWindow::generate_recap() {
       save_entryrecap(*recap_y);
     }
   }
-    if(generated_recap){
+  if (generated_recap) {
 
-  save_last_recaps_dates(last_recaps_dates);
-  display_entries(false);
-  ui->EntriesScroll->verticalScrollBar()->setValue(0);
-    }
+    save_last_recaps_dates(last_recaps_dates);
+    display_entries(false);
+    ui->EntriesScroll->verticalScrollBar()->setValue(0);
+  }
 }
 
 void MainWindow::react_to_last_entry() {
@@ -568,32 +577,43 @@ void MainWindow::react_to_last_entry() {
                        1]; // called before generate recap so we are sure it is
                            // an EntryPerso
     if (last_entry->get_mood() == 0) {
-        std::vector<QString> msg_vect={"Did you forget to put in your mood ?","If not, I'm very sorry for the day you had. It's good that you put your thoughts on paper.","Don't hesitate to seek the help of a relative or of a professional if you feel like you loose control.<br>Don't worry, everything eventually gets better."};
-        chat.display(msg_vect,last_entry->get_mood());
-    }
-    else if (last_entry->get_mood() < 30) {
-        std::vector<QString> msg_vect={"Oh, I'm sorry for the day you had.","Don't forget that you are never alone and talking to a relative or a professional can help you going through hard times."};
-        chat.display(msg_vect,last_entry->get_mood());
-    }
-    else if (last_entry->get_mood() < 50) {
-        std::vector<QString> msg_vect={"Seems like you spent a pretty tough day...", "I hope it'll be better tomorrow."};
-        chat.display(msg_vect,last_entry->get_mood());
-    }
-    else if (last_entry->get_mood() < 75) { // between 50 and 75
-        std::vector<QString> msg_vect={"Looks like a fine day.","What could you improve to make it better?"};
-        chat.display(msg_vect,last_entry->get_mood());
-    }
-    else if (last_entry->get_mood() < 85) {
-        std::vector<QString> msg_vect={"Someone had a happy day.", "It's awesome!!"};
-        chat.display(msg_vect,last_entry->get_mood());
-    }
-    else if (last_entry->get_mood() < 95) { // between 85 and 90
-        std::vector<QString> msg_vect={"What a great day!","Take the time to savor it."};
-        chat.display(msg_vect,last_entry->get_mood());
-    }
-    else {
-        std::vector<QString> msg_vect={"Wow, you spent an amazing day!","It hope it will stay anchored in your memory forever."};
-        chat.display(msg_vect,last_entry->get_mood());
+      std::vector<QString> msg_vect = {
+          "Did you forget to put in your mood ?",
+          "If not, I'm very sorry for the day you had. It's good that you put "
+          "your thoughts on paper.",
+          "Don't hesitate to seek the help of a relative or of a professional "
+          "if you feel like you loose control.<br>Don't worry, everything "
+          "eventually gets better."};
+      chat.display(msg_vect, last_entry->get_mood());
+    } else if (last_entry->get_mood() < 30) {
+      std::vector<QString> msg_vect = {
+          "Oh, I'm sorry for the day you had.",
+          "Don't forget that you are never alone and talking to a relative or "
+          "a professional can help you going through hard times."};
+      chat.display(msg_vect, last_entry->get_mood());
+    } else if (last_entry->get_mood() < 50) {
+      std::vector<QString> msg_vect = {
+          "Seems like you spent a pretty tough day...",
+          "I hope it'll be better tomorrow."};
+      chat.display(msg_vect, last_entry->get_mood());
+    } else if (last_entry->get_mood() < 75) { // between 50 and 75
+      std::vector<QString> msg_vect = {
+          "Looks like a fine day.",
+          "What could you improve to make it better?"};
+      chat.display(msg_vect, last_entry->get_mood());
+    } else if (last_entry->get_mood() < 85) {
+      std::vector<QString> msg_vect = {"Someone had a happy day.",
+                                       "It's awesome!!"};
+      chat.display(msg_vect, last_entry->get_mood());
+    } else if (last_entry->get_mood() < 95) { // between 85 and 90
+      std::vector<QString> msg_vect = {"What a great day!",
+                                       "Take the time to savor it."};
+      chat.display(msg_vect, last_entry->get_mood());
+    } else {
+      std::vector<QString> msg_vect = {
+          "Wow, you spent an amazing day!",
+          "It hope it will stay anchored in your memory forever."};
+      chat.display(msg_vect, last_entry->get_mood());
     }
     reacted_to_entry = true;
   }
@@ -604,43 +624,46 @@ void MainWindow::welcome() {
     EntryPerso *last_entry = vector_entries[vector_entries.size() - 1];
     int daysago = (last_entry->get_qdate()).daysTo(QDate::currentDate());
     if (daysago == 0) {
-        chat << QString("Hello again!");
-        chat.add_mascot(-1);
-        chat << QString("I hope you enjoyed yourself today!!");
-        chat.add_mascot(60);
+      chat << QString("Hello again!");
+      chat.add_mascot(-1);
+      chat << QString("I hope you enjoyed yourself today!!");
+      chat.add_mascot(60);
     } else if (daysago == 1) {
-        chat << QString("Hello!I would love to know how was your day!");
-        chat.add_mascot(-1);
-        chat << QString("Tell me through the entry.");
-        chat.add_mascot(90);
+      chat << QString("Hello!I would love to know how was your day!");
+      chat.add_mascot(-1);
+      chat << QString("Tell me through the entry.");
+      chat.add_mascot(90);
     } else if (daysago > 365) {
-        chat << QString("Welcome back");
-        chat.add_mascot(-1);
-        chat << QString("I though I would never see you again! How are you?");
-        chat.add_mascot(60);
+      chat << QString("Welcome back");
+      chat.add_mascot(-1);
+      chat << QString("I though I would never see you again! How are you?");
+      chat.add_mascot(60);
     } else if (daysago > 14) {
-        chat << QString("It's been a while!");
-        chat.add_mascot(-1);
-        chat << QString("It's good to see you again!!");
-        chat.add_mascot(90);
+      chat << QString("It's been a while!");
+      chat.add_mascot(-1);
+      chat << QString("It's good to see you again!!");
+      chat.add_mascot(90);
     } else if (daysago > 6) {
-        chat << QString("Welcome back!");
-        chat.add_mascot(-1);
-        chat << QString("How has it been going?");
-        chat.add_mascot(60);
+      chat << QString("Welcome back!");
+      chat.add_mascot(-1);
+      chat << QString("How has it been going?");
+      chat.add_mascot(60);
     } else if (daysago > 1) {
-        chat << QString("Hellooo!!");
-        chat.add_mascot(-1);
-        chat << QString("How did it go since last time?");
-        chat.add_mascot(60);
+      chat << QString("Hellooo!!");
+      chat.add_mascot(-1);
+      chat << QString("How did it go since last time?");
+      chat.add_mascot(60);
     }
   } else {
-      chat << QString("Hello, it seems like it's your first time here! I'm Rooxie, your well-being assistant!");
-      chat.add_mascot(-1);
-      chat << QString("You can create an entry in you diary by clicking the New entry button on the top of the screen.");
-      chat.add_mascot(60);
-      chat << QString("Go on and add an entry! I can't wait to hear about your day!");
-      chat.add_mascot(90);
+    chat << QString("Hello, it seems like it's your first time here! I'm "
+                    "Rooxie, your well-being assistant!");
+    chat.add_mascot(-1);
+    chat << QString("You can create an entry in you diary by clicking the New "
+                    "entry button on the top of the screen.");
+    chat.add_mascot(60);
+    chat << QString(
+        "Go on and add an entry! I can't wait to hear about your day!");
+    chat.add_mascot(90);
   }
 }
 
@@ -653,57 +676,63 @@ void MainWindow::on_Test_entries_clicked() {
 
 void MainWindow::add_new_activities_to_old_enties() {
 
-
   for (EntryPerso *entry : vector_entries) {
-      for (Activity const &activity : vector_activities) {
+    for (Activity const &activity : vector_activities) {
+      Activity *to_add = new Activity();
+      to_add->set_name(activity.get_name());
+      to_add->set_type(activity.get_type());
+      std::vector<Activity *> entry_activities =
+          entry->get_activities(); // crashes here if static cast used
+      if (std::find_if(entry_activities.begin(), entry_activities.end(),
+                       [to_add](Activity *a) -> bool {
+                         return *a == *to_add;
+                       }) == entry_activities.end()) {
+        qDebug() << QString("Does not contain")
+                 << QString::fromStdString(activity.get_name())
+                 << QString::number(activity.get_type());
+        // does not contain activity
         Activity *to_add = new Activity();
         to_add->set_name(activity.get_name());
         to_add->set_type(activity.get_type());
-        std::vector<Activity *> entry_activities =
-            entry->get_activities(); // crashes here if static cast used
-        if (std::find_if(entry_activities.begin(), entry_activities.end(),
-                         [to_add](Activity *a) -> bool {
-                           return *a == *to_add;
-                         }) == entry_activities.end()) {
-          qDebug() << QString("Does not contain")
-                   << QString::fromStdString(activity.get_name())
-                   << QString::number(activity.get_type());
-          // does not contain activity
-          Activity *to_add = new Activity();
-          to_add->set_name(activity.get_name());
-          to_add->set_type(activity.get_type());
-          to_add->set_value(0.0);
-          entry->add_activity(to_add);
-        }
+        to_add->set_value(0.0);
+        entry->add_activity(to_add);
       }
     }
+  }
 }
 void MainWindow::remove_activities_from_old_entries() {
   /* remove an activity after it has been deleted */
-  if(vector_entries.empty()){return;}
-  std::vector<Activity*> reference_for_entries = vector_entries.at(0)->get_activities(); // the activities currently in entries
-  std::vector<unsigned long long> to_remove; //positions of activities that should be removed
-  // find activities that are present in entries but not in the vector of all activities
-  for(unsigned long long activity = 0; activity < reference_for_entries.size(); activity++){
-      bool not_found = true;
-       for(Activity act: vector_activities) {
-           if(act == *reference_for_entries.at(activity)){// found it
-               not_found = false;
-              break;
-           }
+  if (vector_entries.empty()) {
+    return;
+  }
+  std::vector<Activity *> reference_for_entries =
+      vector_entries.at(0)
+          ->get_activities(); // the activities currently in entries
+  std::vector<unsigned long long>
+      to_remove; // positions of activities that should be removed
+  // find activities that are present in entries but not in the vector of all
+  // activities
+  for (unsigned long long activity = 0; activity < reference_for_entries.size();
+       activity++) {
+    bool not_found = true;
+    for (Activity act : vector_activities) {
+      if (act == *reference_for_entries.at(activity)) { // found it
+        not_found = false;
+        break;
+      }
+    }
+    if (not_found) {
+      to_remove.push_back(activity);
+    }
+  }
 
-       }
-       if(not_found){to_remove.push_back(activity);}
- }
-
- for(EntryPerso* entry: vector_entries){
-     std::vector<Activity*> entry_activities = entry->get_activities();
-     for(unsigned long long act_remove : to_remove){
-         entry_activities.erase(entry_activities.begin()+act_remove);
-     }
-     entry->set_activities(entry_activities);
- }
-
+  for (EntryPerso *entry : vector_entries) {
+    std::vector<Activity *> entry_activities = entry->get_activities();
+    for (unsigned long long act_remove : to_remove) {
+      entry_activities.erase(entry_activities.begin() + act_remove);
+    }
+    entry->set_activities(entry_activities);
+  }
 }
 
 void MainWindow::refresh_activities() {
@@ -718,27 +747,23 @@ void MainWindow::refresh_activities() {
 }
 
 std::vector<QStringList> MainWindow::habit_repeated_5() {
-    std::vector<QStringList> current_habits = load_habits();
-    std::vector<QStringList> tmp;
-    for (unsigned long i = 0; i < current_habits.size(); i++) {
-        if (current_habits[i][2].toInt() % 5 == 0) {
-            tmp.push_back(current_habits[i]);
-        }
+  std::vector<QStringList> current_habits = load_habits();
+  std::vector<QStringList> tmp;
+  for (unsigned long i = 0; i < current_habits.size(); i++) {
+    if (current_habits[i][2].toInt() % 5 == 0) {
+      tmp.push_back(current_habits[i]);
     }
-    return tmp;
+  }
+  return tmp;
 }
 
 std::vector<QStringList> MainWindow::habit_repeated_66() {
-    std::vector<QStringList> current_habits = load_habits();
-    std::vector<QStringList> tmp;
-    for (unsigned long i = 0; i < current_habits.size(); i++) {
-        if (current_habits[i][2].toInt() == 66) {
-            tmp.push_back(current_habits[i]);
-        }
+  std::vector<QStringList> current_habits = load_habits();
+  std::vector<QStringList> tmp;
+  for (unsigned long i = 0; i < current_habits.size(); i++) {
+    if (current_habits[i][2].toInt() == 66) {
+      tmp.push_back(current_habits[i]);
     }
-    return tmp;
+  }
+  return tmp;
 }
-
-
-
-
