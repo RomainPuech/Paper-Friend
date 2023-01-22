@@ -1,6 +1,6 @@
 | Name                 |Team               |      What I did             |
 |:----------------------:|:-----------------:|:-------------------------|
-| Romain Puech         |Link Analysis/Font, Fixes  ||
+| Romain Puech         |Link Analysis/Font, Fixes  ||- Bug hunting and extensive bug fixing <br>- Management of last changes with every member of the team <br>- Visual changes <br> -created example/tuto entry <br>- Prepared presentation
 | Bogdana Kolic        |Link Analysis/Font, Fixes  |- I removed the setting for the display of all habits and added settings for recaps<br> - I adapted fronted to work with sentiment analysis of the entry text<br> - Made sure at most one EntryCard at a time is in modify mode <br> - I worked on finding and solving various bugs and optimizing the code<br>|
 | Liam Loughman        |Frontend                   ||
 | Yubo Cai             |Frontend                   ||
