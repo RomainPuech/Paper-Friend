@@ -344,7 +344,7 @@ DataAnalysis::anomalies_detection(const std::vector<EntryPerso> &entries,
     // TODO : Optimize this by considering entries sorted
     // chronologically
     for (int i = 0; i < entries.size(); ++i) {
-      for (int j = 0; j < STL_X[var_index].size(); ++i) {
+      for (int j = 0; j < STL_X[var_index].size(); ++j) {
         if (STL_X[var_index][j] == entries[i].get_absolute_day())
           if (STL_Remainders[var_index][j] - mean > 2 * st_dev)
             res.push_back(entries[i]);
