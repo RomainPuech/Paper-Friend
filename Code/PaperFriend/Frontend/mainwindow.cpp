@@ -110,7 +110,7 @@ MainWindow::MainWindow(QWidget *parent)
   {
       EntryPerso* demo_entry = new EntryPerso();
       demo_entry->set_title("Welcome in Paper Friend!");
-      demo_entry->set_text("<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Click the <span style=\" font-style:italic;\">Modify Entry</span> button just below to start writing your first entry!</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">You can write about:</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<ul type=\"circle\" style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">How you <span style=\" font-weight:700;\">feel</span></li>\n<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">What you <span style=\" font-weight:700;\">did</span> today</li>\n<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">What could be <span style=\" font-weight:700;\">improved</span> in your day...</li></ul>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The possibilities are endless! </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>");
+      demo_entry->set_text("<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:11pt;\">Click the Modify Entry button just below to start writing your first entry!</span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">You can write about:</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<ul type=\"circle\" style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">How you <span style=\" font-weight:700;\">feel</span></li>\n<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">What you <span style=\" font-weight:700;\">did</span> today</li>\n<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">What could be <span style=\" font-weight:700;\">improved</span> in your day...</li></ul>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Script MT Bold'; font-size:10pt; font-weight:700;\">The possibilities are endless! </span></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Script MT Bold'; font-size:10pt; font-weight:700;\"><br /></p></body></html>");
       vector_entries.push_back(demo_entry);
   }
 
@@ -527,6 +527,8 @@ void MainWindow::on_suggestions_button_clicked() {
   DataAnalysis data_analysis = DataAnalysis(vector_entries);
   std::string suggestion = data_analysis.suggestion();
   chat << suggestion;
+  chat.add_mascot(60);
+
 }
 void MainWindow::generate_recap() {
   // first check if we need to generate a weekly/monthly/yearly recap
@@ -649,10 +651,12 @@ void MainWindow::react_to_last_entry() {
 }
 
 void MainWindow::welcome() {
+  //now the following if is superfluous since we add a demo entry if it's empty
+  //but ut's still better to keep the if for robustness if we decide to remove that demo entry in the future.
   if (!vector_entries.empty()) {
     EntryPerso *last_entry = vector_entries[vector_entries.size() - 1];
     int daysago = (last_entry->get_qdate()).daysTo(QDate::currentDate());
-    if (daysago == 0) {
+    if (daysago == 0 and last_entry->get_title()!="Welcome in Paper Friend!") {
       chat << QString("Hello again!");
       chat.add_mascot(-1);
       chat << QString("I hope you enjoyed yourself today!!");
@@ -682,17 +686,16 @@ void MainWindow::welcome() {
       chat.add_mascot(-1);
       chat << QString("How did it go since last time?");
       chat.add_mascot(60);
+    } else{//first time you use the app
+      chat << QString("Hello, it seems like it's your first time here! I'm "
+                      "Rooxie, your well-being assistant!");
+      chat.add_mascot(-1);
+      chat << QString("You can put on paper your feelings using entries like the one on the right");
+      chat.add_mascot(60);
+      chat << QString(
+          "Go on and modify the example entry! I can't wait to hear about your day!");
+      chat.add_mascot(90);
     }
-  } else {
-    chat << QString("Hello, it seems like it's your first time here! I'm "
-                    "Rooxie, your well-being assistant!");
-    chat.add_mascot(-1);
-    chat << QString("You can create an entry in you diary by clicking the New "
-                    "entry button on the top of the screen.");
-    chat.add_mascot(60);
-    chat << QString(
-        "Go on and add an entry! I can't wait to hear about your day!");
-    chat.add_mascot(90);
   }
 }
 
