@@ -1381,8 +1381,6 @@ bool Card::eventFilter(QObject *target, QEvent *e) {
   return false;
 }
 
-QDate EntryCard::get_entry_date() { return entry->get_qdate(); }
-
 void EntryCard::automatic_mood(double mood) {
   entry_perso->set_mood(mood);
   mood_slider->setValue(round(mood));

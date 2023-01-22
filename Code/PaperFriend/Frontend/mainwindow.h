@@ -29,7 +29,6 @@ public:
   class TextEditor *textEditor;
   void closeEvent(QCloseEvent *event);
   static std::vector<Activity> get_activities();
-  static void update_activities(std::vector<Activity> activities);
   void update_graphs();
   void generate_recap();
   void react_to_last_entry();
@@ -64,7 +63,7 @@ private:
   static std::vector<EntryPerso *> vector_entries;
   static std::vector<Activity> vector_activities;
   static std::vector<EntryRecap *> vector_recaps;
-  static std::vector<EntryPerso *> displayed_entries;
+  static std::vector<EntryPerso *> displayed_entries; // entryperso entries that are to be displayed
   static std::vector<EntryCard *>
       displayed_cards; // entry perso cards that are currently on display
   EntryCard *today_card;
