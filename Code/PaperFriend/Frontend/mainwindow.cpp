@@ -500,6 +500,7 @@ void MainWindow::on_suggestions_button_clicked() {
   chat << suggestion;
 }
 void MainWindow::generate_recap() {
+    qDebug()<<"generating recaps";
   // first check if we need to generate a weekly/monthly/yearly recap
   // last_recaps_dates is the vector containing the string of the dates of the
   // last [0]weekly, [1]monthly and [2]yearly recap.
@@ -562,7 +563,6 @@ void MainWindow::generate_recap() {
       save_entryrecap(*recap_y);
     }
   }
-
     if(generated_recap){
 qDebug()<<"generated recap";
   save_last_recaps_dates(last_recaps_dates);
@@ -710,6 +710,7 @@ void MainWindow::remove_activities_from_old_entries() {
   std::vector<unsigned long long> to_remove; //positions of activities that should be removed
   // find activities that are present in entries but not in the vector of all activities
   for(long long activity = reference_for_entries.size() -1; activity >= 0; --activity){ // remove in reversed order
+
       bool not_found = true;
        for(Activity act: vector_activities) {
            if(act == *reference_for_entries.at(activity)){// found it

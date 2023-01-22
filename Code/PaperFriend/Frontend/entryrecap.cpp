@@ -11,7 +11,7 @@ EntryRecap::EntryRecap() : Entry() {// Initialize with default values
   this->average_mood = 0;
 };
 
-EntryRecap::EntryRecap(QDate best_day_date,QDate worst_date_date,double best_day_mood, double worst_day_mood,
+EntryRecap::EntryRecap(QDate best_day_date,QDate worst_day_date,double best_day_mood, double worst_day_mood,
                        std::string text, double average_mood, int type)// Initialize with given values
     : Entry(text, ""),best_day_date(best_day_date),worst_day_date(worst_day_date),best_day_mood(best_day_mood),worst_day_mood(worst_day_mood),text(text),type(type),average_mood(average_mood)
 {}
@@ -34,7 +34,7 @@ double EntryRecap::get_average_mood() { return average_mood; }
 
 int EntryRecap::get_type() { return type; }
 
-std::string EntryRecap::get_text() { text; }
+std::string EntryRecap::get_text() { return text; }
 
 void EntryRecap::set_best_day_date(QDate best_day_date) {
   this->best_day_date = best_day_date;
