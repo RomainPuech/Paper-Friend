@@ -623,7 +623,6 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
       recap_title->setText("Yearly recap");
       break;
     }
-    qDebug() << "recap type" + QString::number(entry_recap->get_type());
 
     // display date
     date_display->setMaximumHeight(47);
@@ -739,7 +738,6 @@ void EntryCard::handleModify() {
 }
 
 void EntryCard::doneThreads() {
-  qDebug() << "now I'm here";
   text_analysis_window *text_analysis_w =
       dynamic_cast<text_analysis_window *>(text_analysis);
   text_analysis_w->set_mood(textA->get_text_mood() * 100);
@@ -760,7 +758,6 @@ void EntryCard::handleAnalize() {
   text_analysis_w->start();
   // connect(tathread, &TextAnalysisThread::finished, this,
   // &EntryCard::doneThreads);
-  qDebug() << "this first";
   /*tathread->wait();
   text_analysis.set_mood(textA.get_text_mood());
   text_analysis.set_message();
@@ -1383,8 +1380,6 @@ bool Card::eventFilter(QObject *target, QEvent *e) {
   }
   return false;
 }
-
-QDate EntryCard::get_entry_date() { return entry->get_qdate(); }
 
 void EntryCard::automatic_mood(double mood) {
   entry_perso->set_mood(mood);

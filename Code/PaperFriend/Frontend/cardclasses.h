@@ -66,11 +66,8 @@ public:
     TextAnalysisThread(TextAnalysis* textA = nullptr): QThread(), textA(textA){};
 
     void run(){
-        qDebug()<<"start analysis";
         textA->analyze_text();
         QThread::currentThread()->sleep(3);
-        qDebug()<<"analysis done";
-        //emit finished();
     }
 
 private:
@@ -102,7 +99,6 @@ public:
   void remove_non_existent_act();
   void set_correct_style();
   void set_habits_colors();
-  QDate get_entry_date();
   void automatic_mood(double mood); // updates after the user has chosen automatic mood entry
 private slots:
   void handleModify();
@@ -113,9 +109,9 @@ public slots:
   void doneThreads();
 
 private:
-  TextAnalysis* textA;
-  TextAnalysisThread* tathread;
-  QMainWindow* text_analysis;
+  TextAnalysis* textA; // sentiment analysis object
+  TextAnalysisThread* tathread; // new thread for running the sentiment analysis
+  QMainWindow* text_analysis; // display of the sentiment analysis results
   static bool can_be_modified; // true if there are no cards in modify mode
   bool readOnly; // is this card in readOnly mode
   MainWindow *main_window;

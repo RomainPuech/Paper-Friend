@@ -114,7 +114,7 @@ MainWindow::MainWindow(QWidget *parent)
       vector_entries.push_back(demo_entry);
   }
 
-  sort(vector_entries.begin(), vector_entries.end(), sort_by_date<EntryPerso*>);
+  sort(vector_entries.begin(), vector_entries.end(), sort_by_date<EntryPerso*>); //oldest entry first
 
   // Load habits
 
@@ -161,12 +161,12 @@ MainWindow::MainWindow(QWidget *parent)
     EntryPerso *newest_entry = vector_entries.back();
     if (newest_entry->get_qdate() == QDate::currentDate()) {
       today_card =
-          new EntryCard(20, 300, 300, "white", newest_entry, true, this);
+          new EntryCard(20, 300, 300, "white", newest_entry, true, this); //entry for today has already been recorded
     }
   }
 
   // Load previous recaps dates
-  std::vector<QString> last_recaps_dates = load_last_recaps_dates();
+  std::vector<QString> last_recaps_dates = load_last_recaps_dates(); //dates of the last weekly, monthly and yearly recap
 
   // load previous recaps
   QDir dir_recaps(QDir::currentPath() + "/Recap_entries");
@@ -175,9 +175,9 @@ MainWindow::MainWindow(QWidget *parent)
         load_entryrecap(filename.toStdString(), vector_activities));
   }
   // sort them by the date
-  sort(vector_recaps.begin(), vector_recaps.end(), sort_by_date<EntryRecap *>);
+  sort(vector_recaps.begin(), vector_recaps.end(), sort_by_date<EntryRecap *>); // oldest recaps first
   //// frontend that needs data to be rendered
-  display_entries(false);
+  display_entries(false); // display with recaps
 
   // Chatbox
   chat = MascotChat(ui->scrollArea);
@@ -211,10 +211,6 @@ MainWindow::~MainWindow() {
 
 std::vector<Activity> MainWindow::get_activities() { return vector_activities; }
 
-void MainWindow::update_activities(std::vector<Activity> activities) {
-  vector_activities = activities;
-}
-
 void MainWindow::closeEvent(QCloseEvent *event) {
   QMessageBox::StandardButton answr_btn = QMessageBox::question(
       this, tr("Paper friend"), tr("Are you sure?\n"),
@@ -224,7 +220,6 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   } else {
     for (auto entry : vector_entries) {
       save_entryperso(*entry);
-      // add saving of entry_recaps
     }
     event->accept();
   }
@@ -252,7 +247,7 @@ void MainWindow::display_entries(bool dont_display_recaps) {
 
   while (!ui->EntriesScroll->widget()->layout()->isEmpty()) {
     QLayoutItem *item = ui->EntriesScroll->widget()->layout()->takeAt(0);
-    // ui->graph_frame->removeItem(item);
+    // clear EntriesScroll
     delete item->widget();
     delete item;
   }
@@ -265,13 +260,15 @@ void MainWindow::display_entries(bool dont_display_recaps) {
   for (auto entry = displayed_entries.rbegin();
        entry != displayed_entries.rend(); ++entry) {
     if (rec != vector_recaps.rend() &&
-        (*rec)->get_qdate().daysTo((*entry)->get_qdate()) <= 0) {
+        (*rec)->get_qdate().daysTo((*entry)->get_qdate()) <= 0) { //there is a recap that is newer that the entry
+      if(((*rec)->get_type() == 0 && saved_week()) || ((*rec)->get_type() == 1 && saved_month()) || ((*rec)->get_type() == 2 && saved_year())){
       EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
       c->display(ui->EntriesScroll->widget()
-                     ->layout()); // displays the entry in the main_frame.
+                     ->layout()); // displays recap in the main_frame if said so in the settings
+      }
       ++rec;
       entry--;
-    } else if ((*entry)->get_qdate() == QDate::currentDate()) {
+    } else if ((*entry)->get_qdate() == QDate::currentDate()) { // today entry
       if (today_card == nullptr) {
         today_card = new EntryCard(20, 300, 300, "white", *entry, false, this);
       } else {
@@ -279,18 +276,18 @@ void MainWindow::display_entries(bool dont_display_recaps) {
       }
       today_card->display(ui->EntriesScroll->widget()->layout());
       displayed_cards.push_back(today_card);
-    } else {
+    } else { // regular entryperso display
       EntryCard *c = new EntryCard(20, 300, 300, "white", *entry, true, this);
       c->display(ui->EntriesScroll->widget()
                      ->layout()); // displays the entry in the main_frame.
       displayed_cards.push_back(c);
     }
-  } /*while(rec != vector_recaps.rend()){
+  } while(rec != vector_recaps.rend()){
       EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
       c->display(ui->EntriesScroll->widget()
-                     ->layout()); // displays the entry in the main_frame.
+                     ->layout()); // displays the remaining recaps in the main_frame, unnecessary unless we change our machine date...
       ++rec;
-  }*/
+  }
 }
 
 void MainWindow::display_graph(QString tracked_parameter) {
@@ -317,7 +314,6 @@ void MainWindow::on_pushButton_clicked() {
 
 void MainWindow::on_activitie_button_clicked() {
   all_activities *my_activities = new all_activities(this, vector_activities);
-  // my_activities->add_previous_cells();
   my_activities->setModal(true);
   my_activities->exec();
 }
@@ -343,6 +339,7 @@ void MainWindow::on_save_settings_clicked() {
   settings->hide();
   auto chat = findChild<QWidget *>("scrollArea");
   chat->show();
+  display_entries(false);
 }
 
 void MainWindow::on_filterButton_clicked() {
@@ -532,7 +529,6 @@ void MainWindow::on_suggestions_button_clicked() {
   chat << suggestion;
 }
 void MainWindow::generate_recap() {
-    qDebug()<<"generating recaps";
   // first check if we need to generate a weekly/monthly/yearly recap
   // last_recaps_dates is the vector containing the string of the dates of the
   // last [0]weekly, [1]monthly and [2]yearly recap.
@@ -580,7 +576,6 @@ void MainWindow::generate_recap() {
   if (saved_year() and QDate::currentDate().month() == 12 &&
       QDate::currentDate().day() == 31) // If it's December 31st
   {
-    qDebug() << "yearly recap";
     QString date_last_recap = last_recaps_dates[2];
     if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
       chat << QString("Before celebrating the new year, let's look back to ") +
@@ -596,7 +591,6 @@ void MainWindow::generate_recap() {
     }
   }
     if(generated_recap){
-qDebug()<<"generated recap";
   save_last_recaps_dates(last_recaps_dates);
   display_entries(false);
   ui->EntriesScroll->verticalScrollBar()->setValue(0);
@@ -703,7 +697,7 @@ void MainWindow::welcome() {
 }
 
 void MainWindow::on_Test_entries_clicked() {
-  vector_entries = sample_entries(40);
+  vector_entries = sample_entries(80);
   displayed_entries = vector_entries;
   display_entries(true);
   update_graphs();
@@ -722,9 +716,6 @@ void MainWindow::add_new_activities_to_old_enties() {
                        [to_add](Activity *a) -> bool {
                          return *a == *to_add;
                        }) == entry_activities.end()) {
-        qDebug() << QString("Does not contain")
-                 << QString::fromStdString(activity.get_name())
-                 << QString::number(activity.get_type());
         // does not contain activity
         Activity *to_add = new Activity();
         to_add->set_name(activity.get_name());
@@ -763,16 +754,9 @@ void MainWindow::remove_activities_from_old_entries() {
  }
 
 
-  for (EntryPerso *entry : vector_entries) {
-    std::vector<Activity *> entry_activities = entry->get_activities();
-    for (unsigned long long act_remove : to_remove) {
-      entry_activities.erase(entry_activities.begin() + act_remove);
-    }
-    entry->set_activities(entry_activities);
-  }
 }
 
-void MainWindow::refresh_activities() {
+void MainWindow::refresh_activities() { // refresh the display of entryCards after activities modificatons
   for (EntryCard *c : displayed_cards) {
     if (c->isReadOnly()) {
       c->remove_non_existent_act();
