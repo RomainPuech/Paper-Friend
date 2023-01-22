@@ -8,6 +8,7 @@
 #include <QMainWindow>
 #include <QMovie>
 #include <QLabel>
+#include <QThread>
 
 
 namespace Ui {
@@ -19,12 +20,11 @@ class text_analysis_window : public QMainWindow {
   Q_OBJECT
 
 public:
-    text_analysis_window(QString text_to_analize = "", double mood = 0, EntryCard *card = nullptr);
+    text_analysis_window(EntryCard *card);
     ~text_analysis_window();
-    void set_message(QString message);
-    void analize();
-    double get_mood(){return mood;}
-    void set(QString text);
+    void set_message();
+    void set_mood(double mood){this->mood = mood;}
+    void start();
 
 private slots:
     void on_apply_mood_clicked();
@@ -34,12 +34,20 @@ private:
     QTextEdit* message;
     EntryCard *card;
     Ui::text_analysis_window *ui;
-    TextAnalysis* analize_text;
     QLabel* load_container;
     QMovie* movie;
     double mood;
-    bool open;
 
+};
+
+class WindowThread : public QThread{
+
+public:
+    WindowThread(text_analysis_window* window) : QThread(), window(window){};
+
+    void run();
+private:
+    text_analysis_window* window;
 };
 
 #endif // TEXT_ANALYSIS_WINDOW_H
