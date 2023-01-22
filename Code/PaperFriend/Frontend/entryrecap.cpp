@@ -54,3 +54,5 @@ void EntryRecap::set_average_mood(double average_mood) {
 void EntryRecap::set_type(int type) { this->type = type; }
 
 void EntryRecap::set_text(std::string text) { this->text = text; }
+
+QDate EntryRecap::get_qdate() const { return this->qdate; }

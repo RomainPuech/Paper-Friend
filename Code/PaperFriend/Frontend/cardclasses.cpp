@@ -608,6 +608,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
       recap_title->setText("Yearly recap");
       break;
     }
+    qDebug()<<"recap type" + QString::number(entry_recap->get_type());
 
     // display date
     date_display->setMaximumHeight(47);
