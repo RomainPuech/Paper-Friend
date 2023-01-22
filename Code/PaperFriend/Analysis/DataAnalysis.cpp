@@ -474,19 +474,18 @@ std::string int_to_str(int a) {
 std::string DataAnalysis::suggestion() { // some more exciting gameplay can be implementen later
   /**
    *
-   * @returns string "general review + suggestion" concerning the variable.
-   * - Iterates through variables (except of mood) and says if
-   *   there is anomaly in them, and if yes, says how it affected mood (in a good or in a bad way).
+   * @returns string with suggestion to the user
    *
      - Compares todays mood to last 7 days avg. If the mood got wors,
        it recommends to work on top 2 items which contributed to this the most,
        or if the progress in mood is positive, tells which are the top two items that improved the progress the most.
 
-     - Tells the user if he didn't see his friends for last n days
+     - Tells the user if he didn't see his friends for last n days [NOT YET]
 
    */
   std::string str{};
-  // Alerting depression
+
+  /*
   // Iterating through variables:
   for (int var_index = 1; var_index <= 5; var_index++){
       //std::cout << "Here is the problem 0" << std::endl;
@@ -508,27 +507,26 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
           str += "Consider to normalize " + log[0].get_var_name(var_index) + " \n\n";
         }
       }
-   }
+   }*/
 
   // Comparing to previous results of MOOD:
-  int var_index = 0;
-  if (log.end()->get_var_value(var_index) >=
-      get_lastn_average(7, var_index)) { // compares to last 7 days
-    str += "Your " + log[0].get_var_name(var_index) +
+
+  if (log.back().get_var_value(0) >= get_lastn_average(7, 0)) { // compares to last 7 days
+    str += "Your " + log[0].get_var_name(0) +
            " today is better than average! \n";
     str +=
         "Your progress in " +
-        var_to_str(*(item_priority(log, var_index).begin())) + " and " +
-        var_to_str(*(item_priority(log, var_index).begin() + 1)) +
-        " improves your " + log[0].get_var_name(var_index) +
+        var_to_str(*(item_priority(log, 0).begin())) + " and " +
+        var_to_str(*(item_priority(log, 0).begin() + 1)) +
+        " improves your " + log[0].get_var_name(0) +
         " the most, keep it up! \n"; // suggest top two items which affected the
                                      // variable (mood by default) the most
   } else {
-    str += "Your " + log[0].get_var_name(var_index) +
+    str += "Your " + log[0].get_var_name(0) +
            " today is less than average:( \n";
     str += "Try to work on your " +
-           var_to_str(*(item_priority(log, var_index).begin())) + " and " +
-           var_to_str(*(item_priority(log, var_index).begin() + 1)) + "! \n\n";
+           var_to_str(*(item_priority(log, 0).begin())) + " and " +
+           var_to_str(*(item_priority(log, 0).begin() + 1)) + "! \n\n";
   }
 
   /*
