@@ -85,7 +85,7 @@ It has been more tested on Windows. The NLP analysis of the text of the entry, w
 
 - You can log your mood by using the slider at the top right corner of the entry card.
 
-- You may use the "Test" button to generate a lot of sample entries. Use this button only once. **This button is only here to help you test the app and would not be here if you were a regular user and not a testor.** When you use it, a lot of activities are created. You may sort them to display only the last 30 using the filters (click on the menu with default value "mood" at the top of the entries and choose the "last n" filter, then click "add" to add the filter.)
+- You may use the "Test" button to generate a lot of sample entries. Use this button only once. **This button is only here to help you test the app and would not be here if you were a regular user and not a testor.** When you use it, a lot of entries are created. It will take some time. You may sort them to display only the last 30 using the filters (click on the menu with default value "mood" at the top of the entries and choose the "last n" filter, then click "add" to add the filter.) You may want to create first some custom activities to have them added to your sample generated entries.
 
 - You may create habits using the all habits button
 
