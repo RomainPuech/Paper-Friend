@@ -60,7 +60,6 @@ void TextAnalysis::analyze_text(){
     path.append("/nlp_text_sentiment");
 
 
-
     std::ofstream f_write;
     f_write.open ("input.txt");
 

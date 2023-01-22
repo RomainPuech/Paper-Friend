@@ -489,6 +489,7 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
   // Alerting depression
   // Iterating through variables:
   for (int var_index = 1; var_index <= 5; var_index++){
+      //std::cout << "Here is the problem 0" << std::endl;
       if (anomalies_detection(log, var_index).end()->get_absolute_day() ==
           log.end()->get_absolute_day()) {
         str += "We've detected an anomalie in your " +
@@ -509,17 +510,17 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
       }
    }
 
-  // Comparing to previous results of mood:
+  // Comparing to previous results of MOOD:
   int var_index = 0;
   if (log.end()->get_var_value(var_index) >=
       get_lastn_average(7, var_index)) { // compares to last 7 days
     str += "Your " + log[0].get_var_name(var_index) +
            " today is better than average! \n";
     str +=
-        "Your progress in" +
+        "Your progress in " +
         var_to_str(*(item_priority(log, var_index).begin())) + " and " +
         var_to_str(*(item_priority(log, var_index).begin() + 1)) +
-        "improves your " + log[0].get_var_name(var_index) +
+        " improves your " + log[0].get_var_name(var_index) +
         " the most, keep it up! \n"; // suggest top two items which affected the
                                      // variable (mood by default) the most
   } else {

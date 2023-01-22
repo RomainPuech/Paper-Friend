@@ -64,12 +64,12 @@ private:
   static std::vector<EntryPerso *> vector_entries;
   static std::vector<Activity> vector_activities;
   static std::vector<EntryRecap *> vector_recaps;
-
   static std::vector<EntryPerso *> displayed_entries;
   static std::vector<EntryCard *>
       displayed_cards; // entry perso cards that are currently on display
   EntryCard *today_card;
 
+  std::vector<EntryPerso*> for_presentation__generate_entries_from_date_mood(int n, std::vector<double> moods);
   bool reacted_to_entry; // Has the mascot reacted yet to the user's daily
                          // entry?
 };

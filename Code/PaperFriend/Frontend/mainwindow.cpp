@@ -38,6 +38,18 @@ bool sort_by_date(const T e1, const T e2) {
   return e1->get_qdate().daysTo(e2->get_qdate()) > 0;
 }
 
+/// To generate example data for the presentation
+
+std::vector<EntryPerso*> MainWindow::for_presentation__generate_entries_from_date_mood(int n, std::vector<double> moods){
+    std::vector<EntryPerso*> res;
+    for(int i; i<n; ++i){
+        EntryPerso* e = new EntryPerso();
+        e->set_qdate(QDate::currentDate().addDays(-(n+i)));
+        e->set_mood(moods[i]);
+    }
+    return res;
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), reacted_to_entry(false) {
 
@@ -78,6 +90,16 @@ MainWindow::MainWindow(QWidget *parent)
     vector_entries.push_back(load_entryperso(filename.toStdString(), vector_activities));
   }
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date<EntryPerso*>);
+
+  //To generate example data for presentation:
+  /*
+  std::vector<double> moods = {10.,10.,40.,50.,99.};
+  int n =10;
+  std::vector<EntryPerso*> demo_data = MainWindow::for_presentation__generate_entries_from_date_mood(n,moods);
+  for(EntryPerso*e:demo_data){
+      vector_entries.push_back(e);
+  }
+  */
 
   // Load habits
 
@@ -479,7 +501,7 @@ void MainWindow::generate_recap() {
     last_recaps_dates.push_back(date.toString("yyyy.MM.dd"));
   }
   // weekly
-  if (saved_week() and QDate::currentDate().dayOfWeek() == 7) // If it's Sunday
+  if (vector_entries.size()>=2 and saved_week() and QDate::currentDate().dayOfWeek() == 7) // If it's Sunday
   {
     QString date_last_recap = last_recaps_dates[0];
     if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
@@ -496,7 +518,7 @@ void MainWindow::generate_recap() {
     }
   }
   // monthly
-  if (saved_month() and QDate::currentDate().daysInMonth() ==
+  if (vector_entries.size()>=2 and saved_month() and QDate::currentDate().daysInMonth() ==
      QDate::currentDate().day()) // If it's the last day of the month
   {
     QString date_last_recap = last_recaps_dates[1];
@@ -514,7 +536,7 @@ void MainWindow::generate_recap() {
     }
   }
   // yearly
-  if (saved_year() and QDate::currentDate().month() == 12 &&
+  if (vector_entries.size()>=2 and saved_year() and QDate::currentDate().month() == 12 &&
       QDate::currentDate().day() == 31) // If it's December 31st
   {
       qDebug() << "yearly recap";
@@ -583,27 +605,43 @@ void MainWindow::welcome() {
     EntryPerso *last_entry = vector_entries[vector_entries.size() - 1];
     int daysago = (last_entry->get_qdate()).daysTo(QDate::currentDate());
     if (daysago == 0) {
-        std::vector<QString> msg_vect={"Hello again!", "I hope you enjoyed yourself today!!"};
-        chat.display(msg_vect,-1);
+        chat << QString("Hello again!");
+        chat.add_mascot(-1);
+        chat << QString("I hope you enjoyed yourself today!!");
+        chat.add_mascot(60);
     } else if (daysago == 1) {
-        std::vector<QString> msg_vect={"Hello!", "I would love to know how was your day!", "Tell me through the entry."};
-        chat.display(msg_vect,-1);
+        chat << QString("Hello!I would love to know how was your day!");
+        chat.add_mascot(-1);
+        chat << QString("Tell me through the entry.");
+        chat.add_mascot(90);
     } else if (daysago > 365) {
-        std::vector<QString> msg_vect={"Welcome back","I though I would never see you again! How are you?"};
-        chat.display(msg_vect,-1);
+        chat << QString("Welcome back");
+        chat.add_mascot(-1);
+        chat << QString("I though I would never see you again! How are you?");
+        chat.add_mascot(60);
     } else if (daysago > 14) {
-        std::vector<QString> msg_vect={"It's been a while!","It's good to see you again!!"};
-        chat.display(msg_vect,-1);
+        chat << QString("It's been a while!");
+        chat.add_mascot(-1);
+        chat << QString("It's good to see you again!!");
+        chat.add_mascot(90);
     } else if (daysago > 6) {
-        std::vector<QString> msg_vect={"Welcome back!", "How has it been going?"};
-        chat.display(msg_vect,-1);
+        chat << QString("Welcome back!");
+        chat.add_mascot(-1);
+        chat << QString("How has it been going?");
+        chat.add_mascot(60);
     } else if (daysago > 1) {
-        std::vector<QString> msg_vect={"Hellooo!!", "How did it go since last time?"};
-        chat.display(msg_vect,-1);
+        chat << QString("Hellooo!!");
+        chat.add_mascot(-1);
+        chat << QString("How did it go since last time?");
+        chat.add_mascot(60);
     }
   } else {
-      std::vector<QString> msg_vect={"Hello, it seems like it's your first time here! I'm Rooxie, your well-being assistant!", "You can create an entry in you diary by clicking the New entry button on the top of the screen.", "Go on and add an entry! I can't wait to hear about your day!"};
-      chat.display(msg_vect,-1);
+      chat << QString("Hello, it seems like it's your first time here! I'm Rooxie, your well-being assistant!");
+      chat.add_mascot(-1);
+      chat << QString("You can create an entry in you diary by clicking the New entry button on the top of the screen.");
+      chat.add_mascot(60);
+      chat << QString("Go on and add an entry! I can't wait to hear about your day!");
+      chat.add_mascot(90);
   }
 }
 
@@ -701,5 +739,7 @@ std::vector<QStringList> MainWindow::habit_repeated_66() {
     }
     return tmp;
 }
+
+
 
 

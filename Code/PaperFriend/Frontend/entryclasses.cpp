@@ -83,7 +83,20 @@ double EntryPerso::get_var_value(int index) const {
 }
 
 std::string EntryPerso::get_var_name(int index) const {
-  return all_activities[index].get_name();
+    std::string str;
+    switch (index) {
+        case 2:
+            str = "eating healthy";
+            break;
+
+        case 5:
+            str = "physical activity";
+            break;
+
+        default:
+            str = all_activities[index].get_name();
+    }
+    return str;
 }
 
 std::vector<Activity *> EntryPerso::get_activities() const {
