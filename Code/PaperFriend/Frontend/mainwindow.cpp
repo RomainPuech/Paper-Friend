@@ -700,7 +700,7 @@ void MainWindow::welcome() {
 }
 
 void MainWindow::on_Test_entries_clicked() {
-  vector_entries = sample_entries(80);
+  vector_entries = sample_entries(65);
   displayed_entries = vector_entries;
   display_entries(true);
   update_graphs();
