@@ -67,10 +67,6 @@ void all_activities::closeCell(int ActivitiesCellNumber) {
 
 void all_activities::on_save_activity_button_clicked() {
   if (!error_messages()) {
-    QFile activities_file("./activities.txt");
-    activities_file.open(QIODevice::WriteOnly |
-                         QIODevice::Text); // Opens activities_file and allow to
-                                           // write in the text file.
     QApplication::processEvents();
     QString name_activity;
     int type_activity;
@@ -78,10 +74,8 @@ void all_activities::on_save_activity_button_clicked() {
     for (int i = 0; i < allCellPtr.size(); ++i) {
       name_activity = allCellPtr[i]->get_activity_name();
       type_activity = allCellPtr[i]->get_activity_type();
-      QTextStream out(&activities_file);
       vector_activities.push_back(
           Activity(name_activity.toStdString(), type_activity, 0));
-      // out << name_activity << " , " << type_activity << "⧵n";
     }
     save_activities(vector_activities);
 
