@@ -71,7 +71,7 @@ private:
   std::vector<EntryPerso*> for_presentation__generate_entries_from_date_mood(int n, std::vector<double> moods);
   bool reacted_to_entry; // Has the mascot reacted yet to the user's daily
                          // entry?
-  void filter_entries();
+
 };
 
 #endif // MAINWINDOW_H

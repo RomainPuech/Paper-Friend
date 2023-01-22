@@ -789,35 +789,4 @@ std::vector<QStringList> MainWindow::habit_repeated_66() {
   return tmp;
 }
 
-void MainWindow::filter_entries(){
-  size_t n = 30;
-  std::vector<EntryPerso *> filtered_entries = vector_entries;
 
-    // update and display the filters
-  std::string f = "Filters:   ";
-  for (size_t i = 0; i < filter_params.size(); i++) {
-    // value keeps 2 digits after the decimal point
-    std::stringstream stream;
-
-    stream << std::fixed << std::setprecision(1) << filter_params[i].value;
-    std::string s = stream.str();
-    f +=
-        filter_params[i].keyword + " " + filter_params[i].opt + " " + s + ";  ";
-  }
-  findChild<QLabel *>("existing_filters")->setText(QString::fromStdString(f));
-
-  if (filtered_entries.size() < n) {
-    n = filtered_entries.size();
-  }
-
-  // select the n last entries
-  std::vector<EntryPerso *> entries_to_display;
-  for (size_t i = filtered_entries.size() - n; i < filtered_entries.size();
-       i++) {
-    entries_to_display.push_back(filtered_entries[i]);
-  }
-
-  displayed_entries = entries_to_display;
-  display_entries(true);
-  update_graphs();
-}
