@@ -386,11 +386,12 @@ bool save_entryrecap(EntryRecap entry){ //  create and save the entry file, titl
 
 
     nlohmann::json  j = {
-        {"text", entry.get_text()},
         {"date", entry.get_date()},
-
-        {"best_day_date", entry.get_best_day_date().toString("MM.dd.yyyy").toStdString()+".json"},
-        {"worst_day_date", entry.get_worst_day_date().toString("MM.dd.yyyy").toStdString()+".json"},
+        {"best_day_date", entry.get_best_day_date().toString("MM.dd.yyyy").toStdString()},
+        {"worst_day_date", entry.get_worst_day_date().toString("MM.dd.yyyy").toStdString()},
+        {"best_day_mood", entry.get_best_day_mood()},
+        {"worst_day_mood", entry.get_worst_day_mood()},
+        {"text", entry.get_text()},
         {"type", entry.get_type()},
         {"average_mood", entry.get_average_mood()},
 
@@ -425,9 +426,11 @@ EntryRecap* load_entryrecap(std::string filename, std::vector<Activity> possible
     std::ifstream i("Recap_entries/" + filename);
     nlohmann::json j;
     i >> j;
-    EntryPerso best_day = *(load_entryperso(j["best_day_date"], possible_activities));
-    EntryPerso worst_day = *(load_entryperso(j["worst_day_date"], possible_activities));
-    EntryRecap* res = new EntryRecap(best_day.get_qdate(),worst_day.get_qdate(),best_day.get_mood(),worst_day.get_mood(), j["text"],j["average_mood"], j["type"]);
+    QDate best_day_date = QDate::fromString(QString::fromStdString(j["best_day_date"]));
+    QDate worst_day_date = QDate::fromString(QString::fromStdString(j["worst_day_date"]));
+    double best_day_mood = j["best_day_mood"];
+    double worst_day_mood = j["worst_day_mood"];
+    EntryRecap* res = new EntryRecap(best_day_date,worst_day_date,best_day_mood,worst_day_mood, j["text"],j["average_mood"], j["type"]);
     res->set_date(j["date"]);
     return res;
 }
