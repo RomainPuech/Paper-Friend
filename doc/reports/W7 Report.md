@@ -6,7 +6,7 @@
 | Yubo Cai             |Frontend                   ||
 | Luigi Massacci       |Link Analysis/Front, Fixes | - Extensive testing of the application <br>- identified places were memory was being leaked. <br>
 | Safaa Arbai          |Frontend                   ||
-| Ahmed Benchekroun    |Frontend                   ||
+| Ahmed Benchekroun    |Frontend                   |-Deleted the people/friends UI, CPP and HPP files since it was better for the analysis team to combine people and friends into one file. <br>- Combined people/friends with the activity entries. <br>- Solved all the compilation errors that were caused by the file removal.<br> Forbidden the user from using anything other than allowed alphabetical characters. <br>- Forbidden the user to modify an activity/friend once it has been saved.|
 | Mihaela Gledacheva   |Frontend, Fixes            ||
 | Thomas Turkieh       |File processing            ||
 | Junyuan (Frank) Wang |Front end/File Processing  |- Add a default filter to only show 30 entries when the program lauches. <br> - Fix some warning message. <br> - Delete unused code and write comments.|
