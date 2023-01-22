@@ -780,8 +780,8 @@ void EntryCard::handleBack() {
   case QMessageBox::Save:
     entry->set_title(new_title);
     entry->set_text(new_text);
-    this->change();
     this->update();
+    this->change();
     break;
   case QMessageBox::Discard:
     this->remove_non_existent_act();
@@ -790,7 +790,6 @@ void EntryCard::handleBack() {
   case QMessageBox::Cancel:
       break;
   }
-  alert.close();
 
 
   can_be_modified = true;
