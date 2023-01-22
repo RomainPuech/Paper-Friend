@@ -124,7 +124,7 @@ MainWindow::MainWindow(QWidget *parent)
   // save the card corresponding to the current day in case it has to be
   // modified
   today_card = nullptr;
-  if (!vector_entries.empty()) {
+  if (!vector_entries.empty() && vector_entries.back()->get_qdate()==QDate::currentDate()) {
     EntryPerso *newest_entry = vector_entries.back();
     if (newest_entry->get_qdate() == QDate::currentDate()) {
       today_card =
@@ -221,17 +221,15 @@ void MainWindow::display_entries() {
 
   }
   displayed_cards.clear();
-  std::vector<EntryRecap *>::reverse_iterator rec = vector_recaps.rbegin();
   // displaying in reversed order
+  std::vector<EntryRecap *>::reverse_iterator rec = vector_recaps.rbegin();
   for (auto entry = displayed_entries.rbegin();
        entry != displayed_entries.rend(); ++entry) {
-    if (rec < vector_recaps.rend() &&
-        (*rec)->get_qdate().daysTo((*entry)->get_qdate()) <= 0) {
+    if (rec != vector_recaps.rend() && (*rec)->get_qdate().daysTo((*entry)->get_qdate()) <= 0) {
       EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
       c->display(ui->EntriesScroll->widget()
                      ->layout()); // displays the entry in the main_frame.
-
-      rec++;
+      ++rec;
       entry--;
     } else if ((*entry)->get_qdate() == QDate::currentDate()) {
           if(today_card == nullptr){
@@ -254,7 +252,7 @@ void MainWindow::display_entries() {
       c->display(ui->EntriesScroll->widget()
                      ->layout()); // displays the entry in the main_frame.
 
-      rec++;
+      ++rec;
   }
 }
 
@@ -479,7 +477,7 @@ void MainWindow::on_newEntryButton_clicked() {
         display_entries();
    }
    else{
-       if(displayed_entries.empty() || displayed_entries.back()->get_qdate() != QDate::currentDate()){
+       if((displayed_entries.empty() && vector_entries.back()->get_qdate()==QDate::currentDate()) || displayed_entries.back()->get_qdate() != QDate::currentDate()){
            // today entry exists but is not in the displayed entries
            displayed_entries.push_back(vector_entries.back());
            display_entries();
@@ -515,12 +513,12 @@ void MainWindow::generate_recap() {
       chat.add_mascot(89);
       last_recaps_dates[0] = QDate::currentDate().toString("yyyy.MM.dd");
       DataAnalysis analysis = DataAnalysis(vector_entries);
-      EntryRecap recap = analysis.weekly_recap();
+      EntryRecap recap_w = analysis.weekly_recap();
       generated_recap = true;
-      vector_recaps.push_back(&recap);
-
-      save_last_recaps_dates(last_recaps_dates);
-      save_entryrecap(recap);
+      vector_recaps.push_back(&recap_w);
+      EntryCard* recap_card = new EntryCard(20, 300, 300, "white", &recap_w, true, this);
+      recap_card->display(ui->EntriesScroll->widget()->layout());
+      save_entryrecap(recap_w);
     }
   }
   // monthly
@@ -533,12 +531,12 @@ void MainWindow::generate_recap() {
       chat.add_mascot(65);
       last_recaps_dates[1] = QDate::currentDate().toString("yyyy.MM.dd");
       DataAnalysis analysis = DataAnalysis(vector_entries);
-      EntryRecap recap = analysis.monthly_recap();
+      EntryRecap recap_m = analysis.monthly_recap();
       generated_recap = true;
-      vector_recaps.push_back(&recap);
-
-      save_last_recaps_dates(last_recaps_dates);
-      save_entryrecap(recap);
+      vector_recaps.push_back(&recap_m);
+      EntryCard* recap_card = new EntryCard(20, 300, 300, "white", &recap_m, true, this);
+      recap_card->display(ui->EntriesScroll->widget()->layout());
+      save_entryrecap(recap_m);
     }
   }
   // yearly
@@ -554,16 +552,17 @@ void MainWindow::generate_recap() {
       chat.add_mascot(66);
       last_recaps_dates[2] = QDate::currentDate().toString("yyyy.MM.dd");
       DataAnalysis analysis = DataAnalysis(vector_entries);
-      EntryRecap recap = analysis.yearly_recap();
+      EntryRecap recap_y = analysis.yearly_recap();
+      vector_recaps.push_back(&recap_y);
+      EntryCard* recap_card = new EntryCard(20, 300, 300, "white", &recap_y, true, this);
+      recap_card->display(ui->EntriesScroll->widget()->layout());
       generated_recap = true;
-      vector_recaps.push_back(&recap);
-
-      save_last_recaps_dates(last_recaps_dates);
-      save_entryrecap(recap);
+      save_entryrecap(recap_y);
     }
   }
     if(generated_recap){
-  display_entries();// displays the entry in the main_frame.
+
+  save_last_recaps_dates(last_recaps_dates);
     }
 }
 
