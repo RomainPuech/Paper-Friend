@@ -66,6 +66,7 @@ void MascotChat::add_mascot(int num) {
   image_label->setTextFormat(Qt::RichText);
   image_label->setText(text_to_set);
   image_label->setFixedWidth(85);
+  image_label -> setMargin(5);
   scrollArea->widget()->layout()->addWidget(image_label);
 }
 
@@ -112,6 +113,7 @@ void MascotChat::add_message(QString txt) {
                             //QSizePolicy::MinimumExpanding);
   text_label ->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
   text_label->setText(txt);
+  text_label -> setMargin(3);
   //add_notif_sound();
   scrollArea->widget()->layout()->addWidget(text_label);
 }

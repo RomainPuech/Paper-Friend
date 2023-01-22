@@ -389,8 +389,8 @@ bool save_entryrecap(EntryRecap entry){ //  create and save the entry file, titl
         {"text", entry.get_text()},
         {"date", entry.get_date()},
 
-        {"best_day_date", entry.get_best_day().get_qdate().toString("MM.dd.yyyy").toStdString()+".json"},
-        {"worst_day_date", entry.get_worst_day().get_qdate().toString("MM.dd.yyyy").toStdString()+".json"},
+        {"best_day_date", entry.get_best_day_date().toString("MM.dd.yyyy").toStdString()+".json"},
+        {"worst_day_date", entry.get_worst_day_date().toString("MM.dd.yyyy").toStdString()+".json"},
         {"type", entry.get_type()},
         {"average_mood", entry.get_average_mood()},
 
@@ -427,7 +427,7 @@ EntryRecap* load_entryrecap(std::string filename, std::vector<Activity> possible
     i >> j;
     EntryPerso best_day = *(load_entryperso(j["best_day_date"], possible_activities));
     EntryPerso worst_day = *(load_entryperso(j["worst_day_date"], possible_activities));
-    EntryRecap* res = new EntryRecap(best_day,worst_day, j["text"],j["average_mood"], j["type"]);
+    EntryRecap* res = new EntryRecap(best_day.get_qdate(),worst_day.get_qdate(),best_day.get_mood(),worst_day.get_mood(), j["text"],j["average_mood"], j["type"]);
     res->set_date(j["date"]);
     return res;
 }

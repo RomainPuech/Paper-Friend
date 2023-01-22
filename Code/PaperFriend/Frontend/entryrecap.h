@@ -9,18 +9,22 @@ class EntryRecap
 public:
 
     EntryRecap();
-    EntryRecap( EntryPerso best_day, EntryPerso worst_day, std::string text, double average_mood, int type);
+    EntryRecap( QDate best_day_date, QDate worst_day_date, double best_day_mood, double worst_day_mood,std::string text, double average_mood, int type);
     //~EntryRecap();
 
-    EntryPerso get_best_day();
-    EntryPerso get_worst_day();
+    QDate get_best_day_date();
+    QDate get_worst_day_date();
+    double get_best_day_mood();
+    double get_worst_day_mood();
     double get_average_mood();
     int get_type();
     std::string get_text();
 
 
-    void set_best_day(EntryPerso best_day);
-    void set_worst_day(EntryPerso worst_day);
+    void set_best_day_date(QDate best_day);
+    void set_worst_day_date(QDate worst_day);
+    void set_best_day_mood(double best_day_mood);
+    void set_worst_day_mood(double best_day_mood);
     void set_average_mood(double average_mood);
     void set_type(int type);
     void set_text(std::string text);
@@ -30,8 +34,10 @@ public:
 
 
 private:
-    EntryPerso best_day;
-    EntryPerso worst_day;
+    QDate best_day_date;
+    QDate worst_day_date;
+    double best_day_mood;
+    double worst_day_mood;
     std::string text;
     double average_mood;
     int type;
