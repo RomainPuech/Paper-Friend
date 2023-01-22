@@ -74,6 +74,8 @@ Handles the saving, loading and encryption of files.
 #### How to build it.
 As we used Qt creator, you simply need to clone the repository, open the .pro file and build/run the project with Ctr+R or using the green arrow button.
 
+Alternatively for linux (tested on Ubuntu 20.04 and 22.04) it is possible to build the program via shell. make and qmake are the only pckages required, but they usually come with most installs of Anaconda/Qt/OpenCV/etc, so they are probably already there. From inside the ``Code/PaperFriend`` folder, run ``qmake`` and then ``make``. One can then run the file as ``./PaperFriend``. (Note: another destination for the executable may be specified if desired, but it is not necessary, the executable will create its own cache folders wherever it is located.) 
+
 #### OS specificities
 The app can run on all OS (Linux, Windows and MacOS)
 It has been more tested on Windows. The NLP analysis of the text of the entry, which is an experimental feature that we still though relevant to show, **is only working on MacOS**
