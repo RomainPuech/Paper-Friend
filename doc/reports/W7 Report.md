@@ -4,7 +4,7 @@
 | Bogdana Kolic        |Link Analysis/Font, Fixes  |- I removed the setting for the display of all habits and added settings for recaps<br> - I adapted fronted to work with sentiment analysis of the entry text<br> - Made sure at most one EntryCard at a time is in modify mode <br> - I worked on finding and solving various bugs and optimizing the code<br>|
 | Liam Loughman        |Frontend                   ||
 | Yubo Cai             |Frontend                   ||
-| Luigi Massacci       |Link Analysis/Front, Fixes ||
+| Luigi Massacci       |Link Analysis/Front, Fixes | - Extensive testing of the application <br>- identified places were memory was being leaked. <br>
 | Safaa Arbai          |Frontend                   ||
 | Ahmed Benchekroun    |Frontend                   ||
 | Mihaela Gledacheva   |Frontend, Fixes            ||
@@ -12,4 +12,4 @@
 | Junyuan (Frank) Wang |Front end/File Processing  ||
 | Octave Gaspard       |Data analysis              |- Debugged analysis functions and helped testing correct integration in the UI<br>- Worked on the presentation of the project<br>|
 | Brook Nigatu         |Data analysis              |- Debugged recap functions and improved a small bit on their texts.|
-| Artem Mamichev       |Data analysis              ||    
+| Artem Mamichev       |Data analysis              |- Debugged suggestion function so that suggestions now work. <br>- Made text_analysis function analize the text in the entry window (mainly worked with pathes). <br>- Cleaned up the code and tested everything|    
