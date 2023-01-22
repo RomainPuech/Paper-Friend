@@ -260,7 +260,7 @@ void DynamicGraph::display(QLayout *layout) {
                            QDate::currentDate())) +
                            1,
                        0);
-  int end = -(entries[0]->get_qdate().daysTo(QDate::currentDate()))-1;
+  int end = -(entries[0]->get_qdate().daysTo(QDate::currentDate()));
   parameter_chart->axes(Qt::Horizontal).first()->setRange(end,start+0.015);//0.015 for margin in order to see today's point
   parameter_chart->axes(Qt::Horizontal).first()->setTitleFont(font);
   parameter_chart->axes(Qt::Horizontal)
