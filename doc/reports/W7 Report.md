@@ -4,7 +4,7 @@
 | Bogdana Kolic        |Link Analysis/Font, Fixes  |- I removed the setting for the display of all habits and added settings for recaps<br> - I adapted fronted to work with sentiment analysis of the entry text<br> - Made sure at most one EntryCard at a time is in modify mode <br> - I worked on finding and solving various bugs and optimizing the code<br>|
 | Liam Loughman        |Frontend                   ||
 | Yubo Cai             |Frontend                   ||
-| Luigi Massacci       |Link Analysis/Front, Fixes ||
+| Luigi Massacci       |Link Analysis/Front, Fixes | - Extensive testing of the application <br>- identified places were memory was being leaked. <br>
 | Safaa Arbai          |Frontend                   ||
 | Ahmed Benchekroun    |Frontend                   ||
 | Mihaela Gledacheva   |Frontend, Fixes            ||
