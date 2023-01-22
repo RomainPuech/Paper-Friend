@@ -4,7 +4,6 @@
 #include "qradiobutton.h"
 #include <QLabel>
 #include <QPainterPath>
-//#include <QSoundEffect>
 #include <QVBoxLayout>
 #include <cstring>
 #include <string>
@@ -98,12 +97,6 @@ void MascotChat::prompt_msg(std::string question, int num) {
 }
 
 // private methods
-void MascotChat::add_notif_sound(){
-    /*QSoundEffect effect;
-    effect.setSource(QUrl::fromLocalFile("rsc\notif_sound2.wav"));
-    effect.setVolume(0.25f);
-    effect.play();*/
-}
 void MascotChat::add_message(QString txt) {
   //takes QString and displays it in the chat box
   Message *text_label = new Message();
