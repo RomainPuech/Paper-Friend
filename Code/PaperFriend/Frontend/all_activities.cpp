@@ -159,6 +159,7 @@ void all_activities::closeEvent(QCloseEvent *event) {
       event->ignore();
     } else {
       for (int i = 0; i < allCellPtr.size(); ++i) {
+          if(i< vector_activities.size()){
         QString name_activity_acp;
         name_activity_acp = allCellPtr[i]->get_activity_name();
         std::string name_activity_vec;
@@ -171,7 +172,8 @@ void all_activities::closeEvent(QCloseEvent *event) {
           type_activity_acp != type_activity_vec) {
             changed_type = true;
           }
-        }
+          }else{qDebug()<<"this was the issue";}
+      }
       if (changed_type == true) {
         QMessageBox::warning(this, tr("Paper friend"),
                              tr("Please save your changes."),
