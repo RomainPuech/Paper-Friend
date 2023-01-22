@@ -223,14 +223,14 @@ std::vector<QStringList> load_habits() {
   std::string habit;
   std::vector<QStringList> current_habits;
   std::ifstream myfile;
-  myfile.open("habits.txt");
-  if (myfile.is_open()) {
+  myfile.open("habits.txt"); //We try to open our .txt file
+  if (myfile.is_open()) { //If successful we continue
     std::cout << "Reading habits file" << std::endl;
-    while (myfile.good()) {
+    while (myfile.good()) { //iterate over each line
       QString tmp1;
       std::getline(myfile, habit);
       tmp1 = QString::fromUtf8(habit.c_str());
-      QStringList tmp2 = tmp1.split('|');
+      QStringList tmp2 = tmp1.split('|'); //Split the line with respect to "|" (saved format is "habit_name|habit_frequency|streak|last date modified")
       current_habits.push_back(tmp2);
     }
     myfile.close();
@@ -238,7 +238,7 @@ std::vector<QStringList> load_habits() {
   } else {
     std::cout << "Couldn't open habits file" << std::endl;
   }
-  return current_habits;
+  return current_habits;  //Format is [['habit_name'],['habit_frequency'],['streak'],['last date modified]]
 }
 
 std::vector<QString> load_last_recaps_dates() {
@@ -438,9 +438,9 @@ EntryRecap* load_entryrecap(std::string filename, std::vector<Activity> possible
 std::vector<QStringList> get_daily_habits() {
 
     QDate date = date.currentDate();
-    int tmp = date.dayOfWeek();
+    int tmp = date.dayOfWeek(); //day of week in int format, 1 corrresponds to Monday ...
     std::string day_of_week;
-    switch (tmp) {
+    switch (tmp) { //Get the corresponding day for each i
     case 1:
       day_of_week = "Every Monday";
       break;
@@ -465,15 +465,15 @@ std::vector<QStringList> get_daily_habits() {
     }
     std::vector<QStringList> current_habits = load_habits();
     std::vector<QStringList> habits_of_the_day;
-    for (unsigned long i = 0; i < current_habits.size(); i++) {
+    for (unsigned long i = 0; i < current_habits.size(); i++) { //iterate over all habits and check the ones which are done on this day
       if (QDate::currentDate().toString() != current_habits[i][3]) {
         QStringList tmp;
-        if (current_habits[i][1].toStdString() == "Every Day") {
+        if (current_habits[i][1].toStdString() == "Every Day") { //if it's every day, we always add it to our vector
           tmp.push_back(current_habits[i][0]);
           tmp.push_back(current_habits[i][1]);
           tmp.push_back(current_habits[i][2]);
         }
-        if ((current_habits[i][1].toStdString() == "Every Weekday" &&
+        if ((current_habits[i][1].toStdString() == "Every Weekday" && //if it's every weekday, we check if today's a weekday
              day_of_week == "Every Monday") ||
             (current_habits[i][1].toStdString() == "Every Weekday" &&
              day_of_week == "Every Tuesday") ||
@@ -487,7 +487,7 @@ std::vector<QStringList> get_daily_habits() {
           tmp.push_back(current_habits[i][1]);
           tmp.push_back(current_habits[i][2]);
         }
-        if ((current_habits[i][1].toStdString() == "Every Weekend" &&
+        if ((current_habits[i][1].toStdString() == "Every Weekend" && //Same as above but for weekends
              day_of_week == "Every Saturday") ||
             (current_habits[i][1].toStdString() == "Every Weekend" &&
              day_of_week == "Every Sunday")) {
@@ -495,7 +495,7 @@ std::vector<QStringList> get_daily_habits() {
           tmp.push_back(current_habits[i][1]);
           tmp.push_back(current_habits[i][2]);
         }
-        if (current_habits[i][1].toStdString() == day_of_week) {
+        if (current_habits[i][1].toStdString() == day_of_week) { //If it's the same as today's date
           tmp.push_back(current_habits[i][0]);
           tmp.push_back(current_habits[i][1]);
           tmp.push_back(current_habits[i][2]);
@@ -505,6 +505,6 @@ std::vector<QStringList> get_daily_habits() {
         }
       }
     }
-    return habits_of_the_day;
+    return habits_of_the_day;//return vecotr of QStringList of habits done today in the format [['habit_name'],['habit_frequency'],['streak'],['last date modified]]
 }
 

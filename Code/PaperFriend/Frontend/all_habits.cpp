@@ -83,7 +83,7 @@ bool All_Habits::duplicates_between_entered_habits() { //This function is quite 
     return duplicates_amoung_entered_habits;
 }
 
-bool All_Habits::unnamed_habits() {
+bool All_Habits::unnamed_habits() { //This function checks if the entered habits have no entered text
   bool unnamed = false;
   std::vector<QStringList> current_habits = load_habits();
   for (int i = 0; i < ui->habits_cell_layout->count(); i++) {
@@ -98,7 +98,7 @@ bool All_Habits::unnamed_habits() {
   return unnamed;
 }
 
-bool All_Habits::more_than_50_char_entered_habits() { //This function is quite similar to the one above, the only difference is we check for duplicates amoung entered habits.
+bool All_Habits::more_than_50_char_entered_habits() { //This function checks if the habits entered have more than 50 characters
     bool excess = false;
     for (int i = 0; i < ui->habits_cell_layout->count(); i++) {
         if (ui->habits_cell_layout->itemAt(i)->widget()->findChild<QLineEdit *>("habit_name")->text().size() > 50) {
@@ -108,25 +108,26 @@ bool All_Habits::more_than_50_char_entered_habits() { //This function is quite s
     return excess;
 }
 
-std::vector<QStringList> All_Habits::get_habits_to_be_displayed(){
+std::vector<QStringList> All_Habits::get_habits_to_be_displayed(){ //This function gets the habits that are going to be displayed on the mainwindow with the questions and buttons
     std::vector<QString> displayed_habits;
     for (int i = 0; i < ui_mainwindow->verticalLayout_daily_habits->count(); i++) {
         displayed_habits.push_back(ui_mainwindow->verticalLayout_daily_habits->itemAt(i)->widget()->findChild<QLabel *>("habit_label")->text().split(".")[0]);
     }
+    //The lines above get the habits already displayed in order not to display them twice
     std::vector<QStringList> to_return;
     std::vector<QStringList> daily_habits = get_daily_habits();
     for (unsigned long i = 0; i < daily_habits.size(); i++) {
         bool different = true;
         for (unsigned long j = 0; j < displayed_habits.size(); j++) {
             if (daily_habits[i][0] == displayed_habits[j]) {
-                different = false;
+                different = false; //Checks if habits from .txt file are already displayed in the mainwindow
             }
         }
-        if (different) {
+        if (different) { //If they are not, then we add them to our vector
             to_return.push_back(daily_habits[i]);
         }
     }
-    return to_return;
+    return to_return; //return the vector of habits which ahve to be displayed
 }
 
 void All_Habits::on_save_habit_button_clicked() {
@@ -180,13 +181,13 @@ void All_Habits::on_save_habit_button_clicked() {
 
       std::vector<QStringList> new_habits_of_the_day = get_habits_to_be_displayed();
       if (new_habits_of_the_day.size() > 0) {
-          if (ui_mainwindow->generic_habit_label->isVisible()) {
-              ui_mainwindow->generic_habit_label->setVisible(false);
-              ui_mainwindow->habits_scrollArea->setVisible(true);
+          if (ui_mainwindow->generic_habit_label->isVisible()) { //If the generic label is visible it means that no habits have been displayed before, so we have to set it invisible
+              ui_mainwindow->generic_habit_label->setVisible(false); //which we do here
+              ui_mainwindow->habits_scrollArea->setVisible(true); //and set the scroll are for the questions visible
           }
           for (unsigned long i = 0; i < new_habits_of_the_day.size(); i++) {
-            Display_Daily_Habit *new_daily_habit = new Display_Daily_Habit(new_habits_of_the_day[i][0], new_habits_of_the_day[i][2]);
-            ui_mainwindow->verticalLayout_daily_habits->addWidget(new_daily_habit);
+            Display_Daily_Habit *new_daily_habit = new Display_Daily_Habit(new_habits_of_the_day[i][0], new_habits_of_the_day[i][2]); //creates the ui for each habit
+            ui_mainwindow->verticalLayout_daily_habits->addWidget(new_daily_habit); //displays them in mainwindow
           }
       }
 

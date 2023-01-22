@@ -118,8 +118,8 @@ MainWindow::MainWindow(QWidget *parent)
 
   // Load habits
 
-  std::vector<QStringList> habits_of_the_day = get_daily_habits();
-
+  std::vector<QStringList> habits_of_the_day = get_daily_habits();//vector of habits and their parameters done today
+  //Line of code below displays the question for each habit done on this day
   if (habits_of_the_day.size() > 0) {
     ui->generic_habit_label->setVisible(false);
     for (unsigned long i = 0; i < habits_of_the_day.size(); i++) {
@@ -151,6 +151,17 @@ MainWindow::MainWindow(QWidget *parent)
   }
 
   displayed_entries = entries_to_display;
+
+  struct Filter_param filt;
+  filt.is_value_compare = true;
+  filt.keyword = "last_n_entries";
+  filt.opt = "=";
+  filt.value = 30;
+  filt.display_num = 30;
+  filter_params.push_back(filt);
+
+
+
   // displayed_entries = vector_entries;
 
   // save the card corresponding to the current day in case it has to be
@@ -770,7 +781,7 @@ void MainWindow::refresh_activities() { // refresh the display of entryCards aft
   }
 }
 
-std::vector<QStringList> MainWindow::habit_repeated_5() {
+std::vector<QStringList> MainWindow::habit_repeated_5() { //fucntion that gets habits which is repeated every 5 times in a row
   std::vector<QStringList> current_habits = load_habits();
   std::vector<QStringList> tmp;
   for (unsigned long i = 0; i < current_habits.size(); i++) {
@@ -781,7 +792,7 @@ std::vector<QStringList> MainWindow::habit_repeated_5() {
   return tmp;
 }
 
-std::vector<QStringList> MainWindow::habit_repeated_66() {
+std::vector<QStringList> MainWindow::habit_repeated_66() { //fucntion that gets habits which is repeated 33 imes in a row, which becomes automatic
   std::vector<QStringList> current_habits = load_habits();
   std::vector<QStringList> tmp;
   for (unsigned long i = 0; i < current_habits.size(); i++) {
