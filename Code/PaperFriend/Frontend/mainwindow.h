@@ -57,7 +57,7 @@ private:
   MascotChat chat;
   std::map<QString, DynamicGraph *> dynamic_graphs;
   void toggle_visibility(QWidget *component);
-  void display_entries();
+  void display_entries(bool dont_display_recaps);
   void display_graph(QString tracked_parameter);
   Ui::MainWindow *ui;
   All_Habits *all_habits;

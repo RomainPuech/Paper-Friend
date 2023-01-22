@@ -144,7 +144,7 @@ MainWindow::MainWindow(QWidget *parent)
   // sort them by the date
   sort(vector_recaps.begin(), vector_recaps.end(), sort_by_date<EntryRecap*>);
   //// frontend that needs data to be rendered
-  display_entries();
+  display_entries(false);
 
   // Chatbox
   chat = MascotChat(ui->scrollArea);
@@ -211,7 +211,7 @@ void MainWindow::update_graphs() {
   display_graph("physical activity");
 }
 
-void MainWindow::display_entries() {
+void MainWindow::display_entries(bool dont_display_recaps) {
 
   while (!ui->EntriesScroll->widget()->layout()->isEmpty()) {
     QLayoutItem *item = ui->EntriesScroll->widget()->layout()->takeAt(0);
@@ -223,6 +223,7 @@ void MainWindow::display_entries() {
   displayed_cards.clear();
   // displaying in reversed order
   std::vector<EntryRecap *>::reverse_iterator rec = vector_recaps.rbegin();
+  if(dont_display_recaps){rec = vector_recaps.rend();}
   for (auto entry = displayed_entries.rbegin();
        entry != displayed_entries.rend(); ++entry) {
     if (rec != vector_recaps.rend() && (*rec)->get_qdate().daysTo((*entry)->get_qdate()) <= 0) {
@@ -429,7 +430,7 @@ void MainWindow::on_filterButton_clicked() {
   }
 
   displayed_entries = entries_to_display;
-  display_entries();
+  display_entries(true);
   update_graphs();
 }
 
@@ -439,7 +440,7 @@ void MainWindow::on_clear_button_clicked() {
   // vector_entries = sample_entries(10); // this line should be changed to
   // aquire source of entries
   displayed_entries = vector_entries;
-  display_entries();
+  display_entries(false);
   update_graphs();
 }
 
@@ -472,13 +473,13 @@ void MainWindow::on_newEntryButton_clicked() {
         }
         vector_entries.push_back(today_entry);
         displayed_entries.push_back(today_entry);
-        display_entries();
+        display_entries(false);
    }
    else{
        if(displayed_entries.empty() || displayed_entries.back()->get_qdate() != QDate::currentDate()){
            // today entry exists but is not in the displayed entries
            displayed_entries.push_back(vector_entries.back());
-           display_entries();
+           display_entries(false);
        }
    }
      ui->EntriesScroll->verticalScrollBar()->setValue(0);
@@ -555,7 +556,7 @@ void MainWindow::generate_recap() {
     if(generated_recap){
 
   save_last_recaps_dates(last_recaps_dates);
-  display_entries();
+  display_entries(false);
   ui->EntriesScroll->verticalScrollBar()->setValue(0);
     }
 }
@@ -646,7 +647,7 @@ void MainWindow::welcome() {
 void MainWindow::on_Test_entries_clicked() {
   vector_entries = sample_entries(20);
   displayed_entries = vector_entries;
-  display_entries();
+  display_entries(true);
   update_graphs();
 }
 
