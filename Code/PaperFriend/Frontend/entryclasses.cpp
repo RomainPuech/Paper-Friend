@@ -87,11 +87,11 @@ std::string EntryPerso::get_var_name(int index) const {
     std::string str;
     switch (index) {
         case 2:
-            str = "eating healthy";
+            str = "Eating healthy";
             break;
 
         case 5:
-            str = "physical activity";
+            str = "Physical activity";
             break;
 
         default:
