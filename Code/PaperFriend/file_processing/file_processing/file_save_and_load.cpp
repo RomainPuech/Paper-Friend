@@ -426,8 +426,8 @@ EntryRecap* load_entryrecap(std::string filename, std::vector<Activity> possible
     std::ifstream i("Recap_entries/" + filename);
     nlohmann::json j;
     i >> j;
-    QDate best_day_date = QDate::fromString(QString::fromStdString(j["best_day_date"]));
-    QDate worst_day_date = QDate::fromString(QString::fromStdString(j["worst_day_date"]));
+    QDate best_day_date = QDate::fromString(QString::fromStdString(j["best_day_date"]), "MM.dd.yyyy");
+    QDate worst_day_date = QDate::fromString(QString::fromStdString(j["worst_day_date"]), "MM.dd.yyyy");
     double best_day_mood = j["best_day_mood"];
     double worst_day_mood = j["worst_day_mood"];
     EntryRecap* res = new EntryRecap(best_day_date,worst_day_date,best_day_mood,worst_day_mood, j["text"],j["average_mood"], j["type"]);
