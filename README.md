@@ -93,8 +93,7 @@ It has been more tested on Windows. The NLP analysis of the text of the entry, w
 
 - You can use the settings at the top left corner to prevent the creation of a recap.
 
-- You may want to download the files of the example folder and put them in your build folder as test data.
-
+- You may want to put the content of the "example" folder of the repo to test the app with some data we prepared.
 
         
     
