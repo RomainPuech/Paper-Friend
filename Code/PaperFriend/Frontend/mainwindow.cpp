@@ -151,6 +151,17 @@ MainWindow::MainWindow(QWidget *parent)
   }
 
   displayed_entries = entries_to_display;
+
+  struct Filter_param filt;
+  filt.is_value_compare = true;
+  filt.keyword = "last_n_entries";
+  filt.opt = "=";
+  filt.value = 30;
+  filt.display_num = 30;
+  filter_params.push_back(filt);
+
+
+
   // displayed_entries = vector_entries;
 
   // save the card corresponding to the current day in case it has to be
