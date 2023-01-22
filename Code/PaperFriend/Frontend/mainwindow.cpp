@@ -508,7 +508,6 @@ void MainWindow::on_suggestions_button_clicked() {
   chat << suggestion;
 }
 void MainWindow::generate_recap() {
-    qDebug()<<"generating recaps";
   // first check if we need to generate a weekly/monthly/yearly recap
   // last_recaps_dates is the vector containing the string of the dates of the
   // last [0]weekly, [1]monthly and [2]yearly recap.
@@ -556,7 +555,6 @@ void MainWindow::generate_recap() {
   if (saved_year() and QDate::currentDate().month() == 12 &&
       QDate::currentDate().day() == 31) // If it's December 31st
   {
-    qDebug() << "yearly recap";
     QString date_last_recap = last_recaps_dates[2];
     if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
       chat << QString("Before celebrating the new year, let's look back to ") +
@@ -572,7 +570,6 @@ void MainWindow::generate_recap() {
     }
   }
     if(generated_recap){
-qDebug()<<"generated recap";
   save_last_recaps_dates(last_recaps_dates);
   display_entries(false);
   ui->EntriesScroll->verticalScrollBar()->setValue(0);

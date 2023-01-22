@@ -166,7 +166,7 @@ void all_activities::closeEvent(QCloseEvent *event) {
           type_activity_acp != type_activity_vec) {
             changed_type = true;
           }
-          }else{qDebug()<<"this was the issue";}
+          }
       }
       if (changed_type == true) {
         QMessageBox::warning(this, tr("Paper friend"),

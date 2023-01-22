@@ -19,10 +19,6 @@ text_analysis_window::text_analysis_window(EntryCard *card) :
         load_container = new QLabel();
         mood = 0;
         movie = new QMovie("../PaperFriend/rsc/loading.gif");
-        if (!movie->isValid())
-        {
-            qDebug()<<"gif not loadeed";
-        }
         load_container->setMovie(movie);
         load_container->setMaximumSize(150, 150);
         movie->setScaledSize(QSize(150, 150));
@@ -47,7 +43,6 @@ void text_analysis_window::start(){
 
 void text_analysis_window::set_message(){
     movie->stop();
-    qDebug()<<"removing everything";
     ui->verticalLayout->removeWidget(load_container);
     load_container->setVisible(false);
     ui->apply_mood->setVisible(true);

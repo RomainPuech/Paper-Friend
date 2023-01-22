@@ -66,11 +66,8 @@ public:
     TextAnalysisThread(TextAnalysis* textA = nullptr): QThread(), textA(textA){};
 
     void run(){
-        qDebug()<<"start analysis";
         textA->analyze_text();
         QThread::currentThread()->sleep(3);
-        qDebug()<<"analysis done";
-        //emit finished();
     }
 
 private:
