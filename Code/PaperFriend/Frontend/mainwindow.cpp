@@ -131,7 +131,27 @@ MainWindow::MainWindow(QWidget *parent)
     ui->habits_scrollArea->setVisible(false);
   }
 
-  displayed_entries = vector_entries;
+
+  
+  std::string f = "Filters:   ";
+  std::stringstream stream;
+  std::string s = stream.str();
+    f +=
+        "last_n_entries = 30; ";
+  findChild<QLabel *>("existing_filters")->setText(QString::fromStdString(f));
+
+  size_t n = 30;
+  if (vector_entries.size() < n) {
+    n = vector_entries.size();
+  }
+  std::vector<EntryPerso *> entries_to_display;
+  for (size_t i = vector_entries.size() - n; i < vector_entries.size();
+       i++) {
+    entries_to_display.push_back(vector_entries[i]);
+  }
+
+  displayed_entries = entries_to_display;
+  // displayed_entries = vector_entries;
 
   // save the card corresponding to the current day in case it has to be
   // modified
@@ -176,6 +196,10 @@ MainWindow::MainWindow(QWidget *parent)
 
   // style the application
   QApplication::setStyle(QStyleFactory::create("Fusion"));
+
+
+
+
 }
 
 MainWindow::~MainWindow() {
@@ -348,7 +372,7 @@ void MainWindow::on_filterButton_clicked() {
   // QString value_filter_value =
   // findChild<QDoubleSpinBox *>("value_filter")->text();
   double value = findChild<QDoubleSpinBox *>("value_filter")->value();
-  size_t n = 20;
+  size_t n = 30;
 
   // construct a filter_param object
   struct Filter_param filt;
@@ -679,7 +703,7 @@ void MainWindow::welcome() {
 }
 
 void MainWindow::on_Test_entries_clicked() {
-  vector_entries = sample_entries(20);
+  vector_entries = sample_entries(40);
   displayed_entries = vector_entries;
   display_entries(true);
   update_graphs();
@@ -779,4 +803,37 @@ std::vector<QStringList> MainWindow::habit_repeated_66() {
     }
   }
   return tmp;
+}
+
+void MainWindow::filter_entries(){
+  size_t n = 30;
+  std::vector<EntryPerso *> filtered_entries = vector_entries;
+
+    // update and display the filters
+  std::string f = "Filters:   ";
+  for (size_t i = 0; i < filter_params.size(); i++) {
+    // value keeps 2 digits after the decimal point
+    std::stringstream stream;
+
+    stream << std::fixed << std::setprecision(1) << filter_params[i].value;
+    std::string s = stream.str();
+    f +=
+        filter_params[i].keyword + " " + filter_params[i].opt + " " + s + ";  ";
+  }
+  findChild<QLabel *>("existing_filters")->setText(QString::fromStdString(f));
+
+  if (filtered_entries.size() < n) {
+    n = filtered_entries.size();
+  }
+
+  // select the n last entries
+  std::vector<EntryPerso *> entries_to_display;
+  for (size_t i = filtered_entries.size() - n; i < filtered_entries.size();
+       i++) {
+    entries_to_display.push_back(filtered_entries[i]);
+  }
+
+  displayed_entries = entries_to_display;
+  display_entries(true);
+  update_graphs();
 }
