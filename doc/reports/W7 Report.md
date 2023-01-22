@@ -2,7 +2,7 @@
 |:----------------------:|:-----------------:|:-------------------------|
 | Romain Puech         |Link Analysis/Font, Fixes  ||- Bug hunting and extensive bug fixing <br>- Management of last changes with every member of the team <br>- Visual changes <br> -created example/tuto entry <br>- Prepared presentation
 | Bogdana Kolic        |Link Analysis/Font, Fixes  |- I removed the setting for the display of all habits and added settings for recaps<br> - I adapted fronted to work with sentiment analysis of the entry text<br> - Made sure at most one EntryCard at a time is in modify mode <br> - I worked on finding and solving various bugs and optimizing the code<br>|
-| Liam Loughman        |Frontend                   ||
+| Liam Loughman        |Frontend                   |- Commented my code<br>- fixed bugs when saving file (empty lines error)<br>- Added functionality to yes, no and delete buttons<br>- Implemented a way to display on the mainwindow newly saved habits done on the same day as today to answer the questions|
 | Yubo Cai             |Frontend                   ||
 | Luigi Massacci       |Link Analysis/Front, Fixes | - Extensive testing of the application <br>- identified places were memory was being leaked. <br>
 | Safaa Arbai          |Frontend                   ||
