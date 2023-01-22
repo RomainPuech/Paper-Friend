@@ -12,4 +12,4 @@
 | Junyuan (Frank) Wang |Front end/File Processing  ||
 | Octave Gaspard       |Data analysis              |- Debugged analysis functions and helped testing correct integration in the UI<br>- Worked on the presentation of the project<br>|
 | Brook Nigatu         |Data analysis              |- Debugged recap functions and improved a small bit on their texts.|
-| Artem Mamichev       |Data analysis              ||    
+| Artem Mamichev       |Data analysis              |- Debugged suggestion function so that suggestions now work. <br>- Made text_analysis function analize the text in the entry window (mainly worked with pathes). <br>- Cleaned up the code and tested everything|    
