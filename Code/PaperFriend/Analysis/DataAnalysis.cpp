@@ -485,30 +485,6 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
    */
   std::string str{};
 
-  /*
-  // Iterating through variables:
-  for (int var_index = 1; var_index <= 5; var_index++){
-      //std::cout << "Here is the problem 0" << std::endl;
-      if (anomalies_detection(log, var_index).end()->get_absolute_day() ==
-          log.end()->get_absolute_day()) {
-        str += "We've detected an anomalie in your " +
-               log[0].get_var_name(var_index) + ". It ";
-        if (get_lastn_average(7, 0) < log.end()->get_mood()) {
-          str += "has affected your " + log[0].get_var_name(var_index) +
-                 " in a good way. \n";
-          str += "Keep it up! :)\n";
-        } else {
-          if (get_lastn_average(7, 0) > 2 * log.end()->get_mood())
-            str +=
-                "made your " + log[0].get_var_name(var_index) + " much worse. \n";
-          else
-            str +=
-                "made your " + log[0].get_var_name(var_index) + " much worse. \n";
-          str += "Consider to normalize " + log[0].get_var_name(var_index) + " \n\n";
-        }
-      }
-   }*/
-
   // Comparing to previous results of MOOD:
 
   if (log.back().get_var_value(0) >= get_lastn_average(7, 0)) { // compares to last 7 days
@@ -528,24 +504,6 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
            var_to_str(*(item_priority(log, 0).begin())) + " and " +
            var_to_str(*(item_priority(log, 0).begin() + 1)) + "! \n\n";
   }
-
-  /*
-  // Haven’t seen anyone in days:
-  bool seen_nobody = true;
-  int i = 0; // days without friends in a row
-
-  while (seen_nobody && i < 1000000) {
-    if ((log.end() - i)->get_friends().size() != 0)
-      seen_nobody = false;
-    i++;
-  }
-  i--;
-
-  if (i != 0 && i < 1000000) {
-    str += "You haven't seen your friends for the last " + int_to_str(i) +
-           " days. Want to meet up?:\n\n)";
-  }
-  */
 
   return str;
 }
