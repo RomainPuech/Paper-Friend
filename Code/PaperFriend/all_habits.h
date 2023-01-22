@@ -1,7 +1,10 @@
 #ifndef ALL_HABITS_H
 #define ALL_HABITS_H
 
+#include "ui_mainwindow.h"
+#include <ui_mainwindow.h>
 #include <QDialog>
+#include <QObject>
 
 namespace Ui {
 class All_Habits;
@@ -11,16 +14,19 @@ class All_Habits : public QDialog {
   Q_OBJECT
 
 public:
-  explicit All_Habits(QWidget *parent = nullptr);
+  explicit All_Habits(Ui::MainWindow *ui_mainwindow, QWidget *parent = nullptr);
   ~All_Habits();
   bool savedStatus = true;
   void closeEvent(QCloseEvent *event);
+  bool duplicates_between_entered_saved_habits();
+  bool duplicates_between_entered_habits();
 
 private slots:
   void on_add_habit_button_clicked();
   void on_save_habit_button_clicked();
 
 private:
+  Ui::MainWindow *ui_mainwindow;
   Ui::All_Habits *ui;
 };
 
@@ -36,6 +42,7 @@ public:
   ~Add_Habit_Cell();
 
 private:
+  //Ui::MainWindow *ui_mainwindow;
   Ui::add_habit_cell *ui;
 
 private slots:

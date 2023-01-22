@@ -748,8 +748,8 @@ void EntryCard::handleModify() {
 
 void EntryCard::handleAnalize(){
     TextAnalysis analize_text = TextAnalysis(edit_text->get_title() + " " + edit_text->get_plain_text());
-    text_analysis_window popup = text_analysis_window(this);
     analize_text.analyze_text();
+    text_analysis_window popup = text_analysis_window(analize_text.get_text_mood(), this, this);
     popup.set_message("The analysis of this entry suggests that your mood is " + QString::number(analize_text.get_text_mood()));
     ///popup.set_message(edit_text->get_plain_text());
     popup.exec();
@@ -1345,4 +1345,17 @@ bool Card::eventFilter(QObject *target, QEvent *e) {
     return true;
   }
   return false;
+}
+
+QDate EntryCard::get_entry_date(){
+    return entry->get_qdate();
+}
+
+void EntryCard::automatic_mood(double mood){
+    entry_perso->set_mood(mood*100);
+    mood_slider->setValue(round(mood*100));
+    habits_display->setItemText(
+        0,
+        "Mood: " + QString::number(round(mood*100)) + "%");
+    this->set_correct_style();
 }
