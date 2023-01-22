@@ -10,6 +10,6 @@
 | Mihaela Gledacheva   |Frontend, Fixes            ||
 | Thomas Turkieh       |File processing            ||
 | Junyuan (Frank) Wang |Front end/File Processing  ||
-| Octave Gaspard       |Data analysis              ||
+| Octave Gaspard       |Data analysis              |- Debugged analysis functions and helped testing correct integration in the UI<br>- Worked on the presentation of the project<br>|
 | Brook Nigatu         |Data analysis              ||
 | Artem Mamichev       |Data analysis              ||    
