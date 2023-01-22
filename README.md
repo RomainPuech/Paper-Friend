@@ -91,6 +91,8 @@ It has been more tested on Windows. The NLP analysis of the text of the entry, w
 
 - Every Sunday, last day of month or of year, a weekly/montly/yearly recap is generated. You may want to set your PC's date to december 31st, 2023, and hit the test button, then write an entry. That way you can generate at the same time a weekly, montly and yearly recap to test them all.
 
+- For testing purposes, you can delete entries and recaps by deleting the content of the folders "Entries" and "Entry_recaps" in the build folder.
+
 - You can use the settings at the top left corner to prevent the creation of a recap.
  
 
