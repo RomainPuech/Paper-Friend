@@ -298,7 +298,6 @@ void MainWindow::on_save_settings_clicked() {
   myfile << findChild<QCheckBox *>("Monthly_recaps")->isChecked() << "\n";
   myfile << findChild<QCheckBox *>("Yearly_recaps")->isChecked() << "\n";
   myfile.close();
-  update_graphs();
   auto settings = findChild<QWidget *>("settings_frame");
   settings->hide();
   auto chat = findChild<QWidget *>("scrollArea");
