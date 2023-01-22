@@ -554,7 +554,7 @@ void MainWindow::generate_recap() {
     }
   }
     if(generated_recap){
-
+qDebug()<<"generated recap";
   save_last_recaps_dates(last_recaps_dates);
   display_entries(false);
   ui->EntriesScroll->verticalScrollBar()->setValue(0);
@@ -684,7 +684,7 @@ void MainWindow::remove_activities_from_old_entries() {
   std::vector<Activity*> reference_for_entries = vector_entries.at(0)->get_activities(); // the activities currently in entries
   std::vector<unsigned long long> to_remove; //positions of activities that should be removed
   // find activities that are present in entries but not in the vector of all activities
-  for(unsigned long long activity = 0; activity < reference_for_entries.size(); activity++){
+  for(long long activity = reference_for_entries.size() -1; activity >= 0; --activity){
       bool not_found = true;
        for(Activity act: vector_activities) {
            if(act == *reference_for_entries.at(activity)){// found it
