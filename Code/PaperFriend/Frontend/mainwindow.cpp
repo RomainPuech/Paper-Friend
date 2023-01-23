@@ -102,6 +102,15 @@ MainWindow::MainWindow(QWidget *parent)
   for (const QString &filename : dir.entryList(QDir::Files)) {
     vector_entries.push_back(load_entryperso(filename.toStdString(), vector_activities));
   }
+
+  if(vector_entries.size()==0)
+  {
+      EntryPerso* demo_entry = new EntryPerso();
+      demo_entry->set_title("Welcome in Paper Friend!");
+      demo_entry->set_text("<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Click the <span style=\" font-style:italic;\">Modify Entry</span> button just below to start writing your first entry!</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">You can write about:</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<ul type=\"circle\" style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">How you <span style=\" font-weight:700;\">feel</span></li>\n<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">What you <span style=\" font-weight:700;\">did</span> today</li>\n<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">What could be <span style=\" font-weight:700;\">improved</span> in your day...</li></ul>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The possibilities are endless! </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>");
+      vector_entries.push_back(demo_entry);
+  }
+
   sort(vector_entries.begin(), vector_entries.end(), sort_by_date<EntryPerso*>);
 
 
