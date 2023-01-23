@@ -770,12 +770,10 @@ void EntryCard::handleAnalize() {
 void EntryCard::handleBack() {
   QMessageBox alert;
   alert.setText("Do you want to save the changes to your entry?");
-  alert.setStandardButtons(QMessageBox::Save | QMessageBox::Discard |
-                           QMessageBox::Cancel);
+  alert.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
   alert.setDefaultButton(QMessageBox::Save);
   int choice = alert.exec();
   std::string retrieve_text = (edit_text->get_text()).toStdString();
-  // std::string new_title = retrieve_text.substr(0, retrieve_text.find("\n"));
   std::string new_title = (edit_text->get_title()).toStdString();
   std::string new_text = retrieve_text.substr(retrieve_text.find("\n") + 1);
   switch (choice) {
@@ -789,8 +787,12 @@ void EntryCard::handleBack() {
     this->remove_non_existent_act();
     this->change();
     break;
-    alert.close();
+  case QMessageBox::Cancel:
+      break;
   }
+  alert.close();
+
+
   can_be_modified = true;
   // check if a weekly/monthly/yearly recap has to be created
   main_window->generate_recap();

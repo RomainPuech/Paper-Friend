@@ -570,12 +570,15 @@ void MainWindow::generate_recap() {
       save_entryrecap(*recap_y);
     }
   }
-  if (generated_recap) {
 
-    save_last_recaps_dates(last_recaps_dates);
-    display_entries(false);
-    ui->EntriesScroll->verticalScrollBar()->setValue(0);
-  }
+    if(generated_recap){
+qDebug()<<"generated recap";
+  save_last_recaps_dates(last_recaps_dates);
+  display_entries(false);
+  ui->EntriesScroll->verticalScrollBar()->setValue(0);
+    }
+
+
 }
 
 void MainWindow::react_to_last_entry() {
@@ -710,29 +713,30 @@ void MainWindow::add_new_activities_to_old_enties() {
 }
 void MainWindow::remove_activities_from_old_entries() {
   /* remove an activity after it has been deleted */
-  if (vector_entries.empty()) {
-    return;
-  }
-  std::vector<Activity *> reference_for_entries =
-      vector_entries.at(0)
-          ->get_activities(); // the activities currently in entries
-  std::vector<unsigned long long>
-      to_remove; // positions of activities that should be removed
-  // find activities that are present in entries but not in the vector of all
-  // activities
-  for (unsigned long long activity = 0; activity < reference_for_entries.size();
-       activity++) {
-    bool not_found = true;
-    for (Activity act : vector_activities) {
-      if (act == *reference_for_entries.at(activity)) { // found it
-        not_found = false;
-        break;
-      }
-    }
-    if (not_found) {
-      to_remove.push_back(activity);
-    }
-  }
+  if(vector_entries.empty()){return;}
+  std::vector<Activity*> reference_for_entries = vector_entries.at(0)->get_activities(); // the activities currently in entries
+  std::vector<unsigned long long> to_remove; //positions of activities that should be removed
+  // find activities that are present in entries but not in the vector of all activities
+  for(long long activity = reference_for_entries.size() -1; activity >= 0; --activity){ // remove in reversed order
+      bool not_found = true;
+       for(Activity act: vector_activities) {
+           if(act == *reference_for_entries.at(activity)){// found it
+               not_found = false;
+              break;
+           }
+
+       }
+       if(not_found){to_remove.push_back(activity);}
+ }
+
+ for(EntryPerso* entry: vector_entries){
+     std::vector<Activity*> entry_activities = entry->get_activities();
+     for(unsigned long long act_remove : to_remove){
+         entry_activities.erase(entry_activities.begin()+act_remove);
+     }
+     entry->set_activities(entry_activities);
+ }
+
 
   for (EntryPerso *entry : vector_entries) {
     std::vector<Activity *> entry_activities = entry->get_activities();

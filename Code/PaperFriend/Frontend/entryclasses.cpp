@@ -74,8 +74,9 @@ EntryPerso::EntryPerso(std::string title, std::string text,
 
 }
 EntryPerso::~EntryPerso() {
+  /*
   for (auto el : activities)
-    delete el;
+    delete el;*/
 }
 
 double EntryPerso::get_var_value(int index) const {
