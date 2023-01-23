@@ -98,7 +98,23 @@ It has been more tested on Windows. The NLP analysis of the text of the entry, w
 
 - You can use the settings at the top left corner to prevent the creation of a recap.
  
+#### To test the NLP:
+Here are additional steps if you want to test the NLP algorithm that we showed during the presentation (only on mac):
+- step 1:
+![image](https://user-images.githubusercontent.com/91381114/214132200-d6bc4a22-28a9-41b8-aefb-3d37719b46b8.png)
 
-        
+- step 2:
+![image](https://user-images.githubusercontent.com/91381114/214132278-e9b9e2ae-795e-4e4e-88ba-0536ff97fe86.png)
+
+- step 3:
+![image](https://user-images.githubusercontent.com/91381114/214132370-e37805a2-25e8-49db-9b9a-e622d3f6f1a6.png)
+
+- step 4: put the 3 files there
+![image](https://user-images.githubusercontent.com/91381114/214132407-ae2fe523-59bd-4c20-975d-0f419a6301b7.png)
+
+You can create input.txt and output.txt. You can download the exe of the nlp algorithm at this link:
+https://fex.net/ru/s/ytn5xfy
+Artem used this website to host the file as it was too heavy for github.
+You can then test it by writing a title and a text in your entry and pressing the button analyze.
     
 
