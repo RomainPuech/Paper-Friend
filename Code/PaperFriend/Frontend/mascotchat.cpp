@@ -4,6 +4,7 @@
 #include "qradiobutton.h"
 #include <QLabel>
 #include <QPainterPath>
+//#include <QSoundEffect>
 #include <QVBoxLayout>
 #include <cstring>
 #include <string>
@@ -32,6 +33,31 @@ void MascotChat::operator<<(std::string txt) { add_message(txt); }
 
 void MascotChat::operator<<(QString txt) { add_message(txt); }
 
+void MascotChat::add_achievement(std::vector<QStringList> vect){
+    if (vect.size() == 0) {
+      return;
+    }
+    else {
+      for (int i = 0; i < int(vect.size()); i++) {
+          QString days_qstr = vect[i].at(2);
+          QString habit_name = vect[i].at(0);
+          if (days_qstr.toInt() == 5){
+              QString msg1 = "You've been practicing";
+              QString msg2 = "for 5 days now.";
+              QString full_msg = msg1+habit_name+msg2;
+              add_message(full_msg);
+              add_mascot(60);
+          }
+          else if (days_qstr.toInt() == 66){
+              QString msg1 = "You've been practicing";
+              QString msg2 = "for 66 days now and according to research 66 days is enough for the habit to become automatic";
+              QString full_msg = msg1+habit_name+msg2;
+              add_message(full_msg);
+              add_mascot(60);
+          }
+    }
+   }
+}
 void MascotChat::add_mascot(int num) {
     //display the mascot image in the chat box
   QLabel *image_label = new QLabel;
@@ -72,6 +98,12 @@ void MascotChat::prompt_msg(std::string question, int num) {
 }
 
 // private methods
+void MascotChat::add_notif_sound(){
+    /*QSoundEffect effect;
+    effect.setSource(QUrl::fromLocalFile("rsc\notif_sound2.wav"));
+    effect.setVolume(0.25f);
+    effect.play();*/
+}
 void MascotChat::add_message(QString txt) {
   //takes QString and displays it in the chat box
   Message *text_label = new Message();
@@ -82,6 +114,7 @@ void MascotChat::add_message(QString txt) {
   text_label ->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
   text_label->setText(txt);
   text_label -> setMargin(3);
+  //add_notif_sound();
   scrollArea->widget()->layout()->addWidget(text_label);
 }
 

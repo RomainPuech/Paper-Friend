@@ -144,7 +144,7 @@ MainWindow::MainWindow(QWidget *parent)
   // sort them by the date
   sort(vector_recaps.begin(), vector_recaps.end(), sort_by_date<EntryRecap*>);
   //// frontend that needs data to be rendered
-  display_entries();
+  display_entries(false);
 
   // Chatbox
   chat = MascotChat(ui->scrollArea);
@@ -211,7 +211,7 @@ void MainWindow::update_graphs() {
   display_graph("physical activity");
 }
 
-void MainWindow::display_entries() {
+void MainWindow::display_entries(bool dont_display_recaps) {
 
   while (!ui->EntriesScroll->widget()->layout()->isEmpty()) {
     QLayoutItem *item = ui->EntriesScroll->widget()->layout()->takeAt(0);
@@ -223,6 +223,7 @@ void MainWindow::display_entries() {
   displayed_cards.clear();
   // displaying in reversed order
   std::vector<EntryRecap *>::reverse_iterator rec = vector_recaps.rbegin();
+  if(dont_display_recaps){rec = vector_recaps.rend();}
   for (auto entry = displayed_entries.rbegin();
        entry != displayed_entries.rend(); ++entry) {
     if (rec != vector_recaps.rend() && (*rec)->get_qdate().daysTo((*entry)->get_qdate()) <= 0) {
@@ -247,13 +248,12 @@ void MainWindow::display_entries() {
       displayed_cards.push_back(c);
 
     }
-  } while(rec != vector_recaps.rend()){
+  } /*while(rec != vector_recaps.rend()){
       EntryCard *c = new EntryCard(20, 300, 300, "white", *rec, true, this);
       c->display(ui->EntriesScroll->widget()
                      ->layout()); // displays the entry in the main_frame.
-
       ++rec;
-  }
+  }*/
 }
 
 void MainWindow::display_graph(QString tracked_parameter) {
@@ -302,7 +302,6 @@ void MainWindow::on_save_settings_clicked() {
   myfile << findChild<QCheckBox *>("Monthly_recaps")->isChecked() << "\n";
   myfile << findChild<QCheckBox *>("Yearly_recaps")->isChecked() << "\n";
   myfile.close();
-  update_graphs();
   auto settings = findChild<QWidget *>("settings_frame");
   settings->hide();
   auto chat = findChild<QWidget *>("scrollArea");
@@ -336,7 +335,7 @@ void MainWindow::on_filterButton_clicked() {
   // QString value_filter_value =
   // findChild<QDoubleSpinBox *>("value_filter")->text();
   double value = findChild<QDoubleSpinBox *>("value_filter")->value();
-  int n = 20;
+  size_t n = 20;
 
   // construct a filter_param object
   struct Filter_param filt;
@@ -348,7 +347,7 @@ void MainWindow::on_filterButton_clicked() {
 
   // handling duplicated filters
   bool is_insert = true;
-  for (int i = 0; i < filter_params.size(); i++) {
+  for (size_t i = 0; i < filter_params.size(); i++) {
     if (filter_params[i].keyword == filt.keyword &&
         filter_params[i].opt == filt.opt &&
         filter_params[i].value == filt.value) {
@@ -379,7 +378,7 @@ void MainWindow::on_filterButton_clicked() {
     filter_params.push_back(filt);
   }
 
-  for (int i = 0; i < filter_params.size(); i++) {
+  for (size_t i = 0; i < filter_params.size(); i++) {
     if (filter_params[i].keyword == "last_n_entries") {
       n = filter_params[i].value;
       break;
@@ -388,7 +387,7 @@ void MainWindow::on_filterButton_clicked() {
 
   // filter the entries
   std::vector<EntryPerso *> filtered_entries = vector_entries;
-  for (int i = 0; i < filter_params.size(); i++) {
+  for (size_t i = 0; i < filter_params.size(); i++) {
     if (filter_params[i].keyword == "last_n_entries") {
       continue;
     }
@@ -409,7 +408,7 @@ void MainWindow::on_filterButton_clicked() {
 
   // update and display the filters
   std::string f = "Filters:   ";
-  for (int i = 0; i < filter_params.size(); i++) {
+  for (size_t i = 0; i < filter_params.size(); i++) {
     // value keeps 2 digits after the decimal point
     std::stringstream stream;
 
@@ -426,12 +425,12 @@ void MainWindow::on_filterButton_clicked() {
 
   // select the n last entries
   std::vector<EntryPerso *> entries_to_display;
-  for (int i = filtered_entries.size() - n; i < filtered_entries.size(); i++) {
+  for (size_t i = filtered_entries.size() - n; i < filtered_entries.size(); i++) {
     entries_to_display.push_back(filtered_entries[i]);
   }
 
   displayed_entries = entries_to_display;
-  display_entries();
+  display_entries(true);
   update_graphs();
 }
 
@@ -441,7 +440,7 @@ void MainWindow::on_clear_button_clicked() {
   // vector_entries = sample_entries(10); // this line should be changed to
   // aquire source of entries
   displayed_entries = vector_entries;
-  display_entries();
+  display_entries(false);
   update_graphs();
 }
 
@@ -474,13 +473,13 @@ void MainWindow::on_newEntryButton_clicked() {
         }
         vector_entries.push_back(today_entry);
         displayed_entries.push_back(today_entry);
-        display_entries();
+        display_entries(false);
    }
    else{
-       if((displayed_entries.empty() && vector_entries.back()->get_qdate()==QDate::currentDate()) || displayed_entries.back()->get_qdate() != QDate::currentDate()){
+       if(displayed_entries.empty() || displayed_entries.back()->get_qdate() != QDate::currentDate()){
            // today entry exists but is not in the displayed entries
            displayed_entries.push_back(vector_entries.back());
-           display_entries();
+           display_entries(false);
        }
    }
      ui->EntriesScroll->verticalScrollBar()->setValue(0);
@@ -505,7 +504,7 @@ void MainWindow::generate_recap() {
     last_recaps_dates.push_back(date.toString("yyyy.MM.dd"));
   }
   // weekly
-  if (vector_entries.size()>=2 and saved_week() and QDate::currentDate().dayOfWeek() == 7) // If it's Sunday
+  if (saved_week() and QDate::currentDate().dayOfWeek() == 7) // If it's Sunday
   {
     QString date_last_recap = last_recaps_dates[0];
     if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
@@ -513,16 +512,14 @@ void MainWindow::generate_recap() {
       chat.add_mascot(89);
       last_recaps_dates[0] = QDate::currentDate().toString("yyyy.MM.dd");
       DataAnalysis analysis = DataAnalysis(vector_entries);
-      EntryRecap recap_w = analysis.weekly_recap();
+      EntryRecap* recap_w = analysis.weekly_recap();
       generated_recap = true;
-      vector_recaps.push_back(&recap_w);
-      EntryCard* recap_card = new EntryCard(20, 300, 300, "white", &recap_w, true, this);
-      recap_card->display(ui->EntriesScroll->widget()->layout());
-      save_entryrecap(recap_w);
+      vector_recaps.push_back(recap_w);
+      save_entryrecap(*recap_w);
     }
   }
   // monthly
-  if (vector_entries.size()>=2 and saved_month() and QDate::currentDate().daysInMonth() ==
+  if (saved_month() and QDate::currentDate().daysInMonth() ==
      QDate::currentDate().day()) // If it's the last day of the month
   {
     QString date_last_recap = last_recaps_dates[1];
@@ -531,16 +528,14 @@ void MainWindow::generate_recap() {
       chat.add_mascot(65);
       last_recaps_dates[1] = QDate::currentDate().toString("yyyy.MM.dd");
       DataAnalysis analysis = DataAnalysis(vector_entries);
-      EntryRecap recap_m = analysis.monthly_recap();
+      EntryRecap* recap_m = analysis.monthly_recap();
       generated_recap = true;
-      vector_recaps.push_back(&recap_m);
-      EntryCard* recap_card = new EntryCard(20, 300, 300, "white", &recap_m, true, this);
-      recap_card->display(ui->EntriesScroll->widget()->layout());
-      save_entryrecap(recap_m);
+      vector_recaps.push_back(recap_m);
+      save_entryrecap(*recap_m);
     }
   }
   // yearly
-  if (vector_entries.size()>=2 and saved_year() and QDate::currentDate().month() == 12 &&
+  if (saved_year() and QDate::currentDate().month() == 12 &&
       QDate::currentDate().day() == 31) // If it's December 31st
   {
       qDebug() << "yearly recap";
@@ -552,17 +547,17 @@ void MainWindow::generate_recap() {
       chat.add_mascot(66);
       last_recaps_dates[2] = QDate::currentDate().toString("yyyy.MM.dd");
       DataAnalysis analysis = DataAnalysis(vector_entries);
-      EntryRecap recap_y = analysis.yearly_recap();
-      vector_recaps.push_back(&recap_y);
-      EntryCard* recap_card = new EntryCard(20, 300, 300, "white", &recap_y, true, this);
-      recap_card->display(ui->EntriesScroll->widget()->layout());
+      EntryRecap *recap_y = analysis.yearly_recap();
+      vector_recaps.push_back(recap_y);
       generated_recap = true;
-      save_entryrecap(recap_y);
+      save_entryrecap(*recap_y);
     }
   }
     if(generated_recap){
 
   save_last_recaps_dates(last_recaps_dates);
+  display_entries(false);
+  ui->EntriesScroll->verticalScrollBar()->setValue(0);
     }
 }
 
@@ -652,7 +647,7 @@ void MainWindow::welcome() {
 void MainWindow::on_Test_entries_clicked() {
   vector_entries = sample_entries(20);
   displayed_entries = vector_entries;
-  display_entries();
+  display_entries(true);
   update_graphs();
 }
 

@@ -145,7 +145,7 @@ protected:
 
   std::string
   generate_weekly_recap_text(const std::vector<EntryPerso> &entries);
-  EntryRecap recap(int type);
+  EntryRecap* recap(int type);
 
   // STL returns a vector containing the Trend and the Seasonality component
   // {Trend, Seasonality}. seasonal_length is the length of the seasonality
@@ -158,9 +158,9 @@ protected:
 
 public:
   DataAnalysis(std::vector<EntryPerso *> vector_entries);
-  EntryRecap weekly_recap();
-  EntryRecap monthly_recap();
-  EntryRecap yearly_recap();
+  EntryRecap* weekly_recap();
+  EntryRecap* monthly_recap();
+  EntryRecap* yearly_recap();
   std::string
   suggestion(); // text that will be suggested to user daily
 };
