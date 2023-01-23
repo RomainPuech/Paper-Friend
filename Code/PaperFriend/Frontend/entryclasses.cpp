@@ -151,7 +151,7 @@ std::vector<EntryPerso *> sample_entries(int n) {
   std::vector<EntryPerso *> res = std::vector<EntryPerso *>();
   std::vector<Activity> activities_main = MainWindow::get_activities();
   std::vector<Activity *> activities;
-  for (int i = n; i > 1; --i) {
+  for (int i = n; i > 0; --i) {
     activities.clear();
     for (Activity activity : activities_main) {
       Activity *to_add = new Activity();
