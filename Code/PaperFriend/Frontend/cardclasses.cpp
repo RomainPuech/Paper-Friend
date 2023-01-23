@@ -593,8 +593,10 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
 
   else if (entry_recap != nullptr) {
     this->setContentsMargins(0, 0, 0, 0);
-    EntryPerso best = entry_recap->get_best_day();
-    EntryPerso worst = entry_recap->get_worst_day();
+    QDate best_day_date = entry_recap->get_best_day_date();
+    QDate worst_day_date = entry_recap->get_worst_day_date();
+    double best_day_mood = entry_recap->get_best_day_mood();
+    double worst_day_mood = entry_recap->get_worst_day_mood();
     // recap_layout->setParent(this);
 
     switch (entry_recap->get_type()) {
@@ -640,12 +642,12 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     best_day->setText("Best Day:");
     best_date->setParent(this);
     best_date->setText(
-        generate_date_string(entry_recap->get_best_day().get_qdate()));
+        generate_date_string(entry_recap->get_best_day_date()));
     best_date->setAlignment(Qt::AlignCenter);
     best_mood->setParent(this);
     best_mood->setText(
         "Highest mood: " +
-        QString::number(std::round(entry_recap->get_best_day().get_mood())) +
+        QString::number(std::round(entry_recap->get_best_day_mood())) +
         "%");
     best_day_hb->addWidget(best_day);
     best_day_hb->addWidget(best_date);
@@ -656,12 +658,12 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
     worst_day->setText("Worst Day:");
     worst_date->setParent(this);
     worst_date->setText(
-        generate_date_string(entry_recap->get_worst_day().get_qdate()));
+        generate_date_string(entry_recap->get_worst_day_date()));
     worst_date->setAlignment(Qt::AlignCenter);
     worst_mood->setParent(this);
     worst_mood->setText(
         "Lowest mood: " +
-        QString::number(std::round(entry_recap->get_worst_day().get_mood())) +
+        QString::number(std::round(entry_recap->get_worst_day_mood())) +
         "%");
     worst_day_hb->addWidget(worst_day);
     worst_day_hb->addWidget(worst_date);
@@ -1271,7 +1273,7 @@ void EntryCard::set_entryRecap_style() {
       "border-bottom: 1px solid white;");
   best_date->setStyleSheet("font-weight: bold; border-radius: 0px; "
                            "border-right-style: none; border-top-style: none;");
-  generate_rgb(red, green, entry_recap->get_best_day().get_mood() / 100);
+  generate_rgb(red, green, entry_recap->get_best_day_mood() / 100);
   best_mood->setStyleSheet("font-weight: bold; color: rgb(" +
                            QString::number(red) + ", " +
                            QString::number(green) +
@@ -1287,7 +1289,7 @@ void EntryCard::set_entryRecap_style() {
   worst_date->setStyleSheet(
       "font-weight:bold; border-style: none; border-left: 1px solid black; "
       "border-radius: 0px; border-bottom: 1px solid black;");
-  generate_rgb(red, green, entry_recap->get_worst_day().get_mood() / 100);
+  generate_rgb(red, green, entry_recap->get_worst_day_mood() / 100);
   worst_mood->setStyleSheet("font-weight: bold; color: rgb(" +
                             QString::number(red) + ", " +
                             QString::number(green) +
