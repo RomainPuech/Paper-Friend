@@ -73,6 +73,9 @@ Handles the saving, loading and encryption of files.
 
 #### How to build it.
 As we used Qt creator, you simply need to clone the repository, open the .pro file and build/run the project with Ctr+R or using the green arrow button.
+You need to download Qt Charts. In case it's needed, here is [how we downloaded it](https://github.com/CSE201-project/PaperFriend-desktop-app/wiki/Install-Qt-Charts-library)
+
+Alternatively for linux (tested on Ubuntu 20.04 and 22.04) it is possible to build the program via shell. make and qmake are the only pckages required, but they usually come with most installs of Anaconda/Qt/OpenCV/etc, so they are probably already there. From inside the ``Code/PaperFriend`` folder, run ``qmake`` and then ``make``. One can then run the file as ``./PaperFriend``. (Note: another destination for the executable may be specified if desired, but it is not necessary, the executable will create its own cache folders wherever it is located.) 
 
 #### OS specificities
 The app can run on all OS (Linux, Windows and MacOS)
@@ -89,12 +92,29 @@ It has been more tested on Windows. The NLP analysis of the text of the entry, w
 
 - You may create habits using the all habits button
 
-- Every Sunday, last day of month or of year, a weekly/montly/yearly recap is generated.
+- Every Sunday, last day of month or of year, a weekly/montly/yearly recap is generated. You may want to set your PC's date to december 31st, 2023, and hit the test button, then write an entry. That way you can generate at the same time a weekly, montly and yearly recap to test them all.
+
+- For testing purposes, you can delete entries and recaps by deleting the content of the folders "Entries" and "Entry_recaps" in the build folder.
 
 - You can use the settings at the top left corner to prevent the creation of a recap.
+ 
+#### To test the NLP:
+Here are additional steps if you want to test the NLP algorithm that we showed during the presentation (only on mac):
+- step 1:
+![image](https://user-images.githubusercontent.com/91381114/214132200-d6bc4a22-28a9-41b8-aefb-3d37719b46b8.png)
 
-- You may want to put the content of the "example" folder of the repo to test the app with some data we prepared.
+- step 2:
+![image](https://user-images.githubusercontent.com/91381114/214132278-e9b9e2ae-795e-4e4e-88ba-0536ff97fe86.png)
 
-        
+- step 3:
+![image](https://user-images.githubusercontent.com/91381114/214132370-e37805a2-25e8-49db-9b9a-e622d3f6f1a6.png)
+
+- step 4: put the 3 files there
+![image](https://user-images.githubusercontent.com/91381114/214132407-ae2fe523-59bd-4c20-975d-0f419a6301b7.png)
+
+You can create input.txt and output.txt. You can download the exe of the nlp algorithm at this link:
+https://fex.net/ru/s/ytn5xfy
+Artem used this website to host the file as it was too heavy for github.
+You can then test it by writing a title and a text in your entry and pressing the button analyze.
     
 

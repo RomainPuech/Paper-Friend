@@ -41,15 +41,15 @@ void MascotChat::add_achievement(std::vector<QStringList> vect){
           QString days_qstr = vect[i].at(2);
           QString habit_name = vect[i].at(0);
           if (days_qstr.toInt() == 5){
-              QString msg1 = "You've been practicing";
-              QString msg2 = "for 5 days now.";
+              QString msg1 = "You've been practicing ";
+              QString msg2 = " for 5 days now.";
               QString full_msg = msg1+habit_name+msg2;
               add_message(full_msg);
               add_mascot(60);
           }
           else if (days_qstr.toInt() == 66){
-              QString msg1 = "You've been practicing";
-              QString msg2 = "for 66 days now and according to research 66 days is enough for the habit to become automatic";
+              QString msg1 = "You've been practicing ";
+              QString msg2 = " for 66 days now and according to research 66 days is enough for the habit to become automatic";
               QString full_msg = msg1+habit_name+msg2;
               add_message(full_msg);
               add_mascot(60);
@@ -57,6 +57,7 @@ void MascotChat::add_achievement(std::vector<QStringList> vect){
     }
    }
 }
+
 void MascotChat::add_mascot(int num) {
     //display the mascot image in the chat box
   QLabel *image_label = new QLabel;
