@@ -829,11 +829,13 @@ EntryRecap* DataAnalysis::recap(int type) {
   text += "Here is a summary of your " + periods[type] + " across all areas: \n\n";
   text += detailed_analysis;
 
+
   QDate best_day_date = best_day.get_qdate();
   QDate worst_day_date = worst_day.get_qdate();
   double best_day_mood = best_day.get_mood();
   double worst_day_mood = worst_day.get_mood();
-  return EntryRecap(best_day_date, worst_day_date,best_day_mood,worst_day_mood, text, avg_mood, type);
+  return new EntryRecap(best_day_date, worst_day_date,best_day_mood,worst_day_mood, text, avg_mood, type);
+
 }
 
 EntryRecap* DataAnalysis::weekly_recap() {
