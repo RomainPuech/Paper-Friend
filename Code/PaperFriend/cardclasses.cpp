@@ -20,7 +20,11 @@ Card::Card(int border_radius, int width, int height, QString color)
   this->setLayout(vb_layout);
 }
 
-Card::~Card() { delete vb_layout; }
+Card::~Card() {
+    // IMPORTANT: with Qt, if a Qt object has a parent, it will be automatically deleted when the parent is destroyed.
+    //Therefore, deleting vb_layout will delete all elements in this layout!
+    delete vb_layout;
+}
 
 int Card::get_width() const { return this->width(); }
 
@@ -145,7 +149,7 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
   text_field =
       new QTextEdit(QString::fromStdString(entry->get_text()), text_title_w);
   edit_vb = new QVBoxLayout(edit_and_return);
-  top_menu = new QHBoxLayout();
+  top_menu = new QHBoxLayout();//deleted by call to delete on parent
   fr_act_display = new QListWidget();
   fr_act_select = new QListWidget();
   habits_display = new QComboBox();
@@ -743,35 +747,44 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
 }
 
 EntryCard::~EntryCard() {
-  /*//delete entry;
-  delete date_display;
-  delete mood_display;
+   // ~Card is called, deleting vb_layout. As it is a Qt Layout, all its children will be deleted? This includes:
+    /*
+    text_title_w
+    edit_and_return
+    top_menu
+    recap_text
+    best_day_hb
+    worst_day_hb
+    */
+
+   //delete entry;
+  /*
+  //delete date_display;
+  //delete mood_display;
   delete fr_act_display;
-  delete top_menu;
   delete title;
   delete text_field;
   delete text_title_vb;
-  delete text_title_w;
   //delete entry_perso;
   delete edit_text;
   delete edit_text_w;
   delete edit_vb;
-  delete edit_and_return;
   delete modify;
   delete back_to_display;
-  //delete display_layout;
-  delete mood_slider_w;
+  delete display_layout;
+  //delete mood_slider_w;
   delete mood_slider_instr;
   delete mood_slider;
   delete mood_slider_vb;
-  delete fr_act_select;
+  //delete fr_act_select;
   delete main_window;
   delete recap_title;
-  delete message;
-  delete avg_mood;
-  delete recap_days;
-  delete recap_layout;
-  delete recap_days_hb;*/
+  //delete message;
+  //delete avg_mood;
+  //delete recap_days;
+  //delete recap_layout;
+  //delete recap_days_hb;
+  */
 }
 
 void EntryCard::handleModify() { this->change(); }
