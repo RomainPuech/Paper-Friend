@@ -37,6 +37,8 @@ public:
     void set_height(int height);
     void set_background_color(QString color);
 
+    bool eventFilter(QObject* target, QEvent *e); // to prevent mouse scrolling
+
     virtual void display(QLayout *layout)
     /*
     * A funtion for displaying the Card object on the screen
@@ -70,9 +72,7 @@ public:
     void update_fr_act_select();
     void update_fr_act();
     void remove_non_existent_act();
-    void update_settings();
     void set_correct_style();
-
 private slots:
   void handleModify();
   void handleBack();
@@ -89,8 +89,6 @@ private:
     QLabel *mood_display;
     QListWidget *fr_act_display;
     QLabel *title;
-    QWidget *title_container;
-    QHBoxLayout *title_layout;
     QTextEdit *text_field;
     QWidget *text_title_w; // widget for title, text_field and modify
     QVBoxLayout *text_title_vb; // handles the layout of text_title_w
@@ -132,7 +130,6 @@ private:
     QVBoxLayout *sliders_right;
     QHBoxLayout *sliders;
     QComboBox *habits_display;
-    QListView *habits_view;
 
     //display of entry_recap
     QLabel *recap_title;

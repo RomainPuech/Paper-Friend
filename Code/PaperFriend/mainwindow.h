@@ -30,7 +30,6 @@ public:
     static std::vector<Friend> get_friends();
     static void update_activities(std::vector<Activity> activities);
     static void update_friends(std::vector<Friend> friends);
-    static void settings_refresh(); // update display according to the settings
     void change_editability();
     void update_graphs();
     void generate_recap();
@@ -38,7 +37,7 @@ public:
     void welcome();
     void add_new_activities_to_old_enties();
     static void remove_activities_from_old_entries(int position);
-    static void refresh_acttivities(); // dynamically update the display of entryCard when activities are changed
+    static void refresh_activities(); // dynamically update the display of entryCard when activities are changed
 
 private slots:
     void on_pushButton_clicked();

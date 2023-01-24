@@ -57,10 +57,6 @@ void all_activities::addNewCell(QString cellText, QString cellName, int type)
 }
 
 void all_activities::add_previous_cells(){
-    /*for(int i=0; i < allCellPtr.size(); i++){
-        allCellPtr.at(i)->setParent(this); // set the new window to be the parent
-        ui->activities_cell_layout->addWidget(allCellPtr.at(i));
-    }*/
     for(long long unsigned i = 0; i< vector_activities.size(); i++){
         addNewCell("", QString::fromStdString(vector_activities.at(i).get_name()), vector_activities.at(i).get_type());
         vector_activities.pop_back();
@@ -77,7 +73,7 @@ void all_activities::closeCell(int ActivitiesCellNumber){
     allCellPtr.remove(ActivitiesCellNumber);
     vector_activities.erase(vector_activities.begin() + ActivitiesCellNumber);
     MainWindow::remove_activities_from_old_entries(ActivitiesCellNumber);
-    MainWindow::refresh_acttivities();
+    MainWindow::refresh_activities();
 }
 
 void all_activities::on_save_activity_button_clicked()
@@ -104,6 +100,8 @@ void all_activities::on_save_activity_button_clicked()
         type_activity = allCellPtr[i]->get_activity_type();
         if(allCellPtr.size() == vector_activities.size() && name_activity != "Activity name" && type_activity != 0 ){
             condition = true;
+        }else{
+            condition = false;
         }
     }if(condition == true){
         QMessageBox::StandardButton reply;
@@ -118,7 +116,6 @@ void all_activities::on_save_activity_button_clicked()
     activity_cell A;
     int dlt_number;
     dlt_number = A.number_clicked();
-    qDebug()<< dlt_number;
     if(dlt_number != 0){
         QMessageBox::StandardButton reply;
         reply = QMessageBox::information(this, "Save Confirmation", "All your activities and friends are saved.",QMessageBox::Ok);
@@ -127,12 +124,10 @@ void all_activities::on_save_activity_button_clicked()
         }
     }
 
-
-
     // we add the activity with value 0 to all existing entryPerso.
     //In terms of complexity it is not the best option but given that the number of entries will reasonably be less than 1000 it is going to be immediate in practice and saves us a lot of time in terms of coding
     mainwindowptr->add_new_activities_to_old_enties();
-    MainWindow::refresh_acttivities();
+    MainWindow::refresh_activities();
 
 }
 
@@ -148,6 +143,8 @@ void all_activities::disable_text_change(){
 }
 
 void all_activities::closeEvent (QCloseEvent *event){
+    bool changed_type, type_error, name_error;
+    changed_type = false; type_error = false; name_error = false;
     if(allCellPtr.size() != vector_activities.size()){
         QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Have you saved your activities ?"),
                                                                       QMessageBox::No );
@@ -168,35 +165,43 @@ void all_activities::closeEvent (QCloseEvent *event){
             int type_activity_vec;
             type_activity_vec = vector_activities[i].get_type();
             if(name_activity_acp.toStdString() != name_activity_vec || type_activity_acp != type_activity_vec ){
-                QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Have you saved your activities and friends ?"),
-                                                                              QMessageBox::No);
-
-                if (answr_btn != QMessageBox::No) {
-                    event->ignore();
-                } else {
-                    //this->close();
-                    event->ignore();
-                }
+                changed_type = true;
             }if(type_activity_acp == 0){
-                QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Please enter an activity/friend type."),
-                                                                              QMessageBox::Ok);
-
-                if (answr_btn != QMessageBox::Ok) {
-                    event->ignore();
-                } else {
-                    event->ignore();
-                }
+                type_error = true;
             }if(name_activity_acp.toStdString() == "Activity name"){
-                QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Please enter an activity/friend name."),
-                                                                              QMessageBox::Ok);
-
-                if (answr_btn != QMessageBox::Ok) {
-                    event->ignore();
-                } else {
-                    event->ignore();
-                }
+                name_error = true;
             }
-        }for(int i=0; i<allCellPtr.size(); ++i){
+        }
+        if(changed_type == true){
+            QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Have you saved your activities and friends ?"),
+                                                                          QMessageBox::No);
+
+            if (answr_btn != QMessageBox::No) {
+                event->ignore();
+            } else {
+                event->ignore();
+            }
+        }if(type_error == true){
+            QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Please enter an activity/friend type."),
+                                                                          QMessageBox::Ok);
+
+            if (answr_btn != QMessageBox::Ok) {
+                event->ignore();
+            } else {
+                event->ignore();
+            }
+        }if(name_error == true){
+            QMessageBox::StandardButton answr_btn = QMessageBox::warning( this, tr("Paper friend"), tr("Please enter an activity/friend name."),
+                                                                          QMessageBox::Ok);
+
+            if (answr_btn != QMessageBox::Ok) {
+                event->ignore();
+            } else {
+                event->ignore();
+            }
+        }
+
+        for(int i=0; i<allCellPtr.size(); ++i){
             for(int j=0; j<allCellPtr.size(); ++j){
                 if(i!=j && allCellPtr[j]->get_activity_name() == allCellPtr[i]->get_activity_name()){
                     are_equal = true;

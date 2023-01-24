@@ -45,11 +45,16 @@
      <addaction name="action_Italic"/>
      <addaction name="action_Underline"/>
      <addaction name="action_Font"/>
+     <addaction name="action_Color"/>
      <addaction name="separator"/>
      <addaction name="action_Left"/>
      <addaction name="action_Right"/>
      <addaction name="action_Center"/>
      <addaction name="action_Just"/>
+     <addaction name="separator"/>
+     <addaction name="action_Form"/>
+     <addaction name="action_List"/>
+     <addaction name="action_Line"/>
     </widget>
    </item>
    <item>
@@ -101,39 +106,6 @@
     </widget>
    </item>
   </layout>
-  <action name="action_New">
-   <property name="icon">
-    <iconset resource="myresources.qrc">
-     <normaloff>:/pictures/rsc/new.png</normaloff>:/pictures/rsc/new.png</iconset>
-   </property>
-   <property name="text">
-    <string>New</string>
-   </property>
-   <property name="toolTip">
-    <string>New File</string>
-   </property>
-  </action>
-  <action name="action_Open">
-   <property name="icon">
-    <iconset resource="myresources.qrc">
-     <normaloff>:/pictures/rsc/open.png</normaloff>:/pictures/rsc/open.png</iconset>
-   </property>
-   <property name="text">
-    <string>Open</string>
-   </property>
-   <property name="toolTip">
-    <string>Open the file</string>
-   </property>
-  </action>
-  <action name="action_Close">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/myImages/rsc/close.png</normaloff>:/myImages/rsc/close.png</iconset>
-   </property>
-   <property name="text">
-    <string>Close(&amp;C)</string>
-   </property>
-  </action>
   <action name="action_Save">
    <property name="icon">
     <iconset resource="myresources.qrc">
@@ -153,30 +125,6 @@
    </property>
    <property name="text">
     <string>Save As(&amp;A)</string>
-   </property>
-  </action>
-  <action name="action_Exit">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/myImages/rsc/close.png</normaloff>:/myImages/rsc/close.png</iconset>
-   </property>
-   <property name="text">
-    <string>Exit(&amp;X)</string>
-   </property>
-  </action>
-  <action name="action_Undo">
-   <property name="checkable">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="myresources.qrc">
-     <normaloff>:/pictures/rsc/undo.png</normaloff>:/pictures/rsc/undo.png</iconset>
-   </property>
-   <property name="text">
-    <string>Undo(&amp;Z)</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Z</string>
    </property>
   </action>
   <action name="action_Cut">
@@ -359,39 +307,39 @@
     <string>Alignment of both ends</string>
    </property>
   </action>
-  <action name="action_Y">
+  <action name="action_Form">
    <property name="icon">
-    <iconset>
-     <normaloff>:/myImages/rsc/redo.png</normaloff>:/myImages/rsc/redo.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/form.png</normaloff>:/pictures/rsc/form.png</iconset>
    </property>
    <property name="text">
-    <string>Redo(&amp;Y)</string>
+    <string>Set Form</string>
    </property>
    <property name="toolTip">
-    <string>Redo(Y)</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Y</string>
+    <string>Add a Form </string>
    </property>
   </action>
-  <action name="action_selectAll">
+  <action name="action_List">
    <property name="icon">
-    <iconset>
-     <normaloff>:/myImages/rsc/selectall.png</normaloff>:/myImages/rsc/selectall.png</iconset>
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/list.png</normaloff>:/pictures/rsc/list.png</iconset>
    </property>
    <property name="text">
-    <string>Select All(&amp;A)</string>
-   </property>
-   <property name="toolTip">
-    <string>Select All(A)</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+A</string>
+    <string>Add List</string>
    </property>
   </action>
-  <action name="actionNew">
+  <action name="action_Line">
+   <property name="icon">
+    <iconset resource="myresources.qrc">
+     <normaloff>:/pictures/rsc/line.png</normaloff>:/pictures/rsc/line.png</iconset>
+   </property>
    <property name="text">
-    <string>New</string>
+    <string>Add Horizontal Line</string>
+   </property>
+  </action>
+  <action name="action_Link">
+   <property name="text">
+    <string>Add Link</string>
    </property>
   </action>
  </widget>
