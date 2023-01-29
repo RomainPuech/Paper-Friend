@@ -1,8 +1,10 @@
 #ifndef DATAANALYSIS_H
 #define DATAANALYSIS_H
 
-#include "entryclasses.h"
-#include "entryrecap.h"
+#pragma once
+
+#include "Frontend/entryclasses.h"
+#include "Frontend/entryrecap.h"
 #include <QDebug>
 #include <map>
 #include <numeric>
@@ -110,6 +112,8 @@ protected:
 
   std::vector<double> cyclic_week(int metric_index);
 
+  std::string react_depression();
+
   std::string var_to_str(int var_index) const {
     if (log.size() == 0) {
       return "";
@@ -141,7 +145,7 @@ protected:
 
   std::string
   generate_weekly_recap_text(const std::vector<EntryPerso> &entries);
-  EntryRecap recap(int type);
+  EntryRecap* recap(int type);
 
   // STL returns a vector containing the Trend and the Seasonality component
   // {Trend, Seasonality}. seasonal_length is the length of the seasonality
@@ -154,9 +158,9 @@ protected:
 
 public:
   DataAnalysis(std::vector<EntryPerso *> vector_entries);
-  EntryRecap weekly_recap();
-  EntryRecap monthly_recap();
-  EntryRecap yearly_recap();
+  EntryRecap* weekly_recap();
+  EntryRecap* monthly_recap();
+  EntryRecap* yearly_recap();
   std::string
   suggestion(); // text that will be suggested to user daily
 };

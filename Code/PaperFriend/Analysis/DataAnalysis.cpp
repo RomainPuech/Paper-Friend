@@ -1,5 +1,5 @@
 #include "DataAnalysis.h"
-#include <entryclasses.h>
+#include <Frontend/entryclasses.h>
 
 #include <algorithm>
 #include <cmath> //prefer the c- version rather than the .h
@@ -489,6 +489,7 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
   // Alerting depression
   // Iterating through variables:
   for (int var_index = 1; var_index <= 5; var_index++){
+      //std::cout << "Here is the problem 0" << std::endl;
       if (anomalies_detection(log, var_index).end()->get_absolute_day() ==
           log.end()->get_absolute_day()) {
         str += "We've detected an anomalie in your " +
@@ -504,22 +505,22 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
           else
             str +=
                 "made your " + log[0].get_var_name(var_index) + " much worse. \n";
-          str += "Consider to normalize " + log[0].get_var_name(var_index) + " \n";
+          str += "Consider to normalize " + log[0].get_var_name(var_index) + " \n\n";
         }
       }
    }
 
-  // Comparing to previous results of mood:
+  // Comparing to previous results of MOOD:
   int var_index = 0;
   if (log.end()->get_var_value(var_index) >=
       get_lastn_average(7, var_index)) { // compares to last 7 days
     str += "Your " + log[0].get_var_name(var_index) +
            " today is better than average! \n";
     str +=
-        "Your progress in" +
+        "Your progress in " +
         var_to_str(*(item_priority(log, var_index).begin())) + " and " +
         var_to_str(*(item_priority(log, var_index).begin() + 1)) +
-        "improves your " + log[0].get_var_name(var_index) +
+        " improves your " + log[0].get_var_name(var_index) +
         " the most, keep it up! \n"; // suggest top two items which affected the
                                      // variable (mood by default) the most
   } else {
@@ -527,9 +528,10 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
            " today is less than average:( \n";
     str += "Try to work on your " +
            var_to_str(*(item_priority(log, var_index).begin())) + " and " +
-           var_to_str(*(item_priority(log, var_index).begin() + 1)) + "! \n";
+           var_to_str(*(item_priority(log, var_index).begin() + 1)) + "! \n\n";
   }
 
+  /*
   // Haven’t seen anyone in days:
   bool seen_nobody = true;
   int i = 0; // days without friends in a row
@@ -543,10 +545,23 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
 
   if (i != 0 && i < 1000000) {
     str += "You haven't seen your friends for the last " + int_to_str(i) +
-           " days. Want to meet up?:)";
+           " days. Want to meet up?:\n\n)";
   }
+  */
 
   return str;
+}
+
+std::string DataAnalysis::react_depression(){
+    std::string str = "";
+    if (log.end()->get_var_value(0) <= 0.5 * get_lastn_average(7, 0)){
+        str += "Seems like you have a depression:(";
+        str += "The two main things to fix is your " +
+        var_to_str(*(item_priority(log, 0).begin())) + " and " +
+        var_to_str(*(item_priority(log, 0).begin() + 1)) + "! \n";
+        str += "Keep going! Everything will be alright! \n\n";
+    }
+    return str;
 }
 
 std::vector<int> lengths{7, 30, 365};
@@ -772,7 +787,7 @@ DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &entries,
   return res;
 }
 
-EntryRecap DataAnalysis::recap(int type) {
+EntryRecap* DataAnalysis::recap(int type) {
   /**
    * @param  an integer representing the period to be considered. 0 = week, 1 =
    * month, 2 = year.
@@ -814,10 +829,10 @@ EntryRecap DataAnalysis::recap(int type) {
   text += "Here is a summary of your " + periods[type] + " across all areas: \n\n";
   text += detailed_analysis;
 
-  return EntryRecap(best_day, worst_day, text, avg_mood, type);
+  return new EntryRecap(best_day, worst_day, text, avg_mood, type);
 }
 
-EntryRecap DataAnalysis::weekly_recap() {
+EntryRecap* DataAnalysis::weekly_recap() {
   /**
    * @param
    *
@@ -825,7 +840,7 @@ EntryRecap DataAnalysis::weekly_recap() {
    */
   return recap(0);
 }
-EntryRecap DataAnalysis::monthly_recap() {
+EntryRecap* DataAnalysis::monthly_recap() {
   /**
    * @param
    *
@@ -833,7 +848,7 @@ EntryRecap DataAnalysis::monthly_recap() {
    */
   return recap(1);
 }
-EntryRecap DataAnalysis::yearly_recap() {
+EntryRecap* DataAnalysis::yearly_recap() {
   /**
    * @param
    *

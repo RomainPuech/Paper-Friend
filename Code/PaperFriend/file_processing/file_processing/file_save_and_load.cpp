@@ -2,7 +2,7 @@
 #include "qdir.h"
 #include <QDebug>
 #include <QFile>
-
+#include <cstdio>
 #include <QApplication>
 #include <QFile>
 #include <QLabel>
@@ -99,8 +99,6 @@ str_to_vec_activities(std::vector<Activity> possible_activities,
   }
   for (Activity const &activity : possible_activities) {
     if (activities_done.find(activity.get_name()) != activities_done.end()) {
-      qDebug() << QString("this act was seleected:")
-               << QString::fromStdString(activity.get_name());
       Activity *to_add = new Activity(activity);
       to_add->set_value(1);
       res.push_back(to_add);
@@ -116,60 +114,10 @@ str_to_vec_activities(std::vector<Activity> possible_activities,
   return res;
 }
 
-std::string friend_to_string(Friend act) { // function that return a string that
-                                           // resume the friend to be saved
-  std::string name = act.get_name();
-  std::string duration = std::to_string(act.get_duration());
-  std::string delimiter = "$*$";
-  std::string delimiter2 = "*$*";
-  return (name + delimiter + duration + delimiter2);
-};
-
-Friend string_to_frend(
-    std::string act) { // function that takes a 'string resume' of a friend and
-                       // return an initialized and corresponding friend object
-  std::string delimiter = "$*$";
-  std::string temp = act.substr(0, act.find(delimiter)); // extract the name
-  std::string name = temp;
-  act.erase(0, act.find(delimiter) + delimiter.length());
-  temp = act.substr(0, act.find(delimiter)); // extract the type
-  int duration = std::stoi(temp);
-  Friend res = Friend(name, duration); // initialize the result
-  return res;
-};
-
-std::string
-friend_vec_to_str(std::vector<Friend *>
-                      acts) { // takes a vector of pointers to Friend and return
-                              // a string resuming all the vector (to be saved)
-  std::string res;
-  for (int i = 0; i < acts.size(); i++) {
-    res += friend_to_string(*acts[i]);
-  }
-  return res;
-}
-
-std::vector<Friend *>
-str_to_vec_friends(std::string act) { // activity vec from a string
-  std::vector<Friend *> res;
-  std::string delimiter = "*$*";
-
-  size_t pos = 0;
-  std::string temp;
-  while ((pos = act.find(delimiter)) != std::string::npos) {
-    temp = act.substr(0, pos);
-    Friend *activity = new Friend(string_to_frend(temp));
-    res.push_back(activity);
-    act.erase(0, pos + delimiter.length());
-  }
-  return res;
-}
-
 bool save_entryperso(EntryPerso entry) { //  create and save the entry file,
                                          //  title format MM.YY.JJ
 
   std::string activities = activities_vec_to_str(entry.get_activities());
-  std::string friends = friend_vec_to_str(entry.get_friends());
 
   nlohmann::json j = {{"text", entry.get_text()},
                       {"title", entry.get_title()},
@@ -181,9 +129,7 @@ bool save_entryperso(EntryPerso entry) { //  create and save the entry file,
                       {"productivity", entry.get_productivity()},
                       {"socializing", entry.get_socializing()},
                       {"physical_activity", entry.get_physical_activity()},
-                      {"activities", activities},
-
-                      {"friends", friends}};
+                      {"activities", activities}};
   std::string filename =
       entry.get_qdate().toString("MM.dd.yyyy").toStdString() + ".json";
 
@@ -202,9 +148,7 @@ bool save_entryperso(EntryPerso entry) { //  create and save the entry file,
     return false;
   }
   o << j << std::endl;
-  std::cout << "ouii";
   o.close();
-  std::cout << "nonnn";
   return true;
 };
 
@@ -219,13 +163,9 @@ EntryPerso *load_entryperso(
   EntryPerso *res = new EntryPerso(
       j["text"], j["title"],
       str_to_vec_activities(possible_activities, j["activities"]),
-      str_to_vec_friends(j["friends"]), j["mood"], j["sleep"],
-      j["eating_healthy"], j["productivity"], j["socializing"],
-      j["physical_activity"]);
-  for (Activity *act : res->get_activities()) {
-    qDebug() << QString::fromStdString(act->get_name())
-             << QString::number(act->get_value()) << QString("Turbo debug");
-  }
+      j["mood"], j["sleep"],j["eating_healthy"], j["productivity"],
+      j["socializing"], j["physical_activity"]);
+
   res->set_date(j["date"]);
   return res;
 }
@@ -278,52 +218,6 @@ std::vector<Activity> load_activities() { // activity vec from a string
   return res;
 }
 
-bool save_friends(std::vector<Friend>
-                      acts) { // save the std::vector of activities in a file to
-                              // keep track of all possible types of activities
-  std::string res;
-  for (int i = 0; i < acts.size(); i++) {
-    res += friend_to_string(acts[i]);
-  }
-  nlohmann::json j = {
-      {"friends", res},
-  };
-
-  std::string filename = "friends.json";
-
-  std::ofstream o("./" + filename);
-
-  if (!o.is_open()) {
-    std::cout << "Error opening file" << std::endl;
-    return false;
-  }
-  o << j << std::endl;
-
-  o.close();
-  return true;
-}
-
-std::vector<Friend> load_friends() { // Friend vec from a string
-  std::string filename = "friends.json";
-  std::ifstream i(filename);
-  nlohmann::json j;
-  i >> j;
-
-  std::string act = j["friends"];
-
-  std::vector<Friend> res;
-  std::string delimiter = "*$*";
-
-  size_t pos = 0;
-  std::string temp;
-  while ((pos = act.find(delimiter)) != std::string::npos) {
-    temp = act.substr(0, pos);
-    Friend activity = string_to_frend(temp);
-    res.push_back(activity);
-    act.erase(0, pos + delimiter.length());
-  }
-  return res;
-}
 
 std::vector<QStringList> load_habits() {
   std::string habit;
@@ -470,9 +364,7 @@ void save_delete_of_habits(QString to_delete) { //Functions that loads previousl
                                                 //(in order to completely delete it).
   std::vector<QStringList> old_habits = load_habits();
   if (old_habits.size() == 1) { //If there's only one previously saved habit, then it is for sure the one to delete, so we simply over write it empty.
-    std::ofstream myfile;
-    myfile.open("habits.txt", std::ios::out);
-    myfile.close();
+    remove("habits.txt");
   } else { //Find and delete habit from vector of previously saved habits, then resave the new vector.
     for (unsigned long i = 0; i < old_habits.size(); i++) {
       if (old_habits[i][0] == to_delete) {
