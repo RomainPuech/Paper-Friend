@@ -49,7 +49,7 @@ LinearRegressionCoeffs DataAnalysis::compute_linear_regression_coeffs(
   double slope;
   double variance_x = pow(stddev(X), 2);
   if (variance_x == 0)
-    slope = 99;
+    slope = 0;
   else
     slope = cov(X, Y) / pow(stddev(X), 2);
 
@@ -565,10 +565,10 @@ void DataAnalysis::weekly_anomalies_text(
   for (int i = 0; i < get_num_activities(); ++i) {
     std::vector<EntryPerso> anomalies = anomalies_detection(entries, i);
     if (anomalies.size() == 0) {
-      string_vect[i] += "No anomalies were detected over the week";
+      string_vect[i] += "No anomalies were detected over the week.";
     } else if (anomalies.size() == 1) {
       string_vect[i] += "An anomaly was detected on ";
-      string_vect[i] += anomalies[0].get_weekday();
+      string_vect[i] += anomalies[0].get_weekday() + ".";
     } else {
       string_vect[i] += "Anomalies were detected on ";
       for (unsigned int j = 0; j < anomalies.size() - 1; ++j) {
@@ -578,7 +578,7 @@ void DataAnalysis::weekly_anomalies_text(
       string_vect[i] += "and ";
       string_vect[i] += anomalies[anomalies.size() - 1].get_weekday() + ".";
     }
-    string_vect[i] += "\n";
+    string_vect[i] += "\n\n";
   }
 }
 
@@ -614,7 +614,7 @@ void DataAnalysis::monthly_anomalies_text(
       }
     }
 
-    if (anomalies.size() == 0) {
+    if (anomalies.size() == 0 || standev == 0) {
       string_vect[i] +=
           "This has been relatively stable over the weeks of the past month.";
 
@@ -629,7 +629,7 @@ void DataAnalysis::monthly_anomalies_text(
       string_vect[i] += "and " + weeks[anomalies[anomalies.size() - 1]] +
                         " weeks of the past month were outliers.";
     }
-    string_vect[i] += "\n";
+    string_vect[i] += "\n\n";
     anomalies.clear();
   }
 }
@@ -666,7 +666,7 @@ void DataAnalysis::yearly_anomalies_text(
       }
     }
 
-    if (anomalies.size() == 0) {
+    if (anomalies.size() == 0 || standev == 0) {
       string_vect[i] +=
           "This has been relatively stable over the months of the past year.";
 
@@ -688,7 +688,7 @@ void DataAnalysis::yearly_anomalies_text(
                     .get_month_name() +
           " were outliers in the past year.";
     }
-    string_vect[i] += "\n";
+    string_vect[i] += "\n\n";
     anomalies.clear();
   }
 }
@@ -721,31 +721,31 @@ DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &entries,
   }
 
   double slight_threshold = 0.5; // Some constants to guide judgement
-  double significant_threshold = 2;
+  double significant_threshold = 1.5;
   double quality_threshold = 0.7;
 
   for (int i = 0; i < get_num_activities(); ++i) {
 
-    res += var_to_str(i) + "\n";
+    res += var_to_str(i) + "\n\n";
 
     LinearRegressionCoeffs coeffs = general_trend(entries, i);
 
-    if (abs(coeffs.slope) < slight_threshold) {
-
-      if (coeffs.quality_coeff > quality_threshold) {
-        res += "This has been steady over the past " + periods[type];
-      } else {
+    if (coeffs.quality_coeff < quality_threshold){
         res +=
-            "This has not shown any clear trend over the past " + periods[type];
-      }
+            "This has not shown any clear trend over the past " + periods[type] + ".";
+    }
+
+    else if (abs(coeffs.slope) < slight_threshold) {
+
+       res += "This has been steady over the past " + periods[type] + ".";
     }
 
     else if (abs(coeffs.slope) < significant_threshold) {
       if (coeffs.slope < 0) {
-        res += "This has been slightly dipping over the past " + periods[type];
+        res += "This has been slightly dipping over the past " + periods[type] + ".";
       } else {
         res +=
-            "This has been slightly improving over the past " + periods[type];
+            "This has been slightly improving over the past " + periods[type] + ".";
       }
     }
 
@@ -753,20 +753,20 @@ DataAnalysis::generate_recap_text(const std::vector<EntryPerso> &entries,
       if (coeffs.slope < 0) {
 
         res += "This has shown a significant downward trend over the past " +
-               periods[type];
+               periods[type] + ".";
 
       } else {
         res += "This has shown a significant upward trend over the past " +
-               periods[type];
+               periods[type] + ".";
       }
     }
-    res += "\n";
+    res += "\n\n";
     std::vector<int> influences = item_priority(entries, i);
     res += "It seems like ";
     res += var_to_str(influences[0]);
     res += " and ";
     res += var_to_str(influences[1]);
-    res += " have the most effect.\n";
+    res += " have the most effect.\n\n";
     res += anomaly_texts[i];
   }
   return res;
@@ -798,7 +798,7 @@ EntryRecap DataAnalysis::recap(int type) {
   std::string detailed_analysis = generate_recap_text(period, type);
 
   std::string text = "You have made " + std::to_string(period.size()) +
-                     " entries over the past " + periods[type] + ".\n";
+                     " entries over the past " + periods[type] + ".\n\n";
 
   if (avg_mood < good_threshold) {
     text += "Looks like you've had a tough " + periods[type];
@@ -807,11 +807,11 @@ EntryRecap DataAnalysis::recap(int type) {
   } else {
     text += "Looks like you've had a great " + periods[type];
   }
-  text += "\n";
+  text += "\n\n";
   text += "Your best and worst days, as indicated by your mood, were on " +
           best_day.get_date() + " and " + worst_day.get_date() +
-          " respectively.\n";
-  text += "Here is a summary of your " + periods[type] + " across all areas\n";
+          " respectively.\n\n";
+  text += "Here is a summary of your " + periods[type] + " across all areas: \n\n";
   text += detailed_analysis;
 
   return EntryRecap(best_day, worst_day, text, avg_mood, type);
@@ -1305,9 +1305,7 @@ DataAnalysis::DataAnalysis(std::vector<EntryPerso *> vector_entries) {
     log.push_back(*entry);
   }
 
-  for (int i = 0; i < log.size(); ++i){
-      qDebug() << log[i].get_absolute_day();
-  }
+
   std::vector<EntryPerso> last_3y_temp = get_lastn_days_data(1095);
   std::vector<EntryPerso> last_3y;
 
