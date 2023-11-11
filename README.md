@@ -19,7 +19,10 @@ Based on the same model the user the personal journal to a project-oriented jour
   
     
     
-Here is an example of the application's UI:
+Here is a screenshot from the app:
+![UI](https://github.com/Romain-Puech-BX24/Paper-Friend/assets/91381114/ffb05f50-bdd2-468b-89e8-fe2003b39e27)  
+
+And how the UI was originally designed:
 ![exampleUI](https://user-images.githubusercontent.com/91381114/203642351-10ddf1b8-be66-4267-aefb-1da34732f860.jpg)
 
 
