@@ -641,29 +641,6 @@ void MainWindow::add_new_activities_to_old_enties() {
         }
       }
     }
-  for (EntryPerso *entry : displayed_entries) {
-      for (Activity const &activity : vector_activities) {
-        Activity *to_add = new Activity();
-        to_add->set_name(activity.get_name());
-        to_add->set_type(activity.get_type());
-        std::vector<Activity *> entry_activities =
-            entry->get_activities(); // crashes here if static cast used
-        if (std::find_if(entry_activities.begin(), entry_activities.end(),
-                         [to_add](Activity *a) -> bool {
-                           return *a == *to_add;
-                         }) == entry_activities.end()) {
-          qDebug() << QString("Does not contain")
-                   << QString::fromStdString(activity.get_name())
-                   << QString::number(activity.get_type());
-          // does not contain activity
-          Activity *to_add = new Activity();
-          to_add->set_name(activity.get_name());
-          to_add->set_type(activity.get_type());
-          to_add->set_value(0.0);
-          entry->add_activity(to_add);
-        }
-      }
-    }
 }
 void MainWindow::remove_activities_from_old_entries() {
   /* remove an activity after it has been deleted */
@@ -684,14 +661,6 @@ void MainWindow::remove_activities_from_old_entries() {
  }
 
  for(EntryPerso* entry: vector_entries){
-     std::vector<Activity*> entry_activities = entry->get_activities();
-     for(unsigned long long act_remove : to_remove){
-         entry_activities.erase(entry_activities.begin()+act_remove);
-     }
-     entry->set_activities(entry_activities);
- }
-
- for(EntryPerso* entry: displayed_entries){
      std::vector<Activity*> entry_activities = entry->get_activities();
      for(unsigned long long act_remove : to_remove){
          entry_activities.erase(entry_activities.begin()+act_remove);
