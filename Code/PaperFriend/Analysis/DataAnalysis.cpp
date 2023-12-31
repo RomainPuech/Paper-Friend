@@ -504,7 +504,7 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
           else
             str +=
                 "made your " + log[0].get_var_name(var_index) + " much worse. \n";
-          str += "Consider to normalize " + log[0].get_var_name(var_index) + " \n";
+          str += "Consider to normalize " + log[0].get_var_name(var_index) + " \n\n";
         }
       }
    }
@@ -527,7 +527,7 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
            " today is less than average:( \n";
     str += "Try to work on your " +
            var_to_str(*(item_priority(log, var_index).begin())) + " and " +
-           var_to_str(*(item_priority(log, var_index).begin() + 1)) + "! \n";
+           var_to_str(*(item_priority(log, var_index).begin() + 1)) + "! \n\n";
   }
 
   /*
@@ -544,11 +544,23 @@ std::string DataAnalysis::suggestion() { // some more exciting gameplay can be i
 
   if (i != 0 && i < 1000000) {
     str += "You haven't seen your friends for the last " + int_to_str(i) +
-           " days. Want to meet up?:)";
+           " days. Want to meet up?:\n\n)";
   }
   */
 
   return str;
+}
+
+std::string DataAnalysis::react_depression(){
+    std::string str = "";
+    if (log.end()->get_var_value(0) <= 0.5 * get_lastn_average(7, 0)){
+        str += "Seems like you have a depression:(";
+        str += "The two main things to fix is your " +
+        var_to_str(*(item_priority(log, 0).begin())) + " and " +
+        var_to_str(*(item_priority(log, 0).begin() + 1)) + "! \n";
+        str += "Keep going! Everything will be alright! \n\n";
+    }
+    return str;
 }
 
 std::vector<int> lengths{7, 30, 365};

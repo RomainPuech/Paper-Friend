@@ -462,7 +462,12 @@ void MainWindow::on_newEntryButton_clicked() {
      ui->EntriesScroll->verticalScrollBar()->setValue(0);
    //today_card->change(); this will mess up the program because we can end up with two cards in modify mode
 }
-
+void MainWindow::on_suggestions_button_clicked()
+{
+    DataAnalysis data_analysis = DataAnalysis(vector_entries);
+    std::string suggestion = data_analysis.suggestion();
+    chat<<suggestion;
+}
 void MainWindow::generate_recap() {
   // first check if we need to generate a weekly/monthly/yearly recap
   // last_recaps_dates is the vector containing the string of the dates of the
@@ -706,3 +711,27 @@ void MainWindow::refresh_activities() {
     c->set_correct_style();
   }
 }
+
+std::vector<QStringList> MainWindow::habit_repeated_5() {
+    std::vector<QStringList> current_habits = load_habits();
+    std::vector<QStringList> tmp;
+    for (unsigned long i = 0; i < current_habits.size(); i++) {
+        if (current_habits[i][2].toInt() % 5 == 0) {
+            tmp.push_back(current_habits[i]);
+        }
+    }
+    return tmp;
+}
+
+std::vector<QStringList> MainWindow::habit_repeated_66() {
+    std::vector<QStringList> current_habits = load_habits();
+    std::vector<QStringList> tmp;
+    for (unsigned long i = 0; i < current_habits.size(); i++) {
+        if (current_habits[i][2].toInt() == 66) {
+            tmp.push_back(current_habits[i]);
+        }
+    }
+    return tmp;
+}
+
+

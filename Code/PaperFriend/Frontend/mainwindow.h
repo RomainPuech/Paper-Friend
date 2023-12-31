@@ -38,6 +38,8 @@ public:
   static void remove_activities_from_old_entries();
   static void refresh_activities(); // dynamically update the display of
                                     // entryCard when activities are changed
+  std::vector<QStringList> habit_repeated_5();
+  std::vector<QStringList> habit_repeated_66();
 
 private slots:
   void on_pushButton_clicked();
@@ -48,7 +50,7 @@ private slots:
   void on_newEntryButton_clicked();
   void on_clear_button_clicked();
   void on_type_filter_currentTextChanged(const QString &);
-
+  void on_suggestions_button_clicked();
   void on_Test_entries_clicked();
 
 private:
