@@ -7,7 +7,11 @@
 #include "entryrecap.h"
 #include "file_processing/file_processing/file_save_and_load.h"
 #include "texteditor.h"
+#include "Analysis/textanalysis.h"
 
+#include <chrono>
+#include <thread>
+#include <QThread>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QGroupBox>
@@ -57,7 +61,26 @@ private:
   QString background_color; // default color: white
 };
 
+class TextAnalysisThread : public QThread { //class for calling the text sentiment analysis
+public:
+    TextAnalysisThread(TextAnalysis* textA = nullptr): QThread(), textA(textA){};
+
+    void run(){
+        qDebug()<<"start analysis";
+        textA->analyze_text();
+        QThread::currentThread()->sleep(3);
+        qDebug()<<"analysis done";
+        //emit finished();
+    }
+
+private:
+    TextAnalysis* textA;
+};
+
 class EntryCard : public Card {
+
+Q_OBJECT
+
 public:
   EntryCard(int border_radius = 15, int width = 200, int height = 200,
             QString color = "white", Entry *entry = nullptr,
@@ -86,7 +109,12 @@ private slots:
   void handleAnalize();
   void handleBack();
 
+public slots:
+  void doneThreads();
+
 private:
+  TextAnalysis* textA;
+  TextAnalysisThread* tathread;
   QMainWindow* text_analysis;
   static bool can_be_modified; // true if there are no cards in modify mode
   bool readOnly; // is this card in readOnly mode

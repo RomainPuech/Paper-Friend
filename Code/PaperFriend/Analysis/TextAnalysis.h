@@ -10,7 +10,7 @@ class TextAnalysis{
 
 public:
 
-    TextAnalysis(QString text_to_analize): text_to_analize(text_to_analize.toStdString()){text_mood=0; qDebug()<<QString::fromStdString(this->text_to_analize);};
+    TextAnalysis(std::string text_to_analize): text_to_analize(text_to_analize){text_mood=0; qDebug()<<QString::fromStdString(this->text_to_analize);};
 
     void analyze_text();
 

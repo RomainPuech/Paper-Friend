@@ -8,7 +8,8 @@
 #include <QMessageBox>
 #include <QWheelEvent>
 #include <QDialog>
-#include <thread>
+#include <Qthread>
+#include <chrono>
 
 bool EntryCard::can_be_modified = true;
 
@@ -146,9 +147,11 @@ EntryCard::EntryCard(int border_radius, int width, int height, QString color,
       this->readOnly = readOnly;
       can_be_modified = false;
   }
-     entry_perso = nullptr;
+  text_analysis = new text_analysis_window(this);
+  textA = new TextAnalysis("");
+  tathread = new TextAnalysisThread();
+  entry_perso = nullptr;
   entry_recap = nullptr;
-  text_analysis = new text_analysis_window("", 0, this);
   // entry_perso display
   date_display = new QLabel();
   text_title_w = new QWidget();
@@ -704,6 +707,9 @@ EntryCard::~EntryCard() {
   if(!isReadOnly()){ //this card was in modify mode
       can_be_modified = true; // now the other cards can be modified
   }
+  delete text_analysis;
+  delete textA;
+  delete tathread;
 }
 
 void EntryCard::handleModify() {
@@ -720,13 +726,29 @@ void EntryCard::handleModify() {
     }
 }
 
-void EntryCard::handleAnalize(){
 
-    text_analysis_window* t = dynamic_cast<text_analysis_window*>(text_analysis);
-    t->set(edit_text->get_title() + " " + edit_text->get_plain_text());
-    t->setWindowFlags(Qt::WindowStaysOnTopHint);
-    t->show();
-    t->analize();
+void EntryCard::doneThreads(){
+qDebug()<<"now I'm here";
+text_analysis_window* text_analysis_w = dynamic_cast<text_analysis_window*>(text_analysis);
+text_analysis_w->set_mood(textA->get_text_mood()*100);
+text_analysis_w->set_message();
+}
+
+void EntryCard::handleAnalize(){
+    text_analysis_window* text_analysis_w = dynamic_cast<text_analysis_window*>(text_analysis);
+    //WindowThread wt = WindowThread(&text_analysis);
+    textA = new TextAnalysis((edit_text->get_title() + " " + edit_text->get_plain_text()).toStdString());
+    tathread = new TextAnalysisThread(textA);
+    //wt.start();
+    connect(tathread, SIGNAL(finished()), this, SLOT(doneThreads()));
+    tathread->start();
+    text_analysis_w->start();
+    //connect(tathread, &TextAnalysisThread::finished, this, &EntryCard::doneThreads);
+    qDebug()<<"this first";
+    /*tathread->wait();
+    text_analysis.set_mood(textA.get_text_mood());
+    text_analysis.set_message();
+    text_analysis.show();*/
 }
 
 void EntryCard::handleBack() {

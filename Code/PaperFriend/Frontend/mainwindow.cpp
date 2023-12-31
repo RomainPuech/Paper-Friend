@@ -514,8 +514,6 @@ void MainWindow::generate_recap() {
       EntryRecap* recap_w = analysis.weekly_recap();
       generated_recap = true;
       vector_recaps.push_back(recap_w);
-      EntryCard* recap_card = new EntryCard(20, 300, 300, "white", recap_w, true, this);
-      recap_card->display(ui->EntriesScroll->widget()->layout());
       save_entryrecap(*recap_w);
     }
   }
@@ -532,8 +530,6 @@ void MainWindow::generate_recap() {
       EntryRecap* recap_m = analysis.monthly_recap();
       generated_recap = true;
       vector_recaps.push_back(recap_m);
-      EntryCard* recap_card = new EntryCard(20, 300, 300, "white", recap_m, true, this);
-      recap_card->display(ui->EntriesScroll->widget()->layout());
       save_entryrecap(*recap_m);
     }
   }
@@ -552,8 +548,6 @@ void MainWindow::generate_recap() {
       DataAnalysis analysis = DataAnalysis(vector_entries);
       EntryRecap *recap_y = analysis.yearly_recap();
       vector_recaps.push_back(recap_y);
-      EntryCard* recap_card = new EntryCard(20, 300, 300, "white", recap_y, true, this);
-      recap_card->display(ui->EntriesScroll->widget()->layout());
       generated_recap = true;
       save_entryrecap(*recap_y);
     }
@@ -561,8 +555,8 @@ void MainWindow::generate_recap() {
     if(generated_recap){
 
   save_last_recaps_dates(last_recaps_dates);
-
-  ui->EntriesScroll->verticalScrollBar()->setValue(displayed_entries.size() + vector_recaps.size());
+  display_entries();
+  ui->EntriesScroll->verticalScrollBar()->setValue(0);
     }
 }
 
