@@ -13,6 +13,7 @@ all_activities::all_activities(MainWindow *mainwindow,
     : mainwindowptr(mainwindow), vector_activities(vector_activity),
       QDialog(parent), ui(new Ui::all_activities) {
   ui->setupUi(this);
+  ActivitiesCellNumberTotal = 0;
   this->add_previous_cells();
   disable_text_change();
 }

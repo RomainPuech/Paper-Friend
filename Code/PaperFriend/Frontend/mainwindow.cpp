@@ -468,6 +468,7 @@ void MainWindow::generate_recap() {
   // last_recaps_dates is the vector containing the string of the dates of the
   // last [0]weekly, [1]monthly and [2]yearly recap.
   std::vector<QString> last_recaps_dates = load_last_recaps_dates();
+  bool generated_recap = false;
   if (last_recaps_dates.empty()) {
     QDate date = QDate::currentDate().addDays(-1);
     last_recaps_dates.push_back(date.toString("yyyy.MM.dd"));
@@ -484,8 +485,8 @@ void MainWindow::generate_recap() {
       last_recaps_dates[0] = QDate::currentDate().toString("yyyy.MM.dd");
       DataAnalysis analysis = DataAnalysis(vector_entries);
       EntryRecap recap = analysis.weekly_recap();
+      generated_recap = true;
       vector_recaps.push_back(&recap);
-      display_entries();// displays the entry in the main_frame.
 
       save_last_recaps_dates(last_recaps_dates);
       save_entryrecap(recap);
@@ -502,8 +503,8 @@ void MainWindow::generate_recap() {
       last_recaps_dates[1] = QDate::currentDate().toString("yyyy.MM.dd");
       DataAnalysis analysis = DataAnalysis(vector_entries);
       EntryRecap recap = analysis.monthly_recap();
+      generated_recap = true;
       vector_recaps.push_back(&recap);
-      display_entries(); // displays the entry in the main_frame.
 
       save_last_recaps_dates(last_recaps_dates);
       save_entryrecap(recap);
@@ -513,6 +514,7 @@ void MainWindow::generate_recap() {
   if (saved_year() and QDate::currentDate().month() == 12 &&
       QDate::currentDate().day() == 31) // If it's December 31st
   {
+      qDebug() << "yearly recap";
     QString date_last_recap = last_recaps_dates[2];
     if (date_last_recap != QDate::currentDate().toString("yyyy.MM.dd")) {
       chat << QString("Before celebrating the new year, let's look back to ") +
@@ -522,13 +524,16 @@ void MainWindow::generate_recap() {
       last_recaps_dates[2] = QDate::currentDate().toString("yyyy.MM.dd");
       DataAnalysis analysis = DataAnalysis(vector_entries);
       EntryRecap recap = analysis.yearly_recap();
+      generated_recap = true;
       vector_recaps.push_back(&recap);
-      display_entries(); // displays the entry in the main_frame.
 
       save_last_recaps_dates(last_recaps_dates);
       save_entryrecap(recap);
     }
   }
+    if(generated_recap){
+  display_entries();// displays the entry in the main_frame.
+    }
 }
 
 void MainWindow::react_to_last_entry() {
